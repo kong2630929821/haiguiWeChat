@@ -5,7 +5,7 @@
     </div>
     {{else}}
         <div w-class="top">
-            {{for i,v of it.tabList}}
+            {{for i,v of it1}}
             <div w-class="tab" on-tap="tabClick({{i}})">
                 <div w-class="amount">{{v.amount}}</div>
                 <div>{{v.title}}</div>

@@ -42,7 +42,7 @@
                     <div>合计：<span style="font-size:32px;color:#8A4AF3">{{it.totalMoney.toFixed(2)}}</span></div>
                     <div style="color:#888">不含运费</div>
                 </div>
-                <div w-class="pay {{it.selectList.length>0?'active':''}}">结算({{it.selectList.length}})</div>
+                <div w-class="pay {{it.selectList.length>0?'active':''}}" on-tap="pay">结算({{it.selectList.length}})</div>
             {{else}}
 
                 <div w-class="row" on-tap="deleteAll">

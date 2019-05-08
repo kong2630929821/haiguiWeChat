@@ -1,3 +1,4 @@
+import { popNew } from '../../../../pi/ui/root';
 import { Widget } from '../../../../pi/widget/widget';
 interface Props {
     list:any[];  // 列表
@@ -117,5 +118,11 @@ export class ShoppingCart extends Widget {
             this.props.totalMoney += this.props.list[num].price;
         }
         this.paint();
+    }
+
+    // 结算
+    public pay() {
+        popNew('app-view-shoppingCart-confirmOrder');
+        // popNew('app-view-mine-editAddress');
     }
 }

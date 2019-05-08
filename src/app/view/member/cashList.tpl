@@ -10,13 +10,15 @@
         </div>
     {{end}}
 
+    <div w-class="content">
     {{for i,v of it.list}}
         <div w-class="item" on-tap="goDetail({{i}})">
             <div w-class="top">
                 <div w-class="name">{{v.name}}</div>
-                <div w-class="desc">{{v.cash}}</div>
+                <div w-class="desc">{{v.money}}</div>
             </div>
             <div w-class="time">{{v.time}}</div>
         </div>
     {{end}}
+    </div>
 </div>
