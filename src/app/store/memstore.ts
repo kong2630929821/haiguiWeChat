@@ -135,6 +135,7 @@ export interface GoodsDetails {
     vip_origin:number;  // 会员商品原价，单位分
     discount:number;	// 商品折后价，单位分，即原价 + 税费 - 折扣
     rebate:number;    // 返利（仅限海王）
+    has_tax:boolean;    // 是否为保税商品
     tax:number;		// 商品税费，单位分
     images:MallImages[];	 // 商品包含的图片列表
     intro:string;		// 商品介绍
@@ -149,21 +150,20 @@ export interface GoodsDetails {
     detail:GoodsSegmentationDetails[];  // 商品分段详细描述
     out:number;       // 当前已出库，但未确认的商品数量
     total_out:number;  // 已出库，且已确认的商品数量
-    // tslint:disable-next-line:no-reserved-keywords
-    in:number;     // 当前库存数量，负整数表示无限，0表示无货, 正整数表示指定数量的库存
+    inventorys:number;         // 商品库存
 }
 
-// 商品标签
+// 商品标签 只支持两层结构
 export interface MallLabels {
     id:number;  // 	标签id
     name:string; // 	标签名
     pay_type:number; // 		标签支付类型，1现金，2积分，3表示同时支持现金和积分
     price:number;	// 	标签价格，单位分，负整数表示在商品原价上减去指定的价格，0表示对商品价格不变，正整数表示在商品原价上加上指定的价格
     childs:MallLabels[];	 // 包含的子标签列表，将所有子标签的price求合，再对商品原价进行更新
-    image:number;		// 标签图片path
+    image:MallImages;		// 标签图片path
 }
 
-// 商品规格
+// 商品规格,以列表的形式展示 比如电子产品的参数信息等
 export interface GoodsSpec {
     name:string;  // 商品的规格名
     value:string; // 规格值
@@ -173,7 +173,7 @@ export interface GoodsSpec {
 export interface GoodsSegmentationDetails {
     name:string;  // 分段名
     value:string; // 分段详细描述
-    image:number; // 分段图片path
+    image:MallImages; // 分段图片path
 }
 
 // 放入购物车的商品

@@ -1,6 +1,7 @@
+import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { getStore, Level1Groups, Level2Groups } from '../../store/memstore';
+import { getStore, GoodsDetails, Level1Groups, Level2Groups } from '../../store/memstore';
 
 export const forelet = new Forelet();
 
@@ -49,5 +50,9 @@ export class GoodsList extends Widget {
     public selectLevel2Groups(e:any,id:number) {
         this.props.selectedLevel2Groups = this.props.selectedLevel1Groups.childs.get(id);
         this.paint();
+    }
+
+    public goodsItemClick(res:any) {
+        popNew('app-view-mall-goodsDetail',{ goods:res.goods });
     }
 }

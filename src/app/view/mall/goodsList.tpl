@@ -30,7 +30,7 @@
         </div>
         <div w-class="goods-list">
             {{for i,v of it.selectedLevel2Groups.goods}}
-            <div w-class="goods-item" style="{{i % 2 === 0 ? 'padding-right:5px;' : 'padding-left:5px;'}}">
+            <div w-class="goods-item" style="{{i % 2 === 0 ? 'padding-right:5px;' : 'padding-left:5px;'}}" ev-item-click="goodsItemClick">
                 <app-components-goodsItem-goodsItem>{goods:{{v}} }</app-components-goodsItem-goodsItem>
             </div>
             {{end}}

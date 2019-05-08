@@ -1,3 +1,4 @@
+import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { GoodsDetails } from '../../store/memstore';
 import { calcPrices } from '../../utils/tools';
@@ -18,5 +19,9 @@ export class GoodsItem extends Widget {
         };
         super.setProps(this.props,oldProps);
         // console.log('GoodsItem ----------------',props);
+    }
+
+    public goodsItemClick(e:any) {
+        notify(e.node,'ev-item-click',{ goods:this.props.goods });
     }
 }
