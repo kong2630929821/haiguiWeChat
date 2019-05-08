@@ -5,8 +5,14 @@ import { getStore, Level1Groups, Level2Groups } from '../../store/memstore';
 export const forelet = new Forelet();
 
 interface Props {
+    styleMod:StyleMod;                    // 样式
     selectedLevel1Groups:Level1Groups;   // 选中的一级分组
     selectedLevel2Groups:Level2Groups;   // 选中的二级分组
+}
+
+export enum StyleMod {     // 样式
+    ONE = 1,
+    TWO = 2
 }
 /**
  * 商品列表页
@@ -17,6 +23,7 @@ export class GoodsList extends Widget {
     public setProps(props:Props,oldProps:Props) {
         this.props = {
             ...props,
+            allStyleMod:StyleMod,
             groups:getStore('mall/groups'),
             level1GroupsExpanded:false   // 是否展开一级分组下拉页
         };
