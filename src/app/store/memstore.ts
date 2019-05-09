@@ -316,6 +316,7 @@ interface EarningTotal {
 interface Store {
     mall:Mall;                        // 商城数据
     earning:EarningTotal;             // 收益统计
+    flags:any;                        // 全局标志位
 }
 // 全局内存数据库
 const store:Store = {
@@ -334,5 +335,6 @@ const store:Store = {
         cash:0,
         partner:0,
         shell:0
-    }
+    },
+    flags:{}
 };

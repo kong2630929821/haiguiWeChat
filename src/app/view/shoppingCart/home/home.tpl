@@ -1,5 +1,5 @@
 <div w-class="page">
-    {{if it.list.length==0}}
+    {{if it1.cartGoodsShow.length==0}}
     <div w-class="empty">
         <img src="../../../res/image/emptyCart.png" w-class="emptyImg"/>
         <div w-class="emptyText">去挑选中意的商品</div>
@@ -9,22 +9,27 @@
         <div style="position:relative;height: 88px;">
             <div w-class="edit" on-tap="edit">{{it.editStatus?"完成":"编辑"}}</div>
         </div>
-        {{for i,v of it.list}}
+        {{for i,v of it1.cartGoodsShow}}
         <div w-class="goods">
             {{if !it.editStatus}}
-                <img src="../../../res/image/{{it.selectList.indexOf(i)>-1?'selectBox_active.png':'selectBox.png'}}" w-class="selectBox" on-tap="select({{i}})"/>
+                <img src="../../../res/image/{{v.cartGood.selected ?'selectBox_active.png':'selectBox.png'}}" w-class="selectBox" on-tap="selectOrNot({{i}})"/>
             {{else}}
-                <img src="../../../res/image/{{it.deleteList.indexOf(i)>-1?'redSelBox_active.png':'selectBox.png'}}" w-class="selectBox" on-tap="delGoods({{i}})"/>
+                <img src="../../../res/image/{{v.cartGood.selected ? 'redSelBox_active.png':'selectBox.png'}}" w-class="selectBox" on-tap="selectOrNot({{i}})"/>
             {{end}}
-            <img src="../../../res/image/classify_active.png" w-class="goodsImg"/>
+            <img src="../../../res/image/{{v.image.path}}" w-class="goodsImg"/>
             <div w-class="column">
-                <div w-class="goodsTitle">{{v.name}}</div>
-                <div w-class="goodsFg">{{v.label}}</div>
+                <div w-class="goodsTitle">{{v.cartGood.goods.name}}</div>
+                <div w-class="goodsFg">{{v.labelShow}}</div>
                 <div w-class="row">
-                    <span style="font-size:32px;color:#8A4AF3;">{{v.price.toFixed(2)}}</span>
-                    <div w-class="row">
+                    <div w-class="good-price">
+                        <div w-class="buy-price">￥{{v.finalSale}}</div>
+                        {{if v.priceRet.discount}}
+                        <div w-class="original-price">{{v.priceRet.origin}}</div>
+                        {{end}}
+                    </div>
+                    <div w-class="row1">
                         <div w-class="btn" on-tap="delGoodsNum({{i}})">-</div>
-                        <div w-class="btn total">{{v.num}}</div>
+                        <div w-class="btn total">{{v.cartGood.amount}}</div>
                         <div w-class="btn" on-tap="addGoodsNum({{i}})">+</div>
                     </div>
                 </div>
@@ -34,22 +39,21 @@
 
         <div w-class="row bottom">
             {{if !it.editStatus}}
-                <div w-class="row" on-tap="selectAll">
+                <div w-class="row" on-tap="selectAllOrNot">
                     <img src="../../../res/image/{{it.allSelected?'selectBox_active.png':'selectBox.png'}}" w-class="selectBox"/>
                     <span style="font-size:34px;">全选</span>
                 </div>
                 <div w-class="column totalMoney">
-                    <div>合计：<span style="font-size:32px;color:#8A4AF3">{{it.totalMoney.toFixed(2)}}</span></div>
-                    <div style="color:#888">不含运费</div>
+                    <div>合计：<span style="font-size:32px;color:#8A4AF3">{{it.totalSale}}</span></div>
+                    <div style="color:#888;{{it.canOrder ? '' : 'visibility: hidden;'}}">{{it.isIncludeShipping ? "含运费" : "不含运费"}}</div>
                 </div>
-                <div w-class="pay {{it.selectList.length>0?'active':''}}" on-tap="pay">结算({{it.selectList.length}})</div>
+                <div w-class="pay {{it.canOrder ? 'active':''}}" on-tap="pay">结算({{it.totalAmount}})</div>
             {{else}}
-
-                <div w-class="row" on-tap="deleteAll">
-                    <img src="../../../res/image/{{it.allDelete?'redSelBox_active.png':'selectBox.png'}}" w-class="selectBox"/>
+                <div w-class="row" on-tap="selectAllOrNot">
+                    <img src="../../../res/image/{{it.allSelected ? 'redSelBox_active.png':'selectBox.png'}}" w-class="selectBox"/>
                     <span style="font-size:34px;">全选</span>
                 </div>
-                <div w-class="pay {{it.deleteList.length>0?'active':''}}">删除</div>
+                <div w-class="pay {{it.canOrder ? 'active': '' }}" on-tap="delCartGoods">删除</div>
             {{end}}
         </div>
     {{end}}

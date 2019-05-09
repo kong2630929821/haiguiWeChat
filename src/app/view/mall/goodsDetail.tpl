@@ -53,17 +53,17 @@
     </div>
     <div w-class="fix-bottom">
         <div w-class="left">
-            <div w-class="fix-item fix-item-1">
+            <div w-class="fix-item fix-item-1" on-tap="gotoMallHome">
                 <img src="../../res/image/mall.png"/>
                 <div>首页</div>
             </div>
-            <div w-class="fix-item fix-item-1">
+            <div w-class="fix-item fix-item-1" on-tap="gotoShoppinigCart">
                 <img src="../../res/image/shoppingCart.png"/>
                 <div>购物车</div>
             </div>
         </div>
         <div w-class="right">
-            <div w-class="fix-item fix-item-2" style="background-color:#DF4AF3;" on-tap="pushShoppingCart">加入购物车</div>
+            <div w-class="fix-item fix-item-2" style="background-color:#DF4AF3;" on-tap="chooseSpecClick">加入购物车</div>
             <div w-class="fix-item fix-item-2" style="background-color:#8A4AF3;">立即购买</div>
         </div>
     </div>

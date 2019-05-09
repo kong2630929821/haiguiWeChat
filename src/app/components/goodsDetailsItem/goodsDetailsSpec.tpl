@@ -7,7 +7,7 @@
                 <div w-class="content-box">
                     <div w-class="box1">
                         <div w-class="good-price">
-                            <div w-class="buy-price">{{it.sale}}</div>
+                            <div w-class="buy-price">{{it.finalSale}}</div>
                             {{if it.discount}}
                             <div w-class="original-price">{{it.origin}}</div>
                             {{end}}

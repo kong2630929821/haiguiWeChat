@@ -1,7 +1,7 @@
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { GoodsDetails, MallLabels } from '../../store/memstore';
-import { calcPrices } from '../../utils/tools';
+import { calcPrices, calLabelPrice, filterShowLabelImage, priceFormate } from '../../utils/tools';
 
 interface Props {
     goods:GoodsDetails;
@@ -20,6 +20,7 @@ export class GoodsDetailsSpec extends Widget {
         this.props = {
             ...props,
             ...ret,
+            finalSale:priceFormate(Number(ret.sale) * 100 + calLabelPrice(props.hasLabels)),  // 卖价加上标签影响的价格
             labelImage
         };
         super.setProps(this.props,oldProps);
@@ -30,6 +31,7 @@ export class GoodsDetailsSpec extends Widget {
         const label = this.props.choosedLabels[i][1][j];
         this.props.hasLabels[i] = label;
         this.props.labelImage = filterShowLabelImage(this.props.goods.labels,label);
+        this.props.finalSale = priceFormate(Number(this.props.sale) * 100 + calLabelPrice(this.props.hasLabels));
         this.paint();
     }
 
@@ -59,13 +61,3 @@ export class GoodsDetailsSpec extends Widget {
     }
 
 }
-
-// 展示选择标签的图片
-const filterShowLabelImage = (labels:MallLabels[],labeled:MallLabels) => {
-    for (const label of labels) {
-        for (let i = 0;i < label.childs.length;i++) {
-            const childLabel = label.childs[i];
-            if (childLabel.name === labeled.name) return childLabel.image;
-        }
-    }
-};

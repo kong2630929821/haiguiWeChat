@@ -61,3 +61,23 @@ export const calcPrices = (goods:GoodsDetails) => {
 
     return ret;
 };
+
+// 展示选择标签的图片
+export const filterShowLabelImage = (labels:MallLabels[],labeled:MallLabels) => {
+    for (const label of labels) {
+        for (let i = 0;i < label.childs.length;i++) {
+            const childLabel = label.childs[i];
+            if (childLabel.name === labeled.name) return childLabel.image;
+        }
+    }
+};
+
+// 计算标签影响的价格
+export const  calLabelPrice = (hasLabels:MallLabels[]) => {
+    let labelPrice = 0;
+    for (const v of hasLabels) {
+        labelPrice += v.price;
+    }
+
+    return labelPrice;
+};

@@ -38,7 +38,7 @@ export const getGroups = () => {
                             id:Math.random(),  
                             name:'红色',      
                             pay_type:1,        
-                            price:0,    	
+                            price:Math.floor(Math.random() * 10 * 100),    	
                             childs:[],	 
                             image:getImage()
                         };
@@ -47,7 +47,7 @@ export const getGroups = () => {
                             id:Math.random(),  
                             name:'蓝色',      
                             pay_type:1,        
-                            price:0,    	
+                            price:Math.floor(Math.random() * 10 * 100),    	
                             childs:[],	 
                             image:getImage()
                         };
@@ -56,7 +56,7 @@ export const getGroups = () => {
                             id:Math.random(),  
                             name:'黑色',      
                             pay_type:1,        
-                            price:0,    	
+                            price:Math.floor(Math.random() * 10 * 100),    	
                             childs:[],	 
                             image:getImage()	
                         };
@@ -64,7 +64,7 @@ export const getGroups = () => {
                             id:Math.random(),  
                             name:'颜色',      
                             pay_type:1,        
-                            price:0,    	
+                            price:Math.floor(Math.random() * 10 * 100),    	
                             childs:[mallLabels1Childs1,mallLabels1Childs2,mallLabels1Childs3],	 
                             image:getImage()	
                         };
@@ -73,7 +73,7 @@ export const getGroups = () => {
                             id:Math.random(),  
                             name:'大',      
                             pay_type:1,        
-                            price:0,    	
+                            price:Math.floor(Math.random() * 10 * 100),    	
                             childs:[],	 
                             image:getImage()		
                         };
@@ -81,7 +81,7 @@ export const getGroups = () => {
                             id:Math.random(),  
                             name:'中',      
                             pay_type:1,        
-                            price:0,    	
+                            price:Math.floor(Math.random() * 10 * 100),    	
                             childs:[],	 
                             image:getImage()		
                         };
@@ -89,7 +89,7 @@ export const getGroups = () => {
                             id:Math.random(),  
                             name:'小',      
                             pay_type:1,        
-                            price:0,    	
+                            price:Math.floor(Math.random() * 10 * 100),    	
                             childs:[],	 
                             image:getImage()		
                         };
@@ -97,7 +97,7 @@ export const getGroups = () => {
                             id:Math.random(),  
                             name:'尺寸',      
                             pay_type:1,        
-                            price:0,    	
+                            price:Math.floor(Math.random() * 10 * 100),    	
                             childs:[mallLabels2Childs1,mallLabels2Childs2,mallLabels2Childs3],	 
                             image:getImage()		
                         };
@@ -172,9 +172,9 @@ export const getGroups = () => {
             console.timeEnd('getGroups');
             setStore('mall/groups',groups);
             resolve(groups);
-        },100);
-    });
-};
+        },100;);
+});
+}
 
 const getImage = ():MallImages => {
     return  {

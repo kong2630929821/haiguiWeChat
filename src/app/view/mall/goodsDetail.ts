@@ -77,13 +77,14 @@ export class GoodsDetailHome extends Widget {
         this.props.amount = res.amount;
         this.paint();
     }
+    
     // 加入购物车
     public pushShoppingCart() {
         const cartGood:CartGoods = {
             goods:this.props.goods,
             amount:this.props.amount,
             labels:this.props.fixedLabels.concat(this.props.hasLabels),
-            selected:true
+            selected:false
         };
         const cartGoods = getStore('mall/cartGoods');
         cartGoods.push(cartGood);
@@ -92,6 +93,15 @@ export class GoodsDetailHome extends Widget {
         popNewMessage('添加成功');
     }
 
+    // 前往商城首页
+    public gotoMallHome() {
+        setStore('flags/gotoMallHome',true);
+    }
+
+    // 前往购物车
+    public gotoShoppinigCart() {
+        setStore('flags/gotoShoppinigCart',true);
+    }
 }
 
 // 过滤固定标签和用户选择标签
