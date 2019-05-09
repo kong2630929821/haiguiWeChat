@@ -13,13 +13,15 @@ export class GoodsDetailsSpec extends Widget {
     public setProps(props:Props,oldProps:Props) {
         const ret = calcPrices(props.goods);
         const [fixedLabels,choosedLabels,hasLabels]  = filterMallLabels(props.goods.labels);
+        const labelImage = filterShowLabelImage(props.goods.labels,hasLabels[0]);
         this.props = {
             ...props,
             ...ret,
             fixedLabels,
             choosedLabels,
             hasLabels,
-            buyNumber:1
+            buyNumber:1,
+            labelImage
         };
         super.setProps(this.props,oldProps);
         // console.log('GoodsDetailsItem ----------------',props);
@@ -27,7 +29,9 @@ export class GoodsDetailsSpec extends Widget {
 
     // 选择标签
     public clickLableItem(e:any,i:number,j:number) {
-        this.props.hasLabels[i] = this.props.choosedLabels[i][1][j];
+        const labelName = this.props.choosedLabels[i][1][j];
+        this.props.hasLabels[i] = labelName;
+        this.props.labelImage = filterShowLabelImage(this.props.goods.labels,labelName);
         this.paint();
     }
 
@@ -44,7 +48,18 @@ export class GoodsDetailsSpec extends Widget {
         this.props.buyNumber === nowBuyNumber > this.props.goods.inventorys ? this.props.goods.inventorys : nowBuyNumber;
         this.paint();
     }
+
 }
+
+// 展示选择标签的图片
+const filterShowLabelImage = (labels:MallLabels[],labelName:string) => {
+    for (const label of labels) {
+        for (let i = 0;i < label.childs.length;i++) {
+            const childLabel = label.childs[i];
+            if (childLabel.name === labelName) return childLabel.image;
+        }
+    }
+};
 
 // 过滤固定标签和用户选择标签
 const filterMallLabels = (labels:MallLabels[]) => {

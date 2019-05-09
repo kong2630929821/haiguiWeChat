@@ -99,6 +99,13 @@ export const getGroups = () => {
     });
 };
 
+const getImage = ():MallImages => {
+    return  {
+        path:`a${Math.floor(Math.random() * 100000) % 4 + 1}.png`,  
+        type:1,
+        style:1
+    };
+};
 // 获取商品详细信息
 // tslint:disable-next-line:max-func-body-length
 export const getGoodsDetails = (goods:GoodsDetails) => {
@@ -106,34 +113,32 @@ export const getGoodsDetails = (goods:GoodsDetails) => {
     return new Promise(resolve => {
         // tslint:disable-next-line:max-func-body-length
         setTimeout(() => {
-            const image:MallImages = {
-                path:'a1.png',  
-                type:1,
-                style:1
-            };
+            
             const mallLabels1Childs1:MallLabels = {
                 id:Math.random(),  
                 name:'红色',      
                 pay_type:1,        
                 price:0,    	
                 childs:[],	 
-                image
+                image:getImage()
             };
+           
             const mallLabels1Childs2:MallLabels = {
                 id:Math.random(),  
                 name:'蓝色',      
                 pay_type:1,        
                 price:0,    	
                 childs:[],	 
-                image		
+                image:getImage()
             };
+
             const mallLabels1Childs3:MallLabels = {
                 id:Math.random(),  
                 name:'黑色',      
                 pay_type:1,        
                 price:0,    	
                 childs:[],	 
-                image		
+                image:getImage()	
             };
             const mallLabels1:MallLabels = {
                 id:Math.random(),  
@@ -141,7 +146,7 @@ export const getGoodsDetails = (goods:GoodsDetails) => {
                 pay_type:1,        
                 price:0,    	
                 childs:[mallLabels1Childs1,mallLabels1Childs2,mallLabels1Childs3],	 
-                image		
+                image:getImage()	
             };
 
             const mallLabels2Childs1:MallLabels = {
@@ -150,7 +155,7 @@ export const getGoodsDetails = (goods:GoodsDetails) => {
                 pay_type:1,        
                 price:0,    	
                 childs:[],	 
-                image		
+                image:getImage()		
             };
             const mallLabels2Childs2:MallLabels = {
                 id:Math.random(),  
@@ -158,7 +163,7 @@ export const getGoodsDetails = (goods:GoodsDetails) => {
                 pay_type:1,        
                 price:0,    	
                 childs:[],	 
-                image		
+                image:getImage()		
             };
             const mallLabels2Childs3:MallLabels = {
                 id:Math.random(),  
@@ -166,7 +171,7 @@ export const getGoodsDetails = (goods:GoodsDetails) => {
                 pay_type:1,        
                 price:0,    	
                 childs:[],	 
-                image		
+                image:getImage()		
             };
             const mallLabels2:MallLabels = {
                 id:Math.random(),  
@@ -174,7 +179,7 @@ export const getGoodsDetails = (goods:GoodsDetails) => {
                 pay_type:1,        
                 price:0,    	
                 childs:[mallLabels2Childs1,mallLabels2Childs2,mallLabels2Childs3],	 
-                image		
+                image:getImage()		
             };
             const mallLabels3:MallLabels = {
                 id:Math.random(),  
@@ -182,18 +187,13 @@ export const getGoodsDetails = (goods:GoodsDetails) => {
                 pay_type:1,        
                 price:0,    	
                 childs:[],	 
-                image		
+                image:getImage()		
             };
 
-            const imgae1:MallImages = {
-                path:'a2.png',
-                type:1,
-                style:1
-            };
             const detail:GoodsSegmentationDetails = {
                 name:'使用方法', 
                 value:'此商品自行使用', 
-                image:imgae1 
+                image:getImage() 
             };
            
             const good:GoodsDetails = {
