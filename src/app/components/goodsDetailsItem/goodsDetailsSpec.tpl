@@ -7,9 +7,9 @@
                 <div w-class="content-box">
                     <div w-class="box1">
                         <div w-class="good-price">
-                            <div w-class="buy-price">{{it.finalSale}}</div>
+                            <div w-class="buy-price">{{(it.finalSale/100).toFixed(2)}}</div>
                             {{if it.discount}}
-                            <div w-class="original-price">{{it.origin}}</div>
+                            <div w-class="original-price">{{(it.origin / 100).toFixed(2)}}</div>
                             {{end}}
                         </div>
                         <div w-class="left-num">剩余{{it.goods.inventorys}}件</div>

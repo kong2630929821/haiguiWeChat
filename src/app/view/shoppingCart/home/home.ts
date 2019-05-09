@@ -1,8 +1,8 @@
 import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
-import { CartGoods, register, setStore } from '../../../store/memstore';
-import { calcPrices, calLabelPrice, filterShowLabelImage, priceFormate } from '../../../utils/tools';
+import { CartGoods, MallLabels, register, setStore } from '../../../store/memstore';
+import { calcPrices, calLabelPrice, filterShowLabelImage } from '../../../utils/tools';
 
 export const forelet = new Forelet();
 
@@ -92,7 +92,12 @@ export class ShoppingCart extends Widget {
 
     // 结算
     public pay() {
-        popNew('app-view-shoppingCart-confirmOrder');
+        if (!this.props.canOrder) return;
+        const wantGoods = [];
+        this.state.cartGoodsShow.forEach(v => {
+            if (v.cartGood.selected) wantGoods.push(v.cartGood);
+        });
+        popNew('app-view-shoppingCart-confirmOrder',{ orderGoods:wantGoods });
     }
 
     // 计算商品总价
@@ -104,7 +109,7 @@ export class ShoppingCart extends Widget {
         let totalAmount = 0;          // 购买商品的总数量
         for (const v of cartGoodsShow) {
             if (v.cartGood.selected) {
-                totalSale += Number(v.finalSale) * 100 * v.cartGood.amount;
+                totalSale += v.finalSale * v.cartGood.amount;
                 totalAmount += v.cartGood.amount;
                 canOrder = true;
             }
@@ -112,7 +117,7 @@ export class ShoppingCart extends Widget {
             if (!v.cartGood.goods.has_tax) isIncludeShipping = false;
         }
 
-        this.props.totalSale = priceFormate(totalSale);
+        this.props.totalSale = totalSale;
         this.props.isIncludeShipping = isIncludeShipping;
         this.props.canOrder = canOrder;
         this.props.totalAmount = totalAmount;
@@ -132,8 +137,16 @@ const STATE = {
     cartGoodsShow:[]  // 购物车列表显示
 };
 
+// 购物车商品显示信息
+export interface CartGoodsShow {
+    cartGood:CartGoods;   // 放入购物车的商品
+    labelShow:string;    // 显示标签
+    priceRet:any;       // 计算后的价格相关信息
+    finalSale:number;     // 最终的商品售价  包括标签的不同影响的价格 
+    image:MallLabels;   // 要展示的图片
+}
 register('mall/cartGoods',(cartGoods:CartGoods[]) => {
-    const cartGoodsShow = [];
+    const cartGoodsShow:CartGoodsShow[] = [];
     for (const cartGood of cartGoods) {
         const cartGoodShow:any = {};
         const labelName = [];
@@ -144,7 +157,7 @@ register('mall/cartGoods',(cartGoods:CartGoods[]) => {
         cartGoodShow.cartGood = cartGood;          // 购物车原始信息
         cartGoodShow.labelShow = labelName.join(',');   // 显示标签
         cartGoodShow.priceRet = priceRet;           // 价格相关信息
-        cartGoodShow.finalSale = priceFormate(Number(priceRet.sale) * 100 + calLabelPrice(cartGood.labels));                  // 最终的商品售价  包括标签的不同影响的价格
+        cartGoodShow.finalSale = priceRet.sale + calLabelPrice(cartGood.labels);                  // 最终的商品售价  包括标签的不同影响的价格
         cartGoodShow.image = filterShowLabelImage(cartGood.goods.labels,cartGood.labels[cartGood.labels.length - 1]);  // 要展示的图片
         cartGoodsShow.push(cartGoodShow);
     }

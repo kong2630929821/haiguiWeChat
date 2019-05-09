@@ -22,9 +22,9 @@
                 <div w-class="goodsFg">{{v.labelShow}}</div>
                 <div w-class="row">
                     <div w-class="good-price">
-                        <div w-class="buy-price">￥{{v.finalSale}}</div>
+                        <div w-class="buy-price">￥{{(v.finalSale/100).toFixed(2)}}</div>
                         {{if v.priceRet.discount}}
-                        <div w-class="original-price">{{v.priceRet.origin}}</div>
+                        <div w-class="original-price">{{(v.priceRet.origin / 100).toFixed(2)}}</div>
                         {{end}}
                     </div>
                     <div w-class="row1">
@@ -44,7 +44,7 @@
                     <span style="font-size:34px;">全选</span>
                 </div>
                 <div w-class="column totalMoney">
-                    <div>合计：<span style="font-size:32px;color:#8A4AF3">{{it.totalSale}}</span></div>
+                    <div>合计：<span style="font-size:32px;color:#8A4AF3">{{(it.totalSale/100).toFixed(2)}}</span></div>
                     <div style="color:#888;{{it.canOrder ? '' : 'visibility: hidden;'}}">{{it.isIncludeShipping ? "含运费" : "不含运费"}}</div>
                 </div>
                 <div w-class="pay {{it.canOrder ? 'active':''}}" on-tap="pay">结算({{it.totalAmount}})</div>
