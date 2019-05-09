@@ -74,7 +74,7 @@ export class Input extends Widget {
      * 获取真实输入框dom
      */
     public getInput() {
-        return getRealNode((<any>this.tree).children[0]);
+        return getRealNode((<any>this.tree)).querySelector('input');
     }
 
     /**

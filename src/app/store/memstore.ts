@@ -305,9 +305,17 @@ interface Mall {
     areas:Area[];                    // 地区列表
     suppliers:Supplier[];            // 供应商列表
 }
+
+interface EarningTotal {
+    baby:number;  // 海宝数量
+    cash:number;  // 现金总收益
+    partner:number;  // 伙伴数量
+    shell:number; // 海贝总收益
+}
 // 海龟一号store
 interface Store {
     mall:Mall;                        // 商城数据
+    earning:EarningTotal;             // 收益统计
 }
 // 全局内存数据库
 const store:Store = {
@@ -320,5 +328,11 @@ const store:Store = {
         brands:[],                              // 品牌列表
         areas:[],                               // 地区列表
         suppliers:[]                            // 供应商列表
+    },
+    earning:{
+        baby:0,
+        cash:0,
+        partner:0,
+        shell:0
     }
 };
