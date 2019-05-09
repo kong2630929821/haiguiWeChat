@@ -15,14 +15,14 @@
                         <div w-class="left-num">剩余{{it.goods.inventorys}}件</div>
                     </div>
                 </div>
-                <img src="../../res/image/close.png" w-class="close-icon"/>
+                <img src="../../res/image/close.png" w-class="close-icon" on-tap="closeClick"/>
             </div>
             {{for i,v of it.choosedLabels}}
             <div w-class="choose-item">
                 <div w-class="choose-item-title">选择</div>
                 <div w-class="choose-box">
                     {{for j,k of v[1]}}
-                    <span w-class="item {{k === it.hasLabels[i] ? 'item-active' : ''}}" on-tap="clickLableItem(e,{{i}},{{j}})">{{k}}</span>
+                    <span w-class="item {{k.name === it.hasLabels[i].name ? 'item-active' : ''}}" on-tap="clickLableItem(e,{{i}},{{j}})">{{k.name}}</span>
                     {{end}}
                 </div>
             </div>
@@ -32,13 +32,13 @@
             <div w-class="buy-title">购买数量</div>
             <div w-class="buy-box">
                 <img src="../../res/image/less_icon.png" on-tap="lessClick"/>
-                <div w-class="buy-num">{{it.buyNumber}}</div>
+                <div w-class="buy-num">{{it.amount}}</div>
                 <img src="../../res/image/add_icon.png" on-tap="addClick"/>
             </div>
         </div>
     </div>
     <div w-class="fix-bottom">
-        <div w-class="fix-item fix-item-2" style="background-color:#DF4AF3;">加入购物车</div>
+        <div w-class="fix-item fix-item-2" style="background-color:#DF4AF3;" on-tap="pushShoppingCart">加入购物车</div>
         <div w-class="fix-item fix-item-2" style="background-color:#8A4AF3;">立即购买</div>
     </div>
 </div>

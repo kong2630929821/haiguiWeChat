@@ -4,8 +4,11 @@ import { requestAsync } from './login';
 /**
  * 获取分组信息
  */
+// tslint:disable-next-line:max-func-body-length
 export const getGroups = () => {
+    // tslint:disable-next-line:max-func-body-length
     return new Promise(resolve => {
+        // tslint:disable-next-line:max-func-body-length
         setTimeout(() => {
             const groups = new Map<number, Level1Groups>();
             console.time('getGroups');
@@ -31,6 +34,81 @@ export const getGroups = () => {
                             style:1
                         };
                         const has_tax = Math.random() > 0.5 ? true : false;
+                        const mallLabels1Childs1:MallLabels = {
+                            id:Math.random(),  
+                            name:'红色',      
+                            pay_type:1,        
+                            price:0,    	
+                            childs:[],	 
+                            image:getImage()
+                        };
+                       
+                        const mallLabels1Childs2:MallLabels = {
+                            id:Math.random(),  
+                            name:'蓝色',      
+                            pay_type:1,        
+                            price:0,    	
+                            childs:[],	 
+                            image:getImage()
+                        };
+            
+                        const mallLabels1Childs3:MallLabels = {
+                            id:Math.random(),  
+                            name:'黑色',      
+                            pay_type:1,        
+                            price:0,    	
+                            childs:[],	 
+                            image:getImage()	
+                        };
+                        const mallLabels1:MallLabels = {
+                            id:Math.random(),  
+                            name:'颜色',      
+                            pay_type:1,        
+                            price:0,    	
+                            childs:[mallLabels1Childs1,mallLabels1Childs2,mallLabels1Childs3],	 
+                            image:getImage()	
+                        };
+            
+                        const mallLabels2Childs1:MallLabels = {
+                            id:Math.random(),  
+                            name:'大',      
+                            pay_type:1,        
+                            price:0,    	
+                            childs:[],	 
+                            image:getImage()		
+                        };
+                        const mallLabels2Childs2:MallLabels = {
+                            id:Math.random(),  
+                            name:'中',      
+                            pay_type:1,        
+                            price:0,    	
+                            childs:[],	 
+                            image:getImage()		
+                        };
+                        const mallLabels2Childs3:MallLabels = {
+                            id:Math.random(),  
+                            name:'小',      
+                            pay_type:1,        
+                            price:0,    	
+                            childs:[],	 
+                            image:getImage()		
+                        };
+                        const mallLabels2:MallLabels = {
+                            id:Math.random(),  
+                            name:'尺寸',      
+                            pay_type:1,        
+                            price:0,    	
+                            childs:[mallLabels2Childs1,mallLabels2Childs2,mallLabels2Childs3],	 
+                            image:getImage()		
+                        };
+                        const mallLabels3:MallLabels = {
+                            id:Math.random(),  
+                            name:'特价商品',      
+                            pay_type:1,        
+                            price:0,    	
+                            childs:[],	 
+                            image:getImage()		
+                        };
                         const good:GoodsDetails = {
                             id:goodsId,
                             name:Math.random() > 0.5 ? `商品名字很短${goodsId}` : `商品名字很长商品名字很长商品名字很长商品名字很长${goodsId}`,
@@ -43,7 +121,7 @@ export const getGroups = () => {
                             tax:has_tax ? Number((Math.random() * 100).toFixed(2)) : 0,
                             images:[image1,image2,image3],
                             intro:`商品${goodsId}的详细介绍`,
-                            labels:undefined,
+                            labels:[mallLabels1,mallLabels2,mallLabels3],
                             brand:undefined,
                             area:undefined,
                             supplier:undefined,
@@ -107,88 +185,11 @@ const getImage = ():MallImages => {
 };
 // 获取商品详细信息
 // tslint:disable-next-line:max-func-body-length
-export const getGoodsDetails = (goods:GoodsDetails) => {
+export const getGoodsDetails = (goods:GoodsDetails):Promise<GoodsDetails> => {
     // tslint:disable-next-line:max-func-body-length
     return new Promise(resolve => {
         // tslint:disable-next-line:max-func-body-length
         setTimeout(() => {
-            
-            const mallLabels1Childs1:MallLabels = {
-                id:Math.random(),  
-                name:'红色',      
-                pay_type:1,        
-                price:0,    	
-                childs:[],	 
-                image:getImage()
-            };
-           
-            const mallLabels1Childs2:MallLabels = {
-                id:Math.random(),  
-                name:'蓝色',      
-                pay_type:1,        
-                price:0,    	
-                childs:[],	 
-                image:getImage()
-            };
-
-            const mallLabels1Childs3:MallLabels = {
-                id:Math.random(),  
-                name:'黑色',      
-                pay_type:1,        
-                price:0,    	
-                childs:[],	 
-                image:getImage()	
-            };
-            const mallLabels1:MallLabels = {
-                id:Math.random(),  
-                name:'颜色',      
-                pay_type:1,        
-                price:0,    	
-                childs:[mallLabels1Childs1,mallLabels1Childs2,mallLabels1Childs3],	 
-                image:getImage()	
-            };
-
-            const mallLabels2Childs1:MallLabels = {
-                id:Math.random(),  
-                name:'大',      
-                pay_type:1,        
-                price:0,    	
-                childs:[],	 
-                image:getImage()		
-            };
-            const mallLabels2Childs2:MallLabels = {
-                id:Math.random(),  
-                name:'中',      
-                pay_type:1,        
-                price:0,    	
-                childs:[],	 
-                image:getImage()		
-            };
-            const mallLabels2Childs3:MallLabels = {
-                id:Math.random(),  
-                name:'小',      
-                pay_type:1,        
-                price:0,    	
-                childs:[],	 
-                image:getImage()		
-            };
-            const mallLabels2:MallLabels = {
-                id:Math.random(),  
-                name:'尺寸',      
-                pay_type:1,        
-                price:0,    	
-                childs:[mallLabels2Childs1,mallLabels2Childs2,mallLabels2Childs3],	 
-                image:getImage()		
-            };
-            const mallLabels3:MallLabels = {
-                id:Math.random(),  
-                name:'特价商品',      
-                pay_type:1,        
-                price:0,    	
-                childs:[],	 
-                image:getImage()		
-            };
-
             const detail:GoodsSegmentationDetails = {
                 name:'使用方法', 
                 value:'此商品自行使用', 
@@ -197,7 +198,6 @@ export const getGoodsDetails = (goods:GoodsDetails) => {
            
             const good:GoodsDetails = {
                 ...goods,
-                labels:[mallLabels1,mallLabels2,mallLabels3],
                 brand:undefined,
                 area:undefined,
                 supplier:undefined,

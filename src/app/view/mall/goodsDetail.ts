@@ -1,8 +1,7 @@
-import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { getGoodsDetails } from '../../net/pull';
-import { GoodsDetails } from '../../store/memstore';
-import { calcPrices } from '../../utils/tools';
+import { CartGoods, getStore, GoodsDetails, MallLabels, setStore } from '../../store/memstore';
+import { calcPrices, popNewMessage } from '../../utils/tools';
 
 interface Props {
     goods:GoodsDetails;     // 商品详情
@@ -34,10 +33,17 @@ export class GoodsDetailHome extends Widget {
     };
     public setProps(props:Props,oldProps:Props) {
         const ret = calcPrices(props.goods);
+        const [fixedLabels,choosedLabels,hasLabels]  = filterMallLabels(props.goods.labels);
         this.props = {
             ...props,
             ...ret,
-            descProps:undefined
+            descProps:undefined,   
+            chooseSpec:false,
+            choosedLabels,          // 可供选择的标签
+            hasLabels,               // 已经选择的标签
+            fixedLabels,            // 固定选择的标签
+            amount:1              // 选择数量
+
         };
         super.setProps(this.props);
         getGoodsDetails(props.goods).then(goods => {
@@ -46,11 +52,13 @@ export class GoodsDetailHome extends Widget {
         });
     }
 
+    // 点击描述
     public clickDescs(e:any,key:string) {
         this.props.descProps = this.goodsItemDescs[key];
         this.paint();
     }
 
+    // 关闭描述
     public closeDescsClick() {
         this.props.descProps = undefined;
         this.paint();
@@ -58,6 +66,53 @@ export class GoodsDetailHome extends Widget {
 
     // 选择规则
     public chooseSpecClick() {
-        popNew('app-components-goodsDetailsItem-goodsDetailsSpec',{ goods:this.props.goods });
+        this.props.chooseSpec = true;
+        this.paint();
     }
+
+    // 选择规则关闭
+    public specCloseClick(res:any) {
+        this.props.chooseSpec = false;
+        this.props.hasLabels = res.hasLabels;
+        this.props.amount = res.amount;
+        this.paint();
+    }
+    // 加入购物车
+    public pushShoppingCart() {
+        const cartGood:CartGoods = {
+            goods:this.props.goods,
+            amount:this.props.amount,
+            labels:this.props.fixedLabels.concat(this.props.hasLabels),
+            selected:true
+        };
+        const cartGoods = getStore('mall/cartGoods');
+        cartGoods.push(cartGood);
+        
+        setStore('mall/cartGoods',cartGoods);
+        popNewMessage('添加成功');
+    }
+
 }
+
+// 过滤固定标签和用户选择标签
+const filterMallLabels = (labels:MallLabels[]) => {
+    const fixedLabels = [];  // 固定标签
+    const choosedLabels = [];  // 可供选择的标签
+    const hasLabels = [];     // 默认选择的标签
+    for (const label of labels) {
+        if (label.childs.length > 0) {
+            const childsLabel = [];
+            for (let i = 0;i < label.childs.length;i++) {
+                const childLabel = label.childs[i];
+                childsLabel.push(childLabel);
+                if (!i) hasLabels.push(childLabel);
+            }
+            choosedLabels.push([label,childsLabel]);
+        } else {
+            fixedLabels.push(label);
+        }
+    }
+
+    return [fixedLabels,choosedLabels,hasLabels];
+   
+};

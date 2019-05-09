@@ -139,9 +139,9 @@ export interface GoodsDetails {
     tax:number;		// 商品税费，单位分
     images:MallImages[];	 // 商品包含的图片列表
     intro:string;		// 商品介绍
+    labels:MallLabels[];	 // 商品包含的标签id列表，商品有自已的标签，同时会继承分组的标签，相同id的标签则忽略
 
 /******************************************************************/
-    labels:MallLabels[];	 // 商品包含的标签id列表，商品有自已的标签，同时会继承分组的标签，相同id的标签则忽略
     brand:number;  // 品牌id
     area:number;	 // 地区id
     supplier:number; // 供应商id

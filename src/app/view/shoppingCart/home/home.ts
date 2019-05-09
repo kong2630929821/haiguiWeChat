@@ -1,5 +1,10 @@
 import { popNew } from '../../../../pi/ui/root';
+import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
+import { CartGoods, register } from '../../../store/memstore';
+
+export const forelet = new Forelet();
+
 interface Props {
     list:any[];  // 列表
     selectList:number[];  // 选中下标
@@ -123,6 +128,10 @@ export class ShoppingCart extends Widget {
     // 结算
     public pay() {
         popNew('app-view-shoppingCart-confirmOrder');
-        // popNew('app-view-mine-editAddress');
     }
 }
+
+register('mall/cartGoods',(cartGoods:CartGoods[]) => {
+    console.log('cartGoods ====',cartGoods);
+    forelet.paint(cartGoods);
+});
