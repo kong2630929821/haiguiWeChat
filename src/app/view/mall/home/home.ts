@@ -3,6 +3,7 @@ import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
 import { GroupsLocation } from '../../../config';
 import { Level1Groups, Level2Groups, register } from '../../../store/memstore';
+import { StyleMod } from '../goodsList';
 
 export const forelet = new Forelet();
 
@@ -48,7 +49,7 @@ export class MallHome extends Widget {
     public gotoGoodsList(id:number) {
         const selectedLevel1Groups = this.state.groups.get(id);
         const selectedLevel2Groups = [...selectedLevel1Groups.childs][0][1];
-        popNew('app-view-mall-goodsList',{ selectedLevel1Groups,selectedLevel2Groups });
+        popNew('app-view-mall-goodsList',{ selectedLevel1Groups,selectedLevel2Groups,styleMod:StyleMod.ONE });
     }
 }
 

@@ -1,6 +1,6 @@
 <div w-class="new-page" class="new-page">
     <div style="height:350px;width:100%;" ev-click-slide="slideClick">
-        <app-components-imgSwiper-imgSwiper>{ list:{{it1.firstGroups}} }</app-components-imgSwiper-imgSwiper>
+        <app-components-imgSwiper-imgSwiper>{ list:{{it1.firstGroups}},mod:1 }</app-components-imgSwiper-imgSwiper>
     </div>
     <div style="margin-top:20px;" ev-click-groups-one="groupsOneClick">
         <app-components-groups1-groups1>{ list:{{it1.secondGroups}} }</app-components-groups1-groups1>
