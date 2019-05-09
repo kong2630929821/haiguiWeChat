@@ -4,6 +4,7 @@
         <div w-class="total">{{it.title}}总数</div>
     </div>
 
+    <div w-class="content">
     {{for i,v of it.list}}
         <div w-class="item" on-tap="goDetail({{i}})">
             <div w-class="left">
@@ -14,4 +15,5 @@
             <img src="../../res/image/arrowRight.png" w-class="right"/>
         </div>
     {{end}}
+    </div>
 </div>

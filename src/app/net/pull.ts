@@ -1,10 +1,9 @@
-import { GoodsDetails, GoodsInventory, GoodsSegmentationDetails, Level1Groups, Level2Groups, MallImages, MallLabels,setStore } from '../store/memstore';
+import { GoodsDetails, GoodsSegmentationDetails, Level1Groups, Level2Groups, MallImages, MallLabels,setStore } from '../store/memstore';
+import { requestAsync } from './login';
 
 /**
- * 通信接口
+ * 获取分组信息
  */
-
- // 获取分组信息
 export const getGroups = () => {
     return new Promise(resolve => {
         setTimeout(() => {
@@ -212,4 +211,72 @@ export const getGoodsDetails = (goods:GoodsDetails) => {
             resolve(good);
         },200);
     });
+};
+
+/**
+ * 获取收益统计
+ */
+export const getEarningTotal = () => {
+    const msg = {
+        type:'mall/members@earnings_total',
+        param:{}
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 获取海宝列表
+ */
+export const getHBaoList = (year?:number,month?:number) => {
+    let param = {};
+    if (year) {
+        param = {
+            year: year,
+            month: month
+        };
+    }
+    const msg = {
+        type:'mall/members@haibao_details',
+        param:param
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 获取伙伴列表
+ */
+export const getPartnerList = (year?:number,month?:number) => {
+    let param = {};
+    if (year) {
+        param = {
+            year: year,
+            month: month
+        };
+    }
+    const msg = {
+        type:'mall/members@partner_details',
+        param:param
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 获取收益列表
+ * ttype  1:现金,2:海贝,3:积分
+ */
+export const getEarningList = (year:number,month:number,ttype:number) => {
+    const msg = {
+        type:'mall/members@earnings_log',
+        param:{
+            year: year,
+            month: month,
+            type:ttype
+        }
+    };
+
+    return requestAsync(msg);
+
 };
