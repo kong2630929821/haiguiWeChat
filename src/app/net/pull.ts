@@ -278,5 +278,16 @@ export const getEarningList = (year:number,month:number,ttype:number) => {
     };
 
     return requestAsync(msg);
+};
 
+/**
+ * 获取邀请码
+ */
+export const getInviteCode = () => {
+    const msg = {
+        type:'mall/members@get_invitation_code',
+        param:{}
+    };
+
+    return requestAsync(msg);
 };

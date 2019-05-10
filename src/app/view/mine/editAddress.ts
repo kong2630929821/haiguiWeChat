@@ -1,3 +1,4 @@
+import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 
 /**
@@ -8,6 +9,21 @@ export class EditAddress extends Widget {
         name:'',
         tel:'',
         province:'',
-        address:''
+        address:'',
+        areaSelect:[]
     };
+
+     // 选择省 市 区
+    public selectArea() {
+        popNew('app-components-areaSelect-areaSelect',{ selected:this.props.areaSelect },(r) => {
+            if (r && r.length > 0) {
+                this.props.areaSelect = r;
+                const res = r.map(item => {
+                    return item.name;
+                });
+                this.props.province = res.join('');
+                this.paint();
+            }
+        });
+    }
 }

@@ -1,0 +1,54 @@
+.page{
+    display: flex;
+    flex-direction: column;
+    background: rgba(53,53,53,0.6);
+}
+.top{
+    height: 320px;
+    flex-shrink: 0;
+}
+.content{
+    flex: 1 0 0;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+}
+.row{
+    height: 88px;
+    line-height: 88px;
+    font-size: 26px;
+    color: #222;
+    padding-left: 30px;
+}
+.row1{
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #E5E5E5;
+    justify-content: space-between;
+}
+.close{
+    width: 30px;
+    height: 30px;
+    border: 30px solid transparent;
+}
+.text{
+    width: auto;
+    padding: 0 10px;
+    height: 88px;
+    line-height: 88px;
+    font-size: 26px;
+    color: #222;
+    margin-right: 30px;
+}
+.active{
+    color:#8A4AF3;
+    border-bottom: 3px solid #8A4AF3;
+}
+.activeText{
+    color:#8A4AF3;
+}
+.areaBox{
+    flex: 1 0 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+}

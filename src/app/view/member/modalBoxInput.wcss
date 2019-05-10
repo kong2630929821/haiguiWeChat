@@ -6,7 +6,6 @@
 }
 .contain{
     width:620px;
-    height:700px;
     background:rgba(255,255,255,1);
     border-radius:10px;
 }
@@ -46,6 +45,7 @@
     justify-content: center;
     margin-top: 60px;
     font-size: 28px;
+    margin-bottom: 30px;
 }
 .cancel{
     width:200px;
