@@ -1,12 +1,19 @@
+import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { getStore, Level1Groups, Level2Groups } from '../../store/memstore';
+import { getStore, GoodsDetails, Level1Groups, Level2Groups } from '../../store/memstore';
 
 export const forelet = new Forelet();
 
 interface Props {
+    styleMod:StyleMod;                    // 样式
     selectedLevel1Groups:Level1Groups;   // 选中的一级分组
     selectedLevel2Groups:Level2Groups;   // 选中的二级分组
+}
+
+export enum StyleMod {     // 样式
+    ONE = 1,
+    TWO = 2
 }
 /**
  * 商品列表页
@@ -17,6 +24,7 @@ export class GoodsList extends Widget {
     public setProps(props:Props,oldProps:Props) {
         this.props = {
             ...props,
+            allStyleMod:StyleMod,
             groups:getStore('mall/groups'),
             level1GroupsExpanded:false   // 是否展开一级分组下拉页
         };
@@ -42,5 +50,9 @@ export class GoodsList extends Widget {
     public selectLevel2Groups(e:any,id:number) {
         this.props.selectedLevel2Groups = this.props.selectedLevel1Groups.childs.get(id);
         this.paint();
+    }
+
+    public goodsItemClick(res:any) {
+        popNew('app-view-mall-goodsDetail',{ goods:res.goods });
     }
 }

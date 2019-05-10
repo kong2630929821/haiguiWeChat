@@ -2,7 +2,7 @@
  * 常用工具
  */
 import { popNew } from '../../pi/ui/root';
-import { GoodsDetails } from '../store/memstore';
+import { GoodsDetails, GoodsInventory, MallLabels } from '../store/memstore';
 
 // 弹出提示框
 export const popNewMessage = (content: any) => {

@@ -2,10 +2,11 @@ import { notify } from '../../../pi/widget/event';
 import { getRealNode } from '../../../pi/widget/painter';
 import { Widget } from '../../../pi/widget/widget';
 import { Swiper } from '../../res/js/swiper.min';
-import { Level1Groups } from '../../store/memstore';
+import { Level1Groups, MallImages } from '../../store/memstore';
 
 interface Props {
-    list:Level1Groups[];   // image path列表
+    mod:number;                        // 1 首页轮播  2 商品详情轮播
+    list:Level1Groups[] | MallImages[];   // image path列表
 }
 /**
  * 轮播图组件
@@ -19,31 +20,43 @@ export class ImgSwiper extends Widget {
         };
         super.setProps(this.props,oldProps);
     }
+    
+    public attach() {
+        super.attach();
+        if (this.swiper || this.props.list.length <= 1) return;
+        this.initSwiper();
+    }
+
     public afterUpdate() {
         super.afterUpdate();
         if (this.swiper) return;
         setTimeout(() => {
-            const $root = getRealNode((<any>this.tree).children[0]);
-            this.swiper = new Swiper ($root, {
-                loop: true, // 循环模式选项
-                observer:true,// 修改swiper自己或子元素时，自动初始化swiper
-                observeParents:true,// 修改swiper的父元素时，自动初始化swiper
-                autoplay: {
-                    delay: 2000,
-                    stopOnLastSlide: false,
-                    disableOnInteraction: false
-                },
-                on:{
-                    slideChangeTransitionStart: (r) => {
-                        this.props.activeIndex = this.swiper ? (this.swiper.activeIndex > this.props.list.length ? 1 : this.swiper.activeIndex) : 1; // 切换结束时，告诉我现在是第几个slide
-                        this.paint();
-                    }
-                }
-            });   
+            this.initSwiper();
         },100);
     }
 
+    // 初始化swiper
+    public initSwiper() {
+        const $root = getRealNode((<any>this.tree).children[0]);
+        this.swiper = new Swiper ($root, {
+            loop: true, // 循环模式选项
+            observer:true,// 修改swiper自己或子元素时，自动初始化swiper
+            observeParents:true,// 修改swiper的父元素时，自动初始化swiper
+            autoplay: {
+                delay: 2000,
+                stopOnLastSlide: false,
+                disableOnInteraction: false
+            },
+            on:{
+                slideChangeTransitionStart: (r) => {
+                    this.props.activeIndex = this.swiper ? (this.swiper.activeIndex > this.props.list.length ? 1 : this.swiper.activeIndex) : 1; // 切换结束时，告诉我现在是第几个slide
+                    this.paint();
+                }
+            }
+        });   
+    }
     public clickSlide(e:any) {
+        if (this.props.mod === 2) return;
         notify(e.node,'ev-click-slide',this.props.list[this.props.activeIndex].id);
     }
 }
