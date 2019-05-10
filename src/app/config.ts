@@ -23,3 +23,6 @@ export enum GroupsLocation {
     SECOND = 2,  //  位置2 （轮播图下方分组）
     THIRD = 3   //   位置3  （剩下分组）
 }
+
+// 未支付订单15分钟后回到购物车中，库存也会回退
+export const PendingPaymentDuration = 15 * 60 * 1000;

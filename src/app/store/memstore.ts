@@ -297,7 +297,8 @@ export enum OrderStatus {
     PENDINGPAYMENT = 1,   // 待付款
     PENDINGDELIVERED  = 2,   // 待发货
     PENDINGRECEIPT  = 3,   // 待收货
-    COMPLETED   = 4        // 已完成
+    COMPLETED   = 4,        // 已完成
+    RETURN = 5         // 退货
 }
 
 // 商城数据

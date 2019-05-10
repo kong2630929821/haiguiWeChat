@@ -1,24 +1,21 @@
 import { popNew } from '../../../../pi/ui/root';
 import { Widget } from '../../../../pi/widget/widget';
+import { OrderStatus } from '../../../store/memstore';
 
 /**
  * 我的首页
  */
 export class Home extends Widget {
-    public props:any = {
-        orderType:[
-            { name:'待付款',img:'wallet.png' },
-            { name:'待发货',img:'goods.png' },
-            { name:'待收货',img:'truck.png' },
-            { name:'已完成',img:'order.png' },
-            { name:'退货',img:'return.png' }
-        ]
-    };
-
     public setProps(props:any) {
         this.props = {
-            ...this.props,
-            ...props
+            ...props,
+            allStaus:[
+                { name:'待付款',status:OrderStatus.PENDINGPAYMENT,img:'wallet.png' },
+                { name:'待发货',status:OrderStatus.PENDINGDELIVERED,img:'goods.png' },
+                { name:'待收货',status:OrderStatus.PENDINGRECEIPT,img:'truck.png' },
+                { name:'已完成',status:OrderStatus.COMPLETED ,img:'order.png' },
+                { name:'退货',status:OrderStatus.RETURN,img:'return.png' }
+            ]
         };
         super.setProps(this.props);
     }
@@ -27,7 +24,8 @@ export class Home extends Widget {
         popNew('app-view-mine-addressList');
     }
 
-    public itemClick(num:number) {
-        popNew('app-view-mine-orderList',{ active: num });
+    public itemClick(status:OrderStatus) {
+        if (status === OrderStatus.RETURN) return;
+        popNew('app-view-mine-orderList',{ activeStatus: status,allStaus:this.props.allStaus.slice(0,this.props.allStaus.length - 1) });
     }
 }

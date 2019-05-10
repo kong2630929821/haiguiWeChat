@@ -1,4 +1,4 @@
-import { Address, getStore, GoodsDetails, GoodsSegmentationDetails, Level1Groups, Level2Groups,MallImages, MallLabels, Order, OrderStatus, setStore } from '../store/memstore';
+import { Address, getStore, GoodsDetails, GoodsSegmentationDetails, Level1Groups, Level2Groups,MallImages, MallLabels, Order, OrderGoods, OrderStatus, setStore } from '../store/memstore';
 import { requestAsync } from './login';
 
 /**
@@ -240,11 +240,44 @@ export const getOrders = () => {
             for (let i = 0;i < 12;i++) {
                 const orderId = Math.floor(Math.random() * 100000);
                 const groups = [...getStore('mall/groups')];
-                const orderGoods = [...groups[0][1].childs][0][1].goods;
+                const goods:GoodsDetails[] = [...groups[0][1].childs][0][1].goods;
                 const now = new Date().getTime();
+                const mallLabels3:MallLabels = {
+                    id:Math.random(),  
+                    name:'特价商品',      
+                    pay_type:1,        
+                    price:0,    	
+                    childs:[],	 
+                    image:getImage()		
+                };
+                const mallLabels1:MallLabels = {
+                    id:Math.random(),  
+                    name:'黑色',      
+                    pay_type:1,        
+                    price:0,    	
+                    childs:[],	 
+                    image:getImage()		
+                };
+                const mallLabels2:MallLabels = {
+                    id:Math.random(),  
+                    name:'大',      
+                    pay_type:1,        
+                    price:0,    	
+                    childs:[],	 
+                    image:getImage()		
+                };
+                const orderGoods = [];
+                for (const v of goods) {
+                    const orderGood:OrderGoods = {
+                        goods:v,
+                        amount:Math.floor(Math.random() * 10),
+                        labels:[mallLabels1,mallLabels2,mallLabels3] 
+                    };
+                    orderGoods.push(orderGood);
+                }
                 const order:Order = {
                     id:orderId,		       // 订单id
-                    orderGoods:orderGoods,   // 已购买的商品
+                    orderGoods,   // 已购买的商品
                     pay_type:1,       // 支付类型，1现金，2积分，3表示同时支持现金和积分
                     origin:Math.floor(Math.random() * 100 * 1000),         // 商品原支付金额，单位分，即所有商品单价乘数量
                     tax:Math.floor(Math.random() * 100 * 10),				// 	商品税费，单位分，即所有商品税费乘数量
