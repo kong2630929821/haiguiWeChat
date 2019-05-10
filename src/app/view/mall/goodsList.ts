@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { getStore, GoodsDetails, Level1Groups, Level2Groups } from '../../store/memstore';
+import { getStore, Level1Groups, Level2Groups } from '../../store/memstore';
 
 export const forelet = new Forelet();
 
@@ -20,7 +20,6 @@ export enum StyleMod {     // 样式
  */
 export class GoodsList extends Widget {
     public props:any;
-   
     public setProps(props:Props,oldProps:Props) {
         this.props = {
             ...props,

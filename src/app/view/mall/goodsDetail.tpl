@@ -11,9 +11,9 @@
                 <div w-class="goods-name" class="line2-overflow">{{it.goods.name}}</div>
                 <div w-class="goods-other">
                     <div w-class="good-price">
-                        <div w-class="buy-price">￥{{it.sale}}</div>
+                        <div w-class="buy-price">￥{{(it.sale/100).toFixed(2)}}</div>
                         {{if it.discount}}
-                        <div w-class="original-price">{{it.origin}}</div>
+                        <div w-class="original-price">{{(it.origin/100).toFixed(2)}}</div>
                         {{end}}
                     </div>
                     {{if it.discount || it.rebate}}
@@ -22,7 +22,7 @@
                         <div w-class="good-discount good-label">{{it.discount}}折</div>
                         {{end}}
                         {{if it.rebate}}
-                        <div w-class="good-rebate good-label">返 ￥{{it.rebate}}</div>
+                        <div w-class="good-rebate good-label">返 ￥{{(it.rebate/100).toFixed(2)}}</div>
                         {{end}}
                     </div>
                     {{end}}
@@ -53,18 +53,23 @@
     </div>
     <div w-class="fix-bottom">
         <div w-class="left">
-            <div w-class="fix-item fix-item-1">
+            <div w-class="fix-item fix-item-1" on-tap="gotoMallHome">
                 <img src="../../res/image/mall.png"/>
                 <div>首页</div>
             </div>
-            <div w-class="fix-item fix-item-1">
+            <div w-class="fix-item fix-item-1" on-tap="gotoShoppinigCart">
                 <img src="../../res/image/shoppingCart.png"/>
                 <div>购物车</div>
             </div>
         </div>
         <div w-class="right">
-            <div w-class="fix-item fix-item-2" style="background-color:#DF4AF3;">加入购物车</div>
-            <div w-class="fix-item fix-item-2" style="background-color:#8A4AF3;">立即购买</div>
+            <div w-class="fix-item fix-item-2" style="background-color:#DF4AF3;" on-tap="chooseSpecClick">加入购物车</div>
+            <div w-class="fix-item fix-item-2" style="background-color:#8A4AF3;" on-tap="chooseSpecClick">立即购买</div>
         </div>
     </div>
+    {{if it.chooseSpec}}
+    <div ev-close-spec="specCloseClick" ev-push-shopping-cart="pushShoppingCart" ev-buy-now="buyNow">
+        <app-components-goodsDetailsItem-goodsDetailsSpec>{goods:{{it.goods}},choosedLabels:{{it.choosedLabels}},hasLabels:{{it.hasLabels}},amount:{{it.amount}} }</app-components-goodsDetailsItem-goodsDetailsSpec>
+    </div>
+    {{end}}
 </div>

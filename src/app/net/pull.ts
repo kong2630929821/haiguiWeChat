@@ -1,11 +1,14 @@
-import { GoodsDetails, GoodsSegmentationDetails, Level1Groups, Level2Groups, MallImages, MallLabels,setStore } from '../store/memstore';
+import { Address, getStore, GoodsDetails, GoodsSegmentationDetails, Level1Groups, Level2Groups,MallImages, MallLabels, Order, OrderStatus, setStore } from '../store/memstore';
 import { requestAsync } from './login';
 
 /**
  * 获取分组信息
  */
+// tslint:disable-next-line:max-func-body-length
 export const getGroups = () => {
+    // tslint:disable-next-line:max-func-body-length
     return new Promise(resolve => {
+        // tslint:disable-next-line:max-func-body-length
         setTimeout(() => {
             const groups = new Map<number, Level1Groups>();
             console.time('getGroups');
@@ -31,19 +34,94 @@ export const getGroups = () => {
                             style:1
                         };
                         const has_tax = Math.random() > 0.5 ? true : false;
+                        const mallLabels1Childs1:MallLabels = {
+                            id:Math.random(),  
+                            name:'红色',      
+                            pay_type:1,        
+                            price:Math.floor(Math.random() * 10 * 100),    	
+                            childs:[],	 
+                            image:getImage()
+                        };
+                       
+                        const mallLabels1Childs2:MallLabels = {
+                            id:Math.random(),  
+                            name:'蓝色',      
+                            pay_type:1,        
+                            price:Math.floor(Math.random() * 10 * 100),    	
+                            childs:[],	 
+                            image:getImage()
+                        };
+            
+                        const mallLabels1Childs3:MallLabels = {
+                            id:Math.random(),  
+                            name:'黑色',      
+                            pay_type:1,        
+                            price:Math.floor(Math.random() * 10 * 100),    	
+                            childs:[],	 
+                            image:getImage()	
+                        };
+                        const mallLabels1:MallLabels = {
+                            id:Math.random(),  
+                            name:'颜色',      
+                            pay_type:1,        
+                            price:Math.floor(Math.random() * 10 * 100),    	
+                            childs:[mallLabels1Childs1,mallLabels1Childs2,mallLabels1Childs3],	 
+                            image:getImage()	
+                        };
+            
+                        const mallLabels2Childs1:MallLabels = {
+                            id:Math.random(),  
+                            name:'大',      
+                            pay_type:1,        
+                            price:Math.floor(Math.random() * 10 * 100),    	
+                            childs:[],	 
+                            image:getImage()		
+                        };
+                        const mallLabels2Childs2:MallLabels = {
+                            id:Math.random(),  
+                            name:'中',      
+                            pay_type:1,        
+                            price:Math.floor(Math.random() * 10 * 100),    	
+                            childs:[],	 
+                            image:getImage()		
+                        };
+                        const mallLabels2Childs3:MallLabels = {
+                            id:Math.random(),  
+                            name:'小',      
+                            pay_type:1,        
+                            price:Math.floor(Math.random() * 10 * 100),    	
+                            childs:[],	 
+                            image:getImage()		
+                        };
+                        const mallLabels2:MallLabels = {
+                            id:Math.random(),  
+                            name:'尺寸',      
+                            pay_type:1,        
+                            price:Math.floor(Math.random() * 10 * 100),    	
+                            childs:[mallLabels2Childs1,mallLabels2Childs2,mallLabels2Childs3],	 
+                            image:getImage()		
+                        };
+                        const mallLabels3:MallLabels = {
+                            id:Math.random(),  
+                            name:'特价商品',      
+                            pay_type:1,        
+                            price:0,    	
+                            childs:[],	 
+                            image:getImage()		
+                        };
                         const good:GoodsDetails = {
                             id:goodsId,
-                            name:Math.random() > 0.5 ? `商品名字很短${goodsId}` : `商品名字很长商品名字很长商品名字很长商品名字很长${goodsId}`,
+                            name:Math.random() > 0.5 ? `商品名字很短${goodsId}` : `商品名字很长商品名字很长商品名字很长商品名字很长商品名字很长商品名字很长商品名字很长商品名字很长商品名字很长商品名字很长商品名字很长商品名字很长${goodsId}`,
                             pay_type:1,
                             rebate:200,
                             origin:1200,
                             discount:Math.random() > 0.5 ? 800 : 0,
                             vip_origin:Math.random() > 0.5 ? 1000 : 0,
                             has_tax,
-                            tax:has_tax ? Number((Math.random() * 100).toFixed(2)) : 0,
+                            tax:has_tax ? Math.floor(Math.random() * 100 * 10) : 0,
                             images:[image1,image2,image3],
                             intro:`商品${goodsId}的详细介绍`,
-                            labels:undefined,
+                            labels:[mallLabels1,mallLabels2,mallLabels3],
                             brand:undefined,
                             area:undefined,
                             supplier:undefined,
@@ -98,6 +176,7 @@ export const getGroups = () => {
     });
 };
 
+// 随机生成图片
 const getImage = ():MallImages => {
     return  {
         path:`a${Math.floor(Math.random() * 100000) % 4 + 1}.png`,  
@@ -105,90 +184,14 @@ const getImage = ():MallImages => {
         style:1
     };
 };
+
 // 获取商品详细信息
 // tslint:disable-next-line:max-func-body-length
-export const getGoodsDetails = (goods:GoodsDetails) => {
+export const getGoodsDetails = (goods:GoodsDetails):Promise<GoodsDetails> => {
     // tslint:disable-next-line:max-func-body-length
     return new Promise(resolve => {
         // tslint:disable-next-line:max-func-body-length
         setTimeout(() => {
-            
-            const mallLabels1Childs1:MallLabels = {
-                id:Math.random(),  
-                name:'红色',      
-                pay_type:1,        
-                price:0,    	
-                childs:[],	 
-                image:getImage()
-            };
-           
-            const mallLabels1Childs2:MallLabels = {
-                id:Math.random(),  
-                name:'蓝色',      
-                pay_type:1,        
-                price:0,    	
-                childs:[],	 
-                image:getImage()
-            };
-
-            const mallLabels1Childs3:MallLabels = {
-                id:Math.random(),  
-                name:'黑色',      
-                pay_type:1,        
-                price:0,    	
-                childs:[],	 
-                image:getImage()	
-            };
-            const mallLabels1:MallLabels = {
-                id:Math.random(),  
-                name:'颜色',      
-                pay_type:1,        
-                price:0,    	
-                childs:[mallLabels1Childs1,mallLabels1Childs2,mallLabels1Childs3],	 
-                image:getImage()	
-            };
-
-            const mallLabels2Childs1:MallLabels = {
-                id:Math.random(),  
-                name:'大',      
-                pay_type:1,        
-                price:0,    	
-                childs:[],	 
-                image:getImage()		
-            };
-            const mallLabels2Childs2:MallLabels = {
-                id:Math.random(),  
-                name:'中',      
-                pay_type:1,        
-                price:0,    	
-                childs:[],	 
-                image:getImage()		
-            };
-            const mallLabels2Childs3:MallLabels = {
-                id:Math.random(),  
-                name:'小',      
-                pay_type:1,        
-                price:0,    	
-                childs:[],	 
-                image:getImage()		
-            };
-            const mallLabels2:MallLabels = {
-                id:Math.random(),  
-                name:'尺寸',      
-                pay_type:1,        
-                price:0,    	
-                childs:[mallLabels2Childs1,mallLabels2Childs2,mallLabels2Childs3],	 
-                image:getImage()		
-            };
-            const mallLabels3:MallLabels = {
-                id:Math.random(),  
-                name:'特价商品',      
-                pay_type:1,        
-                price:0,    	
-                childs:[],	 
-                image:getImage()		
-            };
-
             const detail:GoodsSegmentationDetails = {
                 name:'使用方法', 
                 value:'此商品自行使用', 
@@ -197,10 +200,9 @@ export const getGoodsDetails = (goods:GoodsDetails) => {
            
             const good:GoodsDetails = {
                 ...goods,
-                labels:[mallLabels1,mallLabels2,mallLabels3],
                 brand:undefined,
                 area:undefined,
-                supplier:undefined,
+                supplier:Math.random() > 0.5 ? 123456 : 654321,
                 weight:100,
                 spec:undefined,
                 detail:[detail],
@@ -213,6 +215,64 @@ export const getGoodsDetails = (goods:GoodsDetails) => {
     });
 };
 
+// 获取收货人地址列表
+export const getAddresses = () => {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            const address:Address = {
+                id:1,		
+                name:'陈二狗',       
+                tel:'18324648321',       
+                area:'四川省',        
+                address:'四川省成都市高新区天府三街1140号17栋5-33号'  	
+            };
+            setStore('mall/addresses',[address]);
+            resolve();
+        },200);
+    });
+};
+
+// 获取各种状态的订单
+export const getOrders = () => {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            const orders = [];
+            for (let i = 0;i < 12;i++) {
+                const orderId = Math.floor(Math.random() * 100000);
+                const groups = [...getStore('mall/groups')];
+                const orderGoods = [...groups[0][1].childs][0][1].goods;
+                const now = new Date().getTime();
+                const order:Order = {
+                    id:orderId,		       // 订单id
+                    orderGoods:orderGoods,   // 已购买的商品
+                    pay_type:1,       // 支付类型，1现金，2积分，3表示同时支持现金和积分
+                    origin:Math.floor(Math.random() * 100 * 1000),         // 商品原支付金额，单位分，即所有商品单价乘数量
+                    tax:Math.floor(Math.random() * 100 * 10),				// 	商品税费，单位分，即所有商品税费乘数量
+                    freight:2000,        // 商品运费，单位分
+                    other:0,          // 其它费用，单位分
+                    weight:0,         // 商品总重量，单位克，即所有商品重量乘数量
+                    name:'陈二狗',           // 收件人姓名
+                    tel:'18328508594',            // 收件人电话
+                    area:'四川省',           // 收件人地区
+                    address:'四川省成都市高新区天府三街1140号17栋5-33号',        // 收件人详细地址
+                    order_time:now,     // 下单时间，单位毫秒
+                    pay_time:now + Math.floor(Math.random() * 10000),       // 支付时间，单位毫秒
+                    ship_time:now + Math.floor(Math.random() * 1000000),      // 发货时间，单位毫秒
+                    receipt_time:now + Math.floor(Math.random() * 100000),   // 收货时间，单位毫秒
+                    finish_time:now + Math.floor(Math.random() * 200000)    // 完成时间，单位毫秒，已收货，但未完成，例如退货
+                };
+                orders.push(order);
+            }
+            const ordersMap = new Map();
+            ordersMap.set(OrderStatus.PENDINGPAYMENT,orders);
+            ordersMap.set(OrderStatus.PENDINGDELIVERED,orders);
+            ordersMap.set(OrderStatus.PENDINGRECEIPT,orders);
+            ordersMap.set(OrderStatus.COMPLETED,orders);
+            setStore('mall/orders',ordersMap);
+            resolve();
+        },200);
+    });
+};
 /**
  * 获取收益统计
  */

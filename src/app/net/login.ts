@@ -5,8 +5,7 @@
 import { open, request, setReloginCallback, setUrl } from '../../pi/net/ui/con_mgr';
 import { wsUrl } from '../config';
 import { getStore, setStore, UserType } from '../store/memstore';
-import { getEarningTotal, getGroups, getInviteCode } from './pull';
-// tslint:disable-next-line:max-line-length
+import { getAddresses, getEarningTotal, getGroups, getInviteCode, getOrders } from './pull';
 
 /**
  * 获取微信用户信息
@@ -104,7 +103,10 @@ const userLogin = () => {
     requestAsync(msg).then(r => {
         console.log('userLogin success = ',r);
         setStore('user/userType',r.level); // 用户会员等级
-        getGroups();
+        getGroups().then(() => {
+            getOrders();
+        });
+        getAddresses();
         // 获取收益统计
         getEarningTotal().then(res => {
             const earning = getStore('earning');
