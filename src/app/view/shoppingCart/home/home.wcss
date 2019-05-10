@@ -1,6 +1,15 @@
-.page{
+.new-page{
+    display: flex;
+    flex-direction: column;
+}
+.list{
+    flex:  1 0 0;
+    width: 100%;
+    padding-bottom: 230px;
     overflow-x: hidden;
     overflow-y: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
 }
 .empty{
     margin-top: 130px;
@@ -46,22 +55,21 @@
     align-items: center;
 }
 .column{
-    overflow: hidden;
     font-size: 24px;
     color:#888;
     flex: 1 0 0;
+    display: flex;
+    flex-direction: column;
 }
 .goodsTitle{
     color:#222;
-    word-break: break-all;
     margin-bottom: 10px;
+    line-height: 33px;
+    font-size: 24px;
+    max-height: 66px;
 }
 .goodsFg{
     width: 160px;
-    word-break: break-all;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     margin-bottom: 10px;
 }
 .row{
@@ -141,6 +149,7 @@
     position: fixed;
     bottom: 110px;
     width: 100%;
+    background-color: #fff
 }
 .active{
     background: #8A4AF3;

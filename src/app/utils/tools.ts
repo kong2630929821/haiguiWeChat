@@ -77,3 +77,10 @@ export const  calLabelPrice = (hasLabels:MallLabels[]) => {
 
     return labelPrice;
 };
+
+// 计算运费
+export const calcFreight = (provinceName?:string) => {
+    if (!provinceName) return 0;
+
+    return 1000;
+};

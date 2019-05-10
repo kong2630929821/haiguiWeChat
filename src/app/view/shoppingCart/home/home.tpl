@@ -1,4 +1,4 @@
-<div w-class="page">
+<div w-class="new-page" class="new-page">
     {{if it1.cartGoodsShow.length==0}}
     <div w-class="empty">
         <img src="../../../res/image/emptyCart.png" w-class="emptyImg"/>
@@ -6,9 +6,10 @@
         <div w-class="shopping">去逛逛</div>
     </div>
     {{else}}
-        <div style="position:relative;height: 88px;">
-            <div w-class="edit" on-tap="edit">{{it.editStatus?"完成":"编辑"}}</div>
-        </div>
+    <div style="position:relative;height: 88px;">
+        <div w-class="edit" on-tap="edit">{{it.editStatus?"完成":"编辑"}}</div>
+    </div> 
+    <div w-class="list">
         {{for i,v of it1.cartGoodsShow}}
         <div w-class="goods">
             {{if !it.editStatus}}
@@ -18,8 +19,8 @@
             {{end}}
             <img src="../../../res/image/{{v.image.path}}" w-class="goodsImg"/>
             <div w-class="column">
-                <div w-class="goodsTitle">{{v.cartGood.goods.name}}</div>
-                <div w-class="goodsFg">{{v.labelShow}}</div>
+                <div class="line2-overflow" w-class="goodsTitle">{{v.cartGood.goods.name}}</div>
+                <div w-class="goodsFg" class="line1-overflow">{{v.labelShow}}</div>
                 <div w-class="row">
                     <div w-class="good-price">
                         <div w-class="buy-price">￥{{(v.finalSale/100).toFixed(2)}}</div>
@@ -35,7 +36,9 @@
                 </div>
             </div>
         </div>
-        {{end}}
+        {{end}} 
+    </div>
+        
 
         <div w-class="row bottom">
             {{if !it.editStatus}}

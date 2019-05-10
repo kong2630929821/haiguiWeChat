@@ -95,7 +95,7 @@ export class ShoppingCart extends Widget {
         if (!this.props.canOrder) return;
         const wantGoods = [];
         this.state.cartGoodsShow.forEach(v => {
-            if (v.cartGood.selected) wantGoods.push(v.cartGood);
+            if (v.cartGood.selected) wantGoods.push(v);
         });
         popNew('app-view-shoppingCart-confirmOrder',{ orderGoods:wantGoods });
     }

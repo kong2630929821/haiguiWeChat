@@ -5,7 +5,7 @@
 import { open, request, setReloginCallback, setUrl } from '../../pi/net/ui/con_mgr';
 import { wsUrl } from '../config';
 import { getStore, setStore } from '../store/memstore';
-import { getEarningTotal, getGroups } from './pull';
+import { getAddresses, getEarningTotal, getGroups } from './pull';
 // tslint:disable-next-line:max-line-length
 
 /**
@@ -104,6 +104,7 @@ const userLogin = () => {
     requestAsync(msg).then(r => {
         console.log('userLogin success = ',r);
         getGroups();
+        getAddresses();
         getEarningTotal().then(r => {
             const earning = getStore('earning');
             earning.baby = r.hbaoCount;

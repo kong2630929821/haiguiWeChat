@@ -64,6 +64,7 @@ export class App extends Widget {
     }
 
     public tabBarChangeListener(event: any, index: number) {
+        console.log('tabBarChangeListener！！！！！！！！！！！！！！！！！');
         if (this.props.isActive === index) return;
         this.props.isActive = index;
         this.old[index] = true;

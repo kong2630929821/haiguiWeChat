@@ -1,4 +1,4 @@
-import { GoodsDetails, GoodsSegmentationDetails, Level1Groups, Level2Groups, MallImages, MallLabels,setStore } from '../store/memstore';
+import { Address, GoodsDetails, GoodsSegmentationDetails, Level1Groups, Level2Groups, MallImages,MallLabels, setStore } from '../store/memstore';
 import { requestAsync } from './login';
 
 /**
@@ -111,14 +111,14 @@ export const getGroups = () => {
                         };
                         const good:GoodsDetails = {
                             id:goodsId,
-                            name:Math.random() > 0.5 ? `商品名字很短${goodsId}` : `商品名字很长商品名字很长商品名字很长商品名字很长${goodsId}`,
+                            name:Math.random() > 0.5 ? `商品名字很短${goodsId}` : `商品名字很长商品名字很长商品名字很长商品名字很长商品名字很长商品名字很长商品名字很长商品名字很长商品名字很长商品名字很长商品名字很长商品名字很长${goodsId}`,
                             pay_type:1,
                             rebate:200,
                             origin:1200,
                             discount:Math.random() > 0.5 ? 800 : 0,
                             vip_origin:Math.random() > 0.5 ? 1000 : 0,
                             has_tax,
-                            tax:has_tax ? Number((Math.random() * 100).toFixed(2)) : 0,
+                            tax:has_tax ? Math.floor(Math.random() * 100 * 10) : 0,
                             images:[image1,image2,image3],
                             intro:`商品${goodsId}的详细介绍`,
                             labels:[mallLabels1,mallLabels2,mallLabels3],
@@ -172,10 +172,11 @@ export const getGroups = () => {
             console.timeEnd('getGroups');
             setStore('mall/groups',groups);
             resolve(groups);
-        },100;);
-});
-}
+        },100);
+    });
+};
 
+// 随机生成图片
 const getImage = ():MallImages => {
     return  {
         path:`a${Math.floor(Math.random() * 100000) % 4 + 1}.png`,  
@@ -183,6 +184,7 @@ const getImage = ():MallImages => {
         style:1
     };
 };
+
 // 获取商品详细信息
 // tslint:disable-next-line:max-func-body-length
 export const getGoodsDetails = (goods:GoodsDetails):Promise<GoodsDetails> => {
@@ -200,7 +202,7 @@ export const getGoodsDetails = (goods:GoodsDetails):Promise<GoodsDetails> => {
                 ...goods,
                 brand:undefined,
                 area:undefined,
-                supplier:undefined,
+                supplier:Math.random() > 0.5 ? 123456 : 654321,
                 weight:100,
                 spec:undefined,
                 detail:[detail],
@@ -213,6 +215,22 @@ export const getGoodsDetails = (goods:GoodsDetails):Promise<GoodsDetails> => {
     });
 };
 
+// 获取收货人地址列表
+export const getAddresses = () => {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            const address:Address = {
+                id:1,		
+                name:'陈二狗',       
+                tel:'18324648321',       
+                area:'四川省',        
+                address:'四川省成都市高新区天府三街1140号17栋5-33号'  	
+            };
+            setStore('mall/addresses',[address]);
+            resolve();
+        },200);
+    });
+};
 /**
  * 获取收益统计
  */
