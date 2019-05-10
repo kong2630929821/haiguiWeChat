@@ -311,17 +311,35 @@ interface Mall {
     areas:Area[];                    // 地区列表
     suppliers:Supplier[];            // 供应商列表
 }
-
+/********************************用户权益*********************************** */
+// 收益统计
 interface EarningTotal {
     baby:number;  // 海宝数量
     cash:number;  // 现金总收益
     partner:number;  // 伙伴数量
     shell:number; // 海贝总收益
 }
+
+// 用户类型
+export enum UserType {
+    hWang = 1,  // 海王
+    hBao,   // 海宝
+    normal,  // 普通会员  领取过试用装
+    other  // 其他
+}
+
+// 用户信息
+interface User {
+    userType:UserType;  // 用户会员等级 
+    inviteCode:string;  // 邀请码
+}
+
+/******************************store初始化**********************************/
 // 海龟一号store
 interface Store {
     mall:Mall;                        // 商城数据
     earning:EarningTotal;             // 收益统计
+    user:User;                        // 用户信息
     flags:any;                        // 全局标志位
 }
 // 全局内存数据库
@@ -341,6 +359,10 @@ const store:Store = {
         cash:0,
         partner:0,
         shell:0
+    },
+    user:{
+        userType: UserType.other,
+        inviteCode:''
     },
     flags:{}
 };

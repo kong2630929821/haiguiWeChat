@@ -4,9 +4,8 @@
 
 import { open, request, setReloginCallback, setUrl } from '../../pi/net/ui/con_mgr';
 import { wsUrl } from '../config';
-import { getStore, setStore } from '../store/memstore';
-import { getAddresses, getEarningTotal, getGroups, getOrders } from './pull';
-// tslint:disable-next-line:max-line-length
+import { getStore, setStore, UserType } from '../store/memstore';
+import { getAddresses, getEarningTotal, getGroups, getInviteCode, getOrders } from './pull';
 
 /**
  * 获取微信用户信息
@@ -103,17 +102,25 @@ const userLogin = () => {
     console.log('userLogin = ',msg);
     requestAsync(msg).then(r => {
         console.log('userLogin success = ',r);
+        setStore('user/userType',r.level); // 用户会员等级
         getGroups().then(() => {
             getOrders();
         });
         getAddresses();
-        getEarningTotal().then(r => {
+        // 获取收益统计
+        getEarningTotal().then(res => {
             const earning = getStore('earning');
-            earning.baby = r.hbaoCount;
-            earning.cash = r.cash;
-            earning.partner = r.partnerCount;
-            earning.shell = r.hbei;
+            earning.baby = res.hbaoCount;
+            earning.cash = res.cash;
+            earning.partner = res.partnerCount;
+            earning.shell = res.hbei;
             setStore('earning',earning);
         });
+        // 只有海宝和海王才有邀请码
+        if (r.level < UserType.normal) {  
+            getInviteCode().then(res => {
+                setStore('user/inviteCode',res.code);
+            });
+        }
     });
 };

@@ -4,7 +4,7 @@
         {{if it.code}}
         <div w-class="code">我的邀请码&nbsp;{{it.code}}</div>
         {{else}}
-        <div w-class="update" on-tap="update">立即升级</div>
+        <div w-class="update" on-tap="update">立即开通</div>
         {{end}}
     </div>
     <div w-class="desc">{{it.name}}</div>

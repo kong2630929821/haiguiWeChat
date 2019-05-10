@@ -15,7 +15,7 @@
     <div w-class="content">
         {{for i,v of it.powerList}}
         <div w-class="item" on-tap="itemClick({{i}})">
-            <img src="{{v.img}}" w-class="image"/>
+            <img src="../../res/image/{{v.img}}" w-class="image"/>
             <span w-class="text">{{v.name}}</span>
         </div>
         {{end}}

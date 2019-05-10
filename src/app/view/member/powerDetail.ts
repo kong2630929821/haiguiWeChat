@@ -1,8 +1,10 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
+import { UserType } from '../../store/memstore';
+import * as Constant from './powerConstant';
 interface Props {
     list:string[];  // 权益详情介绍
-    userType:number;  // 用户会员等级 1 海宝 2 海王
+    userType:UserType;  // 用户会员等级 
     powerList:any[];  // 权益列表
     showType:string;  // 用户类型名称
     code:string;  // 邀请码
@@ -15,20 +17,28 @@ export class PowerDetail extends Widget {
    
     public setProps(props:any) {
         super.setProps(props);
-        if (props.userType === 2) {
-            this.props.list = this.config.value.hWangList;
-            this.props.powerList = this.config.value.hBaoPower;
+        if (props.userType === UserType.hWang) {
+            this.props.list = Constant.hWangDesc;
+            this.props.powerList = Constant.hWangPower;
             this.props.showType = '海王';
         } else {
-            this.props.list = this.config.value.hBaoList;
-            this.props.powerList = this.config.value.hWangPower;
+            this.props.list = Constant.hBaoDesc;
+            this.props.powerList = Constant.hBaoPower;
             this.props.showType = '海宝';
         }
         
     }
 
+    // 权益
+    public itemClick(ind:number) {
+        const item = this.props.powerList[ind];
+        if (item.tpl) {
+            popNew(item.tpl,{ fg: item.fg, userType: this.props.userType });
+        }
+    }
+
     // 升级会员等级
     public upgradeUser() {
-        popNew('app-view-member-modalBoxInput');
+        popNew('app-view-member-modalBoxInput',{ selectAddr:false });
     }
 }
