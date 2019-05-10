@@ -1,4 +1,4 @@
-import { Address, GoodsDetails, GoodsSegmentationDetails, Level1Groups, Level2Groups, MallImages,MallLabels, setStore } from '../store/memstore';
+import { Address, getStore, GoodsDetails, GoodsSegmentationDetails, Level1Groups, Level2Groups,MallImages, MallLabels, Order, OrderStatus, setStore } from '../store/memstore';
 import { requestAsync } from './login';
 
 /**
@@ -227,6 +227,48 @@ export const getAddresses = () => {
                 address:'四川省成都市高新区天府三街1140号17栋5-33号'  	
             };
             setStore('mall/addresses',[address]);
+            resolve();
+        },200);
+    });
+};
+
+// 获取各种状态的订单
+export const getOrders = () => {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            const orders = [];
+            for (let i = 0;i < 12;i++) {
+                const orderId = Math.floor(Math.random() * 100000);
+                const groups = [...getStore('mall/groups')];
+                const orderGoods = [...groups[0][1].childs][0][1].goods;
+                const now = new Date().getTime();
+                const order:Order = {
+                    id:orderId,		       // 订单id
+                    orderGoods:orderGoods,   // 已购买的商品
+                    pay_type:1,       // 支付类型，1现金，2积分，3表示同时支持现金和积分
+                    origin:Math.floor(Math.random() * 100 * 1000),         // 商品原支付金额，单位分，即所有商品单价乘数量
+                    tax:Math.floor(Math.random() * 100 * 10),				// 	商品税费，单位分，即所有商品税费乘数量
+                    freight:2000,        // 商品运费，单位分
+                    other:0,          // 其它费用，单位分
+                    weight:0,         // 商品总重量，单位克，即所有商品重量乘数量
+                    name:'陈二狗',           // 收件人姓名
+                    tel:'18328508594',            // 收件人电话
+                    area:'四川省',           // 收件人地区
+                    address:'四川省成都市高新区天府三街1140号17栋5-33号',        // 收件人详细地址
+                    order_time:now,     // 下单时间，单位毫秒
+                    pay_time:now + Math.floor(Math.random() * 10000),       // 支付时间，单位毫秒
+                    ship_time:now + Math.floor(Math.random() * 1000000),      // 发货时间，单位毫秒
+                    receipt_time:now + Math.floor(Math.random() * 100000),   // 收货时间，单位毫秒
+                    finish_time:now + Math.floor(Math.random() * 200000)    // 完成时间，单位毫秒，已收货，但未完成，例如退货
+                };
+                orders.push(order);
+            }
+            const ordersMap = new Map();
+            ordersMap.set(OrderStatus.PENDINGPAYMENT,orders);
+            ordersMap.set(OrderStatus.PENDINGDELIVERED,orders);
+            ordersMap.set(OrderStatus.PENDINGRECEIPT,orders);
+            ordersMap.set(OrderStatus.COMPLETED,orders);
+            setStore('mall/orders',ordersMap);
             resolve();
         },200);
     });

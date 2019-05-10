@@ -64,11 +64,11 @@
         </div>
         <div w-class="right">
             <div w-class="fix-item fix-item-2" style="background-color:#DF4AF3;" on-tap="chooseSpecClick">加入购物车</div>
-            <div w-class="fix-item fix-item-2" style="background-color:#8A4AF3;">立即购买</div>
+            <div w-class="fix-item fix-item-2" style="background-color:#8A4AF3;" on-tap="chooseSpecClick">立即购买</div>
         </div>
     </div>
     {{if it.chooseSpec}}
-    <div ev-close-spec="specCloseClick" ev-push-shopping-cart="pushShoppingCart">
+    <div ev-close-spec="specCloseClick" ev-push-shopping-cart="pushShoppingCart" ev-buy-now="buyNow">
         <app-components-goodsDetailsItem-goodsDetailsSpec>{goods:{{it.goods}},choosedLabels:{{it.choosedLabels}},hasLabels:{{it.hasLabels}},amount:{{it.amount}} }</app-components-goodsDetailsItem-goodsDetailsSpec>
     </div>
     {{end}}

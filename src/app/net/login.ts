@@ -5,7 +5,7 @@
 import { open, request, setReloginCallback, setUrl } from '../../pi/net/ui/con_mgr';
 import { wsUrl } from '../config';
 import { getStore, setStore } from '../store/memstore';
-import { getAddresses, getEarningTotal, getGroups } from './pull';
+import { getAddresses, getEarningTotal, getGroups, getOrders } from './pull';
 // tslint:disable-next-line:max-line-length
 
 /**
@@ -103,7 +103,9 @@ const userLogin = () => {
     console.log('userLogin = ',msg);
     requestAsync(msg).then(r => {
         console.log('userLogin success = ',r);
-        getGroups();
+        getGroups().then(() => {
+            getOrders();
+        });
         getAddresses();
         getEarningTotal().then(r => {
             const earning = getStore('earning');

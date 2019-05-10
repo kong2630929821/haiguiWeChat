@@ -1,21 +1,23 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
-import { getStore } from '../../store/memstore';
+import { CartGoods, getStore } from '../../store/memstore';
 import { calcFreight } from '../../utils/tools';
-import { CartGoodsShow } from './home/home';
+import { calcCartGoodsShow, CartGoodsShow } from './home/home';
 
 interface Props {
-    orderGoods:CartGoodsShow[];
+    orderGoods:CartGoods[];
 }
 /**
  * 确认订单
  */
 export class ConfirmOrder extends Widget {
     public setProps(props:Props,oldProps:Props) {
-        const ret = this.calcAllFees(props.orderGoods);
+        const orderGoodsShow = calcCartGoodsShow(props.orderGoods);
+        const ret = this.calcAllFees(orderGoodsShow);
         this.props = {
             ...props,
             ...ret,
+            orderGoodsShow,
             address:getStore('mall/addresses')[0]
         };
         super.setProps(this.props,oldProps);

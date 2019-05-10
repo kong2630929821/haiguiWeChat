@@ -95,7 +95,7 @@ export class ShoppingCart extends Widget {
         if (!this.props.canOrder) return;
         const wantGoods = [];
         this.state.cartGoodsShow.forEach(v => {
-            if (v.cartGood.selected) wantGoods.push(v);
+            if (v.cartGood.selected) wantGoods.push(v.cartGood);
         });
         popNew('app-view-shoppingCart-confirmOrder',{ orderGoods:wantGoods });
     }
@@ -145,7 +145,9 @@ export interface CartGoodsShow {
     finalSale:number;     // 最终的商品售价  包括标签的不同影响的价格 
     image:MallLabels;   // 要展示的图片
 }
-register('mall/cartGoods',(cartGoods:CartGoods[]) => {
+
+// 计算购物车显示信息
+export const calcCartGoodsShow = (cartGoods:CartGoods[]) => {
     const cartGoodsShow:CartGoodsShow[] = [];
     for (const cartGood of cartGoods) {
         const cartGoodShow:any = {};
@@ -161,7 +163,12 @@ register('mall/cartGoods',(cartGoods:CartGoods[]) => {
         cartGoodShow.image = filterShowLabelImage(cartGood.goods.labels,cartGood.labels[cartGood.labels.length - 1]);  // 要展示的图片
         cartGoodsShow.push(cartGoodShow);
     }
-    STATE.cartGoodsShow = cartGoodsShow;
+
+    return cartGoodsShow;
+};
+
+register('mall/cartGoods',(cartGoods:CartGoods[]) => {
+    STATE.cartGoodsShow = calcCartGoodsShow(cartGoods);
     console.log('cartGoods STATE====',STATE);
     forelet.paint(STATE);
 });

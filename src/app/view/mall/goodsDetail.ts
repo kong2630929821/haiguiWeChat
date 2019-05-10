@@ -1,3 +1,4 @@
+import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { getGoodsDetails } from '../../net/pull';
 import { CartGoods, getStore, GoodsDetails, MallLabels, setStore } from '../../store/memstore';
@@ -93,6 +94,19 @@ export class GoodsDetailHome extends Widget {
         popNewMessage('添加成功');
     }
 
+    // 立即购买
+    public buyNow() {
+        const cartGood:CartGoods = {
+            goods:this.props.goods,
+            amount:this.props.amount,
+            labels:this.props.fixedLabels.concat(this.props.hasLabels),
+            selected:true
+        };
+        const cartGoods = [cartGood];
+        setStore('mall/cartGoods',cartGoods);
+
+        popNew('app-view-shoppingCart-confirmOrder',{ orderGoods:cartGoods });
+    }
     // 前往商城首页
     public gotoMallHome() {
         setStore('flags/gotoMallHome',true);

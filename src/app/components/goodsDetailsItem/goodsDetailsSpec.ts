@@ -60,4 +60,8 @@ export class GoodsDetailsSpec extends Widget {
         notify(e.node,'ev-push-shopping-cart',undefined);
     }
 
+    public buyNow(e:any) {
+        this.closeClick(e);
+        notify(e.node,'ev-buy-now',undefined);
+    }
 }

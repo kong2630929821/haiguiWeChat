@@ -14,7 +14,7 @@
     </div>
 
     <div w-class="goodsList">
-        {{for i,v of it.orderGoods}}
+        {{for i,v of it.orderGoodsShow}}
         <div w-class="row" style="padding:20px 30px;" on-tap="itemClick">
             <img src="../../res/image/{{v.image.path}}" w-class="goodsImg"/>
             <div w-class="column">
