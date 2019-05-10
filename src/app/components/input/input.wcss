@@ -3,7 +3,7 @@
     height: 100%;
     color: #222;
     font-size: 32px;
-    border-bottom: 1px solid #888;
+    border-bottom: 1px solid #e5e5e5;
     width: 100%;
 }
 .pi-input__inner{
