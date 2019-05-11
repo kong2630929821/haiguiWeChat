@@ -102,8 +102,7 @@ const userLogin = () => {
     console.log('userLogin = ',msg);
     requestAsync(msg).then(r => {
         console.log('userLogin success = ',r);
-        // setStore('user/userType',r.level); // 用户会员等级
-        setStore('user/userType',UserType.hBao); // 用户会员等级
+        setStore('user/userType',r.level); // 用户会员等级
         getGroups().then(() => {
             getOrders();
         });
