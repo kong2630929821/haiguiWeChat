@@ -39,6 +39,6 @@ export class PowerDetail extends Widget {
 
     // 升级会员等级
     public upgradeUser() {
-        popNew('app-view-member-modalBoxInput',{ selectAddr:false });
+        popNew('app-view-member-applyModalBox');
     }
 }

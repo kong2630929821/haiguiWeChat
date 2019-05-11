@@ -1,0 +1,44 @@
+.page{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.content{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.money{
+    height:112px;
+    font-size:80px;
+    color:rgba(0,0,0,1);
+    line-height:112px;
+}
+.text{
+    height:45px;
+    font-size:32px;
+    color:rgba(136,136,136,1);
+    line-height:45px;
+    margin-bottom: 10px;
+}
+.desc{
+    height:28px;
+    font-size:20px;
+    color:rgba(241,44,32,1);
+    line-height:28px;
+}
+.btn{
+    width:300px;
+    height:90px;
+    border-radius:10px;
+    border:2px solid rgba(141,63,237,1);
+    font-size:32px;
+    color:rgba(141,63,237,1);
+    line-height:90px;
+    margin-top: 180px;
+    text-align: center;
+}
+.detail{
+    position: absolute;
+    bottom: 90px;
+}

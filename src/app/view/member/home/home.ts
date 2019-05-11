@@ -31,8 +31,7 @@ export class Home extends Widget {
 
     // 当前用户的会员等级
     public goDetail() {
-        // popNew('app-view-member-powerDetail',{ userType:this.state.userType, code:this.state.inviteCode });
-        popNew('app-components-areaSelect-areaSelect');
+        popNew('app-view-member-powerDetail',{ userType:this.state.userType, code:this.state.inviteCode });
     }
 
     // 会员等级介绍
@@ -55,7 +54,7 @@ export class Home extends Widget {
 
     // 升级会员等级
     public upgradeUser() {
-        popNew('app-view-member-modalBoxInput',{ selectAddr:false });
+        popNew('app-view-member-applyModalBox');
     }
 
 }

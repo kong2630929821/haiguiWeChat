@@ -291,3 +291,117 @@ export const getInviteCode = () => {
 
     return requestAsync(msg);
 };
+
+/**
+ * 获取余额
+ */
+export const getBalance = () => {
+    const msg = {
+        type:'mall/members@balance',
+        param:{}
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 获取余额流水
+ * ttype  1:现金,2:海贝,3:积分
+ */
+export const getBalanceList = (year:number,month:number,ttype:number) => {
+    const msg = {
+        type:'mall/members@balance_log',
+        param:{
+            year: year,
+            month: month,
+            type:ttype
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 邀请返利
+ */
+export const getInviteRebate = (id:number) => {
+    const msg = {
+        type:'mall/members@invitation_rebate',
+        param:{
+            goodsID:id
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 发送手机验证码
+ */
+export const sendCode = (phone:string) => {
+    const msg = {
+        type:'mall/sms@send_sms_code',
+        param:{
+            phone:phone,
+            num:'86',
+            name:'海归一号'
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 绑定手机号
+ */
+export const bindPhone = (phone:string,code:string) => {
+    const msg = {
+        type:'build_phone',
+        param:{
+            phone,
+            code
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 设置用户昵称
+ */
+export const setUserName = (name:string) => {
+    const msg = {
+        type:'set_wx_name',
+        param:{
+            wx_name:name
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 绑定用户 与邀请用户建立联系
+ */
+export const bindUser = (code:string) => {
+    const msg = {
+        type:'mall/members@build_user',
+        param:{
+            code
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 获取用户信息
+ */
+export const getUserInfo = () => {
+    const msg = {
+        type:'get_user_info',
+        param:{}
+    };
+
+    return requestAsync(msg);
+};

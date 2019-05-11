@@ -1,6 +1,9 @@
 import { popNew } from '../../../../pi/ui/root';
+import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
+import { register } from '../../../store/memstore';
 
+export const forelet = new Forelet();
 /**
  * 我的首页
  */
@@ -21,6 +24,7 @@ export class Home extends Widget {
             ...props
         };
         super.setProps(this.props);
+        this.state = State;
     }
 
     public goAddress() {
@@ -30,4 +34,23 @@ export class Home extends Widget {
     public itemClick(num:number) {
         popNew('app-view-mine-orderList',{ active: num });
     }
+
+    public balanceLog(num:number) {
+        if (num === 0) {
+            popNew('app-view-mine-myCash',{ balance:this.state.balance[0].value });
+        }
+    }
 }
+const State = {
+    balance:[
+        { key:'现金',value:0 },
+        { key:'海贝',value:0 },
+        { key:'积分',value:0 }
+    ]
+};
+register('balance',r => {
+    State.balance[0].value = r.cash;
+    State.balance[1].value = r.shell;
+    State.balance[2].value = r.integral;
+    forelet.paint(State);
+});

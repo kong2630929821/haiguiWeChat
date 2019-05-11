@@ -21,10 +21,10 @@
     </div>
     <div w-class="divideLine"></div>
     <div w-class="orderType">
-        {{for i,v of [1,2,3]}}
-        <div w-class="item">
-            <div w-class="amount">0.00</div>
-            <div w-class="name">现金</div>
+        {{for i,v of it1.balance}}
+        <div w-class="item" on-tap="balanceLog({{i}})">
+            <div w-class="amount">{{v.value}}</div>
+            <div w-class="name">{{v.key}}</div>
         </div>
         {{end}}
     </div>

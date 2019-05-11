@@ -26,7 +26,7 @@ export class GiftPage extends Widget {
 
     // 免费领取
     public freeReceive() {
-        popNew('app-view-member-modalBoxInput');
+        popNew('app-view-member-applyModalBox');
     }
 
     // 报名课程

@@ -5,7 +5,7 @@
 import { open, request, setReloginCallback, setUrl } from '../../pi/net/ui/con_mgr';
 import { wsUrl } from '../config';
 import { getStore, setStore, UserType } from '../store/memstore';
-import { getEarningTotal, getGroups, getInviteCode } from './pull';
+import { getBalance, getEarningTotal, getGroups, getInviteCode, getUserInfo } from './pull';
 // tslint:disable-next-line:max-line-length
 
 /**
@@ -120,5 +120,22 @@ const userLogin = () => {
                 setStore('user/inviteCode',res.code);
             });
         }
+
+        // 获取账户余额
+        getBalance().then(res => {
+            const balance = getStore('balance');
+            balance.cash = res.money;
+            balance.shell = res.haibei;
+            balance.integral = res.integral;
+            setStore('balance',balance);
+        });
+
+        // 获取用户信息
+        getUserInfo().then(r => {
+            const user = getStore('user');
+            user.phoneNum = r.phone;
+            user.userName = r.wx_name;
+            setStore('user',user);
+        });
     });
 };

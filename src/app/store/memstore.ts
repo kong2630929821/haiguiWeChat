@@ -326,6 +326,15 @@ export enum UserType {
 interface User {
     userType:UserType;  // 用户会员等级 
     inviteCode:string;  // 邀请码
+    userName:string;    // 用户名
+    phoneNum:string;       // 手机号
+}
+
+// 用户余额
+interface Balance {
+    cash:number;  // 现金
+    shell:number;  // 海贝
+    integral:number;  // 积分
 }
 
 /******************************store初始化**********************************/
@@ -334,6 +343,7 @@ interface Store {
     mall:Mall;                        // 商城数据
     earning:EarningTotal;             // 收益统计
     user:User;                        // 用户信息
+    balance:Balance;                  // 用户余额
 }
 // 全局内存数据库
 const store:Store = {
@@ -355,6 +365,13 @@ const store:Store = {
     },
     user:{
         userType: UserType.other,
-        inviteCode:''
+        inviteCode:'',
+        userName:'',
+        phoneNum:''
+    },
+    balance:{
+        cash:0,
+        shell:0,
+        integral:0
     }
 };
