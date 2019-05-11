@@ -1,8 +1,8 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { bindPhone, bindUser, getInviteCode, sendCode, setUserName } from '../../net/pull';
-import { getStore, setStore } from '../../store/memstore';
-import { popNewMessage } from '../../utils/tools';
+import { getStore, setStore, UserType } from '../../store/memstore';
+import { popNewLoading, popNewMessage } from '../../utils/tools';
 
 interface Props {
     userName:string;  // 用户名
@@ -82,6 +82,7 @@ export class ModalBoxInput extends Widget {
         if (this.props.phoneNum) {
             sendCode(this.props.phoneNum).then(r => {
                 this.props.nowCount = 60;
+                popNewMessage('验证码已发送');
                 this.paint();
                 const countdown = setInterval(() => {
                     this.props.nowCount--;
@@ -110,20 +111,27 @@ export class ModalBoxInput extends Widget {
     }
 
     // 确认
-    public confirm() {
-        if (!this.props.userName || !this.props.phoneNum || !this.props.inviteCode) {
+    public async confirm() {
+        if (!this.props.userName || !this.props.phoneNum || !this.props.phoneCode || !this.props.inviteCode) {
             popNewMessage('请将内容填写完整');
         } else {
-            if (getStore('user/phoneNum') !== this.props.phoneNum) { // 与之前绑定手机号不同则重新绑定
-                bindPhone(this.props.phoneNum,this.props.phoneCode).then(r => {
-                    setStore('user/phoneNum',this.props.phoneNum);
-                });
+            const loadding = popNewLoading('请稍后');
+            try {
+                const phoneRes = await bindPhone(this.props.phoneNum,this.props.phoneCode);
+                if (phoneRes && phoneRes.result === 1) setStore('user/phoneNum',this.props.phoneNum);
+               
+                const nameRes = await setUserName(this.props.userName);
+                if (nameRes && nameRes.result === 1) setStore('user/userName',this.props.userName);
+                
+                await bindUser(this.props.inviteCode);
+                loadding.callback(loadding.widget);
+                this.ok && this.ok();  // 所有接口都请求成功后关闭弹窗
+                 
+            } catch (error) {
+                loadding.callback(loadding.widget);
+                popNewMessage('信息填写有误');
             }
-            setUserName(this.props.userName).then(r => {
-                setStore('user/userName',this.props.userName);
-            });
-            bindUser(this.props.inviteCode);
-            this.ok && this.ok();
+            
         }
     }
 

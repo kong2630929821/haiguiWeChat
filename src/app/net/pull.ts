@@ -465,3 +465,50 @@ export const getUserInfo = () => {
 
     return requestAsync(msg);
 };
+
+/**
+ * 微信支付
+ * @param money 金额 单位分
+ * @param ttype 商品ID | 海宝
+ * @param count 数量
+ */
+export const wxPay = (money:number,ttype:string,count:number= 1) => {
+    const msg = {
+        type:'mall/pay@pay',
+        param:{
+            money,
+            type:ttype,
+            count,
+            channel:'wxpay'
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 申请提现
+ * @param money 金额 单位分
+ */
+export const applyWithdraw = (money:number) => {
+    const msg = {
+        type:'mall/withdraw@application',
+        param:{
+            money
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 检查是否还有提现额度
+ */
+export const checkWithdraw = () => {
+    const msg = {
+        type:'mall/withdraw@check_withdraw',
+        param:{}
+    };
+
+    return requestAsync(msg);
+};

@@ -37,7 +37,7 @@ export class Home extends Widget {
 
     public balanceLog(num:number) {
         if (num === 0) {
-            popNew('app-view-mine-myCash',{ balance:this.state.balance[0].value });
+            popNew('app-view-mine-myCash');
         }
     }
 }

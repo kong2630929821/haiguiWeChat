@@ -31,9 +31,9 @@
     width:300px;
     height:90px;
     border-radius:10px;
-    border:2px solid rgba(141,63,237,1);
+    border:2px solid #ccc;
     font-size:32px;
-    color:rgba(141,63,237,1);
+    color:#ccc;
     line-height:90px;
     margin-top: 180px;
     text-align: center;
@@ -41,4 +41,8 @@
 .detail{
     position: absolute;
     bottom: 90px;
+}
+.active{
+    color: rgba(141,63,237,1);
+    border:2px solid rgba(141,63,237,1);
 }

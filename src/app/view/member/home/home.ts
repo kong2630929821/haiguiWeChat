@@ -66,7 +66,7 @@ const State = {
         { amount:0,title:'我的伙伴',fg:PageFg.cash },
         { amount:0,title:'海贝总收益',fg:PageFg.shell }
     ],
-    userType:UserType.hBao, // 用户会员等级
+    userType:UserType.other, // 用户会员等级
     inviteCode:'',   // 邀请码
     powerList:hBaoPower  // 权益列表
 };

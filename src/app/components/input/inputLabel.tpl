@@ -2,7 +2,7 @@
 <div w-class="pi-input-box {{it1.focused?'focus':''}}" class="pi-input">
     <div style="display:flex;align-items: center;">
         {{if it.label}}
-        <div style="width:160px;flex-shrink: 0;">{{it.label}}</div>
+        <div style="width:160px;flex-shrink: 0;{{it.labelStyle}}">{{it.label}}</div>
         {{end}}
         <input 
             w-class="pi-input__inner" 
