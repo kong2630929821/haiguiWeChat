@@ -1,6 +1,7 @@
 import { Widget } from '../../../pi/widget/widget';
 import { applyWithdraw } from '../../net/pull';
 import { getStore } from '../../store/memstore';
+import { openWXPay } from '../../utils/logic';
 
 /**
  * 提现
@@ -31,7 +32,7 @@ export class Withdraw extends Widget {
     public confirm() {
         if (this.props.money < this.props.balance) {
             applyWithdraw(this.props.money * 100).then(r => {
-                
+                openWXPay(r.ok);
             });
         } 
     }

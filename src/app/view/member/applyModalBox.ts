@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { bindPhone, bindUser, getInviteCode, sendCode, setUserName } from '../../net/pull';
-import { getStore, setStore, UserType } from '../../store/memstore';
+import { getStore, setStore } from '../../store/memstore';
 import { popNewLoading, popNewMessage } from '../../utils/tools';
 
 interface Props {

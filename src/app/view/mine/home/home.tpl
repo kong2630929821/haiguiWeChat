@@ -3,11 +3,16 @@
         <img src="../../../res/image/income.png" w-class="avatar"/>
         <div w-class="desc">
             <div style="font-size:36px;">
-                用户名<span w-class="userType">海宝</span>
+                用户名
+                {{if it1.userType}}
+                <span w-class="userType">{{it1.userType}}</span>
+                {{end}}
             </div>
+            {{if it1.inviteCode}}
             <div w-class="code">
-                邀请码：&nbsp;002233
+                邀请码：&nbsp;{{it1.inviteCode}}
             </div>
+            {{end}}
         </div>
         <img src="../../../res/image/arrowRight.png" w-class="arrow"/>
     </div>

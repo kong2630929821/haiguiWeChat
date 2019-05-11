@@ -1,7 +1,10 @@
+import { getStore, UserType } from '../store/memstore';
+
 /**
  * 本地方法
  */
 declare var wx;
+declare var WeixinJSBridge;
 /**
  * 选择图片
  * @param num 最多数量
@@ -100,4 +103,38 @@ export const timestampFormat = (timestamp: number,timeType?: number) => {
     }
 
     return `${year}-${month}-${day} ${hour}:${minutes}:${seconds}`;
+};
+
+/**
+ * 打开微信支付
+ */
+export const openWXPay = (param:any) => {
+    const onBridgeReady = () => {
+        WeixinJSBridge.invoke('getBrandWCPayRequest', {
+            appId:'wx2421b1c4370ec43b',     // 公众号名称，由商户传入     
+            timeStamp:'1395712654',         // 时间戳，自1970年以来的秒数     
+            nonceStr:'e61463f8efa94090b1f366cccfbbb444', // 随机串     
+            package:'prepay_id=u802345jgfjsdfgsdg888',     
+            signType:'MD5',         // 微信签名方式：     
+            paySign:'70EA570631E4BB79628FBCA90534C63FF7FADD89' // 微信签名 
+        });
+    };
+
+    if (WeixinJSBridge === 'undefined') {
+        document.addEventListener('WeixinJSBridgeReady', onBridgeReady, false);
+      
+    } else {
+        onBridgeReady();
+    }
+};
+
+/**
+ * 获取会员等级名称
+ */
+export const getUserTypeShow = (user?:UserType) => {
+    if (!user) user = getStore('user/userType',0);
+    if (user === UserType.hWang) return '海王';
+    if (user === UserType.hBao) return '海宝';
+    
+    return '';
 };

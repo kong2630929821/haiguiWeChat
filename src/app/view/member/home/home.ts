@@ -3,6 +3,7 @@ import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
 import { register, UserType } from '../../../store/memstore';
+import { getUserTypeShow } from '../../../utils/logic';
 import { hBaoPower, hWangPower } from '../powerConstant';
 
 export const PageFg = {
@@ -67,6 +68,7 @@ const State = {
         { amount:0,title:'海贝总收益',fg:PageFg.shell }
     ],
     userType:UserType.other, // 用户会员等级
+    userTypeShow:'',
     inviteCode:'',   // 邀请码
     powerList:hBaoPower  // 权益列表
 };
@@ -79,6 +81,7 @@ register('earning',r => {
 });
 register('user',r => {
     State.userType = r.userType;
+    State.userTypeShow = getUserTypeShow(r.userType);
     State.inviteCode = r.inviteCode;
     State.powerList = r.userType === UserType.hWang ? hWangPower :hBaoPower;
     forelet.paint(State);
