@@ -139,9 +139,9 @@ export interface GoodsDetails {
     tax:number;		// 商品税费，单位分
     images:MallImages[];	 // 商品包含的图片列表
     intro:string;		// 商品介绍
+    labels:MallLabels[];	 // 商品包含的标签id列表，商品有自已的标签，同时会继承分组的标签，相同id的标签则忽略
 
 /******************************************************************/
-    labels:MallLabels[];	 // 商品包含的标签id列表，商品有自已的标签，同时会继承分组的标签，相同id的标签则忽略
     brand:number;  // 品牌id
     area:number;	 // 地区id
     supplier:number; // 供应商id
@@ -196,7 +196,6 @@ export interface Order {
     id:number;		       // 订单id
     orderGoods:OrderGoods[];   // 已购买的商品
     pay_type:number;       // 支付类型，1现金，2积分，3表示同时支持现金和积分
-    cost:number;			// 商品成本价，单位分，即所有商品成本价乘数量
     origin:number;         // 商品原支付金额，单位分，即所有商品单价乘数量
     tax:number;				// 	商品税费，单位分，即所有商品税费乘数量
     freight:number;        // 商品运费，单位分
@@ -294,11 +293,18 @@ export interface Supplier {
     goods:GoodsDetails[];	// 供应商商品id列表
 }
 
+export enum OrderStatus {
+    PENDINGPAYMENT = 1,   // 待付款
+    PENDINGDELIVERED  = 2,   // 待发货
+    PENDINGRECEIPT  = 3,   // 待收货
+    COMPLETED   = 4        // 已完成
+}
+
 // 商城数据
 interface Mall {
     groups:Map<number, Level1Groups>;   // 分组数据
     cartGoods:CartGoods[];           // 购物车
-    orders:Order[];                  // 订单列表
+    orders:Map<OrderStatus,Order[]>;      // 订单列表   待付款 待发货 待收货 已完成
     afterSales:AfterSale[];          // 售后列表
     addresses:Address[];             // 收件人地址列表
     brands:Brand[];                  // 品牌列表
@@ -344,13 +350,14 @@ interface Store {
     earning:EarningTotal;             // 收益统计
     user:User;                        // 用户信息
     balance:Balance;                  // 用户余额
+    flags:any;                        // 全局标志位
 }
 // 全局内存数据库
 const store:Store = {
     mall:{
         groups:new Map<number, Level1Groups>(),   // 分组数据
         cartGoods:[],                           // 购物车 
-        orders:[],                              // 订单列表
+        orders:new Map<OrderStatus,Order[]>(),                              // 订单列表
         afterSales:[],                          // 售后列表
         addresses:[],                           // 收件人地址列表
         brands:[],                              // 品牌列表
@@ -373,5 +380,6 @@ const store:Store = {
         cash:0,
         shell:0,
         integral:0
-    }
+    },
+    flags:{}
 };

@@ -1,6 +1,15 @@
-.page{
+.new-page{
+    display: flex;
+    flex-direction: column;
+}
+.list{
+    flex:  1 0 0;
+    width: 100%;
+    padding-bottom: 230px;
     overflow-x: hidden;
     overflow-y: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
 }
 .empty{
     margin-top: 130px;
@@ -46,27 +55,53 @@
     align-items: center;
 }
 .column{
-    overflow: hidden;
     font-size: 24px;
     color:#888;
+    flex: 1 0 0;
+    display: flex;
+    flex-direction: column;
 }
 .goodsTitle{
     color:#222;
-    word-break: break-all;
     margin-bottom: 10px;
+    line-height: 33px;
+    font-size: 24px;
+    max-height: 66px;
 }
 .goodsFg{
     width: 160px;
-    word-break: break-all;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     margin-bottom: 10px;
 }
 .row{
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+.row1{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.good-price{
+    display: flex;
+    align-items: baseline;
+    margin-top: 8px;
+}
+.buy-price{
+    font-size:32px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(138,74,243,1);
+    line-height:45px;
+}
+.original-price{
+    margin-left: 10px;
+    font-size:20px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(136,136,136,1);
+    line-height:28px;
+    text-decoration: line-through;
 }
 .goodsImg{
     width: 140px;
@@ -83,6 +118,8 @@
 .total{
     font-size: 32px;
     margin: 0 30px;
+    display: flex;
+    justify-content: center;
 }
 .totalMoney{
     font-size:20px;
@@ -112,6 +149,7 @@
     position: fixed;
     bottom: 110px;
     width: 100%;
+    background-color: #fff
 }
 .active{
     background: #8A4AF3;

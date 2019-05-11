@@ -1,5 +1,6 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
+import { getStore } from '../../store/memstore';
 import { OrderType } from './orderItem';
 
 /**
@@ -23,6 +24,8 @@ export class OrderList extends Widget {
             ...this.props,
             ...props
         };
+        const orders = getStore('mall/orders');
+        console.log('OrderList =======',orders);
         super.setProps(this.props);
     }
 
