@@ -2,8 +2,8 @@
     <div w-class="top">
         <img src="../../../res/image/income.png" w-class="avatar"/>
         <div w-class="desc">
-            <div style="font-size:36px;">
-                用户名
+            <div w-class="username">
+                <span>用户名</span>
                 {{if it1.userType}}
                 <span w-class="userType">{{it1.userType}}</span>
                 {{end}}
