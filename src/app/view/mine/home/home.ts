@@ -41,6 +41,11 @@ export class Home extends Widget {
             popNew('app-view-mine-myCash');
         }
     }
+
+    // 实名认证
+    public verified() {
+        popNew('app-view-mine-IDCardUpload');
+    }
 }
 const State = {
     balance:[

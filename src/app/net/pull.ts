@@ -512,3 +512,10 @@ export const checkWithdraw = () => {
 
     return requestAsync(msg);
 };
+
+/**
+ * 识别身份证
+ */
+export const verifyIDCard = (url:string) => {
+    return fetch(`127.0.0.1:8091/wx/cmd/id_card?img_url=${url}`).then(response => response.json());
+};

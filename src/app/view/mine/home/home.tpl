@@ -39,7 +39,7 @@
         <div w-class="text">收货地址</div>
         <img src="../../../res/image/arrowRight.png"/>
     </div>
-    <div w-class="row">
+    <div w-class="row" on-tap="verified">
         <img src="../../../res/image/IDcard.png"/>
         <div w-class="text">实名认证</div>
         <img src="../../../res/image/arrowRight.png"/>

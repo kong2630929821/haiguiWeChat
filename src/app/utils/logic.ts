@@ -25,9 +25,9 @@ export const selectImg = (num:number,cb:Function) => {
  * 上传图片
  * @param img 需要上传的图片的本地ID，由chooseImage接口获得
  */
-export const updateImg = (img,cb) => {
+export const uploadFile = (url,cb) => {
     wx.uploadImage({
-        localId: img, 
+        localId: url, 
         isShowProgressTips: 1, // 默认为1，显示进度提示
         success: (res) => {
             const serverId = res.serverId; // 返回图片的服务器端ID

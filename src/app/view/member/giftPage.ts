@@ -17,7 +17,7 @@ export class GiftPage extends Widget {
 
     public setProps(props:any) {
         super.setProps(props);
-        if (props.fg === PowerFlag.free || props.fg === PowerFlag.offClass || props.fg === PowerFlag.vipGift) {
+        if (props.fg === PowerFlag.offClass || props.fg === PowerFlag.vipGift) {
             this.props.img = `${PowerFlag[props.fg]}.png`;
 
         } else if (props.userType === UserType.hBao) {

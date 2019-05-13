@@ -1,0 +1,20 @@
+.page{
+    background: rgba(53,53,53,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.content{
+    width:560px;
+    height:645px;
+    background:rgba(255,255,255,1);
+    border-radius:8px;
+}
+.btn{
+    height:100px;
+    font-size:36px;
+    color:rgba(2,187,0,1);
+    line-height:100px;
+    text-align: center;
+    border-top: 1px solid #E5E5E5;
+}
