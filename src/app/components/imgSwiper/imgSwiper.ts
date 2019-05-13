@@ -2,11 +2,12 @@ import { notify } from '../../../pi/widget/event';
 import { getRealNode } from '../../../pi/widget/painter';
 import { Widget } from '../../../pi/widget/widget';
 import { Swiper } from '../../res/js/swiper.min';
-import { Level1Groups, MallImages } from '../../store/memstore';
+import { Groups } from '../../store/memstore';
+import { getImageThumbnailPath } from '../../utils/tools';
 
 interface Props {
     mod:number;                        // 1 首页轮播  2 商品详情轮播
-    list:Level1Groups[] | MallImages[];   // image path列表
+    list:Groups[] | string[];   // image path列表
 }
 /**
  * 轮播图组件
@@ -16,7 +17,8 @@ export class ImgSwiper extends Widget {
     public setProps(props:Props,oldProps:Props) {
         this.props = {
             ...props,
-            activeIndex:1
+            activeIndex:1,
+            getImageThumbnailPath
         };
         super.setProps(this.props,oldProps);
     }
@@ -31,7 +33,9 @@ export class ImgSwiper extends Widget {
         super.afterUpdate();
         if (this.swiper) return;
         setTimeout(() => {
-            this.initSwiper();
+            if (this.props.list.length > 1) {
+                this.initSwiper();
+            }
         },100);
     }
 
@@ -57,6 +61,7 @@ export class ImgSwiper extends Widget {
     }
     public clickSlide(e:any) {
         if (this.props.mod === 2) return;
-        notify(e.node,'ev-click-slide',this.props.list[this.props.activeIndex].id);
+        const group = this.props.list[this.props.activeIndex];
+        notify(e.node,'ev-click-slide',{ group });
     }
 }

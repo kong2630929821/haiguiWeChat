@@ -17,12 +17,5 @@ export const erlangLogicPort = '2089';
 // websock连接url
 export const wsUrl = `ws://${erlangLogicIp}:${erlangLogicPort}`;
 
-// 分组位置定义
-export enum GroupsLocation {
-    FIRST = 1,    // 位置1 （顶部轮播图）
-    SECOND = 2,  //  位置2 （轮播图下方分组）
-    THIRD = 3   //   位置3  （剩下分组）
-}
-
 // 未支付订单15分钟后回到购物车中，库存也会回退
 export const PendingPaymentDuration = 15 * 60 * 1000;

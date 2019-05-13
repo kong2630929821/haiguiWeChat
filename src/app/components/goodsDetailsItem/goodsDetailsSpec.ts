@@ -1,12 +1,10 @@
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
-import { GoodsDetails, MallLabels } from '../../store/memstore';
-import { calcPrices, calLabelPrice, filterShowLabelImage } from '../../utils/tools';
+import { GoodsDetails } from '../../store/memstore';
+import { calcInventorys, calcPrices, getImageThumbnailPath, priceFormat } from '../../utils/tools';
 
 interface Props {
     goods:GoodsDetails;
-    choosedLabels:MallLabels[];    // 可供选择的标签
-    hasLabels:MallLabels[];    // 已经选择的标签
     amount:number;           // 选择数量
 
 }
@@ -16,22 +14,25 @@ interface Props {
 export class GoodsDetailsSpec extends Widget {
     public setProps(props:Props,oldProps:Props) {
         const ret = calcPrices(props.goods);
-        const labelImage = filterShowLabelImage(props.goods.labels,props.hasLabels[0]);
         this.props = {
             ...props,
             ...ret,
-            finalSale:ret.sale + calLabelPrice(props.hasLabels),  // 卖价加上标签影响的价格
-            labelImage
+            priceFormat,
+            inventorys:calcInventorys(props.goods.labels),  // 库存
+            finalSale:ret.sale,  // 卖价加上标签影响的价格
+            skuIndex:-1,     // 选择的sku下标
+            image:getImageThumbnailPath(props.goods.images)
         };
         super.setProps(this.props,oldProps);
     }
 
     // 选择标签
-    public clickLableItem(e:any,i:number,j:number) {
-        const label = this.props.choosedLabels[i][1][j];
-        this.props.hasLabels[i] = label;
-        this.props.labelImage = filterShowLabelImage(this.props.goods.labels,label);
-        this.props.finalSale = this.props.sale  + calLabelPrice(this.props.hasLabels);
+    public clickLableItem(e:any,index:number) {
+        this.props.skuIndex = index;
+        const sku = this.props.goods.labels[index];
+        this.props.finalSale = this.props.sale  + sku[2];
+        this.props.inventorys = sku[3];
+        this.props.amount = this.props.amount > this.props.inventorys ? this.props.inventorys : this.props.amount;
         this.paint();
     }
 
@@ -45,7 +46,7 @@ export class GoodsDetailsSpec extends Widget {
     // 增加购买数量
     public addClick(e:any) {
         const nowAmount = ++this.props.amount;
-        this.props.amount = nowAmount > this.props.goods.inventorys ? this.props.goods.inventorys : nowAmount;
+        this.props.amount = nowAmount > this.props.inventorys ? this.props.inventorys : nowAmount;
         this.paint();
     }
 

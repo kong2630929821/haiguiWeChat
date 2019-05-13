@@ -1,8 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
-import { getGoodsDetails } from '../../net/pull';
-import { CartGoods, getStore, GoodsDetails, MallLabels, setStore } from '../../store/memstore';
-import { calcPrices, popNewMessage } from '../../utils/tools';
+import { CartGoods, getStore, GoodsDetails, setStore, SKU } from '../../store/memstore';
+import { calcPrices, getImageMainPath, popNewMessage, priceFormat } from '../../utils/tools';
 
 interface Props {
     goods:GoodsDetails;     // 商品详情
@@ -34,23 +33,22 @@ export class GoodsDetailHome extends Widget {
     };
     public setProps(props:Props,oldProps:Props) {
         const ret = calcPrices(props.goods);
-        const [fixedLabels,choosedLabels,hasLabels]  = filterMallLabels(props.goods.labels);
         this.props = {
             ...props,
             ...ret,
+            priceFormat,
+            getImageMainPath,
             descProps:undefined,   
             chooseSpec:false,
-            choosedLabels,          // 可供选择的标签
-            hasLabels,               // 已经选择的标签
-            fixedLabels,            // 固定选择的标签
             amount:1              // 选择数量
 
         };
         super.setProps(this.props);
-        getGoodsDetails(props.goods).then(goods => {
-            this.props.goods = goods;
-            this.paint();
-        });
+        console.log('GoodsDetailHome',this.props);
+        // getGoodsDetails(props.goods).then(goods => {
+        //     this.props.goods = goods;
+        //     this.paint();
+        // });
     }
 
     // 点击描述
@@ -119,7 +117,7 @@ export class GoodsDetailHome extends Widget {
 }
 
 // 过滤固定标签和用户选择标签
-const filterMallLabels = (labels:MallLabels[]) => {
+const filterMallLabels = (labels:SKU[]) => {
     const fixedLabels = [];  // 固定标签
     const choosedLabels = [];  // 可供选择的标签
     const hasLabels = [];     // 默认选择的标签
