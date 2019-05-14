@@ -48,36 +48,30 @@ export const parseGroups = (location:GroupsLocation,info:any) => {
  * 商品详情处理
  */
 export const parseGoodsDetail = (info:any):GoodsDetails => {
-    const detail = info[1];
-    const id = info[0];
-    const skus = parseSKU(detail[12]);
-    const images = parseMallImage(detail[13]);
-
+    const skus = parseSKU(info[13]);
+    const images = parseMallImage(info[14]);
+    
     return {
-        id,	   // 商品id
-        name:detail[0],   // 商品名称
-        brand:detail[1],  // 品牌id
-        area:detail[2],	 // 地区id
-        supplier:detail[3], // 供应商id
-        pay_type:detail[4],	// 	支付类型，1现金，2积分，3表示同时支持现金和积分
-        origin:detail[6],   // 	商品原价，单位分
-        vip_origin:detail[7],  // 会员商品原价，单位分
-        discount:detail[10],	// 商品折后价，单位分，即原价 + 税费 - 折扣
-        rebate:0,    // 返利（仅限海王）
-        has_tax:detail[8] === 'true' ? true : false,    // 是否为保税商品
-        tax:detail[9],	// 商品税费，单位分
+        id:info[0],	   // 商品id
+        name:info[1],   // 商品名称
+        brand:info[2],  // 品牌id
+        area:info[3],	 // 地区id
+        supplier:info[4], // 供应商id
+        pay_type:info[5],	// 	支付类型，1现金，2积分，3表示同时支持现金和积分
+        rebate:info[6],    // 返利（仅限海王）
+        origin:info[7],   // 	商品原价，单位分
+        vip_origin:info[8],  // 会员商品原价，单位分
+        has_tax:info[9] === 'true' ? true : false,    // 是否为保税商品
+        tax:info[10],	// 商品税费，单位分
+        discount:info[11],	// 商品折后价，单位分，即原价 + 税费 - 折扣
         labels:skus,	 // SKU SKU描述 价格影响 库存
         images,	 // 商品包含的图片列表
-        intro:detail[14],		// 商品介绍
+        intro:info[15],		// 商品介绍
         
-    /******************************************************************/
-        spec:[],   // 商品规格
-        detail:[],  // 商品分段详细描述
-        out:0,       // 当前已出库，但未确认的商品数量
-        total_out:0,  // 已出库，且已确认的商品数量
-        inventorys:0   // 商品库存
+        detail:info[16] ? info[16] : [],  // 商品分段详细描述
+        spec:[]   // 商品规格
     };
-
+    
 };
 
 /**
@@ -106,6 +100,6 @@ export const parseSKU = (infos:any) => {
         const sku:SKU = [v[0],v[1],v[2],v[3]];
         skus.push(sku);
     }
-    
+
     return skus;
 };

@@ -15,6 +15,7 @@ export const getGroups = (location:GroupsLocation) => {
 
     return requestAsync(msg).then(res => {
         const groups = parseAllGroups(location,res.groupInfo);
+        console.log('groups ========',groups);
         const groupsMap = getStore('mall/groups');
         groupsMap.set(location,groups);
         setStore('mall/groups',groupsMap);
@@ -35,7 +36,24 @@ export const getGoodsDetails = (goodsId:number) => {
     });
 };
 
-// 获取供应商信息
+/**
+ * 加入购物车
+ */
+export const addCart = (goodId:number,amount:number,sku:string) => {
+    const msg = {
+        type:'get_goods',
+        param:{
+            good_id:goodId,
+            amount,
+            sku
+        }
+    };
+
+    return requestAsync(msg).then(res => {
+        console.log('addCart ======',res);
+    });
+};
+// 获取地区信息
 export const getAreas = () => {
     const msg = {
         type:'get_area',
@@ -50,11 +68,11 @@ export const getAreas = () => {
 };
 
 // 获取供应商信息
-export const getSuppliers = () => {
+export const getSuppliers = (id:number) => {
     const msg = {
         type:'get_supplier',
         param:{
-            ids:[1110001]
+            ids:[id]
         }
     };
 

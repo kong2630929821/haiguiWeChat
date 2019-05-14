@@ -119,26 +119,23 @@ export interface Groups {
 export interface GoodsDetails {
     id:number;	   // 商品id
     name:string;   // 商品名称
+    brand:number;  // 品牌id
+    area:number;	 // 地区id
+    supplier:number; // 供应商id
     pay_type:number;	// 	支付类型，1现金，2积分，3表示同时支持现金和积分
+    rebate:number;    // 返利（仅限海王）
     origin:number;   // 	商品原价，单位分
     vip_origin:number;  // 会员商品原价，单位分
-    discount:number;	// 商品折后价，单位分，即原价 + 税费 - 折扣
-    rebate:number;    // 返利（仅限海王）
     has_tax:boolean;    // 是否为保税商品
     tax:number;		// 商品税费，单位分
+    discount:number;	// 商品折后价，单位分，即原价 + 税费 - 折扣
+    labels:SKU[];	 // SKU SKU描述 价格影响 库存
     images:MallImages[];	 // 商品包含的图片列表
     intro:string;		// 商品介绍
     
 /******************************************************************/
-    labels:SKU[];	 // SKU SKU描述 价格影响 库存
-    brand:number;  // 品牌id
-    area:number;	 // 地区id
-    supplier:number; // 供应商id
-    spec:GoodsSpec[];   // 商品规格
     detail:GoodsSegmentationDetails[];  // 商品分段详细描述
-    out:number;       // 当前已出库，但未确认的商品数量
-    total_out:number;  // 已出库，且已确认的商品数量
-    inventorys:number;         // 商品库存
+    spec:GoodsSpec[];   // 商品规格
 }
 
 export type SKU  = [string,string,number,number]; // SKU SKU描述 价格影响 库存

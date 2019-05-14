@@ -1,6 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
-import { CartGoods, getStore, GoodsDetails, setStore, SKU } from '../../store/memstore';
+import { addCart, getSuppliers } from '../../net/pull';
+import { CartGoods, getStore, GoodsDetails, setStore } from '../../store/memstore';
 import { calcPrices, getImageMainPath, popNewMessage, priceFormat } from '../../utils/tools';
 
 interface Props {
@@ -40,10 +41,12 @@ export class GoodsDetailHome extends Widget {
             getImageMainPath,
             descProps:undefined,   
             chooseSpec:false,
-            amount:1              // 选择数量
+            amount:1,              // 选择数量
+            choosedSku:undefined
 
         };
         super.setProps(this.props);
+        getSuppliers(props.goods.supplier);
         console.log('GoodsDetailHome',this.props);
         // getGoodsDetails(props.goods).then(goods => {
         //     this.props.goods = goods;
@@ -71,25 +74,17 @@ export class GoodsDetailHome extends Widget {
 
     // 选择规则关闭
     public specCloseClick(res:any) {
-        this.props.chooseSpec = false;
-        this.props.hasLabels = res.hasLabels;
+        this.props.choosedSku = res.sku;
         this.props.amount = res.amount;
+        this.props.chooseSpec = false;
         this.paint();
     }
     
     // 加入购物车
     public pushShoppingCart() {
-        const cartGood:CartGoods = {
-            goods:this.props.goods,
-            amount:this.props.amount,
-            labels:this.props.fixedLabels.concat(this.props.hasLabels),
-            selected:false
-        };
-        const cartGoods = getStore('mall/cartGoods');
-        cartGoods.push(cartGood);
-        
-        setStore('mall/cartGoods',cartGoods);
-        popNewMessage('添加成功');
+        addCart(this.props.goods.id,this.props.amount,this.props.choosedSku[0]).then(() => {
+            popNewMessage('添加成功');
+        });
     }
 
     // 立即购买
@@ -115,26 +110,3 @@ export class GoodsDetailHome extends Widget {
         setStore('flags/gotoShoppinigCart',true);
     }
 }
-
-// 过滤固定标签和用户选择标签
-const filterMallLabels = (labels:SKU[]) => {
-    const fixedLabels = [];  // 固定标签
-    const choosedLabels = [];  // 可供选择的标签
-    const hasLabels = [];     // 默认选择的标签
-    for (const label of labels) {
-        if (label.childs.length > 0) {
-            const childsLabel = [];
-            for (let i = 0;i < label.childs.length;i++) {
-                const childLabel = label.childs[i];
-                childsLabel.push(childLabel);
-                if (!i) hasLabels.push(childLabel);
-            }
-            choosedLabels.push([label,childsLabel]);
-        } else {
-            fixedLabels.push(label);
-        }
-    }
-
-    return [fixedLabels,choosedLabels,hasLabels];
-   
-};

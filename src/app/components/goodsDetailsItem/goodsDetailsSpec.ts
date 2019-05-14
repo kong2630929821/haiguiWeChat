@@ -1,12 +1,11 @@
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { GoodsDetails } from '../../store/memstore';
-import { calcInventorys, calcPrices, getImageThumbnailPath, priceFormat } from '../../utils/tools';
+import { calcInventorys, calcPrices, getImageThumbnailPath, popNewMessage, priceFormat } from '../../utils/tools';
 
 interface Props {
     goods:GoodsDetails;
     amount:number;           // 选择数量
-
 }
 /**
  * 规格选择
@@ -52,16 +51,26 @@ export class GoodsDetailsSpec extends Widget {
 
     // 关闭
     public closeClick(e:any) {
-        notify(e.node,'ev-close-spec',{ amount:this.props.amount,hasLabels:this.props.hasLabels });
+        notify(e.node,'ev-close-spec',{ amount:this.props.amount,sku:this.props.goods.labels[this.props.skuIndex] });
     }
 
     // 加入购物车
     public pushShoppingCart(e:any) {
+        if (this.props.skuIndex === -1) {
+            popNewMessage('请选择规格');
+            
+            return;
+        }
         this.closeClick(e);
         notify(e.node,'ev-push-shopping-cart',undefined);
     }
 
     public buyNow(e:any) {
+        if (this.props.skuIndex === -1) {
+            popNewMessage('请选择规格');
+            
+            return;
+        }
         this.closeClick(e);
         notify(e.node,'ev-buy-now',undefined);
     }
