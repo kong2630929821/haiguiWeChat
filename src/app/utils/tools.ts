@@ -52,10 +52,10 @@ export const calcPrices = (goods:GoodsDetails) => {
 };
 
 // 计算运费
-export const calcFreight = (provinceId:number) => {
+export const calcFreight = (area_id:number) => {
     const freights = getStore('mall/freights');
     for (let i = 0;i < freights.length;i ++) {
-        if (freights[i].index === provinceId) return freights[i].price;
+        if (freights[i].index === area_id) return freights[i].price;
     }
 
     return 0;

@@ -2,6 +2,7 @@ import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { PendingPaymentDuration } from '../../config';
 import { Order, OrderStatus } from '../../store/memstore';
+import { calcPrices, getImageThumbnailPath, priceFormat } from '../../utils/tools';
 
 export interface Props {
     order:Order;  // 订单
@@ -44,7 +45,10 @@ export class OrderItem extends Widget {
         this.props = {
             ...props,
             statusShow:this.statusShows[props.status],
-            orderIdShow
+            orderIdShow,
+            getImageThumbnailPath,
+            priceFormat,
+            calcPrices
         };
         super.setProps(this.props);
         console.log('orderdetailitem ====',this.props);
@@ -63,7 +67,7 @@ export class OrderItem extends Widget {
             this.countdown();
             this.props.orderIdShow = `倒计时：${calcLeftTime(this.props.order.order_time)}`;
             this.paint();
-        },100);
+        },1000);
     }
 
     public destroy() {
@@ -76,6 +80,7 @@ export class OrderItem extends Widget {
 // 计算倒计时
 const calcLeftTime = (start:number) => {
     const leftTime = start + PendingPaymentDuration - new Date().getTime();
+    if (leftTime < 0) return `0分0秒`;
     const leftMinutes = Math.floor(leftTime / 1000 / 60);
     const leftSeconds = Math.floor(leftTime / 1000) % 60;
 

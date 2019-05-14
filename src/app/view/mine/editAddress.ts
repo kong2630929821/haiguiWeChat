@@ -14,7 +14,7 @@ export class EditAddress extends Widget {
         province:'',
         address:'',
         areaSelect:[],
-        provinceId:0
+        area_id:0
     };
 
      // 选择省 市 区
@@ -22,7 +22,7 @@ export class EditAddress extends Widget {
         popNew('app-components-areaSelect-areaSelect',{ selected:this.props.areaSelect },(r) => {
             console.log('areaSelect ',  r);
             if (r && r.length > 0) {
-                this.props.provinceId = Number(r[0].id.slice(0,2));
+                this.props.area_id = Number(r[0].id.slice(0,2));
                 this.props.areaSelect = r;
                 const res = r.map(item => {
                     return item.name;
@@ -69,7 +69,7 @@ export class EditAddress extends Widget {
             
             return;
         }
-        addAddress(this.props.name,this.props.tel,this.props.provinceId,`${this.props.province}${this.props.address}`).then(() => {
+        addAddress(this.props.name,this.props.tel,this.props.area_id,`${this.props.province}${this.props.address}`).then(() => {
             popNewMessage('保存成功');
             this.ok && this.ok();
         });

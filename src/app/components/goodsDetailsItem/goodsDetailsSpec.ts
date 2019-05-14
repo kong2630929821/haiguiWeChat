@@ -6,7 +6,8 @@ import { calcInventorys, calcPrices, getImageThumbnailPath, popNewMessage, price
 interface Props {
     goods:GoodsDetails;
     amount:number;           // 选择数量
-    skuIndex:number;  
+    skuIndex:number;
+    buyNow:boolean;     // 立即购买还是加入购物车  
 }
 /**
  * 规格选择
@@ -54,24 +55,13 @@ export class GoodsDetailsSpec extends Widget {
         notify(e.node,'ev-close-spec',{ amount:this.props.amount,skuIndex:this.props.skuIndex });
     }
 
-    // 加入购物车
-    public pushShoppingCart(e:any) {
+    public sureClick(e:any) {
         if (this.props.skuIndex === -1) {
             popNewMessage('请选择规格');
             
             return;
         }
         this.closeClick(e);
-        notify(e.node,'ev-push-shopping-cart',undefined);
-    }
-
-    public buyNow(e:any) {
-        if (this.props.skuIndex === -1) {
-            popNewMessage('请选择规格');
-            
-            return;
-        }
-        this.closeClick(e);
-        notify(e.node,'ev-buy-now',undefined);
+        notify(e.node,'ev-sure-click',{ buyNow:this.props.buyNow });
     }
 }

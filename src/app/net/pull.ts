@@ -1,6 +1,6 @@
 import { Address, getStore,GroupsLocation, OrderStatus, setStore } from '../store/memstore';
 import { requestAsync } from './login';
-import { parseAddress, parseAllGroups, parseCart, parseFreight, parseGoodsDetail } from './parse';
+import { parseAddress, parseAllGroups, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
 
 /**
  * 获取分组信息
@@ -52,8 +52,12 @@ export const addCart = (goodId:number,amount:number,sku:string) => {
         }
     };
 
-    return requestAsync(msg).then(() => {
-        getCart();
+    return requestAsync(msg).then((res) => {
+        console.log('addCart ======',res);
+        const carts = parseCart(res.cartInfo);
+        setStore('mall/cartGoods',carts);
+        
+        return carts;
     });
 };
 
@@ -221,7 +225,13 @@ export const getOrders = (order_type:OrderStatus) => {
     };
 
     return requestAsync(msg).then(res => {
-        console.log('order ======',res);
+        const orders = parseOrder(res.user_orderInfo);
+        console.log('order ======',orders);
+        const ordersMap = getStore('mall/orders');
+        ordersMap.set(order_type,orders);
+        setStore('mall/orders',ordersMap);
+
+        return orders;
     });
 };
 /**

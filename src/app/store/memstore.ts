@@ -167,16 +167,16 @@ export interface Order {
     tax:number;				// 	商品税费，单位分，即所有商品税费乘数量
     freight:number;        // 商品运费，单位分
     other:number;          // 其它费用，单位分
-    weight:number;         // 商品总重量，单位克，即所有商品重量乘数量
     name:string;           // 收件人姓名
     tel:string;            // 收件人电话
-    area:string;           // 收件人地区
+    area:number;           // 收件人地区
     address:string;        // 收件人详细地址
     order_time:number;     // 下单时间，单位毫秒
     pay_time:number;       // 支付时间，单位毫秒
     ship_time:number;      // 发货时间，单位毫秒
     receipt_time:number;   // 收货时间，单位毫秒
     finish_time:number;    // 完成时间，单位毫秒，已收货，但未完成，例如退货
+    ship_id:string;         // 物流单号
 }
 
 // 售后商品订单详情

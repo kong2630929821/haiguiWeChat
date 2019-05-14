@@ -65,13 +65,13 @@
             </div>
         </div>
         <div w-class="right">
-            <div w-class="fix-item fix-item-2" style="background-color:#DF4AF3;" on-tap="chooseSpecClick">加入购物车</div>
-            <div w-class="fix-item fix-item-2" style="background-color:#8A4AF3;" on-tap="chooseSpecClick">立即购买</div>
+            <div w-class="fix-item fix-item-2" style="background-color:#DF4AF3;" on-tap="chooseSpecClick({{false}})">加入购物车</div>
+            <div w-class="fix-item fix-item-2" style="background-color:#8A4AF3;" on-tap="chooseSpecClick({{true}})">立即购买</div>
         </div>
     </div>
     {{if it.chooseSpec}}
-    <div ev-close-spec="specCloseClick" ev-push-shopping-cart="pushShoppingCart" ev-buy-now="buyNow">
-        <app-components-goodsDetailsItem-goodsDetailsSpec>{goods:{{it.goods}},amount:{{it.amount}},skuIndex:{{it.skuIndex}} }</app-components-goodsDetailsItem-goodsDetailsSpec>
+    <div ev-close-spec="specCloseClick"  ev-sure-click="sureClick">
+        <app-components-goodsDetailsItem-goodsDetailsSpec>{goods:{{it.goods}},amount:{{it.amount}},skuIndex:{{it.skuIndex}},buyNow:{{it.buyNow}} }</app-components-goodsDetailsItem-goodsDetailsSpec>
     </div>
     {{end}}
 </div>

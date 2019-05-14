@@ -42,7 +42,8 @@ export class GoodsDetailHome extends Widget {
             descProps:undefined,   
             chooseSpec:false,
             amount:1,              // 选择数量
-            skuIndex:-1
+            skuIndex:-1,
+            buyNow:false
 
         };
         super.setProps(this.props);
@@ -67,8 +68,9 @@ export class GoodsDetailHome extends Widget {
     }
 
     // 选择规则
-    public chooseSpecClick() {
+    public chooseSpecClick(buyNow:boolean) {
         this.props.chooseSpec = true;
+        this.props.buyNow = buyNow;
         this.paint();
     }
 
@@ -80,16 +82,17 @@ export class GoodsDetailHome extends Widget {
         this.paint();
     }
     
-    // 加入购物车
-    public pushShoppingCart() {
+    // 立即购买
+    public sureClick(res:any) {
         const sku = this.props.goods.labels[this.props.skuIndex];
         addCart(this.props.goods.id,this.props.amount,sku[0]).then(() => {
             popNewMessage('添加成功');
         });
-    }
-
-    // 立即购买
-    public buyNow() {
+        // if (res.buyNow) {
+        //     console.log('立即购买');
+        // } else {
+            
+        // }
         // const cartGood:CartGoods = {
         //     goods:this.props.goods,
         //     amount:this.props.amount,

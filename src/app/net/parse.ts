@@ -183,30 +183,49 @@ export const parseFreight = (infos:any) => {
     return freights;
 };
 
+// 获取sku详情
+const getSku = (skus:SKU[],skuId:string) => {
+    for (let i = 0;i < skus.length;i++) {
+        if (skus[i][0] === skuId) return skus[i];
+    }
+};
 /**
  * 解析订单详情
  */
 export const parseOrder = (infos:any) => {
     const orders = [];
     for (const info of infos) {
-        // const order:Order = {
-        //     id:0,		       // 订单id
-        //     orderGoods:[],   // (商品详细信息) (购买数量)
-        //     pay_type:number;       // 支付类型，1现金，2积分，3表示同时支持现金和积分
-        //     origin:number;         // 商品原支付金额，单位分，即所有商品单价乘数量
-        //     tax:number;				// 	商品税费，单位分，即所有商品税费乘数量
-        //     freight:number;        // 商品运费，单位分
-        //     other:number;          // 其它费用，单位分
-        //     weight:number;         // 商品总重量，单位克，即所有商品重量乘数量
-        //     name:string;           // 收件人姓名
-        //     tel:string;            // 收件人电话
-        //     area:string;           // 收件人地区
-        //     address:string;        // 收件人详细地址
-        //     order_time:number;     // 下单时间，单位毫秒
-        //     pay_time:number;       // 支付时间，单位毫秒
-        //     ship_time:number;      // 发货时间，单位毫秒
-        //     receipt_time:number;   // 收货时间，单位毫秒
-        //     finish_time:number;    // 完成时间，单位毫秒，已收货，但未完成，例如退货
-        // };
+        if (!info[14]) continue;     // 下单时间为0  订单退回
+        const orderGoods = [];
+        for (const v of info[2]) {
+            const goods = parseGoodsDetail(v[0]);
+            const amount = v[1];
+            const sku = getSku(goods.labels,v[2][0]);
+            goods.labels = [sku];
+            orderGoods.push([goods,amount]);
+        }
+        const order:Order = {
+            id:info[0],		       // 订单id
+            orderGoods,   // (商品详细信息) (购买数量)
+            pay_type:info[3],       // 支付类型，1现金，2积分，3表示同时支持现金和积分
+            origin:info[5],         // 商品原支付金额，单位分，即所有商品单价乘数量
+            tax:info[6],				// 	商品税费，单位分，即所有商品税费乘数量
+            freight:info[7],        // 商品运费，单位分
+            other:info[8],          // 其它费用，单位分
+            name:info[10],           // 收件人姓名
+            tel:info[11],            // 收件人电话
+            area:info[12],           // 收件人地区
+            address:info[13],        // 收件人详细地址
+            order_time:info[14],     // 下单时间，单位毫秒
+            pay_time:info[15],       // 支付时间，单位毫秒
+            ship_time:info[16],      // 发货时间，单位毫秒
+            receipt_time:info[17],   // 收货时间，单位毫秒
+            finish_time:info[18],    // 完成时间，单位毫秒，已收货，但未完成，例如退货
+            ship_id:info[19]         // 物流单号
+        };
+
+        orders.push(order);
     }
+
+    return orders;
 };

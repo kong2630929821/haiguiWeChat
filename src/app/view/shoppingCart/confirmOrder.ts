@@ -54,7 +54,7 @@ export class ConfirmOrder extends Widget {
             oneSupplier.push(v.cartGood);
             suppliers.set(supplierId,oneSupplier);
         }
-        totalFreight += calcFreight(this.props.address.provinceId) * frieghts.length;
+        totalFreight += calcFreight(this.props.address.area_id) * frieghts.length;
 
         return {
             totalSale,
