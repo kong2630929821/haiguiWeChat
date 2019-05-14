@@ -7,7 +7,10 @@ interface Props {
     list: any[];
     title: string;  // 头部标题
     amount: number;  // 总数
-    select: any;  // 选中的年月
+    select: {
+        num:number;
+        value:number[];
+    };  // 选中的年月
     orgList: any[];
     fg: string; // 进入此页面标记
 }

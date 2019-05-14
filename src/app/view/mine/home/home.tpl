@@ -2,12 +2,17 @@
     <div w-class="top">
         <img src="../../../res/image/income.png" w-class="avatar"/>
         <div w-class="desc">
-            <div style="font-size:36px;">
-                用户名<span w-class="userType">海宝</span>
+            <div w-class="username">
+                <span>用户名</span>
+                {{if it1.userType}}
+                <span w-class="userType">{{it1.userType}}</span>
+                {{end}}
             </div>
+            {{if it1.inviteCode}}
             <div w-class="code">
-                邀请码：&nbsp;002233
+                邀请码：&nbsp;{{it1.inviteCode}}
             </div>
+            {{end}}
         </div>
         <img src="../../../res/image/arrowRight.png" w-class="arrow"/>
     </div>
@@ -21,10 +26,10 @@
     </div>
     <div w-class="divideLine"></div>
     <div w-class="orderType">
-        {{for i,v of [1,2,3]}}
-        <div w-class="item">
-            <div w-class="amount">0.00</div>
-            <div w-class="name">现金</div>
+        {{for i,v of it1.balance}}
+        <div w-class="item" on-tap="balanceLog({{i}})">
+            <div w-class="amount">{{v.value}}</div>
+            <div w-class="name">{{v.key}}</div>
         </div>
         {{end}}
     </div>
@@ -34,7 +39,7 @@
         <div w-class="text">收货地址</div>
         <img src="../../../res/image/arrowRight.png"/>
     </div>
-    <div w-class="row">
+    <div w-class="row" on-tap="verified">
         <img src="../../../res/image/IDcard.png"/>
         <div w-class="text">实名认证</div>
         <img src="../../../res/image/arrowRight.png"/>

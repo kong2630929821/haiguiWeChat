@@ -1,12 +1,13 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { UserType } from '../../store/memstore';
+import { getUserTypeShow } from '../../utils/logic';
 import * as Constant from './powerConstant';
 interface Props {
     list:string[];  // 权益详情介绍
     userType:UserType;  // 用户会员等级 
     powerList:any[];  // 权益列表
-    showType:string;  // 用户类型名称
+    userTypeShow:string;  // 用户类型名称
     code:string;  // 邀请码
 }
 /**
@@ -20,13 +21,11 @@ export class PowerDetail extends Widget {
         if (props.userType === UserType.hWang) {
             this.props.list = Constant.hWangDesc;
             this.props.powerList = Constant.hWangPower;
-            this.props.showType = '海王';
         } else {
             this.props.list = Constant.hBaoDesc;
             this.props.powerList = Constant.hBaoPower;
-            this.props.showType = '海宝';
         }
-        
+        this.props.userTypeShow = getUserTypeShow(props.userType);
     }
 
     // 权益
@@ -39,6 +38,6 @@ export class PowerDetail extends Widget {
 
     // 升级会员等级
     public upgradeUser() {
-        popNew('app-view-member-modalBoxInput',{ selectAddr:false });
+        popNew('app-view-member-applyModalBox');
     }
 }

@@ -3,6 +3,7 @@ import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
 import { register, UserType } from '../../../store/memstore';
+import { getUserTypeShow } from '../../../utils/logic';
 import { hBaoPower, hWangPower } from '../powerConstant';
 
 export const PageFg = {
@@ -31,8 +32,7 @@ export class Home extends Widget {
 
     // 当前用户的会员等级
     public goDetail() {
-        // popNew('app-view-member-powerDetail',{ userType:this.state.userType, code:this.state.inviteCode });
-        popNew('app-components-areaSelect-areaSelect');
+        popNew('app-view-member-powerDetail',{ userType:this.state.userType, code:this.state.inviteCode });
     }
 
     // 会员等级介绍
@@ -55,7 +55,7 @@ export class Home extends Widget {
 
     // 升级会员等级
     public upgradeUser() {
-        popNew('app-view-member-modalBoxInput',{ selectAddr:false });
+        popNew('app-view-member-applyModalBox');
     }
 
 }
@@ -67,7 +67,8 @@ const State = {
         { amount:0,title:'我的伙伴',fg:PageFg.cash },
         { amount:0,title:'海贝总收益',fg:PageFg.shell }
     ],
-    userType:UserType.hBao, // 用户会员等级
+    userType:UserType.other, // 用户会员等级
+    userTypeShow:'',
     inviteCode:'',   // 邀请码
     powerList:hBaoPower  // 权益列表
 };
@@ -80,6 +81,7 @@ register('earning',r => {
 });
 register('user',r => {
     State.userType = r.userType;
+    State.userTypeShow = getUserTypeShow(r.userType);
     State.inviteCode = r.inviteCode;
     State.powerList = r.userType === UserType.hWang ? hWangPower :hBaoPower;
     forelet.paint(State);
