@@ -37,6 +37,7 @@ export class ShoppingCart extends Widget {
             priceFormat
         };
         super.setProps(this.props);
+        this.calcTotalFee();
     }
 
     // 编辑
@@ -60,6 +61,7 @@ export class ShoppingCart extends Widget {
         }
         this.props.allSelected = isSelectAll;
         this.calcTotalFee();
+        this.updateCartGoods();
         this.paint();
     }
     
@@ -72,7 +74,17 @@ export class ShoppingCart extends Widget {
         }
         this.props.allSelected = isSelectAll;
         this.calcTotalFee();
+        this.updateCartGoods();
         this.paint();
+    }
+
+    public updateCartGoods() {
+        const cartGoodsShow = this.state.cartGoodsShow;
+        const cartGoods = [];
+        for (const v of cartGoodsShow) {
+            cartGoods.push(v.cartGood);
+        }
+        setStore('mall/cartGoods',cartGoods,false);
     }
     // 删除购物车商品
     public delCartGoods() {

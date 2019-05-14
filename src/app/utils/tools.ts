@@ -52,10 +52,13 @@ export const calcPrices = (goods:GoodsDetails) => {
 };
 
 // 计算运费
-export const calcFreight = (provinceName?:string) => {
-    if (!provinceName) return 0;
+export const calcFreight = (provinceId:number) => {
+    const freights = getStore('mall/freights');
+    for (let i = 0;i < freights.length;i ++) {
+        if (freights[i].index === provinceId) return freights[i].price;
+    }
 
-    return 1000;
+    return 0;
 };
 
 // 获取特定类型的图片url
@@ -99,4 +102,14 @@ export const calcInventorys = (skus:SKU[]) => {
     }
 
     return num;
+};
+
+// 获取购物车商品是否被选中
+export const getCartGoodsSelected = (index:number):boolean => {
+    const carts = getStore('mall/cartGoods');
+    for (let i = 0;i < carts.length;i++) {
+        if (carts[i].index === index) return carts[i].selected;
+    }
+    
+    return false;
 };

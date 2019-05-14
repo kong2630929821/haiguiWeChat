@@ -1,5 +1,6 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
+import { getOrders } from '../../net/pull';
 import { getStore, OrderStatus } from '../../store/memstore';
 
 interface Props {
@@ -20,6 +21,7 @@ export class OrderList extends Widget {
         
         console.log('OrderList =======',this.props);
         super.setProps(this.props);
+        getOrders(OrderStatus.PENDINGPAYMENT);
     }
 
     // 切换订单类型

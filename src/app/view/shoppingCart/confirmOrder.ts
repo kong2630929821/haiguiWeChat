@@ -1,7 +1,8 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
+import { order } from '../../net/pull';
 import { CartGoods, getStore } from '../../store/memstore';
-import { calcFreight, getImageThumbnailPath, priceFormat } from '../../utils/tools';
+import { calcFreight, getImageThumbnailPath, popNewMessage, priceFormat } from '../../utils/tools';
 import { calcCartGoodsShow, CartGoodsShow } from './home/home';
 
 interface Props {
@@ -13,14 +14,17 @@ interface Props {
 export class ConfirmOrder extends Widget {
     public setProps(props:Props,oldProps:Props) {
         const orderGoodsShow = calcCartGoodsShow(props.orderGoods);
-        const ret = this.calcAllFees(orderGoodsShow);
         this.props = {
             ...props,
-            ...ret,
             getImageThumbnailPath,
             priceFormat,
             orderGoodsShow,
             address:getStore('mall/addresses')[0]
+        };
+        const ret = this.calcAllFees(orderGoodsShow);
+        this.props = {
+            ...this.props,
+            ...ret
         };
         super.setProps(this.props,oldProps);
         console.log('ConfirmOrder ======',this.props);
@@ -50,7 +54,7 @@ export class ConfirmOrder extends Widget {
             oneSupplier.push(v.cartGood);
             suppliers.set(supplierId,oneSupplier);
         }
-        totalFreight += calcFreight('123') * frieghts.length;
+        totalFreight += calcFreight(this.props.address.provinceId) * frieghts.length;
 
         return {
             totalSale,
@@ -59,5 +63,30 @@ export class ConfirmOrder extends Widget {
             suppliers
         };
 
+    }
+
+    // 添加地址
+    public addAddress() {
+        popNew('app-view-mine-editAddress');
+    }
+    // 结算下单
+    public async orderClick() {
+        const allPromise = [];
+        for (const [k,v] of this.props.suppliers) {
+            console.log(k,v);
+            const no_list = [];
+            for (const g of v) {
+                no_list.push(g.index);
+            }
+            const promise = order(no_list,this.props.address.id);
+            allPromise.push(promise);
+        }
+        try {
+            const res = await Promise.all(allPromise);
+        } catch (res) {
+            if (res.result === 2124) {
+                popNewMessage('库存不足');
+            }
+        }
     }
 }

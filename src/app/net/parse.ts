@@ -1,4 +1,5 @@
-import { CartGoods, GoodsDetails, GoodsSegmentationDetails, Groups, GroupsLocation, MallImages, SKU } from '../store/memstore';
+import { Address, CartGoods, Freight, GoodsDetails, GoodsSegmentationDetails, Groups, GroupsLocation, MallImages, Order, SKU } from '../store/memstore';
+import { getCartGoodsSelected } from '../utils/tools';
 
 /**
  * 数据处理
@@ -134,10 +135,78 @@ export const parseCart = (infos:any) => {
             index:info[0],        // 索引
             goods:goodsDetail,   // 商品详细信息
             amount:info[2],        // 购买数量
-            selected:false     // 是否勾选  默认false
+            selected:getCartGoodsSelected(info[0])     // 是否勾选  默认false
         };
         carts.push(cart);
     }
     
     return carts;
+};
+
+/**
+ * 收货地址解析
+ */
+export const parseAddress = (infos:any) => {
+    
+    const addresses = [];
+    for (const info of infos) {
+        const id = info[0][1];
+        const info1 = info[1];
+        const address:Address = {
+            id,
+            name:info1[0],
+            tel:info1[1],
+            area_id:info1[2],
+            address:info1[3]
+        };
+        addresses.push(address);
+    }
+
+    return addresses;
+};
+
+/**
+ * 解析运费信息
+ */
+export const parseFreight = (infos:any) => {
+    const freights = [];
+    for (const info of infos) {
+        const freight:Freight = {
+            index:info[0],
+            province:info[1][0],   // 省份
+            price_type:info[1][1],    // 价格类型
+            price:info[1][2]         // 价格
+        };
+        freights.push(freight);
+    }
+
+    return freights;
+};
+
+/**
+ * 解析订单详情
+ */
+export const parseOrder = (infos:any) => {
+    const orders = [];
+    for (const info of infos) {
+        // const order:Order = {
+        //     id:0,		       // 订单id
+        //     orderGoods:[],   // (商品详细信息) (购买数量)
+        //     pay_type:number;       // 支付类型，1现金，2积分，3表示同时支持现金和积分
+        //     origin:number;         // 商品原支付金额，单位分，即所有商品单价乘数量
+        //     tax:number;				// 	商品税费，单位分，即所有商品税费乘数量
+        //     freight:number;        // 商品运费，单位分
+        //     other:number;          // 其它费用，单位分
+        //     weight:number;         // 商品总重量，单位克，即所有商品重量乘数量
+        //     name:string;           // 收件人姓名
+        //     tel:string;            // 收件人电话
+        //     area:string;           // 收件人地区
+        //     address:string;        // 收件人详细地址
+        //     order_time:number;     // 下单时间，单位毫秒
+        //     pay_time:number;       // 支付时间，单位毫秒
+        //     ship_time:number;      // 发货时间，单位毫秒
+        //     receipt_time:number;   // 收货时间，单位毫秒
+        //     finish_time:number;    // 完成时间，单位毫秒，已收货，但未完成，例如退货
+        // };
+    }
 };

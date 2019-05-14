@@ -17,6 +17,7 @@ export class AddressItem extends Widget {
             right:'arrowRight.png'
         };
         super.setProps(this.props);
+        console.log('AddressItem =======',this.props);
     }
 
     // 点击整个区域

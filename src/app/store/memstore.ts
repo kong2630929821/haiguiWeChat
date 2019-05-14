@@ -215,7 +215,7 @@ export interface Address {
     id:number;			// 序号
     name:string;        // 收件人姓名
     tel:string;         // 收件人电话
-    area:string;        // 收件人地区
+    area_id:number;    // 省份代码id
     address:string;  	// 收件人详细地址	    
 }
 
@@ -267,16 +267,25 @@ export interface Supplier {
     goods:GoodsDetails[];	// 供应商商品id列表
 }
 
+// 订单状态
 export enum OrderStatus {
     PENDINGPAYMENT = 1,   // 待付款
     PENDINGDELIVERED  = 2,   // 待发货
     PENDINGRECEIPT  = 3,   // 待收货
-    COMPLETED   = 4,        // 已完成
-    RETURNSTART = 5,         // 申请退货
-    RETURNING = 6,           // 退货中
-    RETURNEND = 7             // 已退货
+    PENDINGFINISH = 4,     // 待完成     确认收货后7天算已完成   这个时间段内的订单可以申请退货
+    COMPLETED   = 5,        // 已完成
+    RETURNSTART = 6,         // 申请退货
+    RETURNING = 7,           // 退货中
+    RETURNEND = 8             // 已退货
 }
 
+// 运费信息
+export interface Freight {
+    index:number;   // 地区索引
+    province:string;   // 省份
+    price_type:number;    // 价格类型
+    price:number;         // 价格
+}
 // 商城数据
 interface Mall {
     groups:Map<GroupsLocation, Groups[]>;   // 分组数据
@@ -287,6 +296,7 @@ interface Mall {
     brands:Brand[];                  // 品牌列表
     areas:Area[];                    // 地区列表
     suppliers:Supplier[];            // 供应商列表
+    freights:Freight[];             // 运费信息
 }
 /********************************用户权益*********************************** */
 // 收益统计
@@ -361,7 +371,8 @@ const store:Store = {
         addresses:[],                           // 收件人地址列表
         brands:[],                              // 品牌列表
         areas:[],                               // 地区列表
-        suppliers:[]                            // 供应商列表
+        suppliers:[],                            // 供应商列表
+        freights:[]                            // 运费信息
     },
     earning:{
         baby:0,

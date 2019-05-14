@@ -1,6 +1,6 @@
-import { Address, getStore,GroupsLocation, setStore } from '../store/memstore';
+import { Address, getStore,GroupsLocation, OrderStatus, setStore } from '../store/memstore';
 import { requestAsync } from './login';
-import { parseAllGroups, parseCart, parseGoodsDetail } from './parse';
+import { parseAddress, parseAllGroups, parseCart, parseFreight, parseGoodsDetail } from './parse';
 
 /**
  * 获取分组信息
@@ -91,6 +91,81 @@ export const getCart = () => {
     });
 };
 
+/**
+ * 收货地址增加
+ */
+export const addAddress = (name:string,tel:string,area_id:number,address:string) => {
+    const msg = {
+        type:'add_address',
+        param:{
+            name,
+            tel,
+            area_id,
+            address
+        }
+    };
+
+    return requestAsync(msg).then(res => {
+        console.log('addAddress ======',res);
+        getAddress();
+    });
+};
+
+/***
+ * 删除收货地址
+ */
+export const delAddress = (no:number) => {
+    const msg = {
+        type:'del_address',
+        param:{
+            no
+        }
+    };
+
+    return requestAsync(msg).then(res => {
+        console.log('delAddress ======',res);
+        getAddress();
+    });
+};
+
+/**
+ * 获取收货地址
+ */
+export const getAddress = () => {
+    const msg = {
+        type:'get_address',
+        param:{
+        }
+    };
+
+    return requestAsync(msg).then(res => {
+        const addresses = parseAddress(res.addressInfo);
+        console.log('getAddress ======',addresses);
+        setStore('mall/addresses',addresses);
+        
+        return addAddress;
+    });
+};
+
+/**
+ * 获取运费信息
+ */
+export const getFreight = () => {
+    const msg = {
+        type:'get_freight',
+        param:{
+        }
+    };
+
+    return requestAsync(msg).then(res => {
+        const freights = parseFreight(res.addressInfo);
+        console.log('getFreight ======',freights);
+        setStore('mall/freights',freights);
+        
+        return freights;
+    });
+};
+
 // 获取地区信息
 export const getAreas = () => {
     const msg = {
@@ -102,6 +177,23 @@ export const getAreas = () => {
 
     return requestAsync(msg).then(res => {
         console.log('getAreas ======',res);
+    });
+};
+
+/**
+ * 下单
+ */
+export const order = (no_list:number[],address_no:number) => {
+    const msg = {
+        type:'order',
+        param:{
+            no_list,
+            address_no
+        }
+    };
+
+    return requestAsync(msg).then(res => {
+        console.log('order ======',res);
     });
 };
 
@@ -119,26 +211,18 @@ export const getSuppliers = (id:number) => {
     });
 };
 
-// 获取收货人地址列表
-export const getAddresses = () => {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            const address:Address = {
-                id:1,		
-                name:'陈二狗',       
-                tel:'18324648321',       
-                area:'四川省',        
-                address:'四川省成都市高新区天府三街1140号17栋5-33号'  	
-            };
-            setStore('mall/addresses',[address]);
-            resolve();
-        },200);
-    });
-};
-
 // 获取各种状态的订单
-export const getOrders = () => {
-    return 0;
+export const getOrders = (order_type:OrderStatus) => {
+    const msg = {
+        type:'get_order',
+        param:{
+            order_type
+        }
+    };
+
+    return requestAsync(msg).then(res => {
+        console.log('order ======',res);
+    });
 };
 /**
  * 获取收益统计

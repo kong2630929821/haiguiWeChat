@@ -1,5 +1,13 @@
 import { popNew } from '../../../pi/ui/root';
+import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
+import { getStore, register } from '../../store/memstore';
+
+// tslint:disable-next-line:no-reserved-keywords
+declare var module: any;
+export const forelet = new Forelet();
+export const WIDGET_NAME = module.id.replace(/\//g, '-');
+
 interface Props {
     list:any[]; // 地址列表
     isChoose:boolean;  // 是否选择地址
@@ -10,54 +18,21 @@ interface Props {
  */
 export class AddressList extends Widget {
     public props:Props = {
-        list:[
-            {
-                left:'',
-                right:'edit.png',
-                name:'陈某某',
-                tel:'12345678901',
-                province:'四川省成都市高新区',
-                address:'天府三街1140号17栋5-33号'
-            },
-            {
-                left:'',
-                right:'edit.png',
-                name:'陈某某',
-                tel:'12345678901',
-                province:'四川省成都市高新区',
-                address:'天府三街1140号17栋5-33号'
-            },
-            {
-                left:'',
-                right:'edit.png',
-                name:'陈某某',
-                tel:'12345678901',
-                province:'四川省成都市高新区',
-                address:'天府三街1140号17栋5-33号'
-            },
-            {
-                left:'',
-                right:'edit.png',
-                name:'陈某某',
-                tel:'12345678901',
-                province:'四川省成都市高新区',
-                address:'天府三街1140号17栋5-33号'
-            }
-        ],
+        list:[],
         isChoose:false,
         selected:-1
     };
-
     public setProps(props:any) {
         this.props = {
             ...this.props,
             ...props
         };
-        super.setProps(this.props);
         this.initData();
+        super.setProps(this.props);
     }
 
     public initData() {
+        this.props.list = getStore('mall/addresses');
         if (this.props.isChoose) {
             this.props.list = this.props.list.map((item,ind) => {
                 const left = this.props.selected === ind ? 'selectBox_active.png' :'selectBox.png';
@@ -88,3 +63,9 @@ export class AddressList extends Widget {
         popNew('app-view-mine-editAddress');
     }
 }
+
+register('mall/addresses',() => {
+    const w:any = forelet.getWidget(WIDGET_NAME);
+    w && w.initData();
+    w && w.paint();
+});

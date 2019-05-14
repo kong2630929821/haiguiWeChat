@@ -85,10 +85,6 @@ export class GoodsDetailHome extends Widget {
         const sku = this.props.goods.labels[this.props.skuIndex];
         addCart(this.props.goods.id,this.props.amount,sku[0]).then(() => {
             popNewMessage('添加成功');
-            getGoodsDetails(this.props.goods.id).then(goods => {
-                this.props.goods = goods;
-                this.paint();
-            });
         });
     }
 
