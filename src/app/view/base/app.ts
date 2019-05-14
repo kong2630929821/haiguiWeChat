@@ -26,7 +26,7 @@ export class App extends Widget {
     public init(): void {
         this.props = {
             type: 2, // 用户可以单击选项，来切换卡片。支持3种模式，惰性加载0-隐藏显示切换，切换采用加载1-销毁模式，一次性加载2-隐藏显示切换。
-            isActive:4,
+            isActive:0,
             old: this.old,
             tabBarList: [
                 {

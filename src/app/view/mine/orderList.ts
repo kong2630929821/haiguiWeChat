@@ -1,43 +1,40 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
-import { getStore } from '../../store/memstore';
-import { OrderType } from './orderItem';
+import { getStore, OrderStatus } from '../../store/memstore';
 
+interface Props {
+    allStaus:any[];   // 订单的所有状态
+    activeStatus:OrderStatus;    // 当前查询的订单状态
+}
 /**
  * 订单列表
  */
 export class OrderList extends Widget {
-    public props:any = {
-        orderType:[
-            { name:'待付款',img:'wallet.png' },
-            { name:'待发货',img:'goods.png' },
-            { name:'待收货',img:'truck.png' },
-            { name:'已完成',img:'order.png' },
-            { name:'退货',img:'return.png' }
-        ],
-        list:[1,2],
-        active: OrderType.pay
-    };
-
-    public setProps(props:any) {
-        this.props = {
-            ...this.props,
-            ...props
-        };
+    public setProps(props:Props) {
         const orders = getStore('mall/orders');
-        console.log('OrderList =======',orders);
+        const curShowOrders = orders.get(props.activeStatus) || [];
+        this.props = {
+            ...props,
+            curShowOrders
+        };
+        
+        console.log('OrderList =======',this.props);
         super.setProps(this.props);
     }
 
     // 切换订单类型
-    public typeClick(num:number) {
-        this.props.active = num;
+    public typeClick(status:OrderStatus) {
+        this.props.activeStatus = status;
         this.paint();
     }
 
     // 点击订单
-    public itemClick(num:number) {
-        popNew('app-view-mine-freight',{ num:num });
+    public itemClick(index:number) {
+        const props = {
+            order:this.props.curShowOrders[index],
+            status:this.props.activeStatus
+        };
+        popNew('app-view-mine-freight',{ ...props });
     }
 
     // 点击按钮

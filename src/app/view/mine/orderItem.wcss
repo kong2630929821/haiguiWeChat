@@ -28,13 +28,10 @@
     overflow: hidden;
     font-size: 24px;
     color:#888;
+    flex: 1 0 0;
 }
 .goodsTitle{
     color:#222;
-    word-break: break-all;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
     margin-bottom: 10px;
 }
 .total{

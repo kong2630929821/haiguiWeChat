@@ -101,28 +101,17 @@ export const unregister = (keyName: string, cb: Function): void => {
  */
 const handlerMap: HandlerMap = new HandlerMap();
 
-// 一级分组详细信息
-export interface Level1Groups {    
+// 分组详细信息
+export interface Groups {    
     id:number;    // 分组id
     name:string;   // 分组名
     // tslint:disable-next-line:no-reserved-keywords
     type:boolean;     // 组类型，分为子组和叶组，子组可以包含任意的其它子组或叶组，叶组只允许包含商品
+    is_show:boolean;  //  是否展示
     images:MallImages[];   // 分组包含的图片列表
     detail:string;  // 分组详细描述
     location:number;  // 分组在前端的位置，例如商城首页，分类首页等
-    childs:Map<number, Level2Groups>;       // 二级分组信息
-}
-
-// 二级分组详细信息
-export interface Level2Groups {
-    id:number;    // 分组id
-    name:string;   // 分组名
-    // tslint:disable-next-line:no-reserved-keywords
-    type:boolean;     // 组类型，分为子组和叶组，子组可以包含任意的其它子组或叶组，叶组只允许包含商品
-    images:MallImages[];   // 分组包含的图片列表
-    detail:string;  // 分组详细描述
-
-    goods:GoodsDetails[];  // 商品简略信息或者详情信息
+    childs:Groups[] | GoodsDetails[];       // 二级分组信息
 }
 
 /************************点进详情页后获取*******************************************/
@@ -130,44 +119,29 @@ export interface Level2Groups {
 export interface GoodsDetails {
     id:number;	   // 商品id
     name:string;   // 商品名称
-    pay_type:number;	// 	支付类型，1现金，2积分，3表示同时支持现金和积分
-    origin:number;   // 	商品原价，单位分
-    vip_origin:number;  // 会员商品原价，单位分
-    discount:number;	// 商品折后价，单位分，即原价 + 税费 - 折扣
-    rebate:number;    // 返利（仅限海王）
-    has_tax:boolean;    // 是否为保税商品
-    tax:number;		// 商品税费，单位分
-    images:MallImages[];	 // 商品包含的图片列表
-    intro:string;		// 商品介绍
-    labels:MallLabels[];	 // 商品包含的标签id列表，商品有自已的标签，同时会继承分组的标签，相同id的标签则忽略
-
-/******************************************************************/
     brand:number;  // 品牌id
     area:number;	 // 地区id
     supplier:number; // 供应商id
-    weight:number;	// 商品重量，单位克
-    spec:GoodsSpec[];   // 商品规格
+    pay_type:number;	// 	支付类型，1现金，2积分，3表示同时支持现金和积分
+    rebate:number;    // 返利（仅限海王）
+    origin:number;   // 	商品原价，单位分
+    vip_origin:number;  // 会员商品原价，单位分
+    has_tax:boolean;    // 是否为保税商品
+    tax:number;		// 商品税费，单位分
+    discount:number;	// 商品折后价，单位分，即原价 + 税费 - 折扣
+    labels:SKU[];	 // SKU SKU描述 价格影响 库存
+    images:MallImages[];	 // 商品包含的图片列表
+    intro:string;		// 商品介绍
+    
+/******************************************************************/
     detail:GoodsSegmentationDetails[];  // 商品分段详细描述
-    out:number;       // 当前已出库，但未确认的商品数量
-    total_out:number;  // 已出库，且已确认的商品数量
-    inventorys:number;         // 商品库存
+    spec:GoodsSpec[];   // 商品规格
 }
 
-// 商品标签 只支持两层结构
-export interface MallLabels {
-    id:number;  // 	标签id
-    name:string; // 	标签名
-    pay_type:number; // 		标签支付类型，1现金，2积分，3表示同时支持现金和积分
-    price:number;	// 	标签价格，单位分，负整数表示在商品原价上减去指定的价格，0表示对商品价格不变，正整数表示在商品原价上加上指定的价格
-    childs:MallLabels[];	 // 包含的子标签列表，将所有子标签的price求合，再对商品原价进行更新
-    image:MallImages;		// 标签图片path
-}
+export type SKU  = [string,string,number,number]; // SKU SKU描述 价格影响 库存
 
 // 商品规格,以列表的形式展示 比如电子产品的参数信息等
-export interface GoodsSpec {
-    name:string;  // 商品的规格名
-    value:string; // 规格值
-}
+export type GoodsSpec  = [string,string] ;  // 商品的规格名 规格值
 
 // 商品分段详细描述
 export interface GoodsSegmentationDetails {
@@ -179,22 +153,14 @@ export interface GoodsSegmentationDetails {
 // 放入购物车的商品
 export interface CartGoods {
     goods:GoodsDetails;   // 商品详细信息
-    amount:number;     // 购买数量
-    labels:MallLabels[];  // 订单商品标签列表
+    amount:number;        // 购买数量
     selected:boolean;     // 是否勾选  默认false
-}
-
-// 已下单的商品或者已购买的商品
-export interface OrderGoods {
-    goods:GoodsDetails;   // 商品详细信息
-    amount:number;     // 购买数量
-    labels:MallLabels[];  // 订单商品标签列表
 }
 
 // 订单详情
 export interface Order {
     id:number;		       // 订单id
-    orderGoods:OrderGoods[];   // 已购买的商品
+    orderGoods:[GoodsDetails,number][];   // (商品详细信息) (购买数量)
     pay_type:number;       // 支付类型，1现金，2积分，3表示同时支持现金和积分
     origin:number;         // 商品原支付金额，单位分，即所有商品单价乘数量
     tax:number;				// 	商品税费，单位分，即所有商品税费乘数量
@@ -233,7 +199,6 @@ export interface AfterSale {
     id:number;		      // 售后订单id
     order:AfterSaleOrder; // 售后商品订单详情
     goods:GoodsDetails;   // 商品详情
-    labels:MallLabels;    // 用户为指定商品选择标签
     amount:number;        // 商品数量
     tax:number;           // 商品总税费，单位分
     weight:number;        // 商品总重量，单位克
@@ -253,13 +218,21 @@ export interface Address {
     address:string;  	// 收件人详细地址	    
 }
 
+// 图片类型枚举
+export enum ImageType {
+    THUMBNAIL = 1,   // 缩略图
+    MAIN = 2,       // 主图
+    DETAIL = 3,      // 详情图
+    ICON = 4          // 小图 图标
+}
+
 /**
  * 商城图片
  */
 export interface MallImages {
     path:string;  // 图片url
     // tslint:disable-next-line:no-reserved-keywords
-    type:number;  // 图片的类型，例如图标、小图、大图等
+    type:ImageType;  // 图片的类型，例如图标、小图、大图等
     style:number; // 图片显示的样式类型，例如静态、滚动、缩放等
 }
 
@@ -297,12 +270,15 @@ export enum OrderStatus {
     PENDINGPAYMENT = 1,   // 待付款
     PENDINGDELIVERED  = 2,   // 待发货
     PENDINGRECEIPT  = 3,   // 待收货
-    COMPLETED   = 4        // 已完成
+    COMPLETED   = 4,        // 已完成
+    RETURNSTART = 5,         // 申请退货
+    RETURNING = 6,           // 退货中
+    RETURNEND = 7             // 已退货
 }
 
 // 商城数据
 interface Mall {
-    groups:Map<number, Level1Groups>;   // 分组数据
+    groups:Map<GroupsLocation, Groups[]>;   // 分组数据
     cartGoods:CartGoods[];           // 购物车
     orders:Map<OrderStatus,Order[]>;      // 订单列表   待付款 待发货 待收货 已完成
     afterSales:AfterSale[];          // 售后列表
@@ -326,6 +302,28 @@ export enum UserType {
     hBao,   // 海宝
     normal,  // 普通会员  领取过试用装
     other  // 其他
+}
+
+// 分组位置定义
+export enum GroupsLocation {
+    CLASSIFICATION = 20001,    // 分类页
+    FIRST = 10001,    //   首页位置1  轮播图
+    SECOND = 10002,   //   首页位置2 
+    THIRD = 10003,    //   首页位置3 
+    FOUR = 10004,     //   首页位置4 
+    FIVE = 10005,     //   首页位置5 
+    SIX = 10006,      //   首页位置6 
+    SEVEN = 10007,    //   首页位置7 
+    EIGHT = 10008,    //   首页位置8 
+    NINE = 10009,     //   首页位置9 
+    TEN = 10010,      //   首页位置10 
+    ELEVEN = 10011,   //   首页位置11 
+    TWLEVE = 10012,   //   首页位置12 
+    THIRTEEN = 10013, //   首页位置13 
+    FOURTEEN = 10014, //   首页位置14 
+    FIFTEEN = 10015,  //   首页位置15 
+    SIXTEEN = 10016,  //   首页位置16 
+    SEVENTEEN = 10017 //   首页位置17 
 }
 
 // 用户信息
@@ -355,9 +353,9 @@ interface Store {
 // 全局内存数据库
 const store:Store = {
     mall:{
-        groups:new Map<number, Level1Groups>(),   // 分组数据
-        cartGoods:[],                           // 购物车 
-        orders:new Map<OrderStatus,Order[]>(),                              // 订单列表
+        groups:new Map<GroupsLocation, Groups[]>(),    // 分组数据
+        cartGoods:[],                                      // 购物车 
+        orders:new Map<OrderStatus,Order[]>(),             // 订单列表
         afterSales:[],                          // 售后列表
         addresses:[],                           // 收件人地址列表
         brands:[],                              // 品牌列表

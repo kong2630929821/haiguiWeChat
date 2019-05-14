@@ -2,7 +2,7 @@
  * 常用工具
  */
 import { popNew } from '../../pi/ui/root';
-import { GoodsDetails, MallLabels } from '../store/memstore';
+import { getStore, GoodsDetails, ImageType, MallImages, SKU, UserType } from '../store/memstore';
 
 // 弹出提示框
 export const popNewMessage = (content: any) => {
@@ -14,22 +14,15 @@ export const popNewLoading = (text: any) => {
     return popNew('app-components-loading-loading', { text });
 };
 
-let vipLevel;
 // 获取vip等级
 export const getVipLevel = () => {
-    if (vipLevel !== undefined) return vipLevel;
-    const random = Math.random();
-    if (random > 0.7) {
-        vipLevel = 2;
-    } else if (random > 0.4) {
-        vipLevel = 1;
-    } else {
-        vipLevel = 0;
-    }
-    
-    return vipLevel;
+    return getStore('user/userType');
 };
 
+// 价格格式化
+export const priceFormat = (price:number) => {
+    return (price / 100).toFixed(2);
+};
 // 计算打折力度
 export const calcDiscount = (discount:number,origin:number) => {
     return Number((discount / origin * 10).toFixed(1));
@@ -44,11 +37,11 @@ export const calcPrices = (goods:GoodsDetails) => {
         discount:0,           // 几折
         rebate:0              // 返利
     };
-    if (vipLevel === 1) { // 海宝
-        ret.discount = goods.discount ? calcDiscount(goods.discount,goods.origin) : calcDiscount(goods.vip_origin,goods.origin);
+    if (vipLevel === UserType.hBao) { // 海宝
+        ret.discount = goods.discount !== goods.origin ? calcDiscount(goods.discount,goods.origin) : calcDiscount(goods.vip_origin,goods.origin);
         ret.sale = goods.discount ? goods.discount : (goods.vip_origin ? goods.vip_origin : goods.origin);
-    } else if (vipLevel === 2) { // 海王
-        ret.discount = goods.discount ? calcDiscount(goods.discount,goods.origin) : calcDiscount(goods.vip_origin,goods.origin);
+    } else if (vipLevel === UserType.hWang) { // 海王
+        ret.discount = goods.discount !== goods.origin ? calcDiscount(goods.discount,goods.origin) : calcDiscount(goods.vip_origin,goods.origin);
         ret.sale = goods.discount ? goods.discount : (goods.vip_origin ? goods.vip_origin : goods.origin);
         ret.rebate = goods.rebate;
     } else {   // 非vip
@@ -68,19 +61,52 @@ export const filterShowLabelImage = (labels:MallLabels[],labeled:MallLabels) => 
     }
 };
 
-// 计算标签影响的价格
-export const  calLabelPrice = (hasLabels:MallLabels[]) => {
-    let labelPrice = 0;
-    for (const v of hasLabels) {
-        labelPrice += v.price;
-    }
-
-    return labelPrice;
-};
-
 // 计算运费
 export const calcFreight = (provinceName?:string) => {
     if (!provinceName) return 0;
 
     return 1000;
+};
+
+// 获取特定类型的图片url
+export const getImagePath = (images:MallImages[],iType:ImageType) => {
+    const paths:string[] = [];
+    for (const v of images) {
+        if (v.type === iType) paths.push(v.path);
+    }
+
+    return paths;
+};
+
+/**
+ * 获取缩略图路径
+ */
+export const getImageThumbnailPath = (images:MallImages[]) => {
+    return getImagePath(images,ImageType.THUMBNAIL)[0];
+};
+
+/**
+ * 获取主图图路径
+ */
+export const getImageMainPath = (images:MallImages[]) => {
+    return getImagePath(images,ImageType.MAIN);
+};
+
+/**
+ * 获取详情图路径
+ */
+export const getImageDetailPath = (images:MallImages[]) => {
+    return getImagePath(images,ImageType.DETAIL);
+};
+
+/**
+ * 计算商品库存
+ */
+export const calcInventorys = (skus:SKU[]) => {
+    let num = 0;
+    for (const v of skus) {
+        num += v[3];
+    }
+
+    return num;
 };
