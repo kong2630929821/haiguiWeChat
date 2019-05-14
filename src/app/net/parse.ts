@@ -1,4 +1,4 @@
-import { GoodsDetails, Groups, GroupsLocation, MallImages, SKU } from '../store/memstore';
+import { CartGoods, GoodsDetails, GoodsSegmentationDetails, Groups, GroupsLocation, MallImages, SKU } from '../store/memstore';
 
 /**
  * 数据处理
@@ -68,10 +68,27 @@ export const parseGoodsDetail = (info:any):GoodsDetails => {
         images,	 // 商品包含的图片列表
         intro:info[15],		// 商品介绍
         
-        detail:info[16] ? info[16] : [],  // 商品分段详细描述
-        spec:[]   // 商品规格
+        detail:info[16] ? parseGoodsSegmentationDetails(info[16][1]) : [],  // 商品分段详细描述
+        spec:[]   // 商品规格   info[16][0]
     };
     
+};
+
+/**
+ * 商品分段详情解析
+ */
+export const parseGoodsSegmentationDetails = (infos:any) => {
+    const tmps:GoodsSegmentationDetails[] = [];
+    for (const info of infos) {
+        const tmp:GoodsSegmentationDetails = {
+            name:info[0],  // 分段名
+            value:info[1], // 分段详细描述
+            image:parseMallImage([info[2]])[0] // 分段图片path
+        };
+        tmps.push(tmp);
+    }
+    
+    return tmps;
 };
 
 /**
@@ -102,4 +119,25 @@ export const parseSKU = (infos:any) => {
     }
 
     return skus;
+};
+
+/**
+ * 解析购物车数据
+ */
+export const parseCart = (infos:any) => {
+    const carts = [];
+    for (const info of infos) {
+        const goodsInfo = [info[1]].concat(info[4]);
+        const goodsDetail = parseGoodsDetail(goodsInfo);
+        goodsDetail.labels = parseSKU([info[3]]);
+        const cart:CartGoods = {
+            index:info[0],        // 索引
+            goods:goodsDetail,   // 商品详细信息
+            amount:info[2],        // 购买数量
+            selected:false     // 是否勾选  默认false
+        };
+        carts.push(cart);
+    }
+    
+    return carts;
 };

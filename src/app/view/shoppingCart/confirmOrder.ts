@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { CartGoods, getStore } from '../../store/memstore';
-import { calcFreight } from '../../utils/tools';
+import { calcFreight, getImageThumbnailPath, priceFormat } from '../../utils/tools';
 import { calcCartGoodsShow, CartGoodsShow } from './home/home';
 
 interface Props {
@@ -17,6 +17,8 @@ export class ConfirmOrder extends Widget {
         this.props = {
             ...props,
             ...ret,
+            getImageThumbnailPath,
+            priceFormat,
             orderGoodsShow,
             address:getStore('mall/addresses')[0]
         };

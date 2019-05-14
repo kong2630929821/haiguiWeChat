@@ -5,7 +5,7 @@
 import { open, request, setReloginCallback, setUrl } from '../../pi/net/ui/con_mgr';
 import { wsUrl } from '../config';
 import { getStore, GroupsLocation, setStore, UserType } from '../store/memstore';
-import { getAddresses, getBalance, getEarningTotal, getGoodsDetails, getGroups, getInviteCode, getOrders, getUserInfo } from './pull';
+import { getAddresses, getBalance, getCart, getEarningTotal, getGoodsDetails, getGroups, getInviteCode, getOrders, getUserInfo } from './pull';
 
 /**
  * 获取微信用户信息
@@ -108,7 +108,7 @@ const userLogin = () => {
                 getGroups(<any>GroupsLocation[k]);
             }
         }
-        getGoodsDetails(10010000001);
+        getCart();
         // 获取收益统计
         getEarningTotal().then(res => {
             const earning = getStore('earning');

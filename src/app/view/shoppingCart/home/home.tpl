@@ -17,15 +17,15 @@
             {{else}}
                 <img src="../../../res/image/{{v.cartGood.selected ? 'redSelBox_active.png':'selectBox.png'}}" w-class="selectBox" on-tap="selectOrNot({{i}})"/>
             {{end}}
-            <img src="../../../res/image/{{v.image.path}}" w-class="goodsImg"/>
+            <img src="../../../res/image/{{it.getImageThumbnailPath(v.cartGood.goods.images)}}" w-class="goodsImg"/>
             <div w-class="column">
-                <div class="line2-overflow" w-class="goodsTitle">{{v.cartGood.goods.name}}</div>
+                <div class="line2-overflow" w-class="goodsTitle" on-tap="goodsClick(e,{{i}})">{{v.cartGood.goods.name}}</div>
                 <div w-class="goodsFg" class="line1-overflow">{{v.labelShow}}</div>
                 <div w-class="row">
                     <div w-class="good-price">
-                        <div w-class="buy-price">￥{{(v.finalSale/100).toFixed(2)}}</div>
+                        <div w-class="buy-price">￥{{it.priceFormat(v.finalSale)}}</div>
                         {{if v.priceRet.discount}}
-                        <div w-class="original-price">{{(v.priceRet.origin / 100).toFixed(2)}}</div>
+                        <div w-class="original-price">{{it.priceFormat(v.priceRet.origin)}}</div>
                         {{end}}
                     </div>
                     <div w-class="row1">

@@ -6,6 +6,7 @@ import { calcInventorys, calcPrices, getImageThumbnailPath, popNewMessage, price
 interface Props {
     goods:GoodsDetails;
     amount:number;           // 选择数量
+    skuIndex:number;  
 }
 /**
  * 规格选择
@@ -19,7 +20,6 @@ export class GoodsDetailsSpec extends Widget {
             priceFormat,
             inventorys:calcInventorys(props.goods.labels),  // 库存
             finalSale:ret.sale,  // 卖价加上标签影响的价格
-            skuIndex:-1,     // 选择的sku下标
             image:getImageThumbnailPath(props.goods.images)
         };
         super.setProps(this.props,oldProps);
@@ -51,7 +51,7 @@ export class GoodsDetailsSpec extends Widget {
 
     // 关闭
     public closeClick(e:any) {
-        notify(e.node,'ev-close-spec',{ amount:this.props.amount,sku:this.props.goods.labels[this.props.skuIndex] });
+        notify(e.node,'ev-close-spec',{ amount:this.props.amount,skuIndex:this.props.skuIndex });
     }
 
     // 加入购物车

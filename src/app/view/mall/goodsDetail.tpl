@@ -44,12 +44,14 @@
             </div>
             <div w-class="items-father3" on-tap="chooseSpecClick"><app-components-goodsDetailsItem-goodsDetailsItem>{title:"选择",content:"规格",style:"padding-left:30px;"}</app-components-goodsDetailsItem-goodsDetailsItem></div>
         </div>
-        {{for i,v of it.goods.detail}}
+        
         <div w-class="goods-desc">
             <div w-class="desc-title">商品详情</div>
+            {{for i,v of it.goods.detail}}
             <img src="../../res/image/{{v.image.path}}" w-class="desc-img"/>
+            {{end}}
         </div>
-        {{end}}
+        
     </div>
     <div w-class="fix-bottom">
         <div w-class="left">
@@ -69,7 +71,7 @@
     </div>
     {{if it.chooseSpec}}
     <div ev-close-spec="specCloseClick" ev-push-shopping-cart="pushShoppingCart" ev-buy-now="buyNow">
-        <app-components-goodsDetailsItem-goodsDetailsSpec>{goods:{{it.goods}},amount:{{it.amount}} }</app-components-goodsDetailsItem-goodsDetailsSpec>
+        <app-components-goodsDetailsItem-goodsDetailsSpec>{goods:{{it.goods}},amount:{{it.amount}},skuIndex:{{it.skuIndex}} }</app-components-goodsDetailsItem-goodsDetailsSpec>
     </div>
     {{end}}
 </div>

@@ -1,6 +1,6 @@
 import { Address, getStore,GroupsLocation, setStore } from '../store/memstore';
 import { requestAsync } from './login';
-import { parseAllGroups } from './parse';
+import { parseAllGroups, parseCart, parseGoodsDetail } from './parse';
 
 /**
  * 获取分组信息
@@ -32,7 +32,10 @@ export const getGoodsDetails = (goodsId:number) => {
     };
 
     return requestAsync(msg).then(res => {
-        console.log('getGoodsDetails ======',res);
+        const goodsDetail = parseGoodsDetail(res.goodsInfo[0]);
+        console.log('getGoodsDetails ======',goodsDetail);
+
+        return goodsDetail;
     });
 };
 
@@ -41,7 +44,7 @@ export const getGoodsDetails = (goodsId:number) => {
  */
 export const addCart = (goodId:number,amount:number,sku:string) => {
     const msg = {
-        type:'get_goods',
+        type:'add_cart',
         param:{
             good_id:goodId,
             amount,
@@ -49,10 +52,45 @@ export const addCart = (goodId:number,amount:number,sku:string) => {
         }
     };
 
-    return requestAsync(msg).then(res => {
-        console.log('addCart ======',res);
+    return requestAsync(msg).then(() => {
+        getCart();
     });
 };
+
+/**
+ * 购物车减少
+ */
+export const deductCart = (no:number,amount:number) => {
+    const msg = {
+        type:'deduct_cart',
+        param:{
+            no,
+            amount
+        }
+    };
+
+    return requestAsync(msg).then(() => {
+        getCart();
+    });
+};
+
+/**
+ * 获取购物车
+ */
+export const getCart = () => {
+    const msg = {
+        type:'show_cart',
+        param:{
+        }
+    };
+
+    return requestAsync(msg).then(res => {
+        console.log('getCart ======',res);
+        const carts = parseCart(res.cartInfo);
+        setStore('mall/cartGoods',carts);
+    });
+};
+
 // 获取地区信息
 export const getAreas = () => {
     const msg = {

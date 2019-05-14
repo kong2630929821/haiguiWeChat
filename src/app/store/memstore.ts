@@ -152,6 +152,7 @@ export interface GoodsSegmentationDetails {
 
 // 放入购物车的商品
 export interface CartGoods {
+    index:number;        // 索引
     goods:GoodsDetails;   // 商品详细信息
     amount:number;        // 购买数量
     selected:boolean;     // 是否勾选  默认false

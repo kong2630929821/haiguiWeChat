@@ -39,26 +39,16 @@ export const calcPrices = (goods:GoodsDetails) => {
     };
     if (vipLevel === UserType.hBao) { // 海宝
         ret.discount = goods.discount !== goods.origin ? calcDiscount(goods.discount,goods.origin) : calcDiscount(goods.vip_origin,goods.origin);
-        ret.sale = goods.discount ? goods.discount : (goods.vip_origin ? goods.vip_origin : goods.origin);
+        ret.sale = goods.discount !== goods.origin ? goods.discount : (goods.vip_origin ? goods.vip_origin : goods.origin);
     } else if (vipLevel === UserType.hWang) { // 海王
         ret.discount = goods.discount !== goods.origin ? calcDiscount(goods.discount,goods.origin) : calcDiscount(goods.vip_origin,goods.origin);
-        ret.sale = goods.discount ? goods.discount : (goods.vip_origin ? goods.vip_origin : goods.origin);
+        ret.sale = goods.discount !== goods.origin ? goods.discount : (goods.vip_origin ? goods.vip_origin : goods.origin);
         ret.rebate = goods.rebate;
     } else {   // 非vip
 
     }
-
+    
     return ret;
-};
-
-// 展示选择标签的图片
-export const filterShowLabelImage = (labels:MallLabels[],labeled:MallLabels) => {
-    for (const label of labels) {
-        for (let i = 0;i < label.childs.length;i++) {
-            const childLabel = label.childs[i];
-            if (childLabel.name === labeled.name) return childLabel.image;
-        }
-    }
 };
 
 // 计算运费
