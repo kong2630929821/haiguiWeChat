@@ -6,6 +6,7 @@ import { open, request, setReloginCallback, setUrl } from '../../pi/net/ui/con_m
 import { wsUrl } from '../config';
 import { getStore, GroupsLocation, setStore, UserType } from '../store/memstore';
 import { getAddresses, getBalance, getEarningTotal, getGoodsDetails, getGroups, getInviteCode, getOrders, getUserInfo } from './pull';
+import { payComplete } from './push';
 
 /**
  * 获取微信用户信息
@@ -13,9 +14,10 @@ import { getAddresses, getBalance, getEarningTotal, getGoodsDetails, getGroups, 
  * 如果是浏览器环境，直接模拟一个WXUSERINFO
  */
 const getWxUserInfo = () => {
-    if (!localStorage.WXUSERINFO) {
-        localStorage.WXUSERINFO = `{"sid":"4tZ9bjUNgkkuLZiRCskRRUsgyQzyC7vGKHZa", "uinfo":{"openid":"oazhW5yQ5w8-WiQDi8qPTCNfKoGM","nickname":"彬","sex":1,"language":"zh_CN","city":"成都","province":"四川","country":"中国","headimgurl":"http://thirdwx.qlogo.cn/mmopen/vi_32/tmVLphkQHLwj0sykp4TkHXbtn917J6BoTq3QNVc49NkVY6ibA1lCMO3Y6AtUPSYEpt0dATg0sdCh4Z4WH3FpaTA/132","privilege":[]}}`;
-    }
+    // if (!localStorage.WXUSERINFO) {
+    //     localStorage.WXUSERINFO = `{"sid":"4tZ9bjUNgkkuLZiRCskRRUsgyQzyC7vGKHZa", "uinfo":{"openid":"oazhW5yQ5w8-WiQDi8qPTCNfKoGM","nickname":"彬","sex":1,"language":"zh_CN","city":"成都","province":"四川","country":"中国","headimgurl":"http://thirdwx.qlogo.cn/mmopen/vi_32/tmVLphkQHLwj0sykp4TkHXbtn917J6BoTq3QNVc49NkVY6ibA1lCMO3Y6AtUPSYEpt0dATg0sdCh4Z4WH3FpaTA/132","privilege":[]}}`;
+    // }
+    localStorage.WXUSERINFO = `{"sid":"4tZ9bjUNgkkuLZiRCskRRUsgyQzyC7vGKHZa", "uinfo":{"openid":"oazhW5yQ5w8-WiQDi8qPTCNf111","nickname":"彬","sex":1,"language":"zh_CN","city":"成都","province":"四川","country":"中国","headimgurl":"http://thirdwx.qlogo.cn/mmopen/vi_32/tmVLphkQHLwj0sykp4TkHXbtn917J6BoTq3QNVc49NkVY6ibA1lCMO3Y6AtUPSYEpt0dATg0sdCh4Z4WH3FpaTA/132","privilege":[]}}`;
 
     return JSON.parse(localStorage.WXUSERINFO);
 };
@@ -141,5 +143,8 @@ const userLogin = () => {
             user.userName = r.wx_name;
             setStore('user',user);
         });
+
+        // 监听支付成功推送
+        payComplete();
     });
 };

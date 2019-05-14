@@ -1,6 +1,6 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
-import { bindPhone, bindUser, getInviteCode, sendCode, setUserName } from '../../net/pull';
+import { bindPhone, bindUser, randomInviteCode, sendCode, setUserName } from '../../net/pull';
 import { getStore, setStore } from '../../store/memstore';
 import { popNewLoading, popNewMessage } from '../../utils/tools';
 
@@ -99,7 +99,7 @@ export class ModalBoxInput extends Widget {
 
     // 获取邀请码
     public getInvoteCode() {
-        getInviteCode().then(r => {
+        randomInviteCode().then(r => {
             this.props.inviteCode = r.code;
             this.paint();
         });

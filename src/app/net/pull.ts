@@ -182,6 +182,18 @@ export const getInviteCode = () => {
 };
 
 /**
+ * 随机邀请码
+ */
+export const randomInviteCode = () => {
+    const msg = {
+        type:'mall/members@random_invitation_code',
+        param:{}
+    };
+
+    return requestAsync(msg);
+};
+
+/**
  * 获取余额
  */
 export const getBalance = () => {
@@ -261,6 +273,34 @@ export const bindPhone = (phone:string,code:string) => {
 export const setUserName = (name:string) => {
     const msg = {
         type:'set_wx_name',
+        param:{
+            wx_name:name
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 升级海宝
+ */
+export const upgradeHBao = () => {
+    const msg = {
+        type:'mall/members@up_haibao',
+        param:{
+            wx_name:name
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 升级海王
+ */
+export const upgradeHWang = () => {
+    const msg = {
+        type:'mall/members@up_haiwang',
         param:{
             wx_name:name
         }

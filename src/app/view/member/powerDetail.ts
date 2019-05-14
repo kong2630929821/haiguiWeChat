@@ -1,7 +1,9 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
+import { upgradeHWang, wxPay } from '../../net/pull';
 import { UserType } from '../../store/memstore';
-import { getUserTypeShow } from '../../utils/logic';
+import { getUserTypeShow, openWXPay } from '../../utils/logic';
+import { popNewMessage } from '../../utils/tools';
 import * as Constant from './powerConstant';
 interface Props {
     list:string[];  // 权益详情介绍
@@ -38,6 +40,16 @@ export class PowerDetail extends Widget {
 
     // 升级会员等级
     public upgradeUser() {
-        popNew('app-view-member-applyModalBox');
+        popNew('app-view-member-applyModalBox',null,() => {
+            if (this.props.userType === UserType.hWang) {
+                upgradeHWang().then(() => {
+                    popNewMessage('成功发送海王申请');
+                });
+            } else {
+                wxPay(39900,'101').then(r => {
+                    openWXPay(r.ok);
+                });
+            }
+        });
     }
 }
