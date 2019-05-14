@@ -5,7 +5,7 @@
 import { open, request, setReloginCallback, setUrl } from '../../pi/net/ui/con_mgr';
 import { wsUrl } from '../config';
 import { getStore, GroupsLocation, setStore, UserType } from '../store/memstore';
-import { getAddresses, getEarningTotal, getGoodsDetails, getGroups, getInviteCode } from './pull';
+import { getAddresses, getBalance, getEarningTotal, getGoodsDetails, getGroups, getInviteCode, getOrders, getUserInfo } from './pull';
 
 /**
  * 获取微信用户信息
@@ -124,5 +124,22 @@ const userLogin = () => {
                 setStore('user/inviteCode',res.code);
             });
         }
+
+        // 获取账户余额
+        getBalance().then(res => {
+            const balance = getStore('balance');
+            balance.cash = res.money;
+            balance.shell = res.haibei;
+            balance.integral = res.integral;
+            setStore('balance',balance);
+        });
+
+        // 获取用户信息
+        getUserInfo().then(r => {
+            const user = getStore('user');
+            user.phoneNum = r.phone;
+            user.userName = r.wx_name;
+            setStore('user',user);
+        });
     });
 };

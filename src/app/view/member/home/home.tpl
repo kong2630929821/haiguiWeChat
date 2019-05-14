@@ -12,7 +12,7 @@
             </div>
             {{end}}
             <div w-class="row" on-tap="goDetail">
-                <div w-class="name">{{it1.userType == 1 ? "海王" :"海宝"}}会员</div>
+                <div w-class="name">{{it1.userTypeShow}}会员</div>
                 <div w-class="code">我的邀请码&nbsp;{{it1.inviteCode}}</div>
             </div>
         </div>

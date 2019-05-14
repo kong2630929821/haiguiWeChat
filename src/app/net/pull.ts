@@ -180,3 +180,171 @@ export const getInviteCode = () => {
 
     return requestAsync(msg);
 };
+
+/**
+ * 获取余额
+ */
+export const getBalance = () => {
+    const msg = {
+        type:'mall/members@balance',
+        param:{}
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 获取余额流水
+ * ttype  1:现金,2:海贝,3:积分
+ */
+export const getBalanceList = (year:number,month:number,ttype:number) => {
+    const msg = {
+        type:'mall/members@balance_log',
+        param:{
+            year: year,
+            month: month,
+            type:ttype
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 邀请返利
+ */
+export const getInviteRebate = (id:number) => {
+    const msg = {
+        type:'mall/members@invitation_rebate',
+        param:{
+            goodsID:id
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 发送手机验证码
+ */
+export const sendCode = (phone:string) => {
+    const msg = {
+        type:'mall/sms@send_sms_code',
+        param:{
+            phone:phone,
+            num:'86',
+            name:'海归一号'
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 绑定手机号
+ */
+export const bindPhone = (phone:string,code:string) => {
+    const msg = {
+        type:'build_phone',
+        param:{
+            phone,
+            code
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 设置用户昵称
+ */
+export const setUserName = (name:string) => {
+    const msg = {
+        type:'set_wx_name',
+        param:{
+            wx_name:name
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 绑定用户 与邀请用户建立联系
+ */
+export const bindUser = (code:string) => {
+    const msg = {
+        type:'mall/members@build_user',
+        param:{
+            code
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 获取用户信息
+ */
+export const getUserInfo = () => {
+    const msg = {
+        type:'get_user_info',
+        param:{}
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 微信支付
+ * @param money 金额 单位分
+ * @param ttype 商品ID | 海宝
+ * @param count 数量
+ */
+export const wxPay = (money:number,ttype:string,count:number= 1) => {
+    const msg = {
+        type:'mall/pay@pay',
+        param:{
+            money,
+            type:ttype,
+            count,
+            channel:'wxpay'
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 申请提现
+ * @param money 金额 单位分
+ */
+export const applyWithdraw = (money:number) => {
+    const msg = {
+        type:'mall/withdraw@application',
+        param:{
+            money
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 检查是否还有提现额度
+ */
+export const checkWithdraw = () => {
+    const msg = {
+        type:'mall/withdraw@check_withdraw',
+        param:{}
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 识别身份证
+ */
+export const verifyIDCard = (url:string) => {
+    return fetch(`127.0.0.1:8091/wx/cmd/id_card?img_url=${url}`).then(response => response.json());
+};
