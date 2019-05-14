@@ -1,9 +1,9 @@
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
-import { Level1Groups } from '../../store/memstore';
+import { Groups } from '../../store/memstore';
 
 interface Props {
-    list:Level1Groups[];   // 展示的分组列表2 长度只能是单数  由父元素控制传入的长度
+    list:Groups[];   // 展示的分组列表2 长度只能是单数  由父元素控制传入的长度
 }
 
 /**

@@ -4,16 +4,16 @@
     {{end}}
     <div w-class="body">
         <div style="height:500px;width:100%;">
-            <app-components-imgSwiper-imgSwiper>{ list:{{it.goods.images}},mod:2 }</app-components-imgSwiper-imgSwiper>
+            <app-components-imgSwiper-imgSwiper>{ list:{{ it.getImageMainPath(it.goods.images) }},mod:2 }</app-components-imgSwiper-imgSwiper>
         </div>
         <div w-class="goods-msg">
             <div w-class="simple-msg">
                 <div w-class="goods-name" class="line2-overflow">{{it.goods.name}}</div>
                 <div w-class="goods-other">
                     <div w-class="good-price">
-                        <div w-class="buy-price">￥{{(it.sale/100).toFixed(2)}}</div>
+                        <div w-class="buy-price">￥{{it.priceFormat(it.sale)}}</div>
                         {{if it.discount}}
-                        <div w-class="original-price">{{(it.origin/100).toFixed(2)}}</div>
+                        <div w-class="original-price">{{ it.priceFormat(it.origin)}}</div>
                         {{end}}
                     </div>
                     {{if it.discount || it.rebate}}
@@ -22,7 +22,7 @@
                         <div w-class="good-discount good-label">{{it.discount}}折</div>
                         {{end}}
                         {{if it.rebate}}
-                        <div w-class="good-rebate good-label">返 ￥{{(it.rebate/100).toFixed(2)}}</div>
+                        <div w-class="good-rebate good-label">返 ￥{{it.priceFormat(it.rebate)}}</div>
                         {{end}}
                     </div>
                     {{end}}
@@ -44,10 +44,10 @@
             </div>
             <div w-class="items-father3" on-tap="chooseSpecClick"><app-components-goodsDetailsItem-goodsDetailsItem>{title:"选择",content:"规格",style:"padding-left:30px;"}</app-components-goodsDetailsItem-goodsDetailsItem></div>
         </div>
-        {{if it.goods.detail}}
+        {{for i,v of it.goods.detail}}
         <div w-class="goods-desc">
             <div w-class="desc-title">商品详情</div>
-            <img src="../../res/image/{{it.goods.detail[0].image.path}}" w-class="desc-img"/>
+            <img src="../../res/image/{{v.image.path}}" w-class="desc-img"/>
         </div>
         {{end}}
     </div>
@@ -69,7 +69,7 @@
     </div>
     {{if it.chooseSpec}}
     <div ev-close-spec="specCloseClick" ev-push-shopping-cart="pushShoppingCart" ev-buy-now="buyNow">
-        <app-components-goodsDetailsItem-goodsDetailsSpec>{goods:{{it.goods}},choosedLabels:{{it.choosedLabels}},hasLabels:{{it.hasLabels}},amount:{{it.amount}} }</app-components-goodsDetailsItem-goodsDetailsSpec>
+        <app-components-goodsDetailsItem-goodsDetailsSpec>{goods:{{it.goods}},amount:{{it.amount}} }</app-components-goodsDetailsItem-goodsDetailsSpec>
     </div>
     {{end}}
 </div>

@@ -1,6 +1,6 @@
-.page{
-    overflow-x: hidden;
-    overflow-y: auto;
+.new-page{
+    display: flex;
+    flex-direction: column;
 }
 .top{
     border-top: 1px solid #E5E5E5;
@@ -55,8 +55,23 @@
     border: 20px solid transparent;
     border-right: none;
 }
+.process-box{
+    max-height: 414px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
 .process{
     font-size:32px;
     color:rgba(136,136,136,1);
     margin: 30px 60px 10px;
+   
+}
+.orders{
+    flex: 1 0 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
 }

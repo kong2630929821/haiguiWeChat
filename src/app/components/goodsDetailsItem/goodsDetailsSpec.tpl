@@ -3,30 +3,29 @@
     <div w-class="body">
         <div w-class="desc">
             <div w-class="basic-msg">
-                <div style="background-image:url(../../res/image/{{it.labelImage.path}});" class="bg-img" w-class="img"></div>
+                <div style="background-image:url(../../res/image/{{it.image}});" class="bg-img" w-class="img"></div>
                 <div w-class="content-box">
                     <div w-class="box1">
                         <div w-class="good-price">
-                            <div w-class="buy-price">{{(it.finalSale/100).toFixed(2)}}</div>
+                            <div w-class="buy-price">{{it.priceFormat(it.finalSale)}}</div>
                             {{if it.discount}}
-                            <div w-class="original-price">{{(it.origin / 100).toFixed(2)}}</div>
+                            <div w-class="original-price">{{it.priceFormat(it.origin)}}</div>
                             {{end}}
                         </div>
-                        <div w-class="left-num">剩余{{it.goods.inventorys}}件</div>
+                        <div w-class="left-num">剩余{{it.inventorys}}件</div>
                     </div>
                 </div>
                 <img src="../../res/image/close.png" w-class="close-icon" on-tap="closeClick"/>
             </div>
-            {{for i,v of it.choosedLabels}}
+           
             <div w-class="choose-item">
                 <div w-class="choose-item-title">选择</div>
                 <div w-class="choose-box">
-                    {{for j,k of v[1]}}
-                    <span w-class="item {{k.name === it.hasLabels[i].name ? 'item-active' : ''}}" on-tap="clickLableItem(e,{{i}},{{j}})">{{k.name}}</span>
+                    {{for i,v of it.goods.labels}}
+                    <span w-class="item {{i === it.skuIndex ? 'item-active' : ''}}" on-tap="clickLableItem(e,{{i}})">{{v[1]}}</span>
                     {{end}}
                 </div>
             </div>
-            {{end}}
         </div>
         <div w-class="buy">
             <div w-class="buy-title">购买数量</div>

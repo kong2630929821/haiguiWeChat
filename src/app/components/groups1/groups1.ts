@@ -1,9 +1,10 @@
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
-import { Level1Groups } from '../../store/memstore';
+import { Groups } from '../../store/memstore';
+import { getImageThumbnailPath } from '../../utils/tools';
 
 interface Props {
-    list:Level1Groups[];   // 展示的分组列表1
+    list:Groups[];   // 展示的分组列表1
 }
 
 /**
@@ -12,11 +13,15 @@ interface Props {
 export class GroupsOne extends Widget {
     // tslint:disable-next-line:no-unnecessary-override
     public setProps(props:Props,oldProps:Props) {
-        super.setProps(props,oldProps);
+        this.props = {
+            ...props,
+            getImageThumbnailPath
+        };
+        super.setProps(this.props,oldProps);
         // console.log('GroupsOne ----------------',props);
     }
 
     public clickItem(e:any,index:number) {
-        notify(e.node,'ev-click-groups-one',this.props.list[index].id); 
+        notify(e.node,'ev-click-groups-one',{ group:this.props.list[index] }); 
     }
 }

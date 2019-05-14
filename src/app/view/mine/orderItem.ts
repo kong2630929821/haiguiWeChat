@@ -1,39 +1,53 @@
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
-export enum OrderType {
-    pay = 0, // 待付款
-    ship, // 待发货
-    receipt, // 待收货
-    complete, // 已完成
-    return  // 退货
+import { PendingPaymentDuration } from '../../config';
+import { Order, OrderStatus } from '../../store/memstore';
+
+export interface Props {
+    order:Order;  // 订单
+    status:OrderStatus;        // 订单状态
 }
 /**
  * 订单
  */
 export class OrderItem extends Widget {
-    public props:any = {
-        orderType: OrderType.pay,
-        statusList: [
-            '等待买家付款',
-            '等待发货',
-            '商品已发货',
-            ''
-        ],
-        btnList:[
-            { btn1:'取消订单',btn2:'去付款' },
-            { btn1:'取消订单',btn2:'查看物流' },
-            { btn1:'查看物流',btn2:'确认收货' },
-            { btn1:'',btn2:'再来一单' },
-            { btn1:'',btn2:'提交退货申请' }
-        ]
+    public timer:number;
+    public statusShows:any = {
+        [OrderStatus.PENDINGPAYMENT]:{
+            desc:'等待买家付款',
+            btn1:'取消订单',
+            btn2:'去付款'
+        },
+        [OrderStatus.PENDINGDELIVERED]:{
+            desc:'等待发货',
+            btn1:'取消订单',
+            btn2:'查看物流'
+        },
+        [OrderStatus.PENDINGRECEIPT]:{
+            desc:'商品已发货',
+            btn1:'查看物流',
+            btn2:'确认收货'
+        },
+        [OrderStatus.COMPLETED]:{
+            desc:'',
+            btn1:'',
+            btn2:'再来一单'
+        }
     };
-
     public setProps(props:any) {
+        clearTimeout(this.timer);
+        let orderIdShow = `订单号:${props.order.id}`;
+        if (props.status === OrderStatus.PENDINGPAYMENT) {
+            orderIdShow = `倒计时：${calcLeftTime(props.order.order_time)}`;
+            this.countdown();
+        }
         this.props = {
-            ...this.props,
-            ...props
+            ...props,
+            statusShow:this.statusShows[props.status],
+            orderIdShow
         };
         super.setProps(this.props);
+        console.log('orderdetailitem ====',this.props);
     }
 
     public btnClick(e:any,num:number) {
@@ -43,4 +57,27 @@ export class OrderItem extends Widget {
     public itemClick(e:any) {
         notify(e.node,'ev-item-click',null);
     }
+
+    public countdown() {
+        this.timer = setTimeout(() => {
+            this.countdown();
+            this.props.orderIdShow = `倒计时：${calcLeftTime(this.props.order.order_time)}`;
+            this.paint();
+        },100);
+    }
+
+    public destroy() {
+        clearTimeout(this.timer);
+
+        return super.destroy();
+    }
 }
+
+// 计算倒计时
+const calcLeftTime = (start:number) => {
+    const leftTime = start + PendingPaymentDuration - new Date().getTime();
+    const leftMinutes = Math.floor(leftTime / 1000 / 60);
+    const leftSeconds = Math.floor(leftTime / 1000) % 60;
+
+    return `${leftMinutes}分${leftSeconds}秒`;
+};

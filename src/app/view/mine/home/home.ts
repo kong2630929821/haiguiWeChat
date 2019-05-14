@@ -1,7 +1,7 @@
 import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
-import { getStore, register } from '../../../store/memstore';
+import { getStore, OrderStatus, register } from '../../../store/memstore';
 import { getUserTypeShow } from '../../../utils/logic';
 
 export const forelet = new Forelet();
@@ -9,20 +9,18 @@ export const forelet = new Forelet();
  * 我的首页
  */
 export class Home extends Widget {
-    public props:any = {
-        orderType:[
-            { name:'待付款',img:'wallet.png' },
-            { name:'待发货',img:'goods.png' },
-            { name:'待收货',img:'truck.png' },
-            { name:'已完成',img:'order.png' },
-            { name:'退货',img:'return.png' }
-        ]
-    };
-
     public setProps(props:any) {
         this.props = {
-            ...this.props,
-            ...props
+            ...props,
+            allStaus:[
+                { name:'待付款',status:OrderStatus.PENDINGPAYMENT,img:'wallet.png' },
+                { name:'待发货',status:OrderStatus.PENDINGDELIVERED,img:'goods.png' },
+                { name:'待收货',status:OrderStatus.PENDINGRECEIPT,img:'truck.png' },
+                { name:'已完成',status:OrderStatus.COMPLETED ,img:'order.png' },
+                { name:'退货',status:OrderStatus.RETURNSTART,img:'return.png' },
+                { name:'退货中',status:OrderStatus.RETURNING,img:'return.png' },
+                { name:'已退货',status:OrderStatus.RETURNEND,img:'return.png' }
+            ]
         };
         super.setProps(this.props);
         this.state = State;
@@ -32,8 +30,12 @@ export class Home extends Widget {
         popNew('app-view-mine-addressList');
     }
 
-    public itemClick(num:number) {
-        popNew('app-view-mine-orderList',{ active: num });
+    public itemClick(status:OrderStatus) {
+        let allStaus = this.props.allStaus.slice(0,4);
+        if (status === OrderStatus.RETURNSTART) {
+            allStaus = this.props.allStaus.slice(4);
+        }
+        popNew('app-view-mine-orderList',{ activeStatus: status,allStaus });
     }
 
     public balanceLog(num:number) {
