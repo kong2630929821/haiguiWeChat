@@ -6,12 +6,22 @@
 
 import { popNew } from '../../../pi/ui/root';
 import { addWidget } from '../../../pi/widget/util';
+import { PowerFlag } from '../member/powerConstant';
 
 // ============================== 导出
 export const run = (cb): void =>  {
     addWidget(document.body, 'pi-ui-root');
-    // 打开首页面
-    popNew('app-view-base-app');
+    const page = location.search ? /page=([a-zA-Z]+)&*/.exec(location.search)[1] :'';
+    if (page === 'free') {
+        // 打开免费试用装
+        popNew('app-view-member-giftPage',{ fg:PowerFlag.free });
+    } else if (page === 'offClass') {
+        // 打开线下课程
+        popNew('app-view-member-giftPage',{ fg:PowerFlag.offClass });
+    } else {
+        // 打开首页面
+        popNew('app-view-base-app');
+    }
     // 解决进入时闪一下问题
     setTimeout(() => {
         if (cb) cb();

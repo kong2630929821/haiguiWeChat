@@ -9,6 +9,16 @@ interface Props {
         value:number[];
     };  // 选择的年月
 }
+// 现金来源类型
+enum CashLogType {
+    upHwang = 1,  // 其他人升级海王获得收益
+    upHbao,    // 其他人升级海宝获得收益
+    reShop,   // 购物收益
+    reInvite,  // 邀请返利
+    recharge,   // 充值
+    withdraw,  // 提现
+    shopping    // 购物
+}
 /**
  * 所有列表页面
  */

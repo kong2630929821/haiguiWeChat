@@ -1,7 +1,8 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
-import { wxPay } from '../../net/pull';
+import { payMoney, upgradeHWang } from '../../net/pull';
 import { getStore, UserType } from '../../store/memstore';
+import { popNewMessage } from '../../utils/tools';
 import { PowerFlag } from './powerConstant';
 interface Props {
     fg:PowerFlag;   // 进入此页面的标记
@@ -17,14 +18,14 @@ export class GiftPage extends Widget {
 
     public setProps(props:any) {
         super.setProps(props);
-        if (props.fg === PowerFlag.offClass || props.fg === PowerFlag.vipGift) {
+        if (props.fg === PowerFlag.offClass || props.fg === PowerFlag.free) {
             this.props.img = `${PowerFlag[props.fg]}.png`;
 
-        } else if (props.userType === UserType.hBao) {
-            this.props.img = `399_${PowerFlag[props.fg]}.png`;
+        } else if (props.userType === UserType.hWang) {
+            this.props.img = `10000_${PowerFlag[props.fg]}.png`;
 
         } else {
-            this.props.img = `10000_${PowerFlag[props.fg]}.png`;
+            this.props.img = `399_${PowerFlag[props.fg]}.png`;
         }
         this.props.isCurVip = getStore('user/userType',-1) === props.userType;  
         console.log(this.props);
@@ -44,20 +45,24 @@ export class GiftPage extends Widget {
 
     // 报名课程
     public applyClass() {
-        console.log('报名课程');
-        // TODO 
+        // 不是会员需要填写一些基础信息
+        if (getStore('user/userType',-1) >= UserType.normal) {
+            popNew('app-view-member-applyModalBox',null,() => {
+                // TODO
+            });
+        } else {
+            console.log('报名课程');
+        }
     }
 
     // 开通会员
     public open() {
         popNew('app-view-member-applyModalBox',null,() => {
             if (this.props.userType === UserType.hBao) {
-                wxPay(39900,'hBao').then(r => {
-                    console.log(r);
-                });
+                payMoney(39900,'hBao');
             } else {
-                wxPay(1000000,'hWang').then(r => {
-                    console.log(r);
+                upgradeHWang().then(() => {
+                    popNewMessage('成功发送海王申请');
                 });
             }
         });

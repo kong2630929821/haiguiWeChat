@@ -1,6 +1,8 @@
+import { request } from '../../pi/net/ui/con_mgr';
 import { Address, getStore,GroupsLocation, setStore } from '../store/memstore';
+import { openWXPay } from '../utils/logic';
 import { requestAsync } from './login';
-import { parseAllGroups } from './parse';
+import { parseAllGroups, parseBalance } from './parse';
 
 /**
  * 获取分组信息
@@ -182,15 +184,28 @@ export const getInviteCode = () => {
 };
 
 /**
- * 获取余额
+ * 随机邀请码
  */
-export const getBalance = () => {
+export const randomInviteCode = () => {
     const msg = {
-        type:'mall/members@balance',
+        type:'mall/members@random_invitation_code',
         param:{}
     };
 
     return requestAsync(msg);
+};
+
+/**
+ * 获取余额
+ */
+export const getBalance = async () => {
+    const msg = {
+        type:'mall/members@balance',
+        param:{}
+    };
+    
+    const res = await requestAsync(msg);
+    parseBalance(res);
 };
 
 /**
@@ -270,6 +285,34 @@ export const setUserName = (name:string) => {
 };
 
 /**
+ * 升级海宝
+ */
+export const upgradeHBao = () => {
+    const msg = {
+        type:'mall/members@up_haibao',
+        param:{
+            wx_name:name
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 升级海王
+ */
+export const upgradeHWang = () => {
+    const msg = {
+        type:'mall/members@up_haiwang',
+        param:{
+            wx_name:name
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
  * 绑定用户 与邀请用户建立联系
  */
 export const bindUser = (code:string) => {
@@ -296,23 +339,29 @@ export const getUserInfo = () => {
 };
 
 /**
- * 微信支付
+ * 发起支付
  * @param money 金额 单位分
  * @param ttype 商品ID | 海宝
  * @param count 数量
  */
-export const wxPay = (money:number,ttype:string,count:number= 1) => {
+export const payMoney = (money:number,ttype:string,count:number= 1) => {
     const msg = {
         type:'mall/pay@pay',
         param:{
-            money,
+            money:money,
             type:ttype,
             count,
             channel:'wxpay'
         }
     };
 
-    return requestAsync(msg);
+    request(msg, (resp: any) => {
+        if (resp.type) {
+            console.log(`错误信息为${resp.type}`);
+        } else {
+            openWXPay(resp.ok);
+        }
+    });
 };
 
 /**

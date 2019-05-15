@@ -6,6 +6,7 @@ import { open, request, setReloginCallback, setUrl } from '../../pi/net/ui/con_m
 import { wsUrl } from '../config';
 import { getStore, GroupsLocation, setStore, UserType } from '../store/memstore';
 import { getAddresses, getBalance, getEarningTotal, getGoodsDetails, getGroups, getInviteCode, getOrders, getUserInfo } from './pull';
+import { payComplete } from './push';
 
 /**
  * 获取微信用户信息
@@ -16,6 +17,7 @@ const getWxUserInfo = () => {
     if (!localStorage.WXUSERINFO) {
         localStorage.WXUSERINFO = `{"sid":"4tZ9bjUNgkkuLZiRCskRRUsgyQzyC7vGKHZa", "uinfo":{"openid":"oazhW5yQ5w8-WiQDi8qPTCNfKoGM","nickname":"彬","sex":1,"language":"zh_CN","city":"成都","province":"四川","country":"中国","headimgurl":"http://thirdwx.qlogo.cn/mmopen/vi_32/tmVLphkQHLwj0sykp4TkHXbtn917J6BoTq3QNVc49NkVY6ibA1lCMO3Y6AtUPSYEpt0dATg0sdCh4Z4WH3FpaTA/132","privilege":[]}}`;
     }
+    // localStorage.WXUSERINFO = `{"sid":"4tZ9bjUNgkkuLZiRCskRRUsgyQzyC7vGKHZa", "uinfo":{"openid":"oazhW5yQ5w8-WiQDi8qPTCNf111","nickname":"彬","sex":1,"language":"zh_CN","city":"成都","province":"四川","country":"中国","headimgurl":"http://thirdwx.qlogo.cn/mmopen/vi_32/tmVLphkQHLwj0sykp4TkHXbtn917J6BoTq3QNVc49NkVY6ibA1lCMO3Y6AtUPSYEpt0dATg0sdCh4Z4WH3FpaTA/132","privilege":[]}}`;
 
     return JSON.parse(localStorage.WXUSERINFO);
 };
@@ -90,7 +92,7 @@ const conReOpen = () => {
  * 用户登录
  */
 const userLogin = () => {
-    const userStr = JSON.stringify(getWxUserInfo().uinfo);
+    const userStr = getWxUserInfo().uinfo.openid;
     const msg = { 
         type: 'login', 
         param: { 
@@ -126,13 +128,7 @@ const userLogin = () => {
         }
 
         // 获取账户余额
-        getBalance().then(res => {
-            const balance = getStore('balance');
-            balance.cash = res.money;
-            balance.shell = res.haibei;
-            balance.integral = res.integral;
-            setStore('balance',balance);
-        });
+        getBalance();
 
         // 获取用户信息
         getUserInfo().then(r => {
@@ -141,5 +137,8 @@ const userLogin = () => {
             user.userName = r.wx_name;
             setStore('user',user);
         });
+
+        // 监听支付成功推送
+        payComplete();
     });
 };

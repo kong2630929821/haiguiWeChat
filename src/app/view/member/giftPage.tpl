@@ -11,7 +11,9 @@
     {{% ========================试用装领取======================}}
     {{elseif it.fg == 3}}
     <div w-class="btn1" on-tap="freeReceive">免费领取</div>
-    <div w-class="shareBtn1" on-tap="share">推荐给好友</div>
+        {{if it.isCurVip}}
+        <div w-class="shareBtn1" on-tap="share">推荐给好友</div>
+        {{end}}
     
     {{% ========================线下课程======================}}
     {{elseif it.fg == 4}}
