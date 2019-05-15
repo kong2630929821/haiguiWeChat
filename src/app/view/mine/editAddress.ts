@@ -1,5 +1,6 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
+import { PROVINCE_LIST } from '../../components/areaSelect/provinceList';
 import { addAddress, delAddress } from '../../net/pull';
 import { popNewMessage } from '../../utils/tools';
 
@@ -17,6 +18,14 @@ export class EditAddress extends Widget {
         area_id:0
     };
 
+    public setProps(props:any,oldProps:any) {
+        this.props = {
+            ...this.props,
+            ...props,
+            province:this.getProvinceStr(props.area_id)
+        };
+        super.setProps(this.props);
+    }
      // 选择省 市 区
     public selectArea() {
         popNew('app-components-areaSelect-areaSelect',{ selected:this.props.areaSelect },(r) => {
@@ -32,7 +41,11 @@ export class EditAddress extends Widget {
             }
         });
     }
-
+    public getProvinceStr(area_id:number) {
+        for (let i = 0;i < PROVINCE_LIST.length;i++) {
+            if (Number(PROVINCE_LIST[i].id.slice(0,2)) === area_id) return PROVINCE_LIST[i].name;
+        }
+    }
     public nameChange(res:any) {
         this.props.name = res.value;
     }

@@ -56,7 +56,7 @@ export class AddressList extends Widget {
     // 点击右侧按钮
     public rightClick(num:number) {
         console.log(num);
-        popNew('app-view-mine-editAddress',this.props.list[num]);
+        popNew('app-view-mine-editAddress',{ ...this.props.list[num],onlyDel:true });
     }
 
     public addAddr() {
