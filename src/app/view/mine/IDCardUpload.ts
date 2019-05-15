@@ -24,10 +24,10 @@ export class IDCardUpload extends Widget {
             this.props.firstClick = false;
             this.paint();
             popNew('app-components-modalBox-modalBoxImg',null,() => {
-                // this.uploadImg(num);
+                this.uploadImg(num);
             });
         } else {
-            // this.uploadImg(num);
+            this.uploadImg(num);
         }
     }
 

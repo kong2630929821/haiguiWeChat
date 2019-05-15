@@ -19,3 +19,6 @@ export const wsUrl = `ws://${erlangLogicIp}:${erlangLogicPort}`;
 
 // 未支付订单15分钟后回到购物车中，库存也会回退
 export const PendingPaymentDuration = 15 * 60 * 1000;
+
+// 获取图片路径
+export const serverFilePath = `${sourceIp}:${sourcePort}/service/get_file?sid=`;

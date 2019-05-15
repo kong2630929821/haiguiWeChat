@@ -1,3 +1,4 @@
+import { upload } from '../net/pull';
 import { getStore, UserType } from '../store/memstore';
 
 /**
@@ -30,8 +31,10 @@ export const uploadFile = (url,cb) => {
         localId: url, 
         isShowProgressTips: 1, // 默认为1，显示进度提示
         success: (res) => {
-            const serverId = res.serverId; // 返回图片的服务器端ID
-            // TODO 上传到本地服务器
+            // 返回图片的服务器端ID
+            upload(res.serverId).then((url) => {
+                cb(url);
+            });
         }
     });
 };
@@ -132,4 +135,33 @@ export const getUserTypeShow = (user?:UserType) => {
     if (user === UserType.hBao) return '海宝';
     
     return '';
+};
+
+// 现金来源类型
+enum CashLogType {
+    upHwang = 1,  // 其他人升级海王获得收益
+    upHbao,    // 其他人升级海宝获得收益
+    reShop,   // 购物返利
+    reInvite,  // 邀请返利
+    recharge,   // 充值
+    withdraw,  // 提现
+    shopping    // 购物
+}
+// 现金来源名称
+const CashLogName = {
+    upHwang:'升级海王',
+    upHbao:'升级海宝',
+    reShop:'购物返利',
+    reInvite:'邀请返利',
+    recharge:'充值',
+    withdraw:'提现',
+    shopping:'购物'
+};
+
+/**
+ * 获取现金来源名称
+ * @param ttype type
+ */
+export const getCashLogName = (ttype:number) => {
+    return CashLogName[CashLogType[ttype]];
 };

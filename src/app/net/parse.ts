@@ -1,4 +1,4 @@
-import { getStore, GoodsDetails, Groups, GroupsLocation, MallImages, setStore, SKU } from '../store/memstore';
+import { GoodsDetails, Groups, GroupsLocation, MallImages, SKU } from '../store/memstore';
 
 /**
  * 数据处理
@@ -102,15 +102,4 @@ export const parseSKU = (infos:any) => {
     }
 
     return skus;
-};
-
-/**
- * 解析余额
- */
-export const parseBalance = (res) => {
-    const balance = getStore('balance');
-    balance.cash = res.money / 100;   // 现金，单位为分
-    balance.shell = res.haibei;
-    balance.integral = res.integral;
-    setStore('balance',balance);
 };

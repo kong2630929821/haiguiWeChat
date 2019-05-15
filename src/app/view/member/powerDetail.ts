@@ -46,7 +46,7 @@ export class PowerDetail extends Widget {
                     popNewMessage('成功发送海王申请');
                 });
             } else {
-                payMoney(39900,'101');
+                payMoney(39900,'hBao');
             }
         });
     }

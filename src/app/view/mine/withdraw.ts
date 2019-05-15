@@ -11,13 +11,13 @@ export class Withdraw extends Widget {
         balance:getStore('balance/cash',0),
         tax:0,    // 税费
         tariff:0.5,  // 税率 0.5%
-        money:0,
+        inputMoney:0,
         notice:false
     };
 
     // 输入提现金额
     public moneyChange(e:any) {
-        this.props.money = e.value;
+        this.props.inputMoney = e.value;
         if (e.value <= this.props.balance) {
             this.props.tax = e.value * this.props.tariff / 100;
             this.props.notice = false;
@@ -30,10 +30,15 @@ export class Withdraw extends Widget {
 
     // 确认提现
     public confirm() {
-        if (this.props.money < this.props.balance) {
-            applyWithdraw(this.props.money * 100).then(r => {
+        applyWithdraw(this.props.inputMoney * 100).then(r => {
+            popNewMessage('申请提现成功');
+        });
+        if (this.props.inputMoney < this.props.balance && this.props.inputMoney % 10 === 0) {
+            applyWithdraw(this.props.inputMoney * 100).then(r => {
                 popNewMessage('申请提现成功');
             });
-        } 
+        } else {
+            popNewMessage('请输入合适的金额');
+        }
     }
 }
