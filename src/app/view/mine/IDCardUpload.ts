@@ -37,15 +37,17 @@ export class IDCardUpload extends Widget {
         takeImage(1,(r) => {
             console.log(r);
             if (num === 1) {
-                this.props.img1 = r[0];
-                upImage(r[0],res => {
+                this.props.img1 = r;
+                upImage(r,res => {
                     this.props.img1 = serverFilePath + res;
+                    this.paint();
                 });
 
             } else {
-                this.props.img2 = r[0];
-                upImage(r[0],res => {
+                this.props.img2 = r;
+                upImage(r,res => {
                     this.props.img2 = serverFilePath + res;
+                    this.paint();
                 });
             }
             this.paint();

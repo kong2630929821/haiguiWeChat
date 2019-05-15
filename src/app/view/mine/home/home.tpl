@@ -1,9 +1,9 @@
 <div>
     <div w-class="top">
-        <img src="../../../res/image/income.png" w-class="avatar"/>
+        <img src="{{it1.avatar}}" w-class="avatar"/>
         <div w-class="desc">
             <div w-class="username">
-                <span>用户名</span>
+                <span>{{it1.userName}}</span>
                 {{if it1.userType}}
                 <span w-class="userType">{{it1.userType}}</span>
                 {{end}}
@@ -14,7 +14,6 @@
             </div>
             {{end}}
         </div>
-        <img src="../../../res/image/arrowRight.png" w-class="arrow"/>
     </div>
     <div w-class="orderType">
         {{for i,v of it.allStaus.slice(0,5)}}
