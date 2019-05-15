@@ -1,10 +1,20 @@
 import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
-import { getStore, OrderStatus, register } from '../../../store/memstore';
+import { OrderStatus, register } from '../../../store/memstore';
 import { getUserTypeShow } from '../../../utils/logic';
 
 export const forelet = new Forelet();
+
+export const allOrderStatus = [
+    { name:'待付款',status:OrderStatus.PENDINGPAYMENT,img:'wallet.png' },
+    { name:'待发货',status:OrderStatus.PENDINGDELIVERED,img:'goods.png' },
+    { name:'待收货',status:OrderStatus.PENDINGRECEIPT,img:'truck.png' },
+    { name:'已完成',status:OrderStatus.COMPLETED ,img:'order.png' },
+    { name:'退货',status:OrderStatus.RETURNSTART,img:'return.png' },
+    { name:'退货中',status:OrderStatus.RETURNING,img:'return.png' },
+    { name:'已退货',status:OrderStatus.RETURNEND,img:'return.png' }
+];
 /**
  * 我的首页
  */
@@ -12,15 +22,7 @@ export class Home extends Widget {
     public setProps(props:any) {
         this.props = {
             ...props,
-            allStaus:[
-                { name:'待付款',status:OrderStatus.PENDINGPAYMENT,img:'wallet.png' },
-                { name:'待发货',status:OrderStatus.PENDINGDELIVERED,img:'goods.png' },
-                { name:'待收货',status:OrderStatus.PENDINGRECEIPT,img:'truck.png' },
-                { name:'已完成',status:OrderStatus.COMPLETED ,img:'order.png' },
-                { name:'退货',status:OrderStatus.RETURNSTART,img:'return.png' },
-                { name:'退货中',status:OrderStatus.RETURNING,img:'return.png' },
-                { name:'已退货',status:OrderStatus.RETURNEND,img:'return.png' }
-            ]
+            allStaus:allOrderStatus
         };
         super.setProps(this.props);
         this.state = State;

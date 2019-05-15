@@ -3,8 +3,8 @@
  */
 
 // ===================================  导入
-import { request } from '../../pi/ui/con_mgr';
 import { userAgent } from '../../pi/util/html';
+import { sourceIp, sourcePort } from '../config';
 import { uploadFile } from '../net/pull';
 import { loadJS } from './logic';
 import { popNewMessage } from './tools';
@@ -15,41 +15,35 @@ import { popNewMessage } from './tools';
  * 理论上程序一运行就需要调用该函数，去微信获取分享的API
  */
 export const registerWXAPI = () => {
-    let result: any = {};
+    let result:any = {};
     result = userAgent(result);
-    alert(JSON.stringify(result));
-    if (result.micromessenger) {
+    if (result.browser.name === 'micromessenger') {
         loadJS('http://res2.wx.qq.com/open/js/jweixin-1.4.0.js', (info) => {
-            alert(JSON.stringify(info));
             if (info.result === 1) {
                 if ((<any>self).wx) {
-                    const msg = {
-                        type: 'get_wx_auth',
-                        param: {
-                            url: encodeURIComponent(location.href)
-                        }
-                    };
-                    request(msg, (resp: { result: number; value: any }) => {
+                    fetch(`http://${sourceIp}:${sourcePort}/pt/wx/sign?url=${encodeURIComponent(location.href)}`).then((resp:any) => {
+                        resp = resp.json();
+                        alert(JSON.stringify(resp));
+
                         if (resp.result !== 1) {
                             popNewMessage('获取微信API失败');
                             
                             return;
                         }
-                        alert(JSON.stringify(result));
                         const json = JSON.parse(resp.value);
                         json.debug = false;
                         json.jsApiList = ['onMenuShareTimeline', 'hideMenuItems',
                             'onMenuShareAppMessage', 'chooseImage',
                             'uploadImage', 'getLocalImgData', 'scanQRCode'];
                         (<any>self).wx.config(json);
-                        // 隐藏右上角菜单项
+                    // 隐藏右上角菜单项
                         for (let i = 0; i < cbArr.length; i++) {
                             cbArr[i]();
                         }
                         (<any>self).wx.ready(() => {
-                            // warn(logLevel,"config success");
-                            // wx.hideOptionMenu();
-                            // wx.hideAllNonBaseMenuItem();
+                        // warn(logLevel,"config success");
+                        // wx.hideOptionMenu();
+                        // wx.hideAllNonBaseMenuItem();
                             for (let i = 0; i < cbArr.length; i++) {
                                 cbArr[i]();
                             }
@@ -57,11 +51,10 @@ export const registerWXAPI = () => {
                             (<any>self).wx.hideMenuItems({
                                 menuList: ['menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:facebook', 'menuItem:share:QZone'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
                             });
-                            // shareWithUrl(location.href)
                         });
                         (<any>self).wx.error((res) => {
-                            // warn(logLevel,"config验证失败");
-                            // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+                        // warn(logLevel,"config验证失败");
+                        // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
                         });
                     });
                 }

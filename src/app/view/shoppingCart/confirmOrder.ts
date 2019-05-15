@@ -2,8 +2,9 @@ import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { order, orderNow, payMoney, payOrder } from '../../net/pull';
-import { CartGoods, getStore, register } from '../../store/memstore';
+import { CartGoods, getStore, OrderStatus, register } from '../../store/memstore';
 import { calcFreight, getImageThumbnailPath, popNewLoading, popNewMessage, priceFormat } from '../../utils/tools';
+import { allOrderStatus } from '../mine/home/home';
 import { calcCartGoodsShow, CartGoodsShow } from './home/home';
 
 // tslint:disable-next-line:no-reserved-keywords
@@ -19,6 +20,7 @@ interface Props {
  * 确认订单
  */
 export class ConfirmOrder extends Widget {
+    public ok:() => void;
     public ordersRes:any;
     public loading:any;
     public setProps(props:Props,oldProps:Props) {
@@ -119,7 +121,7 @@ export class ConfirmOrder extends Widget {
             const totalFee = this.props.totalSale + this.props.totalFreight + this.props.totalTax;
             const cash = getStore('balance').cash * 100;  // 余额
             if (totalFee > cash) {
-                payMoney(1,'105',1);
+                payMoney(totalFee - cash,'105',1);
             } else {
                 this.pay();
             }
@@ -146,6 +148,9 @@ export class ConfirmOrder extends Widget {
             const orderPayRes = await Promise.all(allPayPromise);
             console.log('orderPayRes ===',orderPayRes);
             popNewMessage('交易成功');
+            this.loading.callback(this.loading.widget);
+            popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGDELIVERED,allStaus:allOrderStatus.slice(0,4) });
+            this.ok && this.ok();
         } catch (e) {
             this.loading.callback(this.loading.widget);
             popNewMessage('购买失败');

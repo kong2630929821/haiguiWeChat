@@ -76,8 +76,12 @@ export const deductCart = (no:number,amount:number) => {
         }
     };
 
-    return requestAsync(msg).then(() => {
-        getCart();
+    return requestAsync(msg).then((res) => {
+        console.log('deductCart ======',res);
+        const carts = parseCart(res.cartInfo);
+        setStore('mall/cartGoods',carts);
+
+        return carts;
     });
 };
 

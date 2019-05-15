@@ -103,14 +103,20 @@ export class ShoppingCart extends Widget {
     // 减少商品数量
     public delGoodsNum(index:number) {
         const no = this.state.cartGoodsShow[index].cartGood.index;
-        deductCart(no,1);
+        deductCart(no,1).then(() => {
+            this.calcTotalFee();
+            this.paint();
+        });
     }
 
     // 增加商品数量
     public addGoodsNum(index:number) {
         const goods = this.state.cartGoodsShow[index].cartGood.goods;
         const sku = goods.labels[0];
-        addCart(goods.id,1,sku[0]);
+        addCart(goods.id,1,sku[0]).then(() => {
+            this.calcTotalFee();
+            this.paint();
+        });
     }
 
     // 结算
