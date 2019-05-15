@@ -560,7 +560,7 @@ export const verifyIDCard = (url:string) => {
 /**
  * 上传文件
  */
-export const upload = (id:string) => {
+export const uploadFile = (id:string) => {
 
     return fetch(`${sourceIp}:${sourcePort}/service/upload/wx_file?serverId=${id}`).then(res => res.json());
 };

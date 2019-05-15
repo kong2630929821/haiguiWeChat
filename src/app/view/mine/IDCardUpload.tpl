@@ -4,16 +4,16 @@
         {{if it.img1}}
         <widget w-tag="app-components-img-img">{width:"323px",height:"192px",isRound:false,imgUrl:{{it.img1}} }</widget>
         {{else}}
-        <div w-class="uploadImg" on-tap="uploadBtn(0)">
+        <div w-class="uploadImg" on-tap="uploadBtn(1)">
             <img src="../../res/image/camera.png"/>
             <div style="margin-top:20px">身份证人像面</div>
         </div>
         {{end}}
 
         {{if it.img2}}
-        <widget w-tag="app-components-img-img">{width:"323px",height:"192px",isRound:false,imgUrl:{{it.img1}} }</widget>
+        <widget w-tag="app-components-img-img">{width:"323px",height:"192px",isRound:false,imgUrl:{{it.img2}} }</widget>
         {{else}}
-        <div w-class="uploadImg" on-tap="uploadBtn(1)">
+        <div w-class="uploadImg" on-tap="uploadBtn(2)">
             <img src="../../res/image/camera.png"/>
             <div style="margin-top:20px">身份证国徽面</div>
         </div>
