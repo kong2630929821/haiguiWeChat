@@ -4,6 +4,7 @@
     padding: 20px 10px;
     border-bottom: 1px solid #E5E5E5;
     background: #fff;
+    justify-content: space-between;
 }
 .text{
     height:48px;

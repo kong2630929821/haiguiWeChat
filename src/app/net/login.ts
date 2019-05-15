@@ -5,7 +5,7 @@
 import { open, request, setReloginCallback, setUrl } from '../../pi/net/ui/con_mgr';
 import { wsUrl } from '../config';
 import { getStore, GroupsLocation, setStore, UserType } from '../store/memstore';
-import { getAddresses, getBalance, getEarningTotal, getGoodsDetails, getGroups, getInviteCode, getOrders, getUserInfo } from './pull';
+import { getAddress, getBalance, getCart, getEarningTotal, getFreight, getGroups, getInviteCode, getSuppliers, getUserInfo } from './pull';
 import { payComplete } from './push';
 
 /**
@@ -110,7 +110,10 @@ const userLogin = () => {
                 getGroups(<any>GroupsLocation[k]);
             }
         }
-        getGoodsDetails(10010000001);
+        getCart();
+        getAddress();  //
+        getFreight();
+        getSuppliers(1011001);
         // 获取收益统计
         getEarningTotal().then(res => {
             const earning = getStore('earning');

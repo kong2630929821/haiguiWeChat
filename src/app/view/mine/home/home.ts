@@ -27,7 +27,7 @@ export class Home extends Widget {
     }
 
     public goAddress() {
-        popNew('app-view-mine-addressList');
+        popNew('app-view-mine-addressList',{});
     }
 
     public itemClick(status:OrderStatus) {

@@ -2,7 +2,7 @@
     {{if it.left}}
     <img src="../../res/image/{{it.left}}" w-class="img" on-tap="leftImg"/>
     {{end}}
-    <div w-class="{{it.left?'':'left'}} {{it.right?'':'right'}}">
+    <div w-class="{{it.left?'':'left'}} {{it.right?'':'right'}}" style="flex: 1 0 0;">
         <div w-class="row text">
             <div>收货人：{{it.address.name}}</div>
             <div>{{it.address.tel}}</div>

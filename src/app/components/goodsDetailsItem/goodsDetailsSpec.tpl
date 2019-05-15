@@ -37,7 +37,6 @@
         </div>
     </div>
     <div w-class="fix-bottom">
-        <div w-class="fix-item fix-item-2" style="background-color:#DF4AF3;" on-tap="pushShoppingCart">加入购物车</div>
-        <div w-class="fix-item fix-item-2" style="background-color:#8A4AF3;" on-tap="buyNow">立即购买</div>
+        <div w-class="fix-item fix-item-2" style="background-color:#8A4AF3;" on-tap="sureClick">确定</div>
     </div>
 </div>

@@ -42,14 +42,16 @@
                 <div w-class="items-father2"><app-components-goodsDetailsItem-goodsDetailsItem>{title:"实名",content:"该商品需实名认证",style:"padding-left:30px;"}</app-components-goodsDetailsItem-goodsDetailsItem></div>
                 {{end}}
             </div>
-            <div w-class="items-father3" on-tap="chooseSpecClick"><app-components-goodsDetailsItem-goodsDetailsItem>{title:"选择",content:"规格",style:"padding-left:30px;"}</app-components-goodsDetailsItem-goodsDetailsItem></div>
+            <div w-class="items-father3" on-tap="chooseSpecClick({{false}})"><app-components-goodsDetailsItem-goodsDetailsItem>{title:"选择",content:"规格",style:"padding-left:30px;"}</app-components-goodsDetailsItem-goodsDetailsItem></div>
         </div>
-        {{for i,v of it.goods.detail}}
+        
         <div w-class="goods-desc">
             <div w-class="desc-title">商品详情</div>
+            {{for i,v of it.goods.detail}}
             <img src="../../res/image/{{v.image.path}}" w-class="desc-img"/>
+            {{end}}
         </div>
-        {{end}}
+        
     </div>
     <div w-class="fix-bottom">
         <div w-class="left">
@@ -63,13 +65,13 @@
             </div>
         </div>
         <div w-class="right">
-            <div w-class="fix-item fix-item-2" style="background-color:#DF4AF3;" on-tap="chooseSpecClick">加入购物车</div>
-            <div w-class="fix-item fix-item-2" style="background-color:#8A4AF3;" on-tap="chooseSpecClick">立即购买</div>
+            <div w-class="fix-item fix-item-2" style="background-color:#DF4AF3;" on-tap="chooseSpecClick({{false}})">加入购物车</div>
+            <div w-class="fix-item fix-item-2" style="background-color:#8A4AF3;" on-tap="chooseSpecClick({{true}})">立即购买</div>
         </div>
     </div>
     {{if it.chooseSpec}}
-    <div ev-close-spec="specCloseClick" ev-push-shopping-cart="pushShoppingCart" ev-buy-now="buyNow">
-        <app-components-goodsDetailsItem-goodsDetailsSpec>{goods:{{it.goods}},amount:{{it.amount}} }</app-components-goodsDetailsItem-goodsDetailsSpec>
+    <div ev-close-spec="specCloseClick"  ev-sure-click="sureClick">
+        <app-components-goodsDetailsItem-goodsDetailsSpec>{goods:{{it.goods}},amount:{{it.amount}},skuIndex:{{it.skuIndex}},buyNow:{{it.buyNow}} }</app-components-goodsDetailsItem-goodsDetailsSpec>
     </div>
     {{end}}
 </div>

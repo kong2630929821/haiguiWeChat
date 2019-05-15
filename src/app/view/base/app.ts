@@ -84,6 +84,13 @@ export class App extends Widget {
         closeAllPage();
         this.paint();
     }
+
+    // 前往分类页
+    public gotoClass() {
+        this.props.isActive = 1;
+        closeAllPage();
+        this.paint();
+    }
 }
 
 // ===================================================== 本地
@@ -104,4 +111,9 @@ register('flags/gotoMallHome',() => {
 register('flags/gotoShoppinigCart',() => {
     const w:any = forelet.getWidget(WIDGET_NAME);
     w && w.gotoShoppinigCart();
+});
+
+register('flags/gotoClass',() => {
+    const w:any = forelet.getWidget(WIDGET_NAME);
+    w && w.gotoClass();
 });

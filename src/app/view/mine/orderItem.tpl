@@ -5,24 +5,22 @@
     </div>
     {{for i,v of it.order.orderGoods}}
     <div w-class="row" style="margin:20px 30px;" on-tap="itemClick">
-        <img src="../../res/image/{{v.labels[v.labels.length - 1].image.path}}" w-class="goodsImg"/>
+        {{: goods = v[0]}}
+        <img src="../../res/image/{{it.getImageThumbnailPath(goods.images)}}" w-class="goodsImg"/>
         <div w-class="column">
-            <div w-class="goodsTitle" class="line2-overflow">{{v.goods.name}}</div>
-            {{: let labels = []}}
-            {{for i1,v1 of v.labels}}
-            {{: labels.push(v1.name)}}
-            {{end}}
-            <div style="margin-bottom: 20px;">{{labels.join(",")}}</div>
+            <div w-class="goodsTitle" class="line2-overflow">{{goods.name}}</div>
+            <div style="margin-bottom: 20px;">{{goods.labels[0][1]}}</div>
             <div w-class="row">
-                <span style="font-size:32px;color:#8A4AF3;">￥ {{v.goods.origin.toFixed(2)}}</span>
-                <span style="font-size:20px;color:#353535;">x{{v.amount}}</span>
+                {{:sale = it.calcPrices(goods).sale}}
+                <span style="font-size:32px;color:#8A4AF3;">￥ {{it.priceFormat(sale)}}</span>
+                <span style="font-size:20px;color:#353535;">x{{v[1]}}</span>
             </div>
         </div>
     </div>
     {{end}}
     <div w-class="row1">
         <div w-class="total">
-            合计<span style="font-size:32px;color:#8A4AF3">￥ {{it.order.origin.toFixed(2)}}</span>
+            合计<span style="font-size:32px;color:#8A4AF3">￥ {{it.priceFormat(it.order.origin)}}</span>
         </div>
     </div>
 
