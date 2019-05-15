@@ -46,7 +46,7 @@ export class PowerDetail extends Widget {
                     popNewMessage('成功发送海王申请');
                 });
             } else {
-                wxPay(39900,'101').then(r => {
+                wxPay(39900,'101').then((r:any) => {
                     openWXPay(r.ok);
                 });
             }

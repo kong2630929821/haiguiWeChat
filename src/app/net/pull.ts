@@ -1,3 +1,4 @@
+import { request } from '../../pi/net/ui/con_mgr';
 import { Address, getStore,GroupsLocation, setStore } from '../store/memstore';
 import { requestAsync } from './login';
 import { parseAllGroups } from './parse';
@@ -345,14 +346,23 @@ export const wxPay = (money:number,ttype:string,count:number= 1) => {
     const msg = {
         type:'mall/pay@pay',
         param:{
-            money,
+            money:1,
             type:ttype,
             count,
             channel:'wxpay'
         }
     };
 
-    return requestAsync(msg);
+    return new Promise((resolve, reject) => {
+        request(msg, (resp: any) => {
+            if (resp.type) {
+                console.log(`错误信息为${resp.type}`);
+                reject(resp);
+            } else {
+                resolve(resp);
+            }
+        });
+    });
 };
 
 /**
