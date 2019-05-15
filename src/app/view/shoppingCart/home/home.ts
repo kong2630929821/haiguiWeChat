@@ -47,6 +47,9 @@ export class ShoppingCart extends Widget {
         this.props.deleteList = [];
         this.paint();
     }
+    public gotoShopping() {
+        setStore('flags/gotoClass',true);
+    }
 
     // 选中或取消
     public selectOrNot(index:number) {

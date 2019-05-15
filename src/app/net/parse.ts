@@ -1,5 +1,5 @@
 import { Address, CartGoods, Freight, getStore, GoodsDetails, GoodsSegmentationDetails, Groups, GroupsLocation, MallImages, Order, setStore, SKU } from '../store/memstore';
-import { getCartGoodsSelected } from '../utils/tools';
+import { getCartGoodsSelected, unicode2Str } from '../utils/tools';
 
 /**
  * 数据处理
@@ -33,7 +33,7 @@ export const parseGroups = (location:GroupsLocation,info:any) => {
     }
     ret = {
         id:info[0],   // 分组id
-        name:info[1],   // 分组名
+        name:unicode2Str(info[1]),   // 分组名
         type:itype,   // 组类型，分为子组和叶组，子组可以包含任意的其它子组或叶组，叶组只允许包含商品
         is_show:info[3] === 'true' ? true : false,
         images:info[4] ? parseMallImage(info[4]) : [],   // 分组包含的图片列表
@@ -54,7 +54,7 @@ export const parseGoodsDetail = (info:any):GoodsDetails => {
     
     return {
         id:info[0],	   // 商品id
-        name:info[1],   // 商品名称
+        name:unicode2Str(info[1]),   // 商品名称
         brand:info[2],  // 品牌id
         area:info[3],	 // 地区id
         supplier:info[4], // 供应商id
@@ -82,7 +82,7 @@ export const parseGoodsSegmentationDetails = (infos:any) => {
     const tmps:GoodsSegmentationDetails[] = [];
     for (const info of infos) {
         const tmp:GoodsSegmentationDetails = {
-            name:info[0],  // 分段名
+            name:unicode2Str(info[0]),  // 分段名
             value:info[1], // 分段详细描述
             image:parseMallImage([info[2]])[0] // 分段图片path
         };
@@ -154,10 +154,10 @@ export const parseAddress = (infos:any) => {
         const info1 = info[1];
         const address:Address = {
             id,
-            name:info1[0],
+            name:unicode2Str(info1[0]),
             tel:info1[1],
             area_id:info1[2],
-            address:info1[3]
+            address:unicode2Str(info1[3])
         };
         addresses.push(address);
     }
@@ -212,10 +212,10 @@ export const parseOrder = (infos:any) => {
             tax:info[6],				// 	商品税费，单位分，即所有商品税费乘数量
             freight:info[7],        // 商品运费，单位分
             other:info[8],          // 其它费用，单位分
-            name:info[10],           // 收件人姓名
+            name:unicode2Str(info[10]),           // 收件人姓名
             tel:info[11],            // 收件人电话
             area:info[12],           // 收件人地区
-            address:info[13],        // 收件人详细地址
+            address:unicode2Str(info[13]),        // 收件人详细地址
             order_time:info[14],     // 下单时间，单位毫秒
             pay_time:info[15],       // 支付时间，单位毫秒
             ship_time:info[16],      // 发货时间，单位毫秒

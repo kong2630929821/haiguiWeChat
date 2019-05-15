@@ -2,6 +2,7 @@
  * 常用工具
  */
 import { popNew } from '../../pi/ui/root';
+import { info } from '../../pi/util/log';
 import { getStore, GoodsDetails, ImageType, MallImages, SKU, UserType } from '../store/memstore';
 
 // 弹出提示框
@@ -112,4 +113,17 @@ export const getCartGoodsSelected = (index:number):boolean => {
     }
     
     return false;
+};
+
+/**
+ * unicode转string
+ */
+export const unicode2Str = (infos:any) => {
+    if (typeof infos === 'string') return infos;
+    let str = '';
+    for (const v of infos) {
+        str += String.fromCharCode(v);
+    }
+
+    return str;
 };

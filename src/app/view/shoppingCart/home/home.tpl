@@ -3,7 +3,7 @@
     <div w-class="empty">
         <img src="../../../res/image/emptyCart.png" w-class="emptyImg"/>
         <div w-class="emptyText">去挑选中意的商品</div>
-        <div w-class="shopping">去逛逛</div>
+        <div w-class="shopping" on-tap="gotoShopping">去逛逛</div>
     </div>
     {{else}}
     <div style="position:relative;height: 88px;">
