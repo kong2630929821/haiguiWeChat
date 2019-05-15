@@ -1,5 +1,5 @@
 import { request } from '../../pi/net/ui/con_mgr';
-import { erlangLogicPort, sourceIp, sourcePort } from '../config';
+import { sourceIp, sourcePort } from '../config';
 import { getStore,GroupsLocation, OrderStatus, setStore } from '../store/memstore';
 import { openWXPay } from '../utils/logic';
 import { requestAsync } from './login';
@@ -577,7 +577,7 @@ export const checkWithdraw = () => {
  */
 export const verifyIDCard = (url:string) => {
 
-    return fetch(`${sourceIp}:${erlangLogicPort}/wx/cmd/id_card?img_url=${url}`).then(res => res.json());
+    return fetch(`http://${sourceIp}:${sourcePort}/pt/wx/cmd/id_card?img_url=${url}`).then(res => res.json());
 };
 
 /**
@@ -585,5 +585,12 @@ export const verifyIDCard = (url:string) => {
  */
 export const uploadFile = (id:string) => {
 
-    return fetch(`${sourceIp}:${sourcePort}/service/upload/wx_file?serverId=${id}`).then(res => res.json());
+    return fetch(`http://${sourceIp}:${sourcePort}/service/upload/wx_file?serverId=${id}`).then(res => res.json());
+};
+
+/**
+ * 获取微信签名
+ */
+export const getWX_sign = () => {
+    return fetch(`http://${sourceIp}:${sourcePort}/pt/wx/sign?url=${location.href}`).then(res => res.json());
 };

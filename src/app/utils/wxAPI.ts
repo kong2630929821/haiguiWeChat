@@ -4,8 +4,7 @@
 
 // ===================================  导入
 import { userAgent } from '../../pi/util/html';
-import { sourceIp, sourcePort } from '../config';
-import { uploadFile } from '../net/pull';
+import { getWX_sign, uploadFile } from '../net/pull';
 import { loadJS } from './logic';
 import { popNewMessage } from './tools';
  
@@ -21,7 +20,7 @@ export const registerWXAPI = () => {
         loadJS('http://res2.wx.qq.com/open/js/jweixin-1.4.0.js', (info) => {
             if (info.result === 1) {
                 if ((<any>self).wx) {
-                    fetch(`http://${sourceIp}:${sourcePort}/pt/wx/sign?url=${encodeURIComponent(location.href)}`).then((resp:any) => {
+                    getWX_sign().then((resp:any) => {
                         resp = resp.json();
                         alert(JSON.stringify(resp));
 
