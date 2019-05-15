@@ -180,11 +180,11 @@ export const getFreight = () => {
 };
 
 // 获取地区信息
-export const getAreas = () => {
+export const getAreas = (id:number) => {
     const msg = {
         type:'get_area',
         param:{
-            ids:[121001]
+            ids:[id]
         }
     };
 

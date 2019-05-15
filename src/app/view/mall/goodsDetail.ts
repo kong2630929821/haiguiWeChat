@@ -1,6 +1,6 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
-import { addCart, getGoodsDetails, getSuppliers } from '../../net/pull';
+import { addCart, getAreas, getGoodsDetails, getSuppliers } from '../../net/pull';
 import { GoodsDetails, setStore } from '../../store/memstore';
 import { calcPrices, getImageMainPath, popNewMessage, priceFormat } from '../../utils/tools';
 
@@ -53,6 +53,7 @@ export class GoodsDetailHome extends Widget {
             this.props.goods = goods;
             this.paint();
         });
+        getAreas(props.goods.area);
     }
 
     // 点击描述

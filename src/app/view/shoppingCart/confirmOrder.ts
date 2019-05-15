@@ -1,6 +1,6 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
-import { order, payOrder } from '../../net/pull';
+import { order, payMoney, payOrder } from '../../net/pull';
 import { CartGoods, getStore } from '../../store/memstore';
 import { calcFreight, getImageThumbnailPath, popNewLoading, popNewMessage, priceFormat } from '../../utils/tools';
 import { calcCartGoodsShow, CartGoodsShow } from './home/home';
@@ -105,8 +105,10 @@ export class ConfirmOrder extends Widget {
                 console.log('oid ====',oid);
                 allPayPromise.push(payOrder(oid));
             }
-            const payRes = await Promise.all(allPayPromise);
-            console.log('payRes ====',payRes);
+            const totalFee = this.props.totalSale + this.props.totalFreight + this.props.totalTax;
+            payMoney(1,'105',1);
+            // const payRes = await Promise.all(allPayPromise);
+            // console.log('payRes ====',payRes);
             popNewMessage('交易成功');
         } catch (res) {
             loading.callback(loading.widget);
