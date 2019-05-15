@@ -1,6 +1,8 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
+import { verifyIDCard } from '../../net/pull';
 import { selectImg } from '../../utils/logic';
+import { popNewMessage } from '../../utils/tools';
 interface Props {
     firstClick:boolean; // 是否是第一次点击上传按钮
     img1:string;
@@ -44,8 +46,12 @@ export class IDCardUpload extends Widget {
 
     public verifyImg() {
         if (this.props.img1 && this.props.img2) {
-            // TODO
-            popNew('app-view-mine-verified',{});
+            verifyIDCard(this.props.img1).then(r => {
+                popNew('app-view-mine-verified',{});
+            });
+            
+        } else {
+            popNewMessage('请先上传图片');
         }
     }
 }

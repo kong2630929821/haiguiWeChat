@@ -41,6 +41,7 @@
 .detail{
     position: absolute;
     bottom: 90px;
+    text-align: center;
 }
 .active{
     color: rgba(141,63,237,1);

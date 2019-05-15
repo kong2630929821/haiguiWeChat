@@ -15,7 +15,7 @@ export class MyCash extends Widget {
     public create() {
         super.create();
         checkWithdraw().then(r => {
-            this.props.ableWithdraw = true;
+            this.props.ableWithdraw = this.props.balance > 0;
             this.paint();
         });
     }
@@ -27,7 +27,7 @@ export class MyCash extends Widget {
 
     // 提现
     public withdraw() {
-        if (this.props.ableWithdraw || this.props.balance === 0) {
+        if (this.props.ableWithdraw) {
             popNew('app-view-mine-withdraw');
         }
     }

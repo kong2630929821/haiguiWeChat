@@ -1,4 +1,4 @@
-import { Address, CartGoods, Freight, GoodsDetails, GoodsSegmentationDetails, Groups, GroupsLocation, MallImages, Order, SKU } from '../store/memstore';
+import { Address, CartGoods, Freight, getStore, GoodsDetails, GoodsSegmentationDetails, Groups, GroupsLocation, MallImages, Order, setStore, SKU } from '../store/memstore';
 import { getCartGoodsSelected } from '../utils/tools';
 
 /**
@@ -228,4 +228,15 @@ export const parseOrder = (infos:any) => {
     }
 
     return orders;
+};
+
+/**
+ * 解析余额
+ */
+export const parseBalance = (res) => {
+    const balance = getStore('balance');
+    balance.cash = res.money / 100;   // 现金，单位为分
+    balance.shell = res.haibei;
+    balance.integral = res.integral;
+    setStore('balance',balance);
 };
