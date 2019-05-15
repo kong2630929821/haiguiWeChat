@@ -2,13 +2,13 @@
     display: flex;
     margin-left: 30px;
     align-items: center;
-    height: 88px;
-    line-height: 88px;
+    min-height: 88px;
     font-size: 34px;
 }
 .row1{
     margin-left: 20px;
     border-bottom: 1px solid #e5e5e5;
+    padding: 20px 0;
 }
 .btn{
     height:98px;

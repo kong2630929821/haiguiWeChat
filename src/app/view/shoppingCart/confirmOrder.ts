@@ -29,8 +29,12 @@ export class ConfirmOrder extends Widget {
         super.setProps(this.props,oldProps);
         console.log('ConfirmOrder ======',this.props);
     }
+
     public selectAddr() {
-        popNew('app-view-mine-addressList',{ isChoose:true,selected:0 });
+        popNew('app-view-mine-addressList',{ isChoose:true },(index:number) => {
+            this.props.address = getStore('mall/addresses')[index];
+            this.paint();
+        });
     }
 
     // 计算商品费用 包括商品总费用 运费总计  税费总计
@@ -54,8 +58,10 @@ export class ConfirmOrder extends Widget {
             oneSupplier.push(v.cartGood);
             suppliers.set(supplierId,oneSupplier);
         }
-        totalFreight += calcFreight(this.props.address.area_id) * frieghts.length;
-
+        if (this.props.address) {
+            totalFreight += calcFreight(this.props.address.area_id) * frieghts.length;
+        }
+        
         return {
             totalSale,
             totalTax,
@@ -67,10 +73,18 @@ export class ConfirmOrder extends Widget {
 
     // 添加地址
     public addAddress() {
-        popNew('app-view-mine-editAddress');
+        popNew('app-view-mine-editAddress',undefined,() => {
+            this.props.address = getStore('mall/addresses')[0];
+            this.paint();
+        });
     }
     // 结算下单
     public async orderClick() {
+        if (!this.props.address) {
+            popNewMessage('请填写收货地址');
+
+            return;
+        }
         const allOrderPromise = [];
         const loading = popNewLoading('提交订单');
         for (const [k,v] of this.props.suppliers) {

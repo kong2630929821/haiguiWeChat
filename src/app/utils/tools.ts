@@ -119,7 +119,7 @@ export const getCartGoodsSelected = (index:number):boolean => {
  * unicode转string
  */
 export const unicode2Str = (infos:any) => {
-    if (typeof infos === 'string') return infos;
+    if (typeof infos !== 'object') return infos;
     let str = '';
     for (const v of infos) {
         str += String.fromCharCode(v);

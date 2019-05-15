@@ -21,6 +21,7 @@ export class ImgSwiper extends Widget {
             getImageThumbnailPath
         };
         super.setProps(this.props,oldProps);
+        console.log('ImgSwiper ====',this.props);
     }
     
     public attach() {
@@ -30,7 +31,7 @@ export class ImgSwiper extends Widget {
             if (this.props.list.length > 1) {
                 this.initSwiper();
             }
-        },100);
+        },500);
     }
 
     public afterUpdate() {
@@ -40,7 +41,7 @@ export class ImgSwiper extends Widget {
             if (this.props.list.length > 1) {
                 this.initSwiper();
             }
-        },100);
+        },500);
     }
 
     // 初始化swiper
@@ -65,7 +66,7 @@ export class ImgSwiper extends Widget {
     }
     public clickSlide(e:any) {
         if (this.props.mod === 2) return;
-        const group = this.props.list[this.props.activeIndex];
+        const group = this.props.list[this.props.activeIndex - 1];
         notify(e.node,'ev-click-slide',{ group });
     }
 }

@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { getStore, register } from '../../store/memstore';
+import { Address, getStore, register } from '../../store/memstore';
 
 // tslint:disable-next-line:no-reserved-keywords
 declare var module: any;
@@ -17,40 +17,28 @@ interface Props {
  * 收货地址列表
  */
 export class AddressList extends Widget {
-    public props:Props = {
-        list:[],
-        isChoose:false,
-        selected:-1
-    };
-    public setProps(props:any) {
+    public ok:(index:number) => void;
+    public setProps(props:Props) {
+        const list = getStore('mall/addresses');
+        let selected = Number(localStorage.getItem('addressIndex'));
+        if (selected > list.length) selected = 0;
         this.props = {
-            ...this.props,
-            ...props
+            ...props,
+            list,
+            selected
         };
-        this.initData();
         super.setProps(this.props);
-    }
-
-    public initData() {
-        this.props.list = getStore('mall/addresses');
-        if (this.props.isChoose) {
-            this.props.list = this.props.list.map((item,ind) => {
-                const left = this.props.selected === ind ? 'selectBox_active.png' :'selectBox.png';
-
-                return {
-                    ...item,
-                    left
-                };
-            });
-        }
     }
 
     // 点击左侧按钮
     public leftClick(num:number) {
         console.log(num);
         this.props.selected = num;
-        this.initData();
+        localStorage.setItem('addressIndex',num.toString());
         this.paint();
+        setTimeout(() => {
+            this.ok && this.ok(num);
+        },50);
     }
 
     // 点击右侧按钮
@@ -62,10 +50,13 @@ export class AddressList extends Widget {
     public addAddr() {
         popNew('app-view-mine-editAddress');
     }
+    public updateAddress(addresses:Address[]) {
+        this.props.list = addresses;
+        this.paint();
+    }
 }
 
-register('mall/addresses',() => {
+register('mall/addresses',(addresses:Address[]) => {
     const w:any = forelet.getWidget(WIDGET_NAME);
-    w && w.initData();
-    w && w.paint();
+    w && w.updateAddress(addresses);
 });

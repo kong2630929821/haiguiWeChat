@@ -1,7 +1,7 @@
 import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
-import { addCart, deductCart, getCart } from '../../../net/pull';
+import { addCart, deductCart } from '../../../net/pull';
 import { CartGoods, register, setStore } from '../../../store/memstore';
 import { calcPrices, getImageThumbnailPath, priceFormat } from '../../../utils/tools';
 

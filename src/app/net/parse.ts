@@ -115,7 +115,7 @@ export const parseMallImage = (infos:any) => {
 export const parseSKU = (infos:any) => {
     const skus:SKU[] = [];
     for (const v of infos) {
-        const sku:SKU = [v[0],v[1],v[2],v[3]];
+        const sku:SKU = [v[0],unicode2Str(v[1]),v[2],v[3]];
         skus.push(sku);
     }
 
@@ -147,7 +147,6 @@ export const parseCart = (infos:any) => {
  * 收货地址解析
  */
 export const parseAddress = (infos:any) => {
-    
     const addresses = [];
     for (const info of infos) {
         const id = info[0][1];
@@ -165,6 +164,25 @@ export const parseAddress = (infos:any) => {
     return addresses;
 };
 
+/**
+ * 收货地址解析
+ */
+export const parseAddress2 = (infos:any) => {
+    const addresses = [];
+    for (const info of infos) {
+        const id = info[0];
+        const address:Address = {
+            id,
+            name:unicode2Str(info[1]),
+            tel:info[2],
+            area_id:info[3],
+            address:unicode2Str(info[4])
+        };
+        addresses.push(address);
+    }
+
+    return addresses;
+};
 /**
  * 解析运费信息
  */

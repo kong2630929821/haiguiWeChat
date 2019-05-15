@@ -2,7 +2,7 @@ import { request } from '../../pi/net/ui/con_mgr';
 import { getStore,GroupsLocation, OrderStatus, setStore } from '../store/memstore';
 import { openWXPay } from '../utils/logic';
 import { requestAsync } from './login';
-import { parseAddress, parseAllGroups, parseBalance, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
+import { parseAddress, parseAddress2, parseAllGroups, parseBalance, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
 
 /**
  * 获取分组信息
@@ -113,7 +113,11 @@ export const addAddress = (name:string,tel:string,area_id:number,address:string)
 
     return requestAsync(msg).then(res => {
         console.log('addAddress ======',res);
-        getAddress();
+        const addresses = parseAddress2(res.addressInfo);
+        console.log('addAddress ======',addresses);
+        setStore('mall/addresses',addresses);
+
+        return address;
     });
 };
 
@@ -129,8 +133,11 @@ export const delAddress = (no:number) => {
     };
 
     return requestAsync(msg).then(res => {
-        console.log('delAddress ======',res);
-        getAddress();
+        const addresses = parseAddress(res.addressInfo);
+        console.log('delAddress ======',addresses);
+        setStore('mall/addresses',addresses);
+
+        return addAddress;
     });
 };
 

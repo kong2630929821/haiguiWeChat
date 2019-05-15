@@ -1,5 +1,5 @@
 <div class="new-page" w-class="page">
-    <div w-class="top" ev-itemClick="selectAddr">
+    <div w-class="top" ev-itemClick="selectAddr" ev-rightClick="selectAddr">
         {{if it.address}}
         <widget w-tag="app-components-addressItem-addressItem">{address:{{it.address}}}</widget>
         {{else}}
