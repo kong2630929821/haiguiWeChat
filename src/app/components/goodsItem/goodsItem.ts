@@ -18,7 +18,7 @@ export class GoodsItem extends Widget {
             ...ret
         };
         super.setProps(this.props,oldProps);
-        // console.log('GoodsItem ----------------',props);
+        console.log('GoodsItem ----------------',this.props);
     }
 
     public goodsItemClick(e:any) {

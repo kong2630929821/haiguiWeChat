@@ -8,7 +8,8 @@
     </div>
 
     <div w-class="content">
-        {{for i,v of it.curShowOrders}}
+        {{: list = it1.orders.get(it.activeStatus) || []}}
+        {{for i,v of list}}
         <div ev-btn-click="btnClick(e,{{i}})" ev-item-click="itemClick({{i}})">
             <widget w-tag="app-view-mine-orderItem">{status:{{it.activeStatus}},order:{{v}} }</widget>
         </div>

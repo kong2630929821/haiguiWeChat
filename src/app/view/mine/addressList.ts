@@ -1,5 +1,13 @@
 import { popNew } from '../../../pi/ui/root';
+import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
+import { Address, getStore, register } from '../../store/memstore';
+
+// tslint:disable-next-line:no-reserved-keywords
+declare var module: any;
+export const forelet = new Forelet();
+export const WIDGET_NAME = module.id.replace(/\//g, '-');
+
 interface Props {
     list:any[]; // 地址列表
     isChoose:boolean;  // 是否选择地址
@@ -9,82 +17,46 @@ interface Props {
  * 收货地址列表
  */
 export class AddressList extends Widget {
-    public props:Props = {
-        list:[
-            {
-                left:'',
-                right:'edit.png',
-                name:'陈某某',
-                tel:'12345678901',
-                province:'四川省成都市高新区',
-                address:'天府三街1140号17栋5-33号'
-            },
-            {
-                left:'',
-                right:'edit.png',
-                name:'陈某某',
-                tel:'12345678901',
-                province:'四川省成都市高新区',
-                address:'天府三街1140号17栋5-33号'
-            },
-            {
-                left:'',
-                right:'edit.png',
-                name:'陈某某',
-                tel:'12345678901',
-                province:'四川省成都市高新区',
-                address:'天府三街1140号17栋5-33号'
-            },
-            {
-                left:'',
-                right:'edit.png',
-                name:'陈某某',
-                tel:'12345678901',
-                province:'四川省成都市高新区',
-                address:'天府三街1140号17栋5-33号'
-            }
-        ],
-        isChoose:false,
-        selected:-1
-    };
-
-    public setProps(props:any) {
+    public ok:(index:number) => void;
+    public setProps(props:Props) {
+        const list = getStore('mall/addresses');
+        let selected = Number(localStorage.getItem('addressIndex'));
+        if (selected > list.length) selected = 0;
         this.props = {
-            ...this.props,
-            ...props
+            ...props,
+            list,
+            selected
         };
         super.setProps(this.props);
-        this.initData();
-    }
-
-    public initData() {
-        if (this.props.isChoose) {
-            this.props.list = this.props.list.map((item,ind) => {
-                const left = this.props.selected === ind ? 'selectBox_active.png' :'selectBox.png';
-
-                return {
-                    ...item,
-                    left
-                };
-            });
-        }
     }
 
     // 点击左侧按钮
     public leftClick(num:number) {
         console.log(num);
         this.props.selected = num;
-        this.initData();
+        localStorage.setItem('addressIndex',num.toString());
         this.paint();
+        setTimeout(() => {
+            this.ok && this.ok(num);
+        },50);
     }
 
     // 点击右侧按钮
     public rightClick(num:number) {
         console.log(num);
-        popNew('app-view-mine-editAddress',this.props.list[num]);
+        popNew('app-view-mine-editAddress',{ ...this.props.list[num],onlyDel:true });
     }
 
     public addAddr() {
         popNew('app-view-mine-editAddress');
     }
+    public updateAddress(addresses:Address[]) {
+        this.props.list = addresses;
+        this.paint();
+    }
 }
+
+register('mall/addresses',(addresses:Address[]) => {
+    const w:any = forelet.getWidget(WIDGET_NAME);
+    w && w.updateAddress(addresses);
+});

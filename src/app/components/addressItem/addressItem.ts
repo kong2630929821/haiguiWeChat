@@ -12,11 +12,11 @@ interface Props {
 export class AddressItem extends Widget {
     public setProps(props:Props,oldProps:Props) {
         this.props = {
-            ...props,
-            left:'address.png',
-            right:'arrowRight.png'
+            right:'arrowRight.png',
+            ...props
         };
         super.setProps(this.props);
+        console.log('AddressItem =======',this.props);
     }
 
     // 点击整个区域

@@ -38,7 +38,7 @@
     line-height:40px;
 }
 .groups2-item{
-    width: 140px;
+    min-width: 140px;
     height: 100%;
     margin: 0 24px;
     display: flex;

@@ -1,9 +1,9 @@
 import { request } from '../../pi/net/ui/con_mgr';
 import { erlangLogicPort, sourceIp, sourcePort } from '../config';
-import { Address, getStore,GroupsLocation, setStore } from '../store/memstore';
+import { getStore,GroupsLocation, OrderStatus, setStore } from '../store/memstore';
 import { openWXPay } from '../utils/logic';
 import { requestAsync } from './login';
-import { parseAllGroups } from './parse';
+import { parseAddress, parseAddress2, parseAllGroups, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
 
 /**
  * 获取分组信息
@@ -35,7 +35,10 @@ export const getGoodsDetails = (goodsId:number) => {
     };
 
     return requestAsync(msg).then(res => {
-        console.log('getGoodsDetails ======',res);
+        const goodsDetail = parseGoodsDetail(res.goodsInfo[0]);
+        console.log('getGoodsDetails ======',goodsDetail);
+
+        return goodsDetail;
     });
 };
 
@@ -44,7 +47,7 @@ export const getGoodsDetails = (goodsId:number) => {
  */
 export const addCart = (goodId:number,amount:number,sku:string) => {
     const msg = {
-        type:'get_goods',
+        type:'add_cart',
         param:{
             good_id:goodId,
             amount,
@@ -52,10 +55,131 @@ export const addCart = (goodId:number,amount:number,sku:string) => {
         }
     };
 
-    return requestAsync(msg).then(res => {
+    return requestAsync(msg).then((res) => {
         console.log('addCart ======',res);
+        const carts = parseCart(res.cartInfo);
+        setStore('mall/cartGoods',carts);
+        
+        return carts;
     });
 };
+
+/**
+ * 购物车减少
+ */
+export const deductCart = (no:number,amount:number) => {
+    const msg = {
+        type:'deduct_cart',
+        param:{
+            no,
+            amount
+        }
+    };
+
+    return requestAsync(msg).then(() => {
+        getCart();
+    });
+};
+
+/**
+ * 获取购物车
+ */
+export const getCart = () => {
+    const msg = {
+        type:'show_cart',
+        param:{
+        }
+    };
+
+    return requestAsync(msg).then(res => {
+        console.log('getCart ======',res);
+        const carts = parseCart(res.cartInfo);
+        setStore('mall/cartGoods',carts);
+    });
+};
+
+/**
+ * 收货地址增加
+ */
+export const addAddress = (name:string,tel:string,area_id:number,address:string) => {
+    const msg = {
+        type:'add_address',
+        param:{
+            name,
+            tel,
+            area_id,
+            address
+        }
+    };
+
+    return requestAsync(msg).then(res => {
+        console.log('addAddress ======',res);
+        const addresses = parseAddress2(res.addressInfo);
+        console.log('addAddress ======',addresses);
+        setStore('mall/addresses',addresses);
+
+        return address;
+    });
+};
+
+/***
+ * 删除收货地址
+ */
+export const delAddress = (no:number) => {
+    const msg = {
+        type:'del_address',
+        param:{
+            no
+        }
+    };
+
+    return requestAsync(msg).then(res => {
+        const addresses = parseAddress(res.addressInfo);
+        console.log('delAddress ======',addresses);
+        setStore('mall/addresses',addresses);
+
+        return addAddress;
+    });
+};
+
+/**
+ * 获取收货地址
+ */
+export const getAddress = () => {
+    const msg = {
+        type:'get_address',
+        param:{
+        }
+    };
+
+    return requestAsync(msg).then(res => {
+        const addresses = parseAddress(res.addressInfo);
+        console.log('getAddress ======',addresses);
+        setStore('mall/addresses',addresses);
+        
+        return addAddress;
+    });
+};
+
+/**
+ * 获取运费信息
+ */
+export const getFreight = () => {
+    const msg = {
+        type:'get_freight',
+        param:{
+        }
+    };
+
+    return requestAsync(msg).then(res => {
+        const freights = parseFreight(res.addressInfo);
+        console.log('getFreight ======',freights);
+        setStore('mall/freights',freights);
+        
+        return freights;
+    });
+};
+
 // 获取地区信息
 export const getAreas = () => {
     const msg = {
@@ -68,6 +192,35 @@ export const getAreas = () => {
     return requestAsync(msg).then(res => {
         console.log('getAreas ======',res);
     });
+};
+
+/**
+ * 下单
+ */
+export const order = (no_list:number[],address_no:number) => {
+    const msg = {
+        type:'order',
+        param:{
+            no_list,
+            address_no
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 支付
+ */
+export const payOrder = (oid:number) => {
+    const msg = {
+        type:'pay_order',
+        param:{
+            oid
+        }
+    };
+
+    return requestAsync(msg);
 };
 
 // 获取供应商信息
@@ -84,26 +237,24 @@ export const getSuppliers = (id:number) => {
     });
 };
 
-// 获取收货人地址列表
-export const getAddresses = () => {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            const address:Address = {
-                id:1,		
-                name:'陈二狗',       
-                tel:'18324648321',       
-                area:'四川省',        
-                address:'四川省成都市高新区天府三街1140号17栋5-33号'  	
-            };
-            setStore('mall/addresses',[address]);
-            resolve();
-        },200);
-    });
-};
-
 // 获取各种状态的订单
-export const getOrders = () => {
-    return 0;
+export const getOrders = (order_type:OrderStatus) => {
+    const msg = {
+        type:'get_order',
+        param:{
+            order_type
+        }
+    };
+
+    return requestAsync(msg).then(res => {
+        const orders = parseOrder(res.user_orderInfo);
+        console.log('order ======',orders);
+        const ordersMap = getStore('mall/orders');
+        ordersMap.set(order_type,orders);
+        setStore('mall/orders',ordersMap);
+
+        return orders;
+    });
 };
 
 /**

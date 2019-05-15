@@ -2,6 +2,7 @@
  * 常用工具
  */
 import { popNew } from '../../pi/ui/root';
+import { info } from '../../pi/util/log';
 import { getStore, GoodsDetails, ImageType, MallImages, SKU, UserType } from '../store/memstore';
 
 // 弹出提示框
@@ -39,33 +40,26 @@ export const calcPrices = (goods:GoodsDetails) => {
     };
     if (vipLevel === UserType.hBao) { // 海宝
         ret.discount = goods.discount !== goods.origin ? calcDiscount(goods.discount,goods.origin) : calcDiscount(goods.vip_origin,goods.origin);
-        ret.sale = goods.discount ? goods.discount : (goods.vip_origin ? goods.vip_origin : goods.origin);
+        ret.sale = goods.discount !== goods.origin ? goods.discount : (goods.vip_origin ? goods.vip_origin : goods.origin);
     } else if (vipLevel === UserType.hWang) { // 海王
         ret.discount = goods.discount !== goods.origin ? calcDiscount(goods.discount,goods.origin) : calcDiscount(goods.vip_origin,goods.origin);
-        ret.sale = goods.discount ? goods.discount : (goods.vip_origin ? goods.vip_origin : goods.origin);
+        ret.sale = goods.discount !== goods.origin ? goods.discount : (goods.vip_origin ? goods.vip_origin : goods.origin);
         ret.rebate = goods.rebate;
     } else {   // 非vip
 
     }
-
+    
     return ret;
 };
 
-// 展示选择标签的图片
-export const filterShowLabelImage = (labels:MallLabels[],labeled:MallLabels) => {
-    for (const label of labels) {
-        for (let i = 0;i < label.childs.length;i++) {
-            const childLabel = label.childs[i];
-            if (childLabel.name === labeled.name) return childLabel.image;
-        }
-    }
-};
-
 // 计算运费
-export const calcFreight = (provinceName?:string) => {
-    if (!provinceName) return 0;
+export const calcFreight = (area_id:number) => {
+    const freights = getStore('mall/freights');
+    for (let i = 0;i < freights.length;i ++) {
+        if (freights[i].index === area_id) return freights[i].price;
+    }
 
-    return 1000;
+    return 0;
 };
 
 // 获取特定类型的图片url
@@ -109,4 +103,27 @@ export const calcInventorys = (skus:SKU[]) => {
     }
 
     return num;
+};
+
+// 获取购物车商品是否被选中
+export const getCartGoodsSelected = (index:number):boolean => {
+    const carts = getStore('mall/cartGoods');
+    for (let i = 0;i < carts.length;i++) {
+        if (carts[i].index === index) return carts[i].selected;
+    }
+    
+    return false;
+};
+
+/**
+ * unicode转string
+ */
+export const unicode2Str = (infos:any) => {
+    if (typeof infos !== 'object') return infos;
+    let str = '';
+    for (const v of infos) {
+        str += String.fromCharCode(v);
+    }
+
+    return str;
 };

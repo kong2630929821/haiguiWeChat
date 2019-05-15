@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
-import { addCart, getSuppliers } from '../../net/pull';
-import { CartGoods, getStore, GoodsDetails, setStore } from '../../store/memstore';
+import { addCart, getGoodsDetails, getSuppliers } from '../../net/pull';
+import { GoodsDetails, setStore } from '../../store/memstore';
 import { calcPrices, getImageMainPath, popNewMessage, priceFormat } from '../../utils/tools';
 
 interface Props {
@@ -42,16 +42,17 @@ export class GoodsDetailHome extends Widget {
             descProps:undefined,   
             chooseSpec:false,
             amount:1,              // 选择数量
-            choosedSku:undefined
+            skuIndex:-1,
+            buyNow:false
 
         };
         super.setProps(this.props);
         getSuppliers(props.goods.supplier);
         console.log('GoodsDetailHome',this.props);
-        // getGoodsDetails(props.goods).then(goods => {
-        //     this.props.goods = goods;
-        //     this.paint();
-        // });
+        getGoodsDetails(props.goods.id).then(goods => {
+            this.props.goods = goods;
+            this.paint();
+        });
     }
 
     // 点击描述
@@ -67,38 +68,41 @@ export class GoodsDetailHome extends Widget {
     }
 
     // 选择规则
-    public chooseSpecClick() {
+    public chooseSpecClick(buyNow:boolean) {
         this.props.chooseSpec = true;
+        this.props.buyNow = buyNow;
         this.paint();
     }
 
     // 选择规则关闭
     public specCloseClick(res:any) {
-        this.props.choosedSku = res.sku;
+        this.props.skuIndex = res.skuIndex;
         this.props.amount = res.amount;
         this.props.chooseSpec = false;
         this.paint();
     }
     
-    // 加入购物车
-    public pushShoppingCart() {
-        addCart(this.props.goods.id,this.props.amount,this.props.choosedSku[0]).then(() => {
+    // 立即购买
+    public sureClick(res:any) {
+        const sku = this.props.goods.labels[this.props.skuIndex];
+        addCart(this.props.goods.id,this.props.amount,sku[0]).then(() => {
             popNewMessage('添加成功');
         });
-    }
+        // if (res.buyNow) {
+        //     console.log('立即购买');
+        // } else {
+            
+        // }
+        // const cartGood:CartGoods = {
+        //     goods:this.props.goods,
+        //     amount:this.props.amount,
+        //     labels:this.props.fixedLabels.concat(this.props.hasLabels),
+        //     selected:true
+        // };
+        // const cartGoods = [cartGood];
+        // setStore('mall/cartGoods',cartGoods);
 
-    // 立即购买
-    public buyNow() {
-        const cartGood:CartGoods = {
-            goods:this.props.goods,
-            amount:this.props.amount,
-            labels:this.props.fixedLabels.concat(this.props.hasLabels),
-            selected:true
-        };
-        const cartGoods = [cartGood];
-        setStore('mall/cartGoods',cartGoods);
-
-        popNew('app-view-shoppingCart-confirmOrder',{ orderGoods:cartGoods });
+        // popNew('app-view-shoppingCart-confirmOrder',{ orderGoods:cartGoods });
     }
     // 前往商城首页
     public gotoMallHome() {
