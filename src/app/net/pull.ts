@@ -196,9 +196,21 @@ export const order = (no_list:number[],address_no:number) => {
         }
     };
 
-    return requestAsync(msg).then(res => {
-        console.log('order ======',res);
-    });
+    return requestAsync(msg);
+};
+
+/**
+ * 支付
+ */
+export const payOrder = (oid:number) => {
+    const msg = {
+        type:'pay_order',
+        param:{
+            oid
+        }
+    };
+
+    return requestAsync(msg);
 };
 
 // 获取供应商信息

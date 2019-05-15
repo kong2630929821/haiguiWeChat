@@ -1,8 +1,8 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
-import { order } from '../../net/pull';
+import { order, payOrder } from '../../net/pull';
 import { CartGoods, getStore } from '../../store/memstore';
-import { calcFreight, getImageThumbnailPath, popNewMessage, priceFormat } from '../../utils/tools';
+import { calcFreight, getImageThumbnailPath, popNewLoading, popNewMessage, priceFormat } from '../../utils/tools';
 import { calcCartGoodsShow, CartGoodsShow } from './home/home';
 
 interface Props {
@@ -71,7 +71,8 @@ export class ConfirmOrder extends Widget {
     }
     // 结算下单
     public async orderClick() {
-        const allPromise = [];
+        const allOrderPromise = [];
+        const loading = popNewLoading('提交订单');
         for (const [k,v] of this.props.suppliers) {
             console.log(k,v);
             const no_list = [];
@@ -79,14 +80,25 @@ export class ConfirmOrder extends Widget {
                 no_list.push(g.index);
             }
             const promise = order(no_list,this.props.address.id);
-            allPromise.push(promise);
+            allOrderPromise.push(promise);
         }
         try {
-            const res = await Promise.all(allPromise);
+            const ordersRes = await Promise.all(allOrderPromise);
+            console.log('ordersRes ===',ordersRes);
+            const allPayPromise = [];
+            for (const res of ordersRes) {
+                const oid = res.orderInfo[0];
+                console.log('oid ====',oid);
+                allPayPromise.push(payOrder(oid));
+            }
+            const payRes = await Promise.all(allPayPromise);
+            console.log('payRes ====',payRes);
+            popNewMessage('交易成功');
         } catch (res) {
+            loading.callback(loading.widget);
             if (res.result === 2124) {
                 popNewMessage('库存不足');
-            }
+            } 
         }
     }
 }
