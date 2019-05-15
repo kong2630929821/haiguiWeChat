@@ -40,14 +40,16 @@ export class PowerDetail extends Widget {
 
     // 升级会员等级
     public upgradeUser() {
-        popNew('app-view-member-applyModalBox',null,() => {
-            if (this.props.userType === UserType.hWang) {
-                upgradeHWang().then(() => {
-                    popNewMessage('成功发送海王申请');
-                });
-            } else {
-                payMoney(39900,'101');
-            }
-        });
+        payMoney(100,'hBao');
+
+        // popNew('app-view-member-applyModalBox',null,() => {
+        //     if (this.props.userType === UserType.hWang) {
+        //         upgradeHWang().then(() => {
+        //             popNewMessage('成功发送海王申请');
+        //         });
+        //     } else {
+        //         payMoney(39900,'hBao');
+        //     }
+        // });
     }
 }

@@ -3,7 +3,7 @@
  */
 import { setMsgHandler } from '../../pi/net/ui/con_mgr';
 import { popNewMessage } from '../utils/tools';
-import { getBalance, upgradeHBao } from './pull';
+import { getBalance, getInviteRebate, upgradeHBao } from './pull';
 
 /**
  * 支付成功
@@ -11,10 +11,14 @@ import { getBalance, upgradeHBao } from './pull';
 export const payComplete = () => {
     setMsgHandler('event_pay_ok', (r) => {
         getBalance();
-        if (r.msg && r.msg.GoodID === '101') {
+        if (r.msg.GoodID === 'hBao') {
             upgradeHBao().then(() => {
                 popNewMessage('升级海宝成功');
             });
+        } else if (r.msg.GoodID === 'free') {
+            getInviteRebate(20001);
+        } else if (r.msg.GoodID === 'offClass') {
+            getInviteRebate(20002);
         }
     });
 };

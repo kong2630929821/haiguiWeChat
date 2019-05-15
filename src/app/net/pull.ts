@@ -1,8 +1,9 @@
 import { request } from '../../pi/net/ui/con_mgr';
+import { erlangLogicPort, sourceIp, sourcePort } from '../config';
 import { getStore,GroupsLocation, OrderStatus, setStore } from '../store/memstore';
 import { openWXPay } from '../utils/logic';
 import { requestAsync } from './login';
-import { parseAddress, parseAddress2, parseAllGroups, parseBalance, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
+import { parseAddress, parseAddress2, parseAllGroups, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
 
 /**
  * 获取分组信息
@@ -255,6 +256,7 @@ export const getOrders = (order_type:OrderStatus) => {
         return orders;
     });
 };
+
 /**
  * 获取收益统计
  */
@@ -354,9 +356,14 @@ export const getBalance = async () => {
         type:'mall/members@balance',
         param:{}
     };
-    
+
     const res = await requestAsync(msg);
-    parseBalance(res);
+    const balance = {
+        cash:res.money / 100,   // 现金，单位为分
+        shell:res.haibei,
+        integral:res.integral
+    };
+    setStore('balance',balance);
 };
 
 /**
@@ -546,5 +553,14 @@ export const checkWithdraw = () => {
  * 识别身份证
  */
 export const verifyIDCard = (url:string) => {
-    return fetch(`127.0.0.1:8091/wx/cmd/id_card?img_url=${url}`).then(response => response.json());
+
+    return fetch(`${sourceIp}:${erlangLogicPort}/wx/cmd/id_card?img_url=${url}`).then(res => res.json());
+};
+
+/**
+ * 上传文件
+ */
+export const uploadFile = (id:string) => {
+
+    return fetch(`${sourceIp}:${sourcePort}/service/upload/wx_file?serverId=${id}`).then(res => res.json());
 };

@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { getBalanceList } from '../../net/pull';
-import { timestampFormat } from '../../utils/logic';
+import { getCashLogName, timestampFormat } from '../../utils/logic';
 interface Props {
     list: any[];   // 当月数据
     select:{
@@ -9,16 +9,7 @@ interface Props {
         value:number[];
     };  // 选择的年月
 }
-// 现金来源类型
-enum CashLogType {
-    upHwang = 1,  // 其他人升级海王获得收益
-    upHbao,    // 其他人升级海宝获得收益
-    reShop,   // 购物收益
-    reInvite,  // 邀请返利
-    recharge,   // 充值
-    withdraw,  // 提现
-    shopping    // 购物
-}
+
 /**
  * 所有列表页面
  */
@@ -26,7 +17,6 @@ export class BalanceLog extends Widget {
     public props: Props = {
         list: [
             // { name:'提现',time:'04-12 12:30',money:'-200.00' },
-            // { name:'提现',time:'04-12 12:30',money:'-100.00' },
             // { name:'升级海宝',time:'04-12 12:30',money:'+100.00' }
         ],
         select:{
@@ -49,7 +39,7 @@ export class BalanceLog extends Widget {
             if (r.value && r.value.length > 0) {
                 const list = r.value.map(item => {
                     return {
-                        name: item[1], 
+                        name: getCashLogName(item[1]), 
                         time: timestampFormat(item[4], 4),
                         money: item[2]
                     };

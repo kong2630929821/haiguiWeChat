@@ -5,6 +5,7 @@
 import { open, request, setReloginCallback, setUrl } from '../../pi/net/ui/con_mgr';
 import { wsUrl } from '../config';
 import { getStore, GroupsLocation, setStore, UserType } from '../store/memstore';
+import { registerWXAPI } from '../utils/wxAPI';
 import { getAddress, getBalance, getCart, getEarningTotal, getFreight, getGroups, getInviteCode, getSuppliers, getUserInfo } from './pull';
 import { payComplete } from './push';
 
@@ -143,5 +144,8 @@ const userLogin = () => {
 
         // 监听支付成功推送
         payComplete();
+        
+        // 注册微信api
+        registerWXAPI();
     });
 };
