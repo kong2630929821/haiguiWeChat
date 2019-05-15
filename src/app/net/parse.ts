@@ -1,4 +1,4 @@
-import { Address, CartGoods, Freight, getStore, GoodsDetails, GoodsSegmentationDetails, Groups, GroupsLocation, MallImages, Order, setStore, SKU } from '../store/memstore';
+import { Address, Area, CartGoods, Freight, getStore, GoodsDetails, GoodsSegmentationDetails, Groups, GroupsLocation, MallImages, Order, setStore, SKU } from '../store/memstore';
 import { getCartGoodsSelected, unicode2Str } from '../utils/tools';
 
 /**
@@ -218,9 +218,10 @@ export const parseOrder = (infos:any) => {
         for (const v of info[2]) {
             const goods = parseGoodsDetail(v[0]);
             const amount = v[1];
-            const sku = getSku(goods.labels,v[2][0]);
+            const unit = v[2];
+            const sku = getSku(goods.labels,v[3][0]);
             goods.labels = [sku];
-            orderGoods.push([goods,amount]);
+            orderGoods.push([goods,amount,unit]);
         }
         const order:Order = {
             id:info[0],		       // 订单id
@@ -257,4 +258,21 @@ export const parseBalance = (res) => {
     balance.shell = res.haibei;
     balance.integral = res.integral;
     setStore('balance',balance);
+};
+
+/**
+ * 解析地区信息
+ */
+export const parseArea = (info:any) => {
+    const info1 = info[1];
+    // tslint:disable-next-line:no-unnecessary-local-variable
+    const area:Area = {
+        id:info[0],  // 	地区id
+        name:unicode2Str(info1[0]), // 	地区名
+        images:parseMallImage(info1[1]), // 	地区包含的图片列表
+        detail:info1[2], // 	地区详细描述
+        goods:info1[3] ? info1[3] : []	// 地区商品列表
+    };
+
+    return area;
 };

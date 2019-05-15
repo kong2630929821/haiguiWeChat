@@ -48,7 +48,8 @@ export class OrderList extends Widget {
 
     // 点击按钮
     public btnClick(e:any,num:number) {
-        console.log(e.value, num);
+        const btn = e.btn;
+        console.log(e.btn, num);
     }
 }
 

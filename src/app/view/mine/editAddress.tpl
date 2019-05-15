@@ -1,4 +1,4 @@
-<div class="new-page">
+<div class="new-page" w-class="new-page">
     {{if it.onlyDel}}
     <div w-class="row row1" ev-input-change="nameChange">
         <div w-class="column">姓名</div><div>{{it.name}}</div>

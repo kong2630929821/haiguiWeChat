@@ -2,7 +2,7 @@ import { request } from '../../pi/net/ui/con_mgr';
 import { getStore,GroupsLocation, OrderStatus, setStore } from '../store/memstore';
 import { openWXPay } from '../utils/logic';
 import { requestAsync } from './login';
-import { parseAddress, parseAddress2, parseAllGroups, parseBalance, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
+import { parseAddress, parseAddress2, parseAllGroups, parseArea, parseBalance, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
 
 /**
  * 获取分组信息
@@ -189,7 +189,10 @@ export const getAreas = (id:number) => {
     };
 
     return requestAsync(msg).then(res => {
-        console.log('getAreas ======',res);
+        const area = parseArea(res.areaInfo[0]);
+        console.log('getAreas====',area);
+        
+        return area;
     });
 };
 
@@ -208,6 +211,22 @@ export const order = (no_list:number[],address_no:number) => {
     return requestAsync(msg);
 };
 
+/**
+ * 立即购买下单
+ * @param good_info [商品id,数量,skuid]
+ * @param address_no 地址索引
+ */
+export const orderNow = (good_info:[number,number,string],address_no:number) => {
+    const msg = {
+        type:'order',
+        param:{
+            good_info,
+            address_no
+        }
+    };
+
+    return requestAsync(msg);
+};
 /**
  * 支付
  */

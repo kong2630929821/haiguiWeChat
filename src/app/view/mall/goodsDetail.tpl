@@ -11,8 +11,8 @@
                 <div w-class="name-box">
                     <div w-class="goods-name" class="line2-overflow">{{it.goods.name}}</div>
                     <div w-class="area">
-                        <img src="../../res/image/goods_area/icon/faguo.jpg" />
-                        <div w-class="area-text">法国</div>
+                        <img src="../../res/image/{{it.areaIcon}}" />
+                        <div w-class="area-text">{{it.area}}</div>
                     </div>
                 </div>
                 <div w-class="goods-other">

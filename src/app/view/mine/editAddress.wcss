@@ -1,3 +1,6 @@
+.new-page{
+    z-index: 10;
+}
 .row{
     display: flex;
     margin-left: 30px;

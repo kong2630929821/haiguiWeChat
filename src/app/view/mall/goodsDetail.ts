@@ -1,8 +1,8 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { addCart, getAreas, getGoodsDetails, getSuppliers } from '../../net/pull';
-import { GoodsDetails, setStore } from '../../store/memstore';
-import { calcPrices, getImageMainPath, popNewMessage, priceFormat } from '../../utils/tools';
+import { Area, CartGoods, GoodsDetails, ImageType, setStore } from '../../store/memstore';
+import { calcPrices, getImageMainPath, getImagePath, popNewMessage, priceFormat } from '../../utils/tools';
 
 interface Props {
     goods:GoodsDetails;     // 商品详情
@@ -43,17 +43,22 @@ export class GoodsDetailHome extends Widget {
             chooseSpec:false,
             amount:1,              // 选择数量
             skuIndex:-1,
-            buyNow:false
+            buyNow:false,
+            areaIcon:'',     // 国旗图标
+            area:''          // 国家
 
         };
         super.setProps(this.props);
-        getSuppliers(props.goods.supplier);
         console.log('GoodsDetailHome',this.props);
         getGoodsDetails(props.goods.id).then(goods => {
             this.props.goods = goods;
             this.paint();
         });
-        getAreas(props.goods.area);
+        getAreas(props.goods.area).then((area:Area) => {
+            this.props.area = area.name;
+            this.props.areaIcon = getImagePath(area.images,ImageType.ICON)[0];
+            this.paint();
+        });
     }
 
     // 点击描述
@@ -86,24 +91,25 @@ export class GoodsDetailHome extends Widget {
     // 立即购买
     public sureClick(res:any) {
         const sku = this.props.goods.labels[this.props.skuIndex];
-        addCart(this.props.goods.id,this.props.amount,sku[0]).then(() => {
-            popNewMessage('添加成功');
-        });
-        // if (res.buyNow) {
-        //     console.log('立即购买');
-        // } else {
-            
-        // }
-        // const cartGood:CartGoods = {
-        //     goods:this.props.goods,
-        //     amount:this.props.amount,
-        //     labels:this.props.fixedLabels.concat(this.props.hasLabels),
-        //     selected:true
-        // };
-        // const cartGoods = [cartGood];
-        // setStore('mall/cartGoods',cartGoods);
+        if (res.buyNow) {
+            console.log('立即购买');
+            const goods = JSON.parse(JSON.stringify(this.props.goods));
+            goods.labels = [sku];
+            const cartGood:CartGoods = {
+                index:-1,
+                goods:this.props.goods,
+                amount:this.props.amount,
+                selected:true
+            };
+            const cartGoods = [cartGood];
 
-        // popNew('app-view-shoppingCart-confirmOrder',{ orderGoods:cartGoods });
+            popNew('app-view-shoppingCart-confirmOrder',{ orderGoods:cartGoods,buyNow:true });
+        } else {
+            addCart(this.props.goods.id,this.props.amount,sku[0]).then(() => {
+                popNewMessage('添加成功');
+            });
+        }
+        
     }
     // 前往商城首页
     public gotoMallHome() {

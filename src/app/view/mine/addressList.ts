@@ -20,7 +20,7 @@ export class AddressList extends Widget {
     public ok:(index:number) => void;
     public setProps(props:Props) {
         const list = getStore('mall/addresses');
-        let selected = Number(localStorage.getItem('addressIndex'));
+        let selected = Number(localStorage.getItem('addressIndex')) || 0;
         if (selected > list.length) selected = 0;
         this.props = {
             ...props,
