@@ -109,7 +109,7 @@ export const parseSKU = (infos:any) => {
  */
 export const parseBalance = (res) => {
     const balance = getStore('balance');
-    balance.cash = res.money / 100;
+    balance.cash = res.money / 100;   // 现金，单位为分
     balance.shell = res.haibei;
     balance.integral = res.integral;
     setStore('balance',balance);

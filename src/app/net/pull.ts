@@ -1,7 +1,8 @@
 import { request } from '../../pi/net/ui/con_mgr';
 import { Address, getStore,GroupsLocation, setStore } from '../store/memstore';
+import { openWXPay } from '../utils/logic';
 import { requestAsync } from './login';
-import { parseAllGroups } from './parse';
+import { parseAllGroups, parseBalance } from './parse';
 
 /**
  * 获取分组信息
@@ -197,13 +198,14 @@ export const randomInviteCode = () => {
 /**
  * 获取余额
  */
-export const getBalance = () => {
+export const getBalance = async () => {
     const msg = {
         type:'mall/members@balance',
         param:{}
     };
-
-    return requestAsync(msg);
+    
+    const res = await requestAsync(msg);
+    parseBalance(res);
 };
 
 /**
@@ -337,31 +339,28 @@ export const getUserInfo = () => {
 };
 
 /**
- * 微信支付
+ * 发起支付
  * @param money 金额 单位分
  * @param ttype 商品ID | 海宝
  * @param count 数量
  */
-export const wxPay = (money:number,ttype:string,count:number= 1) => {
+export const payMoney = (money:number,ttype:string,count:number= 1) => {
     const msg = {
         type:'mall/pay@pay',
         param:{
-            money:1,
+            money:money,
             type:ttype,
             count,
             channel:'wxpay'
         }
     };
 
-    return new Promise((resolve, reject) => {
-        request(msg, (resp: any) => {
-            if (resp.type) {
-                console.log(`错误信息为${resp.type}`);
-                reject(resp);
-            } else {
-                resolve(resp);
-            }
-        });
+    request(msg, (resp: any) => {
+        if (resp.type) {
+            console.log(`错误信息为${resp.type}`);
+        } else {
+            openWXPay(resp.ok);
+        }
     });
 };
 

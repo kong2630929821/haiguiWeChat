@@ -128,13 +128,7 @@ const userLogin = () => {
         }
 
         // 获取账户余额
-        getBalance().then(res => {
-            const balance = getStore('balance');
-            balance.cash = res.money;
-            balance.shell = res.haibei;
-            balance.integral = res.integral;
-            setStore('balance',balance);
-        });
+        getBalance();
 
         // 获取用户信息
         getUserInfo().then(r => {

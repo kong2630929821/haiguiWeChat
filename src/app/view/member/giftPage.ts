@@ -1,8 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
-import { upgradeHWang, wxPay } from '../../net/pull';
+import { payMoney, upgradeHWang } from '../../net/pull';
 import { getStore, UserType } from '../../store/memstore';
-import { openWXPay } from '../../utils/logic';
 import { popNewMessage } from '../../utils/tools';
 import { PowerFlag } from './powerConstant';
 interface Props {
@@ -60,9 +59,7 @@ export class GiftPage extends Widget {
     public open() {
         popNew('app-view-member-applyModalBox',null,() => {
             if (this.props.userType === UserType.hBao) {
-                wxPay(39900,'hBao').then((r:any) => {
-                    openWXPay(r.ok);
-                });
+                payMoney(39900,'hBao');
             } else {
                 upgradeHWang().then(() => {
                     popNewMessage('成功发送海王申请');

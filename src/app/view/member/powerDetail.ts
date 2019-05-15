@@ -1,8 +1,8 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
-import { upgradeHWang, wxPay } from '../../net/pull';
+import { payMoney, upgradeHWang } from '../../net/pull';
 import { UserType } from '../../store/memstore';
-import { getUserTypeShow, openWXPay } from '../../utils/logic';
+import { getUserTypeShow } from '../../utils/logic';
 import { popNewMessage } from '../../utils/tools';
 import * as Constant from './powerConstant';
 interface Props {
@@ -46,9 +46,7 @@ export class PowerDetail extends Widget {
                     popNewMessage('成功发送海王申请');
                 });
             } else {
-                wxPay(39900,'101').then((r:any) => {
-                    openWXPay(r.ok);
-                });
+                payMoney(39900,'101');
             }
         });
     }
