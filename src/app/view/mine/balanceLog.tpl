@@ -15,7 +15,7 @@
                 </div>
                 <div w-class="itemTop">
                     <div w-class="time">{{v.time}}</div>
-                    {{if it.status}}
+                    {{if v.status}}
                     <div w-class="time">{{v.status}}</div>
                     {{end}}
                 </div>

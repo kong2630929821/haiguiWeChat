@@ -1,6 +1,6 @@
 import { Widget } from '../../../pi/widget/widget';
 import { verifyIDCard } from '../../net/pull';
-import { popNewMessage } from '../../utils/tools';
+import { popNewLoading, popNewMessage } from '../../utils/tools';
 interface Props {
     name:string;  // 姓名
     card:string;  // 身份证号码
@@ -19,7 +19,10 @@ export class Verified extends Widget {
     
     public verify() {
         if (this.props.name && this.props.card && this.props.sid) {
-            verifyIDCard(this.props.name,this.props.card,this.props.sid).then(res => {
+            const loadding = popNewLoading('请稍候');
+            verifyIDCard(this.props.name,this.props.card,this.props.sid).then(() => {
+                
+                loadding.callback(loadding.widget);
                 popNewMessage('实名认证成功');
                 this.ok && this.ok(true);
             });

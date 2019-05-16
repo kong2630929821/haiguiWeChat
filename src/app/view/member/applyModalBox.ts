@@ -116,22 +116,43 @@ export class ModalBoxInput extends Widget {
             popNewMessage('请将内容填写完整');
         } else {
             const loadding = popNewLoading('请稍后');
-            try {
+
+            try {  // 验证手机号
                 const phoneRes = await bindPhone(this.props.phoneNum,this.props.phoneCode);
-                if (phoneRes && phoneRes.result === 1) setStore('user/phoneNum',this.props.phoneNum);
-               
+                if (phoneRes) setStore('user/phoneNum',this.props.phoneNum);
+
+            } catch (err) {
+                loadding.callback(loadding.widget);
+                if (err.result === 1023) {
+                    popNewMessage('手机号已被注册');
+                } else {
+                    popNewMessage('验证码填写有误');
+                }
+
+                return;
+            }
+
+            try {   // 设置用户名
                 const nameRes = await setUserName(this.props.userName);
-                if (nameRes && nameRes.result === 1) setStore('user/userName',this.props.userName);
-                
+                if (nameRes) setStore('user/userName',this.props.userName);
+            } catch (err) {
+                loadding.callback(loadding.widget);
+                popNewMessage('用户名设置失败');
+
+                return;
+            }
+
+            try {   // 绑定邀请码
                 await bindUser(this.props.inviteCode);
+            } catch (err) {
                 loadding.callback(loadding.widget);
-                this.ok && this.ok();  // 所有接口都请求成功后关闭弹窗
-                 
-            } catch (error) {
-                loadding.callback(loadding.widget);
-                popNewMessage('信息填写有误');
+                popNewMessage('邀请码填写有误');
+
+                return;
             }
             
+            loadding.callback(loadding.widget);
+            this.ok && this.ok();  // 所有接口都请求成功后关闭弹窗
         }
     }
 

@@ -1,27 +1,24 @@
 <div class="new-page" w-class="page">
     <div w-class="title">身份证正反照片（必填）</div>
     <div w-class="upload">
-        {{if it.img1}}
-        <div on-tap="uploadBtn(1)">
-            <widget w-tag="app-components-img-img">{width:"323px",height:"192px",isRound:false,imgURL:{{it.img1}} }</widget>
-        </div>
-        {{else}}
+       
         <div w-class="uploadImg" on-tap="uploadBtn(1)">
+            {{if it.img1}}
+            <widget w-tag="app-components-img-img">{width:"323px",height:"192px",isRound:false,imgURL:{{it.img1}} }</widget>
+            {{else}}
             <img src="../../res/image/camera.png"/>
             <div style="margin-top:20px">身份证人像面</div>
+            {{end}}
         </div>
-        {{end}}
 
-        {{if it.img2}}
-        <div on-tap="uploadBtn(2)">
-            <widget w-tag="app-components-img-img">{width:"323px",height:"192px",isRound:false,imgURL:{{it.img2}} }</widget>
-        </div>
-        {{else}}
         <div w-class="uploadImg" on-tap="uploadBtn(2)">
+            {{if it.img2}}
+            <widget w-tag="app-components-img-img">{width:"323px",height:"192px",isRound:false,imgURL:{{it.img2}} }</widget>
+            {{else}}
             <img src="../../res/image/camera.png"/>
             <div style="margin-top:20px">身份证国徽面</div>
+            {{end}}
         </div>
-        {{end}}
     </div>
    
     <div w-class="bottom">

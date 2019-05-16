@@ -1,8 +1,9 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { getGoodsDetails, payMoney, upgradeHWang } from '../../net/pull';
-import { CartGoods, getStore, GoodsDetails, UserType } from '../../store/memstore';
-import { popNewMessage } from '../../utils/tools';
+import { CartGoods, getStore, UserType } from '../../store/memstore';
+import { popNewLoading, popNewMessage } from '../../utils/tools';
+import { shareWithUrl } from '../../utils/wxAPI';
 import { PowerFlag } from './powerConstant';
 interface Props {
     fg:PowerFlag;   // 进入此页面的标记
@@ -37,19 +38,10 @@ export class GiftPage extends Widget {
         if (getStore('user/userType',-1) >= UserType.normal) {
             popNew('app-view-member-applyModalBox',null,() => {
                 
-                getGoodsDetails(10010007).then(goods => {
-                    const cartGood:CartGoods = {
-                        index:-1,
-                        goods,
-                        amount:1,
-                        selected:true
-                    };
-                    const cartGoods = [cartGood];
-                    popNew('app-view-shoppingCart-confirmOrder',{ orderGoods:cartGoods,buyNow:true });
-                });
+                this.confirmOrder(10010007);
             });
         } else {
-            console.log('免费领取');
+            this.confirmOrder(10010007);            
         }
     }
 
@@ -59,24 +51,33 @@ export class GiftPage extends Widget {
         if (getStore('user/userType',-1) >= UserType.normal) {
             popNew('app-view-member-applyModalBox',null,() => {
                 
-                getGoodsDetails(10010008).then(goods => {
-                    const cartGood:CartGoods = {
-                        index:-1,
-                        goods,
-                        amount:1,
-                        selected:true
-                    };
-                    const cartGoods = [cartGood];
-                    popNew('app-view-shoppingCart-confirmOrder',{ orderGoods:cartGoods,buyNow:true });
-                });
+                this.confirmOrder(10010008);
             });
         } else {
-            console.log('报名课程');
+            this.confirmOrder(10010008);
         }
     }
 
+    // 确认下单
+    public confirmOrder (id:number) {
+        const loadding = popNewLoading('请稍候');
+        getGoodsDetails(id).then(goods => {
+            const cartGood:CartGoods = {
+                index:-1,
+                goods,
+                amount:1,
+                selected:true
+            };
+            loadding.callback(loadding.widget);
+            popNew('app-view-shoppingCart-confirmOrder',{ orderGoods:[cartGood],buyNow:true });
+        }).catch(() => {
+            popNewMessage('下单失败');
+            loadding.callback(loadding.widget);
+        });
+    }
+
     // 开通会员
-    public open() {
+    public openVIP() {
         popNew('app-view-member-applyModalBox',null,() => {
             if (this.props.userType === UserType.hBao) {
                 payMoney(39900,'hBao');
@@ -89,8 +90,12 @@ export class GiftPage extends Widget {
     }
 
     // 分享给好友
-    public share() {
-        console.log('分享给好友');
-        // TODO
+    public share(name:string) {
+        if (name === 'free') {
+            shareWithUrl('免费领面膜','好友送了你一份面膜，快来领取吧',`${location.href}?page=${name}`,'');
+            
+        } else {
+            shareWithUrl('免费领课程','好友送了你一个线下课程，快来领取吧',`${location.href}?page=${name}`,'');
+        }
     }
 }
