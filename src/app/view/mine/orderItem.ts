@@ -55,7 +55,7 @@ export class OrderItem extends Widget {
     }
 
     public btnClick(e:any,num:number) {
-        notify(e.node,'ev-btn-click',{ value: num });
+        notify(e.node,'ev-btn-click',{ btn: num,status:this.props.status });
     }
 
     public itemClick(e:any) {

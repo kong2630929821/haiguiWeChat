@@ -3,6 +3,7 @@
     overflow-y: auto;
     background: #F9F9F9;
     padding-bottom: 120px;
+    z-index: 9;
 }
 .row{
     display: flex;

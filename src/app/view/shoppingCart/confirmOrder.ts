@@ -1,17 +1,27 @@
 import { popNew } from '../../../pi/ui/root';
+import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { order, payOrder } from '../../net/pull';
-import { CartGoods, getStore } from '../../store/memstore';
+import { order, orderNow, payMoney, payOrder } from '../../net/pull';
+import { CartGoods, getStore, OrderStatus, register } from '../../store/memstore';
 import { calcFreight, getImageThumbnailPath, popNewLoading, popNewMessage, priceFormat } from '../../utils/tools';
+import { allOrderStatus } from '../mine/home/home';
 import { calcCartGoodsShow, CartGoodsShow } from './home/home';
+
+// tslint:disable-next-line:no-reserved-keywords
+declare var module: any;
+export const forelet = new Forelet();
+export const WIDGET_NAME = module.id.replace(/\//g, '-');
 
 interface Props {
     orderGoods:CartGoods[];
+    buyNow:boolean;    // 立即购买
 }
 /**
  * 确认订单
  */
 export class ConfirmOrder extends Widget {
+    public ok:() => void;
+    public loading:any;
     public setProps(props:Props,oldProps:Props) {
         const orderGoodsShow = calcCartGoodsShow(props.orderGoods);
         this.props = {
@@ -87,32 +97,91 @@ export class ConfirmOrder extends Widget {
         }
         const allOrderPromise = [];
         const loading = popNewLoading('提交订单');
+        setTimeout(() => {
+            loading &&  loading.callback(loading.widget);
+            popNewMessage('支付失败');
+        },15 * 1000);
         for (const [k,v] of this.props.suppliers) {
             console.log(k,v);
             const no_list = [];
             for (const g of v) {
                 no_list.push(g.index);
             }
-            const promise = order(no_list,this.props.address.id);
+            let promise;
+            if (this.props.buyNow) {
+                const cartGood = this.props.orderGoods[0];
+                promise = orderNow([cartGood.goods.id,cartGood.amount,cartGood.goods.labels[0][0]],this.props.address.id);
+            } else {
+                promise = order(no_list,this.props.address.id);
+            }
+            
             allOrderPromise.push(promise);
         }
         try {
             const ordersRes = await Promise.all(allOrderPromise);
-            console.log('ordersRes ===',ordersRes);
-            const allPayPromise = [];
+            console.log('ordersRes ====',ordersRes);
+            const oids = [];
             for (const res of ordersRes) {
                 const oid = res.orderInfo[0];
+                oids.push(oid);
                 console.log('oid ====',oid);
-                allPayPromise.push(payOrder(oid));
             }
-            const payRes = await Promise.all(allPayPromise);
-            console.log('payRes ====',payRes);
-            popNewMessage('交易成功');
+            const totalFee = this.props.totalSale + this.props.totalFreight + this.props.totalTax;
+            const cash = getStore('balance').cash * 100;  // 余额
+            console.log('cash ========',cash);
+            if (totalFee > cash) {
+                alert('wxpay');
+                payOids = oids;// 存储即将付款的订单id
+                payLoading = loading;
+                payMoney(totalFee - cash,'105',1);
+            } else {
+                await orderPay(oids);
+                popNewMessage('交易成功');
+                loading.callback(loading.widget);
+                popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGDELIVERED,allStaus:allOrderStatus.slice(0,4) });
+                this.ok && this.ok();
+            }
         } catch (res) {
             loading.callback(loading.widget);
             if (res.result === 2124) {
                 popNewMessage('库存不足');
-            } 
+            } else {
+                popNewMessage('购买失败');
+            }
         }
     }
+
+    public paySuccess() {
+        popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGDELIVERED,allStaus:allOrderStatus.slice(0,4) });
+        this.ok && this.ok();
+        payLoading.callback(payLoading.widget);
+        payLoading = undefined;
+        payOids = undefined;
+    }
 }
+export let payLoading;
+export let payOids;
+// 支付
+export const orderPay = (orderIds:number[]) => {
+    if (!orderIds) return;
+    const allPayPromise = [];
+    for (const id of orderIds) {
+        console.log('oid ====',id);
+        allPayPromise.push(payOrder(id));
+    }
+
+    return Promise.all(allPayPromise);
+};
+
+register('flags/mallRecharge',async () => {
+    const w:any = forelet.getWidget(WIDGET_NAME);
+    try {
+        await orderPay(payOids);
+        popNewMessage('交易成功');
+        w && w.paySuccess();
+    } catch (e) {
+        popNewMessage('购买失败');
+        payLoading.callback(payLoading.widget);
+        payLoading = undefined;
+    }
+});

@@ -22,7 +22,7 @@
                 <div w-class="choose-item-title">选择</div>
                 <div w-class="choose-box">
                     {{for i,v of it.goods.labels}}
-                    <span w-class="item {{i === it.skuIndex ? 'item-active' : ''}}" on-tap="clickLableItem(e,{{i}})">{{v[1]}}</span>
+                    <span w-class="item {{i === it.skuIndex ? 'item-active' : ''}} {{v[3] === 0 ? 'item-sold-out' : ''}}" on-tap="clickLableItem(e,{{i}})">{{v[1]}}</span>
                     {{end}}
                 </div>
             </div>

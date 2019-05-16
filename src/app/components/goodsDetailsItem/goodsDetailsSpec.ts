@@ -28,8 +28,9 @@ export class GoodsDetailsSpec extends Widget {
 
     // 选择标签
     public clickLableItem(e:any,index:number) {
-        this.props.skuIndex = index;
         const sku = this.props.goods.labels[index];
+        if (sku[3] === 0) return;
+        this.props.skuIndex = index;
         this.props.finalSale = this.props.sale  + sku[2];
         this.props.inventorys = sku[3];
         this.props.amount = this.props.amount > this.props.inventorys ? this.props.inventorys : this.props.amount;
