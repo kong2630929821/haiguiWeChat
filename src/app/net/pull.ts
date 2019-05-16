@@ -3,7 +3,7 @@ import { sourceIp, sourcePort } from '../config';
 import { getStore,GroupsLocation, OrderStatus, setStore } from '../store/memstore';
 import { openWXPay } from '../utils/logic';
 import { requestAsync } from './login';
-import { parseAddress, parseAddress2, parseAllGroups, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
+import { parseAddress, parseAddress2, parseAllGroups, parseArea, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
 
 /**
  * 获取分组信息
@@ -76,8 +76,12 @@ export const deductCart = (no:number,amount:number) => {
         }
     };
 
-    return requestAsync(msg).then(() => {
-        getCart();
+    return requestAsync(msg).then((res) => {
+        console.log('deductCart ======',res);
+        const carts = parseCart(res.cartInfo);
+        setStore('mall/cartGoods',carts);
+
+        return carts;
     });
 };
 
@@ -181,16 +185,19 @@ export const getFreight = () => {
 };
 
 // 获取地区信息
-export const getAreas = () => {
+export const getAreas = (id:number) => {
     const msg = {
         type:'get_area',
         param:{
-            ids:[121001]
+            ids:[id]
         }
     };
 
     return requestAsync(msg).then(res => {
-        console.log('getAreas ======',res);
+        const area = parseArea(res.areaInfo[0]);
+        console.log('getAreas====',area);
+        
+        return area;
     });
 };
 
@@ -209,6 +216,22 @@ export const order = (no_list:number[],address_no:number) => {
     return requestAsync(msg);
 };
 
+/**
+ * 立即购买下单
+ * @param good_info [商品id,数量,skuid]
+ * @param address_no 地址索引
+ */
+export const orderNow = (good_info:[number,number,string],address_no:number) => {
+    const msg = {
+        type:'order',
+        param:{
+            good_info,
+            address_no
+        }
+    };
+
+    return requestAsync(msg);
+};
 /**
  * 支付
  */
@@ -516,6 +539,7 @@ export const payMoney = (money:number,ttype:string,count:number= 1) => {
     request(msg, (resp: any) => {
         if (resp.type) {
             console.log(`错误信息为${resp.type}`);
+            alert(`错误信息为${resp.type}`);
         } else {
             openWXPay(resp.ok);
         }

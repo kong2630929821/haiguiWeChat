@@ -11,8 +11,7 @@
             <div w-class="goodsTitle" class="line2-overflow">{{goods.name}}</div>
             <div style="margin-bottom: 20px;">{{goods.labels[0][1]}}</div>
             <div w-class="row">
-                {{:sale = it.calcPrices(goods).sale}}
-                <span style="font-size:32px;color:#8A4AF3;">￥ {{it.priceFormat(sale)}}</span>
+                <span style="font-size:32px;color:#8A4AF3;">￥ {{it.priceFormat(v[2])}}</span>
                 <span style="font-size:20px;color:#353535;">x{{v[1]}}</span>
             </div>
         </div>

@@ -17,12 +17,30 @@
     padding: 20px 30px 10px;
     background-color: #fff;
 }
+.name-box{
+    display: flex;
+}
 .goods-name{
     font-size:34px;
     font-family:PingFangSC-Regular;
     font-weight:400;
     color:rgba(34,34,34,1);
     line-height:48px;
+}
+.area{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 20px;
+    margin-top: 10px;
+}
+.area-text{
+    font-size:20px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(0,0,0,1);
+    line-height:28px;
+    margin-top: 15px;
 }
 .goods-other{
     display: flex;
