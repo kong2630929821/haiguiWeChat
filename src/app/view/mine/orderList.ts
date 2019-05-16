@@ -4,7 +4,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { getOrders, payMoney } from '../../net/pull';
 import { getStore, Order, OrderStatus, register } from '../../store/memstore';
 import { popNewLoading, popNewMessage } from '../../utils/tools';
-import { noResponse, orderPay, setPayLoading } from '../shoppingCart/confirmOrder';
+import { noResponse, orderPay, setPayLoading, setPayOids } from '../shoppingCart/confirmOrder';
 
 // tslint:disable-next-line:no-reserved-keywords
 declare var module: any;
@@ -59,10 +59,10 @@ export class OrderList extends Widget {
                 const totalFee = order.origin + order.tax + order.freight;
                 const loading = popNewLoading('支付中');
                 if (totalFee > cash) {
-                    setPayLoading(oids); // 存储即将付款的订单id
+                    setPayOids(oids); // 存储即将付款的订单id
                     setPayLoading(loading);
-                    payMoney(totalFee - cash,'105',1);
                     noResponse();
+                    payMoney(totalFee - cash,'105',1);
                 } else {
                     await orderPay(oids);
                     popNewMessage('支付成功');

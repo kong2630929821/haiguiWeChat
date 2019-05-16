@@ -2,6 +2,7 @@ import { request } from '../../pi/net/ui/con_mgr';
 import { sourceIp, sourcePort } from '../config';
 import { getStore,GroupsLocation, OrderStatus, setStore } from '../store/memstore';
 import { openWXPay } from '../utils/logic';
+import { popNewLoading } from '../utils/tools';
 import { requestAsync } from './login';
 import { parseAddress, parseAddress2, parseAllGroups, parseArea, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
 
@@ -539,6 +540,7 @@ export const payMoney = (money:number,ttype:string,count:number= 1) => {
     request(msg, (resp: any) => {
         if (resp.type) {
             console.log(`错误信息为${resp.type}`);
+            popNewLoading('支付失败');
         } else {
             openWXPay(resp.ok);
         }

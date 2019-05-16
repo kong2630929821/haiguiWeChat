@@ -128,8 +128,8 @@ export class ConfirmOrder extends Widget {
             if (totalFee > cash) {
                 payOids = oids;// 存储即将付款的订单id
                 payLoading = loading;
-                payMoney(totalFee - cash,'105',1);
                 noResponse();
+                payMoney(totalFee - cash,'105',1);
             } else {
                 await orderPay(oids);
                 popNewMessage('支付成功');
@@ -195,6 +195,7 @@ register('flags/mallRecharge',async () => {
     const w:any = forelet.getWidget(WIDGET_NAME);
     clearNoResponse();
     try {
+        alert(JSON.stringify(payOids));
         await orderPay(payOids);
         popNewMessage('支付成功');
         w && w.paySuccess();
