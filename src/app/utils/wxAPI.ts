@@ -21,20 +21,13 @@ export const registerWXAPI = () => {
             if (info.result === 1) {
                 if ((<any>self).wx) {
                     getWX_sign().then((resp:any) => {
-                        resp = resp.json();
                         alert(JSON.stringify(resp));
 
-                        if (resp.result !== 1) {
-                            popNewMessage('获取微信API失败');
-                            
-                            return;
-                        }
-                        const json = JSON.parse(resp.value);
-                        json.debug = false;
-                        json.jsApiList = ['onMenuShareTimeline', 'hideMenuItems',
+                        resp.debug = false;
+                        resp.jsApiList = ['onMenuShareTimeline', 'hideMenuItems',
                             'onMenuShareAppMessage', 'chooseImage',
                             'uploadImage', 'getLocalImgData', 'scanQRCode'];
-                        (<any>self).wx.config(json);
+                        (<any>self).wx.config(resp);
                     // 隐藏右上角菜单项
                         for (let i = 0; i < cbArr.length; i++) {
                             cbArr[i]();
@@ -127,6 +120,7 @@ export const upImage = (imgid: string, cb: (serid: string) => void) => {
         isShowProgressTips: 0, // 默认为1，显示进度提示
         success: (res) => {
             // 上传到服务器
+            alert(res.serverId);
             uploadFile(res.serverId).then((url) => {
                 cb(url);
             });

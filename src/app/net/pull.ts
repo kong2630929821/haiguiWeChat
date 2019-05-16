@@ -539,6 +539,7 @@ export const payMoney = (money:number,ttype:string,count:number= 1) => {
     request(msg, (resp: any) => {
         if (resp.type) {
             console.log(`错误信息为${resp.type}`);
+            alert(`错误信息为${resp.type}`);
         } else {
             openWXPay(resp.ok);
         }
