@@ -3,6 +3,7 @@ import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
 import { OrderStatus, register } from '../../../store/memstore';
 import { getUserTypeShow } from '../../../utils/logic';
+import { priceFormat } from '../../../utils/tools';
 
 export const forelet = new Forelet();
 
@@ -53,7 +54,7 @@ export class Home extends Widget {
 }
 const State = {
     balance:[
-        { key:'现金',value:0 },
+        { key:'现金',value:'0' },
         { key:'海贝',value:0 },
         { key:'积分',value:0 }
     ],
@@ -63,7 +64,7 @@ const State = {
     avatar:''
 };
 register('balance',r => {
-    State.balance[0].value = r.cash;
+    State.balance[0].value = priceFormat(r.cash);
     State.balance[1].value = r.shell;
     State.balance[2].value = r.integral;
     forelet.paint(State);
