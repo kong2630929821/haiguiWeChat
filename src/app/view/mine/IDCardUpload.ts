@@ -1,22 +1,25 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { serverFilePath } from '../../config';
-import { verifyIDCard } from '../../net/pull';
+import { identifyIDCard } from '../../net/pull';
 import { popNewMessage } from '../../utils/tools';
 import { takeImage, upImage } from '../../utils/wxAPI';
 interface Props {
     firstClick:boolean; // 是否是第一次点击上传按钮
     img1:string;
     img2:string;
+    sid:string; // 身份证正面照ID
 }
 /**
  * 上传身份证
  */
 export class IDCardUpload extends Widget {
+    public ok:() => void;
     public props:Props = {
         firstClick:true,
         img1:'',
-        img2:''
+        img2:'',
+        sid:''
     };
     
     // 点击上传按钮
@@ -38,14 +41,15 @@ export class IDCardUpload extends Widget {
             console.log(r);
             if (num === 1) {
                 this.props.img1 = r;
-                upImage(r,res => {
+                upImage(r, res => {
                     this.props.img1 = serverFilePath + res;
+                    this.props.sid = res;
                     this.paint();
                 });
 
             } else {
                 this.props.img2 = r;
-                upImage(r,res => {
+                upImage(r, res => {
                     this.props.img2 = serverFilePath + res;
                     this.paint();
                 });
@@ -55,8 +59,16 @@ export class IDCardUpload extends Widget {
     }
 
     public verifyImg() {
-        if (this.props.img1 && this.props.img2) {
-            popNew('app-view-mine-verified',{});
+        if (this.props.sid) {
+            identifyIDCard(this.props.img1).then(res => {
+                popNew('app-view-mine-verified',{
+                    name:res.body.name || '',
+                    card:res.body.id || '',
+                    sid:this.props.sid
+                },() => {
+                    this.ok && this.ok();
+                });
+            });
             
         } else {
             popNewMessage('请先上传图片');

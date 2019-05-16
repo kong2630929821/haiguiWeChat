@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
-import { payMoney, upgradeHWang } from '../../net/pull';
-import { getStore, UserType } from '../../store/memstore';
+import { getGoodsDetails, payMoney, upgradeHWang } from '../../net/pull';
+import { CartGoods, getStore, GoodsDetails, UserType } from '../../store/memstore';
 import { popNewMessage } from '../../utils/tools';
 import { PowerFlag } from './powerConstant';
 interface Props {
@@ -36,7 +36,17 @@ export class GiftPage extends Widget {
         // 不是会员需要填写一些基础信息
         if (getStore('user/userType',-1) >= UserType.normal) {
             popNew('app-view-member-applyModalBox',null,() => {
-                // TODO
+                
+                getGoodsDetails(10010007).then(goods => {
+                    const cartGood:CartGoods = {
+                        index:-1,
+                        goods,
+                        amount:1,
+                        selected:true
+                    };
+                    const cartGoods = [cartGood];
+                    popNew('app-view-shoppingCart-confirmOrder',{ orderGoods:cartGoods,buyNow:true });
+                });
             });
         } else {
             console.log('免费领取');
@@ -48,7 +58,17 @@ export class GiftPage extends Widget {
         // 不是会员需要填写一些基础信息
         if (getStore('user/userType',-1) >= UserType.normal) {
             popNew('app-view-member-applyModalBox',null,() => {
-                // TODO
+                
+                getGoodsDetails(10010008).then(goods => {
+                    const cartGood:CartGoods = {
+                        index:-1,
+                        goods,
+                        amount:1,
+                        selected:true
+                    };
+                    const cartGoods = [cartGood];
+                    popNew('app-view-shoppingCart-confirmOrder',{ orderGoods:cartGoods,buyNow:true });
+                });
             });
         } else {
             console.log('报名课程');

@@ -2,7 +2,7 @@
  * 后端主动推消息给前端
  */
 import { setMsgHandler } from '../../pi/net/ui/con_mgr';
-import { setStore } from '../store/memstore';
+import { setStore, UserType } from '../store/memstore';
 import { popNewMessage } from '../utils/tools';
 import { getBalance, getInviteRebate, upgradeHBao } from './pull';
 
@@ -16,6 +16,7 @@ export const payComplete = () => {
         if (r.msg && r.msg[2] === 'hBao') {
             upgradeHBao().then(() => {
                 popNewMessage('升级海宝成功');
+                setStore('user/userType', UserType.hBao);
             });
         } else if (r.msg && r.msg[2] === 'free') {
             getInviteRebate(20001);
