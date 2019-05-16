@@ -11,19 +11,13 @@
     </div>
 
     <div w-class="orders"><widget w-tag="app-view-mine-orderItemDetail">{status:{{it.status}},order:{{it.order}} }</widget></div>
-
-    <div w-class="row row1">
-        <div w-class="order">
-            百世快递&nbsp;<span style="color:#000;">12323565612154</span>
+    <div w-class="divid"></div>
+    <div w-class="row2">
+        <div w-class="total">
+            {{if it.statusShow.btn1}}
+            <div w-class="btn" on-tap="btnClick(e,0)">{{it.statusShow.btn1}}</div>
+            {{end}}
+            <div w-class="btn btn1" on-tap="btnClick(e,1)">{{it.statusShow.btn2}}</div>
         </div>
-        <img src="../../res/image/copy.png" w-class="copy"/>
-    </div>
-    <div w-class="process-box">
-    {{for i,v of [1,2,3,4,5,6]}}
-    <div w-class="process">
-        <div>商品等待揽收</div>
-        <div style="font-size: 26px;margin-top: 10px;">04-14 23:00</div>
-    </div>
-    {{end}}
     </div>
 </div>

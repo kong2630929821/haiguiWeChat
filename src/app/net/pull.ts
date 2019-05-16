@@ -2,7 +2,7 @@ import { request } from '../../pi/net/ui/con_mgr';
 import { sourceIp, sourcePort } from '../config';
 import { getStore,GroupsLocation, OrderStatus, setStore } from '../store/memstore';
 import { openWXPay } from '../utils/logic';
-import { popNewLoading } from '../utils/tools';
+import { popNewLoading, popNewMessage } from '../utils/tools';
 import { requestAsync } from './login';
 import { parseAddress, parseAddress2, parseAllGroups, parseArea, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
 
@@ -282,6 +282,62 @@ export const getOrders = (order_type:OrderStatus) => {
 };
 
 /**
+ * 收货
+ */
+export const receiptOrder = (oid:number) => {
+    const msg = {
+        type:'receipt',
+        param:{
+            oid
+        }
+    };
+
+    return requestAsync(msg).then(res => {
+        console.log('receiptOrder ======',res);
+    });
+};
+
+/**
+ * 退货
+ */
+export const returnGoods = (aid:number,reason:string) => {
+    const msg = {
+        type:'return_goods',
+        param:{
+            aid,
+            reason
+        }
+    };
+
+    return requestAsync(msg).then(res => {
+        console.log('returnGoods ======',res);
+    });
+};
+
+//  退货状态
+export enum ReturnGoodsStatus {  
+    CANRETURN = 0,   // 未退货
+    RETURNING = 1,   // 退货中
+    RETURNED = 2     // 已退货
+
+}
+/**
+ * 获取退货信息
+ */
+export const getReturnGoods = (rtype:ReturnGoodsStatus) => {
+    const msg = {
+        type:'get_return_goods',
+        param:{
+            type:rtype
+        }
+    };
+
+    return requestAsync(msg).then(res => {
+        console.log('getReturnGoods ======',res);
+    });
+};
+
+/**
  * 获取收益统计
  */
 export const getEarningTotal = () => {
@@ -540,7 +596,7 @@ export const payMoney = (money:number,ttype:string,count:number= 1) => {
     request(msg, (resp: any) => {
         if (resp.type) {
             console.log(`错误信息为${resp.type}`);
-            popNewLoading('支付失败');
+            popNewMessage(`支付失败${resp.type}`);
         } else {
             openWXPay(resp.ok);
         }

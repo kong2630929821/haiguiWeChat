@@ -41,11 +41,16 @@ export class OrderList extends Widget {
 
     // 点击订单
     public itemClick(index:number) {
+        const status = this.props.activeStatus;
         const props = {
-            order:this.props.curShowOrders[index],
-            status:this.props.activeStatus
+            order:this.state.orders.get(status)[index],
+            status
         };
-        popNew('app-view-mine-freight',{ ...props });
+        popNew('app-view-mine-orderDetail',{ ...props },(status:OrderStatus) => {
+            if (status === OrderStatus.PENDINGDELIVERED) {
+                this.paySuccess();
+            }
+        });
     }
 
     // 点击按钮

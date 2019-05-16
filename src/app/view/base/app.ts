@@ -3,7 +3,7 @@
 import { backList } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { register } from '../../store/memstore';
+import { CartGoods, register } from '../../store/memstore';
 
 // ================================ 导出
 // tslint:disable-next-line:no-reserved-keywords
@@ -58,7 +58,8 @@ export class App extends Widget {
                     components: 'app-view-mine-home-home'
                 }
             ],
-            tabBarAnimateClasss:''
+            tabBarAnimateClasss:'',
+            cartGoodsLen:0
         };
         
     }
@@ -91,6 +92,11 @@ export class App extends Widget {
         closeAllPage();
         this.paint();
     }
+
+    public updateCartGoodsIcon(len:number) {
+        this.props.cartGoodsLen = len;
+        this.paint();
+    }
 }
 
 // ===================================================== 本地
@@ -116,4 +122,10 @@ register('flags/gotoShoppinigCart',() => {
 register('flags/gotoClass',() => {
     const w:any = forelet.getWidget(WIDGET_NAME);
     w && w.gotoClass();
+});
+
+// 购物车变动
+register('mall/cartGoods',(cartGoods:CartGoods[]) => {
+    const w:any = forelet.getWidget(WIDGET_NAME);
+    w && w.updateCartGoodsIcon(cartGoods.length);
 });

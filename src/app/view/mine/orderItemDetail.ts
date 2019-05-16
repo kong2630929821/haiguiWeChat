@@ -11,7 +11,7 @@ export interface Props {
 /**
  * 订单
  */
-export class OrderItem extends Widget {
+export class OrderItemDetail extends Widget {
     public timer:number;
     public statusShows:any = {
         [OrderStatus.PENDINGPAYMENT]:{

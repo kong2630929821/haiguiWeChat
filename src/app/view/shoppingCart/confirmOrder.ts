@@ -169,8 +169,8 @@ export const setPayOids = (oids:number[]) => {
 export const noResponse = () => {
     timer = setTimeout(() => {
         closeLoading();
-        popNewMessage('支付失败');
-    },15 * 1000);
+        popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGPAYMENT,allStaus:allOrderStatus.slice(0,4) });
+    },5 * 1000);
 };
 
 export const clearNoResponse = () => {
