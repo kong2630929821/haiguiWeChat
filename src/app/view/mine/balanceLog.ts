@@ -41,8 +41,7 @@ export class BalanceLog extends Widget {
                 const list = r.value.map((item,index) => {
                     if (getCashLogName(item[1]) === '提现') {
                         getWithdrawStatus(item[3]).then(res => {
-                            console.log(res);
-                            list[index].status = res[3] === 0 ? '申请中' :''; 
+                            this.props.list[index].status = res.value[3] === 0 ? '申请中' :''; 
                             this.paint();
                         });
                     }

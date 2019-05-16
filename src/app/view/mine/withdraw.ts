@@ -7,6 +7,7 @@ import { popNewMessage } from '../../utils/tools';
  * 提现
  */
 export class Withdraw extends Widget {
+    public ok :() => void;
     public props:any = {
         balance:getStore('balance/cash',0),
         tax:0,    // 税费
@@ -30,19 +31,15 @@ export class Withdraw extends Widget {
 
     // 确认提现
     public confirm() {
-        applyWithdraw(this.props.inputMoney * 100).then(r => {
-            popNewMessage('申请提现成功');
-        }).catch(r => {
-            alert(JSON.stringify(r));
-        });
-        // if (this.props.inputMoney < this.props.balance && this.props.inputMoney % 10 === 0) {
-        //     applyWithdraw(this.props.inputMoney * 100).then(r => {
-        //         popNewMessage('申请提现成功');
-        //     }).catch(r => {
-        //         popNewMessage('申请提现失败');
-        //     });
-        // } else {
-        //     popNewMessage('请输入合适的金额');
-        // }
+        if (this.props.inputMoney < this.props.balance && this.props.inputMoney % 10 === 0) {
+            applyWithdraw(this.props.inputMoney * 100).then(r => {
+                popNewMessage('申请提现成功');
+                this.ok && this.ok();
+            }).catch(r => {
+                popNewMessage('申请提现失败');
+            });
+        } else {
+            popNewMessage('请输入合适的金额');
+        }
     }
 }

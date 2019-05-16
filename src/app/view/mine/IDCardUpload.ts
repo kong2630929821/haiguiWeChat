@@ -17,7 +17,7 @@ export class IDCardUpload extends Widget {
     public ok:() => void;
     public props:Props = {
         firstClick:true,
-        img1:'https://images.cnitblog.com/blog/454646/201306/07090646-834eecbb94f8475a9a12026c50ef0dde.jpg',
+        img1:'',
         img2:'',
         sid:''
     };
