@@ -2,7 +2,6 @@ import { request } from '../../pi/net/ui/con_mgr';
 import { sourceIp, sourcePort } from '../config';
 import { getStore,GroupsLocation, OrderStatus, setStore } from '../store/memstore';
 import { openWXPay } from '../utils/logic';
-import { priceFormat } from '../utils/tools';
 import { requestAsync } from './login';
 import { parseAddress, parseAddress2, parseAllGroups, parseArea, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
 
@@ -383,7 +382,7 @@ export const getBalance = async () => {
 
     const res = await requestAsync(msg);
     const balance = {
-        cash: priceFormat(res.money),   // 现金，单位为分
+        cash: res.money,   // 现金，单位为分
         shell:res.haibei,
         integral:res.integral
     };

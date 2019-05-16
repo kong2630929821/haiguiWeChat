@@ -4,6 +4,7 @@ import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
 import { register, UserType } from '../../../store/memstore';
 import { getUserTypeShow } from '../../../utils/logic';
+import { priceFormat } from '../../../utils/tools';
 import { hBaoPower, hWangPower } from '../powerConstant';
 
 export const PageFg = {
@@ -63,7 +64,7 @@ export class Home extends Widget {
 const State = {
     earning:[
         { amount:0,title:'我的海宝',fg:PageFg.baby },
-        { amount:0,title:'现金总收益',fg:PageFg.cash },
+        { amount:'0',title:'现金总收益',fg:PageFg.cash },
         { amount:0,title:'我的伙伴',fg:PageFg.cash },
         { amount:0,title:'海贝总收益',fg:PageFg.shell }
     ],
@@ -74,7 +75,7 @@ const State = {
 };
 register('earning',r => {
     State.earning[0].amount = r.baby;
-    State.earning[1].amount = r.cash;
+    State.earning[1].amount = priceFormat(r.cash);
     State.earning[2].amount = r.partner;
     State.earning[3].amount = r.shell;
     forelet.paint(State);
