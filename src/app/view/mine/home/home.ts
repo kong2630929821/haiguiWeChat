@@ -56,7 +56,9 @@ const State = {
         { key:'积分',value:0 }
     ],
     userType:'',
-    inviteCode:''
+    inviteCode:'',
+    userName:'',
+    avatar:''
 };
 register('balance',r => {
     State.balance[0].value = r.cash;
@@ -67,5 +69,7 @@ register('balance',r => {
 register('user',r => {
     State.userType = getUserTypeShow(r.userType);
     State.inviteCode = r.inviteCode;
+    State.userName = r.userName;
+    State.avatar = r.avatar;
     forelet.paint(State);
 });
