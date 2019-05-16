@@ -3,6 +3,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { PendingPaymentDuration } from '../../config';
 import { Order, OrderStatus } from '../../store/memstore';
 import { calcPrices, getImageThumbnailPath, priceFormat } from '../../utils/tools';
+import { calcLeftTime } from './orderItem';
 
 export interface Props {
     order:Order;  // 订单
@@ -76,13 +77,3 @@ export class OrderItemDetail extends Widget {
         return super.destroy();
     }
 }
-
-// 计算倒计时
-const calcLeftTime = (start:number) => {
-    const leftTime = start + PendingPaymentDuration - new Date().getTime();
-    if (leftTime < 0) return `0分0秒`;
-    const leftMinutes = Math.floor(leftTime / 1000 / 60);
-    const leftSeconds = Math.floor(leftTime / 1000) % 60;
-
-    return `${leftMinutes}分${leftSeconds}秒`;
-};

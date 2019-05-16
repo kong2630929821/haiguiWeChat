@@ -128,7 +128,9 @@ export class ConfirmOrder extends Widget {
             if (totalFee > cash) {
                 payOids = oids;// 存储即将付款的订单id
                 payLoading = loading;
-                noResponse();
+                noResponse(() => {
+                    popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGPAYMENT,allStaus:allOrderStatus.slice(0,4) });
+                });
                 payMoney(totalFee - cash,'105',1);
             } else {
                 await orderPay(oids);
@@ -166,10 +168,10 @@ export const setPayOids = (oids:number[]) => {
 };
 
 // 15秒没有收到充值成功的消息  认为失败
-export const noResponse = () => {
+export const noResponse = (cb?:Function) => {
     timer = setTimeout(() => {
         closeLoading();
-        popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGPAYMENT,allStaus:allOrderStatus.slice(0,4) });
+        cb && cb();
     },5 * 1000);
 };
 

@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { getOrders, payMoney } from '../../net/pull';
+import { cancelOrder, getOrders, payMoney } from '../../net/pull';
 import { getStore, Order, OrderStatus, register } from '../../store/memstore';
 import { popNewLoading, popNewMessage } from '../../utils/tools';
 import { noResponse, orderPay, setPayLoading, setPayOids } from '../shoppingCart/confirmOrder';
@@ -66,7 +66,9 @@ export class OrderList extends Widget {
                 if (totalFee > cash) {
                     setPayOids(oids); // 存储即将付款的订单id
                     setPayLoading(loading);
-                    noResponse();
+                    noResponse(() => {
+                        popNewMessage('支付失败');
+                    });
                     payMoney(totalFee - cash,'105',1);
                 } else {
                     await orderPay(oids);
@@ -75,6 +77,16 @@ export class OrderList extends Widget {
                     this.paySuccess();
                 }
             }
+        } else {  // 取消按钮
+            if (this.props.activeStatus === OrderStatus.PENDINGPAYMENT) { // 取消订单
+                cancelOrder(order.id).then(() => {
+                    popNewMessage('取消成功');
+                    getOrders(this.props.activeStatus);
+                }).catch(() => {
+                    popNewMessage('取消失败');
+                });
+            }
+
         }
 
         console.log(e.btn, index);

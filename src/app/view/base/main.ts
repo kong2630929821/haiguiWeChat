@@ -6,6 +6,7 @@
 
 import { popNew } from '../../../pi/ui/root';
 import { addWidget } from '../../../pi/widget/util';
+import { queryLogistics } from '../../net/thirdPull';
 import { PowerFlag } from '../member/powerConstant';
 
 // ============================== 导出
@@ -22,6 +23,7 @@ export const run = (cb): void =>  {
         // 打开首页面
         popNew('app-view-base-app');
     }
+    queryLogistics();
     // 解决进入时闪一下问题
     setTimeout(() => {
         if (cb) cb();

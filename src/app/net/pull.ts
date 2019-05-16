@@ -2,7 +2,7 @@ import { request } from '../../pi/net/ui/con_mgr';
 import { sourceIp, sourcePort } from '../config';
 import { getStore,GroupsLocation, OrderStatus, setStore } from '../store/memstore';
 import { openWXPay } from '../utils/logic';
-import { popNewLoading, popNewMessage } from '../utils/tools';
+import { popNewMessage } from '../utils/tools';
 import { requestAsync } from './login';
 import { parseAddress, parseAddress2, parseAllGroups, parseArea, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
 
@@ -278,6 +278,20 @@ export const getOrders = (order_type:OrderStatus) => {
         setStore('mall/orders',ordersMap);
 
         return orders;
+    });
+};
+
+// 取消订单
+export const cancelOrder = (oid:number) => {
+    const msg = {
+        type:'cancel_order',
+        param:{
+            oid
+        }
+    };
+
+    return requestAsync(msg).then(res => {
+        console.log('cancelOrder ======',res);
     });
 };
 
