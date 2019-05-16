@@ -14,44 +14,40 @@ import { popNewMessage } from './tools';
  * 理论上程序一运行就需要调用该函数，去微信获取分享的API
  */
 export const registerWXAPI = () => {
-    let result:any = {};
-    result = userAgent(result);
-    if (result.browser.name === 'micromessenger') {
-        loadJS('http://res2.wx.qq.com/open/js/jweixin-1.4.0.js', (info) => {
-            if (info.result === 1) {
-                if ((<any>self).wx) {
-                    getWX_sign().then((resp:any) => {
-                        alert(JSON.stringify(resp));
-                        resp.debug = false;
-                        resp.jsApiList = ['onMenuShareTimeline', 'hideMenuItems',
-                            'onMenuShareAppMessage', 'chooseImage',
-                            'uploadImage', 'getLocalImgData', 'scanQRCode'];
-                        (<any>self).wx.config(resp);
+    loadJS('http://res2.wx.qq.com/open/js/jweixin-1.4.0.js', (info) => {
+        if (info.result === 1) {
+            if ((<any>self).wx) {
+                getWX_sign().then((resp:any) => {
+                    alert(JSON.stringify(resp));
+                    resp.debug = false;
+                    resp.jsApiList = ['onMenuShareTimeline', 'hideMenuItems',
+                        'onMenuShareAppMessage', 'chooseImage',
+                        'uploadImage', 'getLocalImgData', 'scanQRCode'];
+                    (<any>self).wx.config(resp);
                     // 隐藏右上角菜单项
-                        for (let i = 0; i < cbArr.length; i++) {
-                            cbArr[i]();
-                        }
-                        (<any>self).wx.ready(() => {
+                    for (let i = 0; i < cbArr.length; i++) {
+                        cbArr[i]();
+                    }
+                    (<any>self).wx.ready(() => {
                         // warn(logLevel,"config success");
                         // wx.hideOptionMenu();
                         // wx.hideAllNonBaseMenuItem();
-                            for (let i = 0; i < cbArr.length; i++) {
-                                cbArr[i]();
-                            }
-                            apiReady = true;
-                            (<any>self).wx.hideMenuItems({
-                                menuList: ['menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:facebook', 'menuItem:share:QZone'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-                            });
-                        });
-                        (<any>self).wx.error((res) => {
-                        // warn(logLevel,"config验证失败");
-                        // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+                        for (let i = 0; i < cbArr.length; i++) {
+                            cbArr[i]();
+                        }
+                        apiReady = true;
+                        (<any>self).wx.hideMenuItems({
+                            menuList: ['menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:facebook', 'menuItem:share:QZone'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
                         });
                     });
-                }
+                    (<any>self).wx.error((res) => {
+                        // warn(logLevel,"config验证失败");
+                        // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+                    });
+                });
             }
-        });
-    }
+        }
+    });
 };
 
 /**
@@ -118,7 +114,6 @@ export const upImage = (imgid: string, cb: (serid: string) => void) => {
         localId: imgid, // 需要上传的图片的本地ID，由chooseImage接口获得
         isShowProgressTips: 0, // 默认为1，显示进度提示
         success: (res) => {
-            alert(res.serverId);
             // 上传到服务器
             uploadFile(res.serverId).then((ans) => {
                 cb(ans.sid);
