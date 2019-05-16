@@ -1,9 +1,10 @@
 import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { getOrders, order } from '../../net/pull';
+import { getOrders, payMoney } from '../../net/pull';
 import { getStore, Order, OrderStatus, register } from '../../store/memstore';
-import { allOrderStatus } from './home/home';
+import { popNewLoading, popNewMessage } from '../../utils/tools';
+import { noResponse, orderPay, setPayLoading } from '../shoppingCart/confirmOrder';
 
 // tslint:disable-next-line:no-reserved-keywords
 declare var module: any;
@@ -48,7 +49,7 @@ export class OrderList extends Widget {
     }
 
     // 点击按钮
-    public btnClick(e:any,index:number) {
+    public async btnClick(e:any,index:number) {
         const btn = e.btn;
         const order = this.state.orders.get(this.props.activeStatus)[index];
         if (btn === 1) {  // 确定按钮
@@ -56,29 +57,41 @@ export class OrderList extends Widget {
                 const oids = [order.id];
                 const cash = getStore('balance').cash * 100;  // 余额 
                 const totalFee = order.origin + order.tax + order.freight;
-                // if (totalFee > cash) {
-                //     alert('wxpay');
-                //     payOids = oids;// 存储即将付款的订单id
-                //     payLoading = loading;
-                //     payMoney(totalFee - cash,'105',1);
-                // } else {
-                //     await orderPay(oids);
-                //     popNewMessage('交易成功');
-                //     loading.callback(loading.widget);
-                //     popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGDELIVERED,allStaus:allOrderStatus.slice(0,4) });
-                //     this.ok && this.ok();
-                // }
+                const loading = popNewLoading('支付中');
+                if (totalFee > cash) {
+                    setPayLoading(oids); // 存储即将付款的订单id
+                    setPayLoading(loading);
+                    payMoney(totalFee - cash,'105',1);
+                    noResponse();
+                } else {
+                    await orderPay(oids);
+                    popNewMessage('支付成功');
+                    loading.callback(loading.widget);
+                    this.paySuccess();
+                }
             }
         }
 
         console.log(e.btn, index);
+    }
+
+    public paySuccess() {
+        getOrders(OrderStatus.PENDINGDELIVERED);
+        this.props.activeStatus = OrderStatus.PENDINGDELIVERED;
+        this.paint();
     }
 }
 
 const STATE = {
     orders:new Map<OrderStatus,Order[]>()
 };
+
 register('mall/orders',(orders:Map<OrderStatus,Order[]>) => {
     STATE.orders = orders;
     forelet.paint(STATE);
+});
+
+register('flags/mallRecharge',async () => {
+    const w:any = forelet.getWidget(WIDGET_NAME);
+    w && w.paySuccess();
 });
