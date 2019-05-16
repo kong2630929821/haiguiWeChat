@@ -5,6 +5,7 @@
 import { open, request, setReloginCallback, setUrl } from '../../pi/net/ui/con_mgr';
 import { wsUrl } from '../config';
 import { getStore, GroupsLocation, setStore, UserType } from '../store/memstore';
+import { priceFormat } from '../utils/tools';
 import { registerWXAPI } from '../utils/wxAPI';
 import { getAddress, getBalance, getCart, getEarningTotal, getFreight, getGroups, getInviteCode, getSuppliers, getUserInfo } from './pull';
 import { payComplete } from './push';
@@ -117,7 +118,7 @@ const userLogin = () => {
         getEarningTotal().then(res => {
             const earning = getStore('earning');
             earning.baby = res.hbaoCount;
-            earning.cash = res.cash;
+            earning.cash = priceFormat(res.cash);
             earning.partner = res.partnerCount;
             earning.shell = res.hbei;
             setStore('earning',earning);

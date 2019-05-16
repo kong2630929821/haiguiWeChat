@@ -1,5 +1,5 @@
 import { Address, Area, CartGoods, Freight, getStore, GoodsDetails, GoodsSegmentationDetails, Groups, GroupsLocation, MallImages, Order, setStore, SKU } from '../store/memstore';
-import { getCartGoodsSelected, unicode2Str } from '../utils/tools';
+import { getCartGoodsSelected, priceFormat, unicode2Str } from '../utils/tools';
 
 /**
  * 数据处理
@@ -254,7 +254,7 @@ export const parseOrder = (infos:any) => {
  */
 export const parseBalance = (res) => {
     const balance = getStore('balance');
-    balance.cash = res.money / 100;   // 现金，单位为分
+    balance.cash = priceFormat(res.money);   // 现金，单位为分
     balance.shell = res.haibei;
     balance.integral = res.integral;
     setStore('balance',balance);

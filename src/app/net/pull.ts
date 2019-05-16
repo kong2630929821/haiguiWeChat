@@ -2,6 +2,7 @@ import { request } from '../../pi/net/ui/con_mgr';
 import { sourceIp, sourcePort } from '../config';
 import { getStore,GroupsLocation, OrderStatus, setStore } from '../store/memstore';
 import { openWXPay } from '../utils/logic';
+import { priceFormat } from '../utils/tools';
 import { requestAsync } from './login';
 import { parseAddress, parseAddress2, parseAllGroups, parseArea, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
 
@@ -382,7 +383,7 @@ export const getBalance = async () => {
 
     const res = await requestAsync(msg);
     const balance = {
-        cash:res.money / 100,   // 现金，单位为分
+        cash: priceFormat(res.money),   // 现金，单位为分
         shell:res.haibei,
         integral:res.integral
     };
@@ -577,7 +578,7 @@ export const checkWithdraw = () => {
  * 识别身份证
  */
 export const identifyIDCard = (url:string) => {
-
+    
     return fetch(`http://${sourceIp}:${sourcePort}/pt/wx/cmd/id_card?img_url=${encodeURIComponent(url)}`).then(res => res.json());
 };
 

@@ -2,6 +2,7 @@ import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { getHBaoList, getPartnerList } from '../../net/pull';
+import { priceFormat, unicode2Str } from '../../utils/tools';
 import { PageFg } from './home/home';
 interface Props {
     list: any[];
@@ -40,9 +41,9 @@ export class LogList extends Widget {
                 if (r.value && r.value.length > 0) {
                     this.props.list = r.value.map(item => {
                         return {
-                            name: '微信名',  // item[0]
-                            desc: `我的本月收益：${item[5].toFixed(2)}`,
-                            tel: '12345678901' // item[1]
+                            name: unicode2Str(item[0]),
+                            desc: `我的本月收益：${priceFormat(item[5])}`,
+                            tel: item[1]
                         };
                     });
                 } else {
@@ -57,9 +58,9 @@ export class LogList extends Widget {
                 if (r.value && r.value.length > 0) {
                     this.props.list = r.value.map(item => {
                         return {
-                            name: '微信名',  // item[0]
-                            desc: `我的本月收益：${item[3].toFixed(2)}`,
-                            tel: '12345678901' // item[1]
+                            name: unicode2Str(item[0]),
+                            desc: `我的本月收益：${priceFormat(item[3])}`,
+                            tel: item[1]
                         };
                     });
                 } else {
@@ -75,21 +76,21 @@ export class LogList extends Widget {
         let list = [];
         if (this.props.fg === PageFg.baby) {
             list = [
-                { key: '海宝', value: item[0] || '微信名' },
-                { key: '电话', value: item[1] || '12345678901' },
+                { key: '海宝', value: unicode2Str(item[0]) },
+                { key: '电话', value: item[1] },
                 { key: 'ta的海宝数量', value: `${item[2]}个` },
-                { key: 'ta的本月收益', value: item[3] },
-                { key: 'ta的总收益', value: item[4] },
-                { key: '我的本月收益', value: item[5] },
-                { key: '我的总收益', value: item[6] }
+                { key: 'ta的本月收益', value: priceFormat(item[3]) },
+                { key: 'ta的总收益', value: priceFormat(item[4]) },
+                { key: '我的本月收益', value: priceFormat(item[5]) },
+                { key: '我的总收益', value: priceFormat(item[6]) }
             ];
         } else {
             list = [
-                { key: '海王', value: item[0] || '微信名' },
-                { key: '电话', value: item[1] || '12345678901' },
+                { key: '海王', value: unicode2Str(item[0]) },
+                { key: '电话', value: item[1] },
                 { key: '海宝数量', value: `${item[2]}个` },
-                { key: '我的本月收益', value: item[3] },
-                { key: '我的总收益', value: item[4] }
+                { key: '我的本月收益', value: priceFormat(item[3]) },
+                { key: '我的总收益', value: priceFormat(item[4]) }
             ];
         }
 

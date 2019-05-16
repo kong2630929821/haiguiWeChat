@@ -10,7 +10,7 @@ export class Withdraw extends Widget {
     public props:any = {
         balance:getStore('balance/cash',0),
         tax:0,    // 税费
-        tariff:6,  // 税率 6%
+        tariff:0.06,  // 税率 6%
         inputMoney:0,
         notice:false
     };
@@ -19,7 +19,7 @@ export class Withdraw extends Widget {
     public moneyChange(e:any) {
         this.props.inputMoney = e.value;
         if (e.value <= this.props.balance) {
-            this.props.tax = e.value * this.props.tariff / 100;
+            this.props.tax = e.value * this.props.tariff;
             this.props.notice = false;
         } else {
             this.props.tax = 0;

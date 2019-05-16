@@ -2,7 +2,7 @@ import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { serverFilePath } from '../../config';
 import { identifyIDCard } from '../../net/pull';
-import { popNewMessage } from '../../utils/tools';
+import { popNewLoading, popNewMessage } from '../../utils/tools';
 import { takeImage, upImage } from '../../utils/wxAPI';
 interface Props {
     firstClick:boolean; // 是否是第一次点击上传按钮
@@ -17,7 +17,7 @@ export class IDCardUpload extends Widget {
     public ok:() => void;
     public props:Props = {
         firstClick:true,
-        img1:'',
+        img1:'https://images.cnitblog.com/blog/454646/201306/07090646-834eecbb94f8475a9a12026c50ef0dde.jpg',
         img2:'',
         sid:''
     };
@@ -60,11 +60,15 @@ export class IDCardUpload extends Widget {
 
     public verifyImg() {
         if (this.props.sid) {
+            const loadding = popNewLoading('请稍候');
             identifyIDCard(this.props.img1).then(res => {
+                console.log(res);
+                loadding.callback(loadding.widget);
+                const data = JSON.parse(res.body);
                 popNew('app-view-mine-verified',{
-                    name:res.body.name || '',
-                    card:res.body.id || '',
-                    sid:this.props.sid
+                    name: data.name || '',
+                    card: data.id || '',
+                    sid: this.props.sid
                 },() => {
                     this.ok && this.ok();
                 });
