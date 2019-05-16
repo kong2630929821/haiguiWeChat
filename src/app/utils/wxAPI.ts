@@ -120,8 +120,8 @@ export const upImage = (imgid: string, cb: (serid: string) => void) => {
         success: (res) => {
             alert(res.serverId);
             // 上传到服务器
-            uploadFile(res.serverId).then((url) => {
-                cb(url);
+            uploadFile(res.serverId).then((ans) => {
+                cb(ans.sid);
             });
 
         }, fail: (res) => {

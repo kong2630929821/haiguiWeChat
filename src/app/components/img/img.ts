@@ -1,8 +1,4 @@
 
-/**
- * 图片显示组件
- */
-
 import { Widget } from '../../../pi/widget/widget';
 
 interface Props {
@@ -13,6 +9,9 @@ interface Props {
     isRound?:boolean;
 }
 
+/**
+ * 图片显示组件
+ */
 export class WalletImg extends Widget {
     public props:Props;
     public ok:() => void;

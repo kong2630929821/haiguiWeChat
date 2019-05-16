@@ -576,9 +576,28 @@ export const checkWithdraw = () => {
 /**
  * 识别身份证
  */
-export const verifyIDCard = (url:string) => {
+export const identifyIDCard = (url:string) => {
 
-    return fetch(`http://${sourceIp}:${sourcePort}/pt/wx/cmd/id_card?img_url=${url}`).then(res => res.json());
+    return fetch(`http://${sourceIp}:${sourcePort}/pt/wx/cmd/id_card?img_url=${encodeURIComponent(url)}`).then(res => res.json());
+};
+
+/**
+ * 实名认证
+ * @param name 姓名
+ * @param card 身份证号
+ * @param sid 身份证图片ID
+ */
+export const verifyIDCard = (name:string,card:string,sid:string) => {
+    const msg = {
+        type:'mall/withdraw@get_withdraw_log',
+        param:{
+            name,
+            card,
+            sid
+        }
+    };
+
+    return requestAsync(msg);
 };
 
 /**
