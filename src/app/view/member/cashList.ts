@@ -1,7 +1,8 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { getEarningList } from '../../net/pull';
-import { timestampFormat } from '../../utils/logic';
+import { getCashLogName, timestampFormat } from '../../utils/logic';
+import { priceFormat } from '../../utils/tools';
 import { PageFg } from './home/home';
 interface Props {
     list: any[];
@@ -21,7 +22,6 @@ export class LogList extends Widget {
     public props: Props = {
         list: [
             // { name:'提现',time:'04-12 12:30',money:'-200.00' },
-            // { name:'提现',time:'04-12 12:30',money:'-100.00' },
             // { name:'升级海宝',time:'04-12 12:30',money:'+100.00' }
         ],
         title: '======',
@@ -58,9 +58,9 @@ export class LogList extends Widget {
             if (r.value && r.value.length > 0) {
                 this.props.list = r.value.map(item => {
                     return {
-                        name: '升级海宝',  // item[2]
+                        name: getCashLogName(item[2]),
                         time: timestampFormat(item[5], 4),
-                        money: item[3]
+                        money: `${itype === 1 ? '￥' :''}${priceFormat(item[3])}`
                     };
                 });
             } else {

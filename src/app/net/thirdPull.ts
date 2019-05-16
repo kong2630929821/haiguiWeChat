@@ -31,6 +31,7 @@ export const queryLogistics = () => {
 
     const dataStr = JSON.stringify(data);
     const encodeStr = encodeURIComponent(dataStr);
+
     postData(url,data).then(res => {
         console.log('queryLogistics',res);
     });

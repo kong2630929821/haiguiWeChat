@@ -12,19 +12,19 @@
     {{elseif it.fg == 3}}
     <div w-class="btn1" on-tap="freeReceive">免费领取</div>
         {{if it.isCurVip}}
-        <div w-class="shareBtn1" on-tap="share">推荐给好友</div>
+        <div w-class="shareBtn1" on-tap="share('free')">推荐给好友</div>
         {{end}}
     
     {{% ========================线下课程======================}}
     {{elseif it.fg == 4}}
     <div w-class="btns">
-        <div w-class="shareBtn" on-tap="share">推荐给好友</div>
+        <div w-class="shareBtn" on-tap="share('offClass')">推荐给好友</div>
         <div w-class="btn" style="margin-top:0;" on-tap="applyClass">报名听课</div>
     </div>
     
     {{% ========================开通获得积分======================}}
     {{elseif it.fg==5 && !it.isCurVip}}
-    <div w-class="open" on-tap="open">立即开通</div>
+    <div w-class="open" on-tap="openVIP">立即开通</div>
     
     {{% ========================1万特有的课程======================}}
     {{elseif (it.fg ==8 || it.fg ==9) && it.isCurVip }}

@@ -1,7 +1,8 @@
 import { popNew } from '../../../pi/ui/root';
+import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { payMoney, upgradeHWang } from '../../net/pull';
-import { UserType } from '../../store/memstore';
+import { register, UserType } from '../../store/memstore';
 import { getUserTypeShow } from '../../utils/logic';
 import { popNewMessage } from '../../utils/tools';
 import * as Constant from './powerConstant';
@@ -12,10 +13,17 @@ interface Props {
     userTypeShow:string;  // 用户类型名称
     code:string;  // 邀请码
 }
+
+// tslint:disable-next-line:no-reserved-keywords
+declare var module: any;
+export const forelet = new Forelet();
+export const WIDGET_NAME = module.id.replace(/\//g, '-');
+
 /**
  * 权益详情
  */
 export class PowerDetail extends Widget {
+    public ok:() => void;
     public props:Props;
    
     public setProps(props:any) {
@@ -52,3 +60,8 @@ export class PowerDetail extends Widget {
         });
     }
 }
+
+register('user/userType',() => {
+    const w:any = forelet.getWidget(WIDGET_NAME);
+    w && w.ok && w.ok();  // 升级海宝或升级海王成功关闭当前页面
+});

@@ -26,7 +26,7 @@
         <span style="margin-left:20px;">仅{{it.userTypeShow}}会员享受此权益</span>
     </div>
 
-    {{if !it.code}}
+    {{if it.code}}
     <div w-class="btn" on-tap="upgradeUser">立即开通</div>
     {{end}}
 </div>
