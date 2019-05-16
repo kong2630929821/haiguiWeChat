@@ -66,9 +66,7 @@ export class OrderList extends Widget {
                 if (totalFee > cash) {
                     setPayOids(oids); // 存储即将付款的订单id
                     setPayLoading(loading);
-                    noResponse(() => {
-                        popNewMessage('支付失败');
-                    });
+                    noResponse();
                     payMoney(totalFee - cash,'105',1);
                 } else {
                     await orderPay(oids);

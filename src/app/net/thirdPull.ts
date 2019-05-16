@@ -28,6 +28,9 @@ export const queryLogistics = () => {
         ShipperCode: 'SF',
         LogisticCode: '118650888018'
     };
+
+    const dataStr = JSON.stringify(data);
+    const encodeStr = encodeURIComponent(dataStr);
     postData(url,data).then(res => {
         console.log('queryLogistics',res);
     });
