@@ -118,6 +118,7 @@ export const upImage = (imgid: string, cb: (serid: string) => void) => {
         localId: imgid, // 需要上传的图片的本地ID，由chooseImage接口获得
         isShowProgressTips: 0, // 默认为1，显示进度提示
         success: (res) => {
+            alert(res.serverId);
             // 上传到服务器
             uploadFile(res.serverId).then((url) => {
                 cb(url);

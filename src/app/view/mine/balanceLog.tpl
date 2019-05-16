@@ -13,7 +13,12 @@
                     <div w-class="name">{{v.name}}</div>
                     <div w-class="desc">{{v.money}}</div>
                 </div>
-                <div w-class="time">{{v.time}}</div>
+                <div w-class="itemTop">
+                    <div w-class="time">{{v.time}}</div>
+                    {{if it.status}}
+                    <div w-class="time">{{v.status}}</div>
+                    {{end}}
+                </div>
             </div>
         {{end}}
     {{else}}

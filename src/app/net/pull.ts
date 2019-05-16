@@ -571,3 +571,17 @@ export const uploadFile = (id:string) => {
 export const getWX_sign = () => {
     return fetch(`http://${sourceIp}:${sourcePort}/pt/wx/sign?url=${location.href}`).then(res => res.json());
 };
+
+/**
+ * 查看提现状态
+ */
+export const getWithdrawStatus = (id:number) => {
+    const msg = {
+        type:'mall/withdraw@get_withdraw_log',
+        param:{
+            id
+        }
+    };
+
+    return requestAsync(msg);
+};
