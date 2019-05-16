@@ -343,6 +343,7 @@ interface User {
     inviteCode:string;  // 邀请码
     userName:string;    // 用户名
     phoneNum:string;       // 手机号
+    avatar:string;         // 头像
 }
 
 // 用户余额
@@ -384,7 +385,8 @@ const store:Store = {
         userType: UserType.other,
         inviteCode:'',
         userName:'',
-        phoneNum:''
+        phoneNum:'',
+        avatar:''
     },
     balance:{
         cash:0,

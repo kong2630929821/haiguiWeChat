@@ -18,7 +18,6 @@ const getWxUserInfo = () => {
     if (!localStorage.WXUSERINFO) {
         localStorage.WXUSERINFO = `{"sid":"4tZ9bjUNgkkuLZiRCskRRUsgyQzyC7vGKHZa", "uinfo":{"openid":"oazhW5yQ5w8-WiQDi8qPTCNfKoGM","nickname":"彬","sex":1,"language":"zh_CN","city":"成都","province":"四川","country":"中国","headimgurl":"http://thirdwx.qlogo.cn/mmopen/vi_32/tmVLphkQHLwj0sykp4TkHXbtn917J6BoTq3QNVc49NkVY6ibA1lCMO3Y6AtUPSYEpt0dATg0sdCh4Z4WH3FpaTA/132","privilege":[]}}`;
     }
-    // localStorage.WXUSERINFO = `{"sid":"4tZ9bjUNgkkuLZiRCskRRUsgyQzyC7vGKHZa", "uinfo":{"openid":"oazhW5yQ5w8-WiQDi8qPTCNf111","nickname":"彬","sex":1,"language":"zh_CN","city":"成都","province":"四川","country":"中国","headimgurl":"http://thirdwx.qlogo.cn/mmopen/vi_32/tmVLphkQHLwj0sykp4TkHXbtn917J6BoTq3QNVc49NkVY6ibA1lCMO3Y6AtUPSYEpt0dATg0sdCh4Z4WH3FpaTA/132","privilege":[]}}`;
 
     return JSON.parse(localStorage.WXUSERINFO);
 };
@@ -93,12 +92,12 @@ const conReOpen = () => {
  * 用户登录
  */
 const userLogin = () => {
-    const userStr = getWxUserInfo().uinfo.openid;
+    const userStr = getWxUserInfo().uinfo;
     const msg = { 
         type: 'login', 
         param: { 
             type:1,
-            user:userStr,
+            user:userStr.openid,
             password:''
         } 
     };
@@ -136,8 +135,9 @@ const userLogin = () => {
         // 获取用户信息
         getUserInfo().then(r => {
             const user = getStore('user');
+            user.avatar = userStr.headimgurl;
+            user.userName = r.wx_name || userStr.nickname;
             user.phoneNum = r.phone;
-            user.userName = r.wx_name;
             setStore('user',user);
         });
 

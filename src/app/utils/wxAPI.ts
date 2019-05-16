@@ -22,7 +22,6 @@ export const registerWXAPI = () => {
                 if ((<any>self).wx) {
                     getWX_sign().then((resp:any) => {
                         alert(JSON.stringify(resp));
-
                         resp.debug = false;
                         resp.jsApiList = ['onMenuShareTimeline', 'hideMenuItems',
                             'onMenuShareAppMessage', 'chooseImage',
@@ -120,7 +119,6 @@ export const upImage = (imgid: string, cb: (serid: string) => void) => {
         isShowProgressTips: 0, // 默认为1，显示进度提示
         success: (res) => {
             // 上传到服务器
-            alert(res.serverId);
             uploadFile(res.serverId).then((url) => {
                 cb(url);
             });

@@ -40,12 +40,14 @@ export class IDCardUpload extends Widget {
                 this.props.img1 = r;
                 upImage(r,res => {
                     this.props.img1 = serverFilePath + res;
+                    this.paint();
                 });
 
             } else {
                 this.props.img2 = r;
                 upImage(r,res => {
                     this.props.img2 = serverFilePath + res;
+                    this.paint();
                 });
             }
             this.paint();
