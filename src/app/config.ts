@@ -21,4 +21,4 @@ export const wsUrl = `ws://${erlangLogicIp}:${erlangLogicPort}`;
 export const PendingPaymentDuration = 15 * 60 * 1000;
 
 // 获取图片路径
-export const serverFilePath = `${sourceIp}:${sourcePort}/service/get_file?sid=`;
+export const serverFilePath = `http://${sourceIp}:${sourcePort}/service/get_file?sid=`;

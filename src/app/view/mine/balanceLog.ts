@@ -1,6 +1,6 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
-import { getBalanceList } from '../../net/pull';
+import { getBalanceList, getWithdrawStatus } from '../../net/pull';
 import { getCashLogName, timestampFormat } from '../../utils/logic';
 interface Props {
     list: any[];   // 当月数据
@@ -37,11 +37,20 @@ export class BalanceLog extends Widget {
         const data = this.props.select.value;
         getBalanceList(data[0], data[1], 1).then(r => {
             if (r.value && r.value.length > 0) {
-                const list = r.value.map(item => {
+                const list = r.value.map((item,index) => {
+                    if (getCashLogName(item[1]) === '提现') {
+                        getWithdrawStatus(item[3]).then(res => {
+                            console.log(res);
+                            list[index].status = res[3];
+                            this.paint();
+                        });
+                    }
+
                     return {
                         name: getCashLogName(item[1]), 
                         time: timestampFormat(item[4], 4),
-                        money: item[2]
+                        money: item[2] / 100,   // 金额，单位分
+                        status:''
                     };
                 });
                 this.props.list = list;
