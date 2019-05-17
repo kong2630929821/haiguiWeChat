@@ -2,15 +2,14 @@ import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { bindPhone, bindUser, randomInviteCode, sendCode, setUserName } from '../../net/pull';
 import { getStore, setStore } from '../../store/memstore';
+import { getLastAddress } from '../../utils/logic';
 import { popNewLoading, popNewMessage } from '../../utils/tools';
 
 interface Props {
     userName:string;  // 用户名
     selectAddr:boolean;  // 是否显示地区选择
     phoneNum:string;  // 手机号
-    area:string;  // 地区
     address:string;  // 地址
-    areaSelect:any[]; // 地区选择结果
     nowCount:number;  // 倒计时
     phoneCode:string;  // 手机验证码
     inviteCode:string;  // 邀请码
@@ -25,20 +24,11 @@ export class ModalBoxInput extends Widget {
         userName:'',
         selectAddr:false,
         phoneNum:'',
-        area:'',
-        address:'',
-        areaSelect:[],
+        address:'详细地址信息',
         nowCount:0,
         phoneCode:'',
         inviteCode:''
     };
-
-    public create() {
-        super.create();
-        const user = getStore('user');
-        this.props.userName = user.userName;
-        this.props.phoneNum = user.phoneNum;
-    }
 
     public setProps(props:any) {
         this.props = {
@@ -46,7 +36,11 @@ export class ModalBoxInput extends Widget {
             ...props
         };
         super.setProps(this.props);
-       
+        const user = getStore('user');
+        this.props.userName = user.userName;
+        this.props.phoneNum = user.phoneNum;
+        const addr = getLastAddress();
+        this.props.address = addr[2].address;
     }
 
     // 输入用户名
@@ -156,17 +150,11 @@ export class ModalBoxInput extends Widget {
         }
     }
 
-    // 选择省 市 区
-    public selectArea() {
-        popNew('app-components-areaSelect-areaSelect',{ selected:this.props.areaSelect },(r) => {
-            if (r && r.length > 0) {
-                this.props.areaSelect = r;
-                const res = r.map(item => {
-                    return item.name;
-                });
-                this.props.area = res.join('');
-                this.paint();
-            }
+    public selAddr() {
+        popNew('app-view-mine-addressList',{ isChoose:true },(index:number) => {
+            this.props.address = getStore('mall/addresses')[index].address;
+            this.paint();
         });
     }
+
 }

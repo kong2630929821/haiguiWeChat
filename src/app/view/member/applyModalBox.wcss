@@ -63,3 +63,9 @@
     text-align: center;
     line-height: 88px;
 }
+.addr{
+    font-size: 28px;
+    color: #B2B2B2;
+    flex: 1 0 0;
+    padding-left: 10px;
+}

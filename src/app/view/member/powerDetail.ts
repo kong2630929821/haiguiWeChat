@@ -1,9 +1,9 @@
 import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { payMoney, upgradeHWang } from '../../net/pull';
+import { upgradeHWang } from '../../net/pull';
 import { register, UserType } from '../../store/memstore';
-import { getUserTypeShow } from '../../utils/logic';
+import { getUserTypeShow, payToUpHbao } from '../../utils/logic';
 import { popNewMessage } from '../../utils/tools';
 import * as Constant from './powerConstant';
 interface Props {
@@ -54,8 +54,7 @@ export class PowerDetail extends Widget {
                     popNewMessage('成功发送海王申请');
                 });
             } else {
-                // payMoney(39900,'hBao');
-                payMoney(1,'hBao');
+                payToUpHbao();
             }
         });
     }

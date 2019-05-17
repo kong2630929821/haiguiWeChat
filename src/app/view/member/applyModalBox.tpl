@@ -22,12 +22,8 @@
 
         {{if it.selectAddr}}
         <div w-class="row">
-            <div style="margin-right:10px;" on-tap="selectArea">
-                <widget w-tag="app-components-input-input">{placeHolder:"选择省/市/区",style:"padding:10px;font-size:28px;",input:{{it.area}} }</widget>
-            </div>
-            <div ev-input-change="addressChange">
-                <widget w-tag="app-components-input-input">{placeHolder:"街道门牌、房间号等",style:"padding:10px;font-size:28px;"}</widget>
-            </div>
+            <div w-class="addr">{{it.address}}</div>
+            <div w-class="btn" on-tap="selAddr">选择地址</div>
         </div>
         {{end}}
         <div w-class="btns">

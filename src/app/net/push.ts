@@ -2,9 +2,9 @@
  * 后端主动推消息给前端
  */
 import { setMsgHandler } from '../../pi/net/ui/con_mgr';
-import { setStore, UserType } from '../store/memstore';
-import { popNewMessage } from '../utils/tools';
-import { getBalance, getInviteRebate, upgradeHBao } from './pull';
+import { setStore } from '../store/memstore';
+import { payToUpHbao } from '../utils/logic';
+import { getBalance, getInviteRebate } from './pull';
 
 /**
  * 支付成功
@@ -14,10 +14,7 @@ export const payComplete = () => {
         alert(JSON.stringify(r));
         getBalance();
         if (r.msg && r.msg[2] === 'hBao') {
-            upgradeHBao().then(() => {
-                popNewMessage('升级海宝成功');
-                setStore('user/userType', UserType.hBao);
-            });
+            payToUpHbao();
         } else if (r.msg && r.msg[2] === 'free') {
             getInviteRebate(20001);
         } else if (r.msg && r.msg[2] === 'offClass') {

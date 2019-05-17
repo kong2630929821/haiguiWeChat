@@ -1,8 +1,9 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { freeMaskGoodsId, offClassGoodsId } from '../../config';
-import { getGoodsDetails, payMoney, upgradeHWang } from '../../net/pull';
+import { getGoodsDetails, upgradeHWang } from '../../net/pull';
 import { CartGoods, getStore, UserType } from '../../store/memstore';
+import { payToUpHbao } from '../../utils/logic';
 import { popNewLoading, popNewMessage } from '../../utils/tools';
 import { shareWithUrl } from '../../utils/wxAPI';
 import { PowerFlag } from './powerConstant';
@@ -37,7 +38,7 @@ export class GiftPage extends Widget {
     public freeReceive() {
         // 不是会员需要填写一些基础信息
         if (getStore('user/userType',-1) >= UserType.normal) {
-            popNew('app-view-member-applyModalBox',null,() => {
+            popNew('app-view-member-applyModalBox',{ selectAddr:true },() => {
                 
                 this.confirmOrder(freeMaskGoodsId);
             });
@@ -50,7 +51,7 @@ export class GiftPage extends Widget {
     public applyClass() {
         // 不是会员需要填写一些基础信息
         if (getStore('user/userType',-1) >= UserType.normal) {
-            popNew('app-view-member-applyModalBox',null,() => {
+            popNew('app-view-member-applyModalBox',{ selectAddr:true },() => {
                 
                 this.confirmOrder(offClassGoodsId);
             });
@@ -77,7 +78,7 @@ export class GiftPage extends Widget {
     public openVIP() {
         popNew('app-view-member-applyModalBox',null,() => {
             if (this.props.userType === UserType.hBao) {
-                payMoney(39900,'hBao');
+                payToUpHbao();
             } else {
                 upgradeHWang().then(() => {
                     popNewMessage('成功发送海王申请');
