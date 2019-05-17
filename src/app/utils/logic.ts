@@ -119,8 +119,9 @@ export const getCashLogName = (ttype:number) => {
  * 升级海宝支付
  */
 export const payToUpHbao = () => {
-    if (getStore('balance/cash') < 39900) {
-        payMoney(39900,'hBao');
+    const cash = getStore('balance/cash');
+    if (cash < 39900) { 
+        payMoney(39900 - cash,'hBao');
     } else {
         upgradeHBao().then(() => {
             popNewMessage('升级海宝成功');

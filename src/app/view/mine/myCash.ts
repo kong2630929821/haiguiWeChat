@@ -2,13 +2,14 @@ import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { checkWithdraw } from '../../net/pull';
 import { getStore } from '../../store/memstore';
+import { priceFormat } from '../../utils/tools';
 
 /**
  * 我的现金
  */
 export class MyCash extends Widget {
     public props:any = {
-        balance:getStore('balance/cash',0),
+        balance:priceFormat(getStore('balance/cash',0)),
         ableWithdraw:false
     };
 

@@ -596,7 +596,7 @@ export const payMoney = (money:number,ttype:string,count:number= 1) => {
     const msg = {
         type:'mall/pay@pay',
         param:{
-            money:money,
+            money:Math.floor(money),
             type:ttype,
             count,
             channel:'wxpay'

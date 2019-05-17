@@ -90,20 +90,20 @@ const conReOpen = () => {
 const userLogin = () => {
     let userStr;
     let openId;
-    // if (location.search.indexOf('debug') >= 0) {
-    openId = localStorage.getItem('openid');
-    if (!openId) {
-        openId = new Date().getTime();
-        localStorage.setItem('openid',openId);
+    if (location.search.indexOf('debug') >= 0) {
+        openId = localStorage.getItem('openid');
+        if (!openId) {
+            openId = new Date().getTime();
+            localStorage.setItem('openid',openId);
+        }
+        userStr = {
+            openid:openId,
+            headimgurl:'',
+            nickname:'默认名字'
+        };
+    } else {
+        userStr = getWxUserInfo().uinfo;
     }
-    userStr = {
-        openid:openId,
-        headimgurl:'',
-        nickname:'默认名字'
-    };
-    // } else {
-    //     userStr = getWxUserInfo().uinfo;
-    // }
     const msg = { 
         type: 'login', 
         param: { 
@@ -147,7 +147,7 @@ const userLogin = () => {
         getUserInfo().then(r => {
             const user = getStore('user');
             user.avatar = userStr.headimgurl;
-            user.userName = r.name || r.wx_name || userStr.nickname;
+            user.userName = r.wx_name || userStr.nickname;
             user.phoneNum = r.phone;
             setStore('user',user);
         });
