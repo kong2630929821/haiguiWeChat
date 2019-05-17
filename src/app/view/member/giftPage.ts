@@ -1,5 +1,6 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
+import { freeMaskGoodsId, offClassGoodsId } from '../../config';
 import { getGoodsDetails, payMoney, upgradeHWang } from '../../net/pull';
 import { CartGoods, getStore, UserType } from '../../store/memstore';
 import { popNewLoading, popNewMessage } from '../../utils/tools';
@@ -38,10 +39,10 @@ export class GiftPage extends Widget {
         if (getStore('user/userType',-1) >= UserType.normal) {
             popNew('app-view-member-applyModalBox',null,() => {
                 
-                this.confirmOrder(10010007);
+                this.confirmOrder(freeMaskGoodsId);
             });
         } else {
-            this.confirmOrder(10010007);            
+            this.confirmOrder(freeMaskGoodsId);            
         }
     }
 
@@ -51,29 +52,25 @@ export class GiftPage extends Widget {
         if (getStore('user/userType',-1) >= UserType.normal) {
             popNew('app-view-member-applyModalBox',null,() => {
                 
-                this.confirmOrder(10010008);
+                this.confirmOrder(offClassGoodsId);
             });
         } else {
-            this.confirmOrder(10010008);
+            this.confirmOrder(offClassGoodsId);
         }
     }
 
     // 确认下单
-    public confirmOrder (id:number) {
+    public async confirmOrder (id:number) {
         const loadding = popNewLoading('请稍候');
-        getGoodsDetails(id).then(goods => {
-            const cartGood:CartGoods = {
-                index:-1,
-                goods,
-                amount:1,
-                selected:true
-            };
-            loadding.callback(loadding.widget);
-            popNew('app-view-shoppingCart-confirmOrder',{ orderGoods:[cartGood],buyNow:true });
-        }).catch(() => {
-            popNewMessage('下单失败');
-            loadding.callback(loadding.widget);
-        });
+        const goods = await getGoodsDetails(id);
+        const cartGood:CartGoods = {
+            index:-1,
+            goods,
+            amount:1,
+            selected:true
+        };
+        loadding.callback(loadding.widget);
+        popNew('app-view-shoppingCart-confirmOrder',{ orderGoods:[cartGood],buyNow:true });
     }
 
     // 开通会员
@@ -93,7 +90,7 @@ export class GiftPage extends Widget {
     public share(name:string) {
         if (name === 'free') {
             shareWithUrl('免费领面膜','好友送了你一份面膜，快来领取吧',`${location.href}?page=${name}`,'');
-            
+
         } else {
             shareWithUrl('免费领课程','好友送了你一个线下课程，快来领取吧',`${location.href}?page=${name}`,'');
         }

@@ -22,3 +22,9 @@ export const PendingPaymentDuration = 15 * 60 * 1000;
 
 // 获取图片路径
 export const serverFilePath = `http://${sourceIp}:${sourcePort}/service/get_file?sid=`;
+
+// 免费面膜商品ID
+export const freeMaskGoodsId = 10010007;
+
+// 线下课程商品ID
+export const offClassGoodsId = 10010008;
