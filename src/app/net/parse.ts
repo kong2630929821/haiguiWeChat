@@ -223,6 +223,7 @@ export const parseOrder = (infos:any) => {
             goods.labels = [sku];
             orderGoods.push([goods,amount,unit]);
         }
+        // info[1] 为uid  无用
         const order:Order = {
             id:info[0],		       // 订单id
             orderGoods,   // (商品详细信息) (购买数量)

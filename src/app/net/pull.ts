@@ -296,7 +296,7 @@ export const cancelOrder = (oid:number) => {
 };
 
 /**
- * 收货
+ * 确认收货
  */
 export const receiptOrder = (oid:number) => {
     const msg = {
@@ -700,7 +700,7 @@ export const getWithdrawStatus = (id:number) => {
     return requestAsync(msg);
 };
 
-// 获取物流公司编码
+// 获取物流公司编码  3993730228950
 export const getExpressCompany = (sid:string) => {
     const msg = {
         type:'get_express_company',
@@ -710,9 +710,33 @@ export const getExpressCompany = (sid:string) => {
     };
 
     return requestAsync(msg).then(res => {
-        const data = JSON.parse(res.data);
-        const url = res.url;
-        const RequestData = res.RequestData;
-        console.log('getExpressCompany====',data,url,RequestData);
+        const data = JSON.parse(res.ResponseData);
+        console.log('getExpressCompany====',data);
+
+        return data.Shippers[0];    // 接口识别会返回一家或者多家快递公司，返回的数据根据快递鸟大数据分析结果排序，排名靠前的命中率更高。
+        
+    });
+};
+
+/**
+ * 获取物流信息
+ * @param LogisticCode 物流单号
+ * @param ShipperCode 物流公司编码
+ */
+export const getExpressInfo = (LogisticCode:string,ShipperCode:string) => {
+    const msg = {
+        type:'get_express_info',
+        param:{
+            LogisticCode,
+            ShipperCode
+        }
+    };
+
+    return requestAsync(msg).then(res => {
+        const data = JSON.parse(res.ResponseData);
+        console.log('getExpressInfo====',data);
+
+        return data.Traces;
+        
     });
 };

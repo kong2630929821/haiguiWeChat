@@ -28,7 +28,9 @@
             {{if it.statusShow.btn1}}
             <div w-class="btn" on-tap="btnClick(e,0)">{{it.statusShow.btn1}}</div>
             {{end}}
+            {{if it.statusShow.btn2}}
             <div w-class="btn btn1" on-tap="btnClick(e,1)">{{it.statusShow.btn2}}</div>
+            {{end}}
         </div>
     </div>
 </div>
