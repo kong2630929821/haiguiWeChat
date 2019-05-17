@@ -30,11 +30,16 @@ export class EditAddress extends Widget {
     public selectArea() {
         popNew('app-components-areaSelect-areaSelect',{ selected:this.props.areaSelect },(r) => {
             console.log('areaSelect ',  r);
-            if (r && r.length > 0) {
+            if (r && r[0] && r[0].id) {
                 this.props.area_id = Number(r[0].id.slice(0,2));
                 this.props.areaSelect = r;
                 const res = r.map(item => {
-                    return item.name;
+                    if (item.id) {
+                        return item.name;
+                    } else {
+                        return '';
+                    }
+                    
                 });
                 this.props.province = res.join('');
                 this.paint();

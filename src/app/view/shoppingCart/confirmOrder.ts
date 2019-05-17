@@ -97,10 +97,6 @@ export class ConfirmOrder extends Widget {
         }
         const allOrderPromise = [];
         const loading = popNewLoading('提交订单');
-        setTimeout(() => {
-            loading &&  loading.callback(loading.widget);
-            popNewMessage('支付失败');
-        },15 * 1000);
         for (const [k,v] of this.props.suppliers) {
             console.log(k,v);
             const no_list = [];
@@ -130,13 +126,15 @@ export class ConfirmOrder extends Widget {
             const cash = getStore('balance').cash * 100;  // 余额
             console.log('cash ========',cash);
             if (totalFee > cash) {
-                alert('wxpay');
                 payOids = oids;// 存储即将付款的订单id
                 payLoading = loading;
+                noResponse(() => {
+                    popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGPAYMENT,allStaus:allOrderStatus.slice(0,4) });
+                });
                 payMoney(totalFee - cash,'105',1);
             } else {
                 await orderPay(oids);
-                popNewMessage('交易成功');
+                popNewMessage('支付成功');
                 loading.callback(loading.widget);
                 popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGDELIVERED,allStaus:allOrderStatus.slice(0,4) });
                 this.ok && this.ok();
@@ -146,7 +144,7 @@ export class ConfirmOrder extends Widget {
             if (res.result === 2124) {
                 popNewMessage('库存不足');
             } else {
-                popNewMessage('购买失败');
+                popNewMessage('支付失败');
             }
         }
     }
@@ -154,13 +152,35 @@ export class ConfirmOrder extends Widget {
     public paySuccess() {
         popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGDELIVERED,allStaus:allOrderStatus.slice(0,4) });
         this.ok && this.ok();
-        payLoading.callback(payLoading.widget);
-        payLoading = undefined;
-        payOids = undefined;
     }
 }
-export let payLoading;
-export let payOids;
+
+export const setPayLoading = (loading:any) => {
+    payLoading = loading;
+};
+
+const closeLoading = () => {
+    payLoading && payLoading.callback(payLoading.widget);
+    payLoading = undefined;
+};
+export const setPayOids = (oids:number[]) => {
+    payOids = oids;
+};
+
+// 15秒没有收到充值成功的消息  认为失败
+export const noResponse = (cb?:Function) => {
+    timer = setTimeout(() => {
+        closeLoading();
+        cb && cb();
+    },5 * 1000);
+};
+
+export const clearNoResponse = () => {
+    clearTimeout(timer);
+};
+let payLoading;
+let payOids;
+let timer;
 // 支付
 export const orderPay = (orderIds:number[]) => {
     if (!orderIds) return;
@@ -175,13 +195,18 @@ export const orderPay = (orderIds:number[]) => {
 
 register('flags/mallRecharge',async () => {
     const w:any = forelet.getWidget(WIDGET_NAME);
+    clearNoResponse();
     try {
+        alert(JSON.stringify(payOids));
         await orderPay(payOids);
-        popNewMessage('交易成功');
+        popNewMessage('支付成功');
         w && w.paySuccess();
+        closeLoading();
+        payOids = undefined;
     } catch (e) {
-        popNewMessage('购买失败');
+        popNewMessage('支付失败');
         payLoading.callback(payLoading.widget);
         payLoading = undefined;
+        payOids = undefined;
     }
 });

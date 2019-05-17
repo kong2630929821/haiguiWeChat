@@ -20,6 +20,7 @@
     color: #c6c6c6;
     letter-spacing: 0.24px;
     text-align: center;
+    position: relative;
 }
 .ga-tab-bar-item-active{
     color:  #8D3FED;
@@ -33,7 +34,7 @@
 }
 .ga-tab-bar-text{
     font-size: 20px;
-    margin-top: 10px;
+    margin-top: 5px;
 }
 
 .tabs{
@@ -46,4 +47,32 @@
     left: 0;
     bottom: 0;
     right: 0;
+}
+.icon{
+    position: absolute;
+    top: 0px;
+    right: -25px;
+    background-color: #000;
+    color: #fff;
+   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.icon1{
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+}
+.icon2{
+    height: 36px;
+    padding: 0 10px;
+    border-radius: 14px;
+    right: -35px;
+}
+.icon3{
+    height: 36px;
+    padding: 0 10px;
+    border-radius: 14px;
+    right: -50px;
 }

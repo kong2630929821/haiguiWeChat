@@ -23,10 +23,17 @@
     <div style=" display: flex;height: 110px;width: 100%;">
         {{for index,item of it.tabBarList}}
         <div w-class="ga-tab-bar-item {{it.isActive == index ? 'ga-tab-bar-item-active' : ''}}" on-down="tabBarChangeListener(e,{{index}})">
-            <img src="../../res/image/{{it.isActive == index ? item.iconActive : item.icon}}" w-class="ga-tab-bar-icon" />
+            <div style="position:relative;">
+                <img src="../../res/image/{{it.isActive == index ? item.iconActive : item.icon}}" w-class="ga-tab-bar-icon" />
+                {{if (index === 2 && it.cartGoodsLen > 0)}}
+                {{:icon =  it.cartGoodsLen > 99 ? "icon3" : (it.cartGoodsLen > 9 ? "icon2" : "icon1" )}}
+                <div w-class="icon {{icon}}">{{it.cartGoodsLen > 99 ? "99+" : it.cartGoodsLen}}</div>
+                {{end}}
+            </div>
             <span w-class="ga-tab-bar-text">
                 {{item.text}}
             </span>
+            
         </div>
         {{end}}
     </div>

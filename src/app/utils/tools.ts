@@ -2,7 +2,6 @@
  * 常用工具
  */
 import { popNew } from '../../pi/ui/root';
-import { info } from '../../pi/util/log';
 import { getStore, GoodsDetails, ImageType, MallImages, SKU, UserType } from '../store/memstore';
 
 // 弹出提示框

@@ -6,7 +6,7 @@ import { open, request, setReloginCallback, setUrl } from '../../pi/net/ui/con_m
 import { wsUrl } from '../config';
 import { getStore, GroupsLocation, setStore, UserType } from '../store/memstore';
 import { registerWXAPI } from '../utils/wxAPI';
-import { getAddress, getBalance, getCart, getEarningTotal, getFreight, getGroups, getInviteCode, getUserInfo } from './pull';
+import { getAddress, getBalance, getCart, getEarningTotal, getExpressCompany, getFreight, getGroups, getInviteCode, getUserInfo } from './pull';
 import { payComplete } from './push';
 
 /**
@@ -15,10 +15,6 @@ import { payComplete } from './push';
  * 如果是浏览器环境，直接模拟一个WXUSERINFO
  */
 const getWxUserInfo = () => {
-    if (!localStorage.WXUSERINFO) {
-        localStorage.WXUSERINFO = `{"sid":"4tZ9bjUNgkkuLZiRCskRRUsgyQzyC7vGKHZa", "uinfo":{"openid":"oazhW5yQ5w8-WiQDi8qPTCNfKoGM","nickname":"彬","sex":1,"language":"zh_CN","city":"成都","province":"四川","country":"中国","headimgurl":"http://thirdwx.qlogo.cn/mmopen/vi_32/tmVLphkQHLwj0sykp4TkHXbtn917J6BoTq3QNVc49NkVY6ibA1lCMO3Y6AtUPSYEpt0dATg0sdCh4Z4WH3FpaTA/132","privilege":[]}}`;
-    }
-
     return JSON.parse(localStorage.WXUSERINFO);
 };
 
@@ -92,7 +88,22 @@ const conReOpen = () => {
  * 用户登录
  */
 const userLogin = () => {
-    const userStr = getWxUserInfo().uinfo;
+    let userStr;
+    let openId;
+    if (location.search.indexOf('debug') >= 0) {
+        openId = localStorage.getItem('openid');
+        if (!openId) {
+            openId = new Date().getTime();
+            localStorage.setItem('openid',openId);
+        }
+        userStr = {
+            openid:openId,
+            headimgurl:'',
+            nickname:'默认名字'
+        };
+    } else {
+        userStr = getWxUserInfo().uinfo;
+    }
     const msg = { 
         type: 'login', 
         param: { 
@@ -113,6 +124,7 @@ const userLogin = () => {
         getCart();
         getAddress();  //
         getFreight();
+        getExpressCompany('118650888018');
         // 获取收益统计
         getEarningTotal().then(res => {
             const earning = getStore('earning');

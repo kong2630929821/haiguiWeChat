@@ -11,7 +11,7 @@ import { PowerFlag } from '../member/powerConstant';
 // ============================== 导出
 export const run = (cb): void =>  {
     addWidget(document.body, 'pi-ui-root');
-    const page = location.search ? /page=([a-zA-Z]+)&*/.exec(location.search)[1] :'';
+    const page = /page=([a-zA-Z]+)&*/.exec(location.search) ? /page=([a-zA-Z]+)&*/.exec(location.search)[1] :'';
     if (page === 'free') {
         // 打开免费试用装
         popNew('app-view-member-giftPage',{ fg:PowerFlag.free });

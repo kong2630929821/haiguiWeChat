@@ -41,8 +41,8 @@ export class AddressList extends Widget {
         },50);
     }
 
-    // 点击右侧按钮
-    public rightClick(num:number) {
+    // 点击按钮
+    public itemClick(num:number) {
         console.log(num);
         popNew('app-view-mine-editAddress',{ ...this.props.list[num],onlyDel:true });
     }
