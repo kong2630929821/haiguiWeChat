@@ -1,8 +1,8 @@
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
-import { PendingPaymentDuration } from '../../config';
 import { Order, OrderStatus } from '../../store/memstore';
 import { calcPrices, getImageThumbnailPath, priceFormat } from '../../utils/tools';
+import { statusShows } from './orderDetail';
 import { calcLeftTime } from './orderItem';
 
 export interface Props {
@@ -14,28 +14,7 @@ export interface Props {
  */
 export class OrderItemDetail extends Widget {
     public timer:number;
-    public statusShows:any = {
-        [OrderStatus.PENDINGPAYMENT]:{
-            desc:'等待买家付款',
-            btn1:'取消订单',
-            btn2:'去付款'
-        },
-        [OrderStatus.PENDINGDELIVERED]:{
-            desc:'等待发货',
-            btn1:'',
-            btn2:'查看物流'
-        },
-        [OrderStatus.PENDINGRECEIPT]:{
-            desc:'商品已发货',
-            btn1:'查看物流',
-            btn2:'确认收货'
-        },
-        [OrderStatus.COMPLETED]:{
-            desc:'',
-            btn1:'',
-            btn2:'再来一单'
-        }
-    };
+
     public setProps(props:any) {
         clearTimeout(this.timer);
         let orderIdShow = `订单号:${props.order.id}`;
@@ -45,7 +24,7 @@ export class OrderItemDetail extends Widget {
         }
         this.props = {
             ...props,
-            statusShow:this.statusShows[props.status],
+            statusShow:statusShows[props.status],
             orderIdShow,
             getImageThumbnailPath,
             priceFormat,

@@ -46,6 +46,7 @@
     font-weight:400;
     color:rgba(136,136,136,1);
     line-height:28px;
+    align-content: flex-start;
 }
 .group2-item{
     width: 33.3%;
