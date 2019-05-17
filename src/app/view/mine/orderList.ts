@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { cancelOrder, getOrders, payMoney } from '../../net/pull';
+import { cancelOrder, getOrders, payMoney, receiptOrder } from '../../net/pull';
 import { getStore, Order, OrderStatus, register } from '../../store/memstore';
 import { popNewLoading, popNewMessage } from '../../utils/tools';
 import { noResponse, orderPay, setPayLoading, setPayOids } from '../shoppingCart/confirmOrder';
@@ -57,34 +57,26 @@ export class OrderList extends Widget {
     public async btnClick(e:any,index:number) {
         const btn = e.btn;
         const order = this.state.orders.get(this.props.activeStatus)[index];
+        const activeStatus = this.props.activeStatus;
         if (btn === 1) {  // 确定按钮
-            if (this.props.activeStatus === OrderStatus.PENDINGPAYMENT) {   // 去付款
-                const oids = [order.id];
-                const cash = getStore('balance').cash * 100;  // 余额 
-                const totalFee = order.origin + order.tax + order.freight;
-                const loading = popNewLoading('支付中');
-                if (totalFee > cash) {
-                    setPayOids(oids); // 存储即将付款的订单id
-                    setPayLoading(loading);
-                    noResponse();
-                    payMoney(totalFee - cash,'105',1);
-                } else {
-                    await orderPay(oids);
-                    popNewMessage('支付成功');
-                    loading.callback(loading.widget);
-                    this.paySuccess();
-                }
+            if (activeStatus === OrderStatus.PENDINGPAYMENT) {   // 待付款 去付款
+                payOrderNow(order,this.paySuccess);  // 去付款
+            } else if (activeStatus === OrderStatus.PENDINGRECEIPT) {  // 待收货  确认收货
+                receiptOrder(order.id).then(() => {
+                    this.typeClick(OrderStatus.PENDINGRECEIPT);
+                });
             }
         } else {  // 取消按钮
-            if (this.props.activeStatus === OrderStatus.PENDINGPAYMENT) { // 取消订单
+            if (activeStatus === OrderStatus.PENDINGPAYMENT) { // 待付款  取消订单
                 cancelOrder(order.id).then(() => {
                     popNewMessage('取消成功');
-                    getOrders(this.props.activeStatus);
+                    getOrders(activeStatus);
                 }).catch(() => {
                     popNewMessage('取消失败');
                 });
+            } else if (activeStatus === OrderStatus.PENDINGRECEIPT) {  // 待收货  查看物流
+                popNew('app-view-mine-freight',{ order: order });
             }
-
         }
 
         console.log(e.btn, index);
@@ -96,6 +88,29 @@ export class OrderList extends Widget {
         this.paint();
     }
 }
+
+// 去付款
+export const payOrderNow = async (order:Order,success:Function) => {
+    const oids = [order.id];
+    const cash = getStore('balance').cash;  // 余额 
+    const totalFee = order.origin + order.tax + order.freight;
+    const loading = popNewLoading('支付中');
+    try {
+        if (totalFee > cash) {
+            setPayOids(oids); // 存储即将付款的订单id
+            setPayLoading(loading);
+            noResponse();
+            payMoney(totalFee - cash,'105',1);
+        } else {
+            await orderPay(oids);
+            popNewMessage('支付成功');
+            loading.callback(loading.widget);
+            success && success();        }
+    } catch (e) {
+        loading.callback(loading.widget);
+        popNewMessage('支付失败');
+    }
+};
 
 const STATE = {
     orders:new Map<OrderStatus,Order[]>()

@@ -17,7 +17,7 @@
             <div w-class="groups1">
                 <div w-class="groups1-scroll">
                     {{for i,v of it.classificationGroups}}
-                    <div w-class="groups1-item">
+                    <div w-class="groups1-item" class="{{v.id === it.selectedLevel1Groups.id ? 'item-active' : ''}}">
                         <div w-class="groups1-item-text {{v.id === it.selectedLevel1Groups.id ? 'groups1-item-active' : ''}}" on-tap="selectLevel1Groups(e,{{i}})">{{v.name}}</div>
                     </div>
                     {{end}}

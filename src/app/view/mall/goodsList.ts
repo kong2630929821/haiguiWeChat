@@ -33,6 +33,14 @@ export class GoodsList extends Widget {
         console.log('GoodsList ====',this.props);
     }
 
+    public attach() {
+        super.attach();
+        const viewPortWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
+        // const activeDom = document.querySelector('.item-active');
+        // const rect = activeDom.getBoundingClientRect();
+        console.log('viewPortWidth ===',viewPortWidth);
+        // console.log('rect ===',rect);
+    }
     // 一级分组页切换
     public level1GroupsExpandedClick() {
         this.props.level1GroupsExpanded = !this.props.level1GroupsExpanded;

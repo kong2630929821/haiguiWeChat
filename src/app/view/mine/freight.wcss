@@ -3,12 +3,6 @@
     flex-direction: column;
     z-index: 10;
 }
-.top{
-    border-top: 1px solid #E5E5E5;
-    border-bottom: 1px solid #E5E5E5;
-    padding: 20px 90px 20px 30px;
-    margin-bottom: 20px;
-}
 .row{
     display: flex;
     justify-content: space-between;
@@ -57,7 +51,7 @@
     border-right: none;
 }
 .process-box{
-    max-height: 414px;
+    flex: 1 0 0;
     overflow-x: hidden;
     overflow-y: auto;
     scroll-behavior: smooth;
