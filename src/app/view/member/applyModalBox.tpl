@@ -16,7 +16,11 @@
             {{end}}
         </div>
         <div w-class="row" ev-input-change="inviteCodeChange">
+            {{if it.inviteCode}}
+            <div w-class="addr">{{it.inviteCode}}</div>
+            {{else}}
             <widget w-tag="app-components-input-input">{placeHolder:"推荐人邀请码",style:"padding:10px;font-size:28px;",input:{{it.inviteCode}} }</widget>
+            {{end}}
             <div w-class="btn" on-tap="getInvoteCode">推荐一个</div>
         </div>
 

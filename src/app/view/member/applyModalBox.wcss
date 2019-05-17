@@ -68,4 +68,8 @@
     color: #B2B2B2;
     flex: 1 0 0;
     padding-left: 10px;
+    word-break: break-all;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 }

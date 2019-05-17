@@ -144,11 +144,14 @@ const userLogin = () => {
         getBalance();
 
         // 获取用户信息
-        getUserInfo().then(r => {
+        getUserInfo().then(res => {
             const user = getStore('user');
             user.avatar = userStr.headimgurl;
-            user.userName = r.wx_name || userStr.nickname;
-            user.phoneNum = r.phone;
+            user.userName = res.wx_name || userStr.nickname;
+            user.phoneNum = res.phone;
+            if (res.level < UserType.other) {
+                user.fcode = res.fcode;  // 上级的邀请码
+            } 
             setStore('user',user);
         });
 

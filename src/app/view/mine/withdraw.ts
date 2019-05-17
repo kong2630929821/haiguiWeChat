@@ -34,10 +34,10 @@ export class Withdraw extends Widget {
         // && this.props.inputMoney % 10 === 0
         if (this.props.inputMoney < this.props.balance) {
             applyWithdraw(this.props.inputMoney * 100).then(r => {
-                popNewMessage('申请提现成功');
+                popNewMessage('申请提交成功');
                 this.ok && this.ok();
             }).catch(r => {
-                popNewMessage('申请提现失败');
+                popNewMessage('申请提交失败');
             });
         } else {
             popNewMessage('请输入合适的金额');

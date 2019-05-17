@@ -24,7 +24,7 @@ export class ModalBoxInput extends Widget {
         userName:'',
         selectAddr:false,
         phoneNum:'',
-        address:'详细地址信息',
+        address:'',
         nowCount:0,
         phoneCode:'',
         inviteCode:''
@@ -39,8 +39,9 @@ export class ModalBoxInput extends Widget {
         const user = getStore('user');
         this.props.userName = user.userName;
         this.props.phoneNum = user.phoneNum;
-        const addr = getLastAddress();
-        this.props.address = addr[2].address;
+        this.props.inviteCode = user.fcode || 'WSGHJA';
+        const addr = getLastAddress()[2];
+        this.props.address = addr ? addr.address :'详细地址信息';
     }
 
     // 输入用户名
@@ -152,7 +153,8 @@ export class ModalBoxInput extends Widget {
 
     public selAddr() {
         popNew('app-view-mine-addressList',{ isChoose:true },(index:number) => {
-            this.props.address = getStore('mall/addresses')[index].address;
+            const addr = getStore('mall/addresses')[index];
+            this.props.address = addr ? addr.address :'详细地址信息';
             this.paint();
         });
     }

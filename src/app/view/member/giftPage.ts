@@ -1,8 +1,8 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { freeMaskGoodsId, offClassGoodsId } from '../../config';
-import { getGoodsDetails, orderNow, upgradeHWang } from '../../net/pull';
-import { CartGoods, getStore, UserType } from '../../store/memstore';
+import { upgradeHWang } from '../../net/pull';
+import { getStore, UserType } from '../../store/memstore';
 import { payToUpHbao } from '../../utils/logic';
 import { popNewLoading, popNewMessage } from '../../utils/tools';
 import { shareWithUrl } from '../../utils/wxAPI';
@@ -63,10 +63,8 @@ export class GiftPage extends Widget {
     // 确认下单
     public async confirmOrder (id:number) {
         const loadding = popNewLoading('请稍候');
-        // const goods = await getGoodsDetails(id);
-        // loadding.callback(loadding.widget);
-        // orderNow([id,1,[]);
-        // popNew('app-view-shoppingCart-confirmOrder',{ orderGoods:[cartGood],buyNow:true });
+        loadding.callback(loadding.widget);
+        
     }
 
     // 开通会员
