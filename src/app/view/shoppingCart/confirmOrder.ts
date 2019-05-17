@@ -123,7 +123,7 @@ export class ConfirmOrder extends Widget {
                 console.log('oid ====',oid);
             }
             const totalFee = this.props.totalSale + this.props.totalFreight + this.props.totalTax;
-            const cash = getStore('balance').cash * 100;  // 余额
+            const cash = getStore('balance').cash;  // 余额
             console.log('cash ========',cash);
             if (totalFee > cash) {
                 payOids = oids;// 存储即将付款的订单id

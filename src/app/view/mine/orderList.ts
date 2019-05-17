@@ -92,7 +92,7 @@ export class OrderList extends Widget {
 // 去付款
 export const payOrderNow = async (order:Order,success:Function) => {
     const oids = [order.id];
-    const cash = getStore('balance').cash * 100;  // 余额 
+    const cash = getStore('balance').cash;  // 余额 
     const totalFee = order.origin + order.tax + order.freight;
     const loading = popNewLoading('支付中');
     try {
