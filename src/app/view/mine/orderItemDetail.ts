@@ -1,9 +1,9 @@
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { PendingPaymentDuration } from '../../config';
-import { getOrders } from '../../net/pull';
 import { Order, OrderStatus } from '../../store/memstore';
 import { calcPrices, getImageThumbnailPath, priceFormat } from '../../utils/tools';
+import { calcLeftTime } from './orderItem';
 
 export interface Props {
     order:Order;  // 订单
@@ -12,7 +12,7 @@ export interface Props {
 /**
  * 订单
  */
-export class OrderItem extends Widget {
+export class OrderItemDetail extends Widget {
     public timer:number;
     public statusShows:any = {
         [OrderStatus.PENDINGPAYMENT]:{
@@ -77,17 +77,3 @@ export class OrderItem extends Widget {
         return super.destroy();
     }
 }
-
-// 计算倒计时
-export const calcLeftTime = (start:number) => {
-    const leftTime = start + PendingPaymentDuration - new Date().getTime();
-    if (leftTime < 0) {
-        getOrders(OrderStatus.PENDINGPAYMENT);
-
-        return `0分0秒`;
-    }
-    const leftMinutes = Math.floor(leftTime / 1000 / 60);
-    const leftSeconds = Math.floor(leftTime / 1000) % 60;
-
-    return `${leftMinutes}分${leftSeconds}秒`;
-};
