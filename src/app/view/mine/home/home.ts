@@ -11,7 +11,7 @@ export const allOrderStatus = [
     { name:'待付款',status:OrderStatus.PENDINGPAYMENT,img:'wallet.png' },
     { name:'待发货',status:OrderStatus.PENDINGDELIVERED,img:'goods.png' },
     { name:'待收货',status:OrderStatus.PENDINGRECEIPT,img:'truck.png' },
-    { name:'已完成',status:OrderStatus.COMPLETED ,img:'order.png' },
+    { name:'已完成',status:OrderStatus.PENDINGFINISH ,img:'order.png' },
     { name:'退货',status:OrderStatus.RETURNSTART,img:'return.png' },
     { name:'退货中',status:OrderStatus.RETURNING,img:'return.png' },
     { name:'已退货',status:OrderStatus.RETURNEND,img:'return.png' }
