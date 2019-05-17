@@ -15,9 +15,9 @@ export class AreaSelect extends Widget {
     public ok:(fg:any) => void;
     public props:Props = {
         showList:PROVINCE_LIST,
-        selected:[{ name:'中国大陆' }],
+        selected:[{ name:'请选择' }],
         activeNum:0,
-        activeStr:'中国大陆'
+        activeStr:'请选择'
     };
 
     public setProps(props:any) {

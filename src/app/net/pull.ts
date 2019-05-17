@@ -2,7 +2,7 @@ import { request } from '../../pi/net/ui/con_mgr';
 import { sourceIp, sourcePort } from '../config';
 import { getStore,GroupsLocation, OrderStatus, setStore } from '../store/memstore';
 import { openWXPay } from '../utils/logic';
-import { popNewMessage, priceFormat } from '../utils/tools';
+import { popNewMessage } from '../utils/tools';
 import { requestAsync } from './login';
 import { parseAddress, parseAddress2, parseAllGroups, parseArea, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
 
@@ -453,7 +453,7 @@ export const getBalance = async () => {
 
     const res = await requestAsync(msg);
     const balance = {
-        cash: priceFormat(res.money),   // 现金，单位为分
+        cash: res.money,   // 现金，单位为分
         shell:res.haibei,
         integral:res.integral
     };
@@ -698,4 +698,21 @@ export const getWithdrawStatus = (id:number) => {
     };
 
     return requestAsync(msg);
+};
+
+// 获取物流公司编码
+export const getExpressCompany = (sid:string) => {
+    const msg = {
+        type:'get_express_company',
+        param:{
+            LogisticCode:sid
+        }
+    };
+
+    return requestAsync(msg).then(res => {
+        const data = JSON.parse(res.data);
+        const url = res.url;
+        const RequestData = res.RequestData;
+        console.log('getExpressCompany====',data,url,RequestData);
+    });
 };
