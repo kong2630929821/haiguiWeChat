@@ -596,7 +596,7 @@ export const getUserInfo = () => {
  * @param ttype 商品ID | 海宝
  * @param count 数量
  */
-export const payMoney = (money:number,ttype:string,count:number= 1) => {
+export const payMoney = (money:number,ttype:string,count:number= 1,failed?:Function) => {
     const msg = {
         type:'mall/pay@pay',
         param:{
@@ -612,7 +612,7 @@ export const payMoney = (money:number,ttype:string,count:number= 1) => {
             console.log(`错误信息为${resp.type}`);
             popNewMessage(`支付失败${resp.type}`);
         } else {
-            openWXPay(resp.ok);
+            openWXPay(resp.ok,failed);
         }
     });
 };

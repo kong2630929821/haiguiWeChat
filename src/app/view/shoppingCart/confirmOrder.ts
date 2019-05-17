@@ -131,7 +131,12 @@ export class ConfirmOrder extends Widget {
                 noResponse(() => {
                     popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGPAYMENT,allStaus:allOrderStatus.slice(0,4) });
                 });
-                payMoney(totalFee - cash,'105',1);
+                payMoney(totalFee - cash,'105',1,() => {
+                    popNewMessage('支付失败');
+                    clearNoResponse();
+                    closeLoading();
+                    popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGPAYMENT,allStaus:allOrderStatus.slice(0,4) });
+                });
             } else {
                 await orderPay(oids);
                 popNewMessage('支付成功');
@@ -159,7 +164,7 @@ export const setPayLoading = (loading:any) => {
     payLoading = loading;
 };
 
-const closeLoading = () => {
+export const closeLoading = () => {
     payLoading && payLoading.callback(payLoading.widget);
     payLoading = undefined;
 };
@@ -172,7 +177,7 @@ export const noResponse = (cb?:Function) => {
     timer = setTimeout(() => {
         closeLoading();
         cb && cb();
-    },5 * 1000);
+    },15 * 1000);
 };
 
 export const clearNoResponse = () => {

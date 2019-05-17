@@ -58,10 +58,13 @@ export const timestampFormat = (timestamp: number,timeType?: number) => {
 /**
  * 打开微信支付
  */
-export const openWXPay = (param:any) => {
+export const openWXPay = (param:any,failed?:Function) => {
     const onBridgeReady = () => {
         WeixinJSBridge.invoke('getBrandWCPayRequest', JSON.parse(param), (res) => {
             alert(JSON.stringify(res));
+            if (res.err_msg) {
+                failed && failed();
+            }
         });
     };
 

@@ -78,7 +78,7 @@ export const statusShows:any = {
         btn1:'查看物流',
         btn2:'确认收货'
     },
-    [OrderStatus.COMPLETED]:{
+    [OrderStatus.PENDINGFINISH]:{
         desc:'',
         btn1:'',
         btn2:''

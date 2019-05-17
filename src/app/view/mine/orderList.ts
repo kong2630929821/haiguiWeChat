@@ -4,7 +4,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { cancelOrder, getOrders, payMoney, receiptOrder } from '../../net/pull';
 import { getStore, Order, OrderStatus, register } from '../../store/memstore';
 import { popNewLoading, popNewMessage } from '../../utils/tools';
-import { noResponse, orderPay, setPayLoading, setPayOids } from '../shoppingCart/confirmOrder';
+import { clearNoResponse, closeLoading, noResponse, orderPay, setPayLoading, setPayOids } from '../shoppingCart/confirmOrder';
 
 // tslint:disable-next-line:no-reserved-keywords
 declare var module: any;
@@ -63,7 +63,7 @@ export class OrderList extends Widget {
                 payOrderNow(order,this.paySuccess);  // 去付款
             } else if (activeStatus === OrderStatus.PENDINGRECEIPT) {  // 待收货  确认收货
                 receiptOrder(order.id).then(() => {
-                    this.typeClick(OrderStatus.PENDINGRECEIPT);
+                    this.typeClick(OrderStatus.PENDINGFINISH);
                 });
             }
         } else {  // 取消按钮
@@ -100,7 +100,11 @@ export const payOrderNow = async (order:Order,success:Function) => {
             setPayOids(oids); // 存储即将付款的订单id
             setPayLoading(loading);
             noResponse();
-            payMoney(totalFee - cash,'105',1);
+            payMoney(totalFee - cash,'105',1,() => {
+                popNewMessage('支付失败');
+                clearNoResponse();
+                closeLoading();
+            });
         } else {
             await orderPay(oids);
             popNewMessage('支付成功');
