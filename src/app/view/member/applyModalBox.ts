@@ -9,7 +9,7 @@ interface Props {
     userName:string;  // 用户名
     selectAddr:boolean;  // 是否显示地区选择
     phoneNum:string;  // 手机号
-    address:string;  // 地址
+    address:any;  // 地址 Address
     nowCount:number;  // 倒计时
     phoneCode:string;  // 手机验证码
     inviteCode:string;  // 邀请码
@@ -19,13 +19,13 @@ interface Props {
  * 填信息输入框弹窗
  */
 export class ModalBoxInput extends Widget {
-    public ok:() => void;
+    public ok:(addr:any) => void;  // 地址信息
     public cancel:() => void;
     public props:Props = {
         userName:'',
         selectAddr:false,
         phoneNum:'',
-        address:'',
+        address:{},
         nowCount:0,
         phoneCode:'',
         inviteCode:'',
@@ -42,8 +42,8 @@ export class ModalBoxInput extends Widget {
         this.props.userName = user.userName;
         this.props.phoneNum = user.phoneNum;
         this.props.fcode = user.fcode;
-        const addr = getLastAddress()[2];
-        this.props.address = addr ? addr.address :'详细地址信息';
+        this.props.inviteCode = user.fcode;
+        this.props.address = getLastAddress()[2];
     }
 
     // 输入用户名
@@ -66,11 +66,6 @@ export class ModalBoxInput extends Widget {
     // 输入邀请码
     public inviteCodeChange(e:any) {
         this.props.inviteCode = e.value;
-        this.paint();
-    }
-
-    public addressChange(e:any) {
-        this.props.address = e.value;
         this.paint();
     }
 
@@ -109,7 +104,7 @@ export class ModalBoxInput extends Widget {
 
     // 确认
     public async confirm() {
-        if (!this.props.userName || !this.props.phoneNum || !this.props.phoneCode || !this.props.inviteCode) {
+        if (!this.props.userName || !this.props.phoneNum || !this.props.phoneCode || !this.props.inviteCode || (this.props.selectAddr && !this.props.address)) {
             popNewMessage('请将内容填写完整');
         } else {
             const loadding = popNewLoading('请稍后');
@@ -151,14 +146,13 @@ export class ModalBoxInput extends Widget {
             }
             
             loadding.callback(loadding.widget);
-            this.ok && this.ok();  // 所有接口都请求成功后关闭弹窗
+            this.ok && this.ok(this.props.address);  // 所有接口都请求成功后关闭弹窗
         }
     }
 
     public selAddr() {
         popNew('app-view-mine-addressList',{ isChoose:true },(index:number) => {
-            const addr = getStore('mall/addresses')[index];
-            this.props.address = addr ? addr.address :'详细地址信息';
+            this.props.address = getStore('mall/addresses')[index];
             this.paint();
         });
     }

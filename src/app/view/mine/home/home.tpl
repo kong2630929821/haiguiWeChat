@@ -1,6 +1,6 @@
 <div>
     <div w-class="top">
-        <img src="{{it1.avatar}}" w-class="avatar"/>
+        <img src="{{it1.avatar||'../../../res/image/income_active.png'}}" w-class="avatar"/>
         <div w-class="desc">
             <div w-class="username">
                 <span>{{it1.userName}}</span>
@@ -9,8 +9,9 @@
                 {{end}}
             </div>
             {{if it1.inviteCode}}
-            <div w-class="code">
-                邀请码：&nbsp;{{it1.inviteCode}}
+            <div style="display:flex;align-items:center;">
+                <div w-class="code">邀请码：&nbsp;{{it1.inviteCode}}</div>
+                <img src="../../../res/image/copyBtn.png" w-class="copybtn"/>
             </div>
             {{end}}
         </div>
@@ -23,6 +24,7 @@
         </div>
         {{end}}
     </div>
+    
     <div w-class="divideLine"></div>
     <div w-class="orderType">
         {{for i,v of it1.balance}}

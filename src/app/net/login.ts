@@ -125,23 +125,17 @@ const userLogin = () => {
         getAddress();  //
         getFreight();
         // 获取收益统计
-        getEarningTotal().then(res => {
-            const earning = getStore('earning');
-            earning.baby = res.hbaoCount;
-            earning.cash = res.cash;
-            earning.partner = res.partnerCount;
-            earning.shell = res.hbei;
-            setStore('earning',earning);
-        });
+        getEarningTotal();
+        
+        // 获取账户余额
+        getBalance();
+
         // 只有海宝和海王才有邀请码
         if (r.level < UserType.normal) {  
             getInviteCode().then(res => {
                 setStore('user/inviteCode',res.code);
             });
         }
-
-        // 获取账户余额
-        getBalance();
 
         // 获取用户信息
         getUserInfo().then(res => {

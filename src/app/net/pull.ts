@@ -385,13 +385,20 @@ export const getOrderById = (oids:number[]) => {
 /**
  * 获取收益统计
  */
-export const getEarningTotal = () => {
+export const getEarningTotal = async () => {
     const msg = {
         type:'mall/members@earnings_total',
         param:{}
     };
 
-    return requestAsync(msg);
+    const res = await requestAsync(msg);
+    const earning = {
+        baby: res.hbaoCount,
+        cash: res.cash,
+        partner: res.partnerCount,
+        shell: res.hbei
+    };
+    setStore('earning',earning);
 };
 
 /**
@@ -775,5 +782,34 @@ export const getExpressInfo = (LogisticCode:string,ShipperCode:string) => {
 
 /**
  * 获取活动商品价格
+ * @param goods 商品ID
+ * @param addr 地址
  */
-export const getActivePrice = () => {};
+export const getActiveGoodsPrice = (goods:number, addr:number) => {
+    const msg = {
+        type:'mall/members@get_activity_goods',
+        param:{
+            goods_id: goods,
+            addr_id: addr
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 购买活动商品
+ * @param goods 商品ID, 商品数量, SKU 
+ * @param addr 地址
+ */
+export const orderActiveGoods = (goods:[number,number,string],addr:number) => {
+    const msg = {
+        type:'order',
+        param:{
+            good_info: goods,
+            address_no: addr
+        }
+    };
+
+    return requestAsync(msg);
+};

@@ -24,7 +24,19 @@ export const PendingPaymentDuration = 15 * 60 * 1000;
 export const serverFilePath = `http://${sourceIp}:${sourcePort}/service/get_file?sid=`;
 
 // 免费面膜商品ID
-export const freeMaskGoodsId = 10010007;
+export const freeMaskGoodsId = 10020001;
 
 // 线下课程商品ID
-export const offClassGoodsId = 10010008;
+export const OffClassGoodsId = 10020002;
+
+// 399美白礼包
+export const whiteGoodsId_399 = 10020003;
+
+// 1万美白礼包
+export const whiteGoodsId_10000 = 10020004;
+
+// 5980线下精品课程
+export const vipClassGoodsId = 10020005;
+
+// 29800线下销售课程
+export const saleClassGoodsId = 10020006;

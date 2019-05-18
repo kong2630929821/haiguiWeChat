@@ -34,6 +34,8 @@
     color:rgba(255,255,255,1);
     line-height:37px;
     margin-top: 10px;
+    display: flex;
+    align-items: center;
 }
 .arrow{
     margin-right: 20px;
@@ -89,4 +91,9 @@
     align-items: center;
     height: 50px;
     line-height: 50px;
+}
+.copybtn{
+    width: 30px;
+    height: 30px;
+    margin-left: 15px;
 }
