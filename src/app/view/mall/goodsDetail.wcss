@@ -159,6 +159,7 @@
     display: flex;
 }
 .fix-item{
+    position: relative;
     flex: 1 0 0;
 }
 .fix-item-1{
@@ -181,4 +182,32 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.icon{
+    position: absolute;
+    top: 0px;
+    right: -25px;
+    background-color: #000;
+    color: #fff;
+   
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.icon1{
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+}
+.icon2{
+    height: 36px;
+    padding: 0 10px;
+    border-radius: 14px;
+    right: -35px;
+}
+.icon3{
+    height: 36px;
+    padding: 0 10px;
+    border-radius: 14px;
+    right: -50px;
 }

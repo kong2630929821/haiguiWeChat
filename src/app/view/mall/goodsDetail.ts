@@ -1,8 +1,14 @@
 import { popNew } from '../../../pi/ui/root';
+import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { addCart, getAreas, getGoodsDetails, getSuppliers } from '../../net/pull';
-import { Area, CartGoods, GoodsDetails, ImageType, setStore } from '../../store/memstore';
+import { addCart, getAreas, getGoodsDetails } from '../../net/pull';
+import { Area, CartGoods, getStore, GoodsDetails, ImageType, register, setStore } from '../../store/memstore';
 import { calcPrices, getImageMainPath, getImagePath, popNewMessage, priceFormat } from '../../utils/tools';
+
+// tslint:disable-next-line:no-reserved-keywords
+declare var module: any;
+export const forelet = new Forelet();
+export const WIDGET_NAME = module.id.replace(/\//g, '-');
 
 interface Props {
     goods:GoodsDetails;     // 商品详情
@@ -40,6 +46,7 @@ export class GoodsDetailHome extends Widget {
         this.props = {
             ...props,
             ...ret,
+            cartGoodsLen:getStore('mall/cartGoods').length,
             priceFormat,
             getImageMainPath,
             descProps:undefined,   
@@ -128,4 +135,15 @@ export class GoodsDetailHome extends Widget {
     public gotoShoppinigCart() {
         setStore('flags/gotoShoppinigCart',true);
     }
+
+    public updateCartGoodsIcon(len:number) {
+        this.props.cartGoodsLen = len;
+        this.paint();
+    }
 }
+
+// 购物车变动
+register('mall/cartGoods',(cartGoods:CartGoods[]) => {
+    const w:any = forelet.getWidget(WIDGET_NAME);
+    w && w.updateCartGoodsIcon(cartGoods.length);
+});
