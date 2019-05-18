@@ -4,9 +4,9 @@
 
 import { open, request, setReloginCallback, setUrl } from '../../pi/net/ui/con_mgr';
 import { wsUrl } from '../config';
-import { getStore, GroupsLocation, setStore, UserType } from '../store/memstore';
+import { getStore, GroupsLocation, OrderStatus, setStore, UserType } from '../store/memstore';
 import { registerWXAPI } from '../utils/wxAPI';
-import { getAddress, getBalance, getCart, getEarningTotal, getExpressCompany, getExpressInfo, getFreight, getGroups, getInviteCode, getReturnGoods, getUserInfo, ReturnGoodsStatus } from './pull';
+import { getAddress, getBalance, getCart, getEarningTotal, getFreight, getGroups, getInviteCode, getOrders, getUserInfo } from './pull';
 import { payComplete } from './push';
 
 /**
@@ -124,6 +124,11 @@ const userLogin = () => {
         getCart();
         getAddress();  //
         getFreight();
+
+        // 获取订单
+        getOrders(OrderStatus.PENDINGPAYMENT);
+        getOrders(OrderStatus.PENDINGDELIVERED);
+        getOrders(OrderStatus.PENDINGRECEIPT);
         // 获取收益统计
         getEarningTotal();
         

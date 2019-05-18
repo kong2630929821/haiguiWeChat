@@ -348,6 +348,7 @@ export const getReturnGoods = (rtype:ReturnGoodsStatus) => {
 
     return requestAsync(msg).then(res => {
         const infos = JSON.parse(res.value);
+        if (!infos) return;
         const orderIds = [];
         for (const info of infos) {
             orderIds.push(info[1]);

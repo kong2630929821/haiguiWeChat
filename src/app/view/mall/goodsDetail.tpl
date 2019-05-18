@@ -66,8 +66,14 @@
                 <div>首页</div>
             </div>
             <div w-class="fix-item fix-item-1" on-tap="gotoShoppinigCart">
-                <img src="../../res/image/shoppingCart.png"/>
-                <div>购物车</div>
+                <div style="position: relative;">
+                    <img src="../../res/image/shoppingCart.png"/>
+                    <div>购物车</div>
+                    {{if  it.cartGoodsLen > 0}}
+                    {{:icon =  it.cartGoodsLen > 99 ? "icon3" : (it.cartGoodsLen > 9 ? "icon2" : "icon1" )}}
+                    <div w-class="icon {{icon}}">{{it.cartGoodsLen > 99 ? "99+" : it.cartGoodsLen}}</div>
+                    {{end}}
+                </div>
             </div>
         </div>
         <div w-class="right">
