@@ -26,6 +26,7 @@
     font-weight:400;
     color:rgba(34,34,34,1);
     line-height:48px;
+    flex: 1 0 0;
 }
 .area{
     display: flex;

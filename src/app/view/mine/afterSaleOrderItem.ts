@@ -1,12 +1,12 @@
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { ReturnGoodsStatus } from '../../net/pull';
-import { Order, OrderStatus } from '../../store/memstore';
+import { AfterSale } from '../../store/memstore';
 import { calcPrices, getImageThumbnailPath, priceFormat } from '../../utils/tools';
 
 export interface Props {
-    order:Order;  // 订单
-    status:OrderStatus;        // 订单状态
+    afterSaleOrder:AfterSale;  // 订单
+    status:ReturnGoodsStatus;        // 订单状态
 }
 /**
  * 订单
@@ -14,13 +14,13 @@ export interface Props {
 export class OrderItem extends Widget {
     public timer:number;
     public setProps(props:any) {
-        
         this.props = {
             ...props,
             statusShow:statusShows[props.status],
             getImageThumbnailPath,
             priceFormat,
-            calcPrices
+            calcPrices,
+            ReturnGoodsStatus
         };
         super.setProps(this.props);
         console.log('orderdetailitem ====',this.props);
