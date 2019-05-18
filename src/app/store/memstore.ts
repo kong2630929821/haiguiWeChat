@@ -1,4 +1,5 @@
 import { HandlerMap } from '../../pi/util/event';
+import { ReturnGoodsStatus } from '../net/pull';
 
 /**
  * 判断是否是对象
@@ -273,7 +274,7 @@ interface Mall {
     groups:Map<GroupsLocation, Groups[]>;   // 分组数据
     cartGoods:CartGoods[];           // 购物车
     orders:Map<OrderStatus,Order[]>;      // 订单列表   待付款 待发货 待收货 已完成
-    afterSales:AfterSale[];          // 售后列表
+    afterSales:Map<ReturnGoodsStatus,AfterSale[]>;          // 售后列表
     addresses:Address[];             // 收件人地址列表
     brands:Brand[];                  // 品牌列表
     areas:Area[];                    // 地区列表
@@ -350,7 +351,7 @@ const store:Store = {
         groups:new Map<GroupsLocation, Groups[]>(),    // 分组数据
         cartGoods:[],                                      // 购物车 
         orders:new Map<OrderStatus,Order[]>(),             // 订单列表
-        afterSales:[],                          // 售后列表
+        afterSales:new Map<ReturnGoodsStatus,AfterSale[]>(),                          // 售后列表
         addresses:[],                           // 收件人地址列表
         brands:[],                              // 品牌列表
         areas:[],                               // 地区列表

@@ -124,7 +124,6 @@ const userLogin = () => {
         getCart();
         getAddress();  //
         getFreight();
-        getReturnGoods(ReturnGoodsStatus.CANRETURN);
         // 获取收益统计
         getEarningTotal().then(res => {
             const earning = getStore('earning');

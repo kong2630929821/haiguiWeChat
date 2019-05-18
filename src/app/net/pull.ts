@@ -4,7 +4,7 @@ import { getStore,GroupsLocation, OrderStatus, setStore } from '../store/memstor
 import { openWXPay } from '../utils/logic';
 import { popNewMessage } from '../utils/tools';
 import { requestAsync } from './login';
-import { parseAddress, parseAddress2, parseAllGroups, parseArea, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
+import { parseAddress, parseAddress2, parseAfterSale, parseAllGroups, parseArea, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
 
 /**
  * 获取分组信息
@@ -353,9 +353,35 @@ export const getReturnGoods = (rtype:ReturnGoodsStatus) => {
             orderIds.push(info[1]);
         }
         console.log('getReturnGoods ======',infos);
+
+        return getOrderById(orderIds).then(orders => {
+            const afterSaleOrders = parseAfterSale(infos,orders);
+            console.log('afterSaleOrders ====',afterSaleOrders);
+            const afterSales = getStore('mall/afterSales');
+            afterSales.set(rtype,afterSaleOrders);
+            setStore('mall/afterSales',afterSales);
+
+            return afterSaleOrders;
+        });
     });
 };
 
+// 获取订单详情
+export const getOrderById = (oids:number[]) => {
+    const msg = {
+        type:'get_order_by_id',
+        param:{
+            oids
+        }
+    };
+
+    return requestAsync(msg).then(res => {
+        const orders = parseOrder(res.user_orderInfo);
+        console.log('getOrderById ======',orders);
+
+        return orders;
+    });
+};
 /**
  * 获取收益统计
  */

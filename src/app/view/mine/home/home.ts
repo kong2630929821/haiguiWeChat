@@ -1,6 +1,7 @@
 import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
+import { ReturnGoodsStatus } from '../../../net/pull';
 import { OrderStatus, register } from '../../../store/memstore';
 import { getUserTypeShow } from '../../../utils/logic';
 import { priceFormat } from '../../../utils/tools';
@@ -12,9 +13,14 @@ export const allOrderStatus = [
     { name:'待发货',status:OrderStatus.PENDINGDELIVERED,img:'goods.png' },
     { name:'待收货',status:OrderStatus.PENDINGRECEIPT,img:'truck.png' },
     { name:'已完成',status:OrderStatus.PENDINGFINISH ,img:'order.png' },
-    { name:'退货',status:OrderStatus.RETURNSTART,img:'return.png' },
-    { name:'退货中',status:OrderStatus.RETURNING,img:'return.png' },
-    { name:'已退货',status:OrderStatus.RETURNEND,img:'return.png' }
+    { name:'退货',status:OrderStatus.RETURNSTART,img:'return.png' }
+];
+
+// 退货订单
+export const returnOrderStatus = [
+    { name:'退货',status:ReturnGoodsStatus.CANRETURN,img:'return.png' },
+    { name:'退货中',status:ReturnGoodsStatus.RETURNING,img:'return.png' },
+    { name:'已退货',status:ReturnGoodsStatus.RETURNED,img:'return.png' }
 ];
 /**
  * 我的首页
@@ -34,11 +40,15 @@ export class Home extends Widget {
     }
 
     public itemClick(status:OrderStatus) {
-        let allStaus = this.props.allStaus.slice(0,4);
+        let allStaus;
         if (status === OrderStatus.RETURNSTART) {
-            allStaus = this.props.allStaus.slice(4);
+            allStaus = returnOrderStatus;
+            popNew('app-view-mine-afterSaleOrderList',{ activeStatus: ReturnGoodsStatus.CANRETURN,allStaus });
+        } else {
+            allStaus = this.props.allStaus.slice(0,4);
+            popNew('app-view-mine-orderList',{ activeStatus: status,allStaus });
         }
-        popNew('app-view-mine-orderList',{ activeStatus: status,allStaus });
+        
     }
 
     public balanceLog(num:number) {
