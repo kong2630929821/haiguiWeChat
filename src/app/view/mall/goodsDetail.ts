@@ -34,6 +34,9 @@ export class GoodsDetailHome extends Widget {
     };
     public setProps(props:Props,oldProps:Props) {
         const ret = calcPrices(props.goods);
+        const skus = props.goods.labels;
+        let skuIndex = -1;
+        if (skus.length === 1) skuIndex = 0;
         this.props = {
             ...props,
             ...ret,
@@ -42,7 +45,7 @@ export class GoodsDetailHome extends Widget {
             descProps:undefined,   
             chooseSpec:false,
             amount:1,              // 选择数量
-            skuIndex:-1,
+            skuIndex,
             buyNow:false,
             areaIcon:'',     // 国旗图标
             area:''          // 国家
@@ -75,9 +78,14 @@ export class GoodsDetailHome extends Widget {
 
     // 选择规则
     public chooseSpecClick(buyNow:boolean) {
-        this.props.chooseSpec = true;
         this.props.buyNow = buyNow;
-        this.paint();
+        const skus = this.props.goods.labels;
+        if (skus.length === 1) {
+            this.sureClick({ buyNow });
+        } else {
+            this.props.chooseSpec = true;
+            this.paint();
+        }
     }
 
     // 选择规则关闭

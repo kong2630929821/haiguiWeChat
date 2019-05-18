@@ -6,7 +6,7 @@ import { open, request, setReloginCallback, setUrl } from '../../pi/net/ui/con_m
 import { wsUrl } from '../config';
 import { getStore, GroupsLocation, setStore, UserType } from '../store/memstore';
 import { registerWXAPI } from '../utils/wxAPI';
-import { getAddress, getBalance, getCart, getEarningTotal, getExpressCompany, getExpressInfo, getFreight, getGroups, getInviteCode, getUserInfo } from './pull';
+import { getAddress, getBalance, getCart, getEarningTotal, getExpressCompany, getExpressInfo, getFreight, getGroups, getInviteCode, getReturnGoods, getUserInfo, ReturnGoodsStatus } from './pull';
 import { payComplete } from './push';
 
 /**
