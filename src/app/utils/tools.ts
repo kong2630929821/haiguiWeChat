@@ -157,3 +157,14 @@ export const copyToClipboard = (copyText) => {
     }
     document.body.removeChild(input);
 };
+
+/**
+ * 电话号码格式检查
+ */
+export const checkPhone = (phoneNumber:string) => { 
+    if (/^1[34578]\d{9}$/.test(phoneNumber)) { 
+        return true; 
+    } 
+
+    return false;
+};
