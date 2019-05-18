@@ -17,9 +17,15 @@
     </div>
     <div w-class="orderType">
         {{for i,v of it.allStaus.slice(0,5)}}
+        {{: orders = it1.orders.get(v.status) || []}}
+        {{: len = orders.length }}
         <div w-class="item" on-tap="itemClick({{v.status}})">
             <img src="../../../res/image/{{v.img}}"/>
             <div w-class="name">{{v.name}}</div>
+            {{if len > 0 && (i === 0 || i === 1 || i === 2)}}
+            {{:icon =  len > 99 ? "icon3" : (len > 9 ? "icon2" : "icon1" )}}
+            <div w-class="icon {{icon}}">{{len > 99 ? "99+" : len}}</div>
+            {{end}}
         </div>
         {{end}}
     </div>

@@ -1,5 +1,5 @@
 <div>
-    {{for i,v of it.order.orderGoods}}
+    {{for i,v of it.afterSaleOrder.order.orderGoods}}
     <div w-class="row" style="margin:20px 30px;" on-tap="itemClick">
         {{: goods = v[0]}}
         <img src="../../res/image/{{it.getImageThumbnailPath(goods.images)}}" w-class="goodsImg"/>
@@ -19,8 +19,12 @@
             {{if it.statusShow.btn1}}
             <div w-class="btn" on-tap="btnClick(e,0)">{{it.statusShow.btn1}}</div>
             {{end}}
-            {{if it.statusShow.btn2}}
+            {{: showText = it.status === it.ReturnGoodsStatus.CANRETURN ? it.afterSaleOrder.request_time > 0 : !!it.statusShow.text}}
+            {{if !showText}}
             <div w-class="btn btn1" on-tap="btnClick(e,1)">{{it.statusShow.btn2}}</div>
+            {{end}}
+            {{if showText}}
+            <div w-class="text">{{it.statusShow.text}}</div>
             {{end}}
         </div>
     </div>

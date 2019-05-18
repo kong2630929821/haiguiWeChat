@@ -2,7 +2,7 @@ import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { PROVINCE_LIST } from '../../components/areaSelect/provinceList';
 import { addAddress, delAddress } from '../../net/pull';
-import { popNewMessage } from '../../utils/tools';
+import { checkPhone, popNewMessage } from '../../utils/tools';
 
 /**
  * 编辑地址
@@ -70,11 +70,11 @@ export class EditAddress extends Widget {
             return;
         }
 
-        if (!this.props.tel) {
-            popNewMessage('请输入收货人电话');
+        if (!checkPhone(this.props.tel)) {
+            popNewMessage('电话号码格式不正确');
             
             return;
-        }
+        } 
 
         if (!this.props.province) {
             popNewMessage('请选择地区');

@@ -11,7 +11,7 @@
         {{: list = it1.orders.get(it.activeStatus) || []}}
         {{for i,v of list}}
         <div ev-btn-click="btnClick(e,{{i}})" >
-            <widget w-tag="app-view-mine-afterSaleOrderItem">{status:{{it.activeStatus}},order:{{v.order}} }</widget>
+            <widget w-tag="app-view-mine-afterSaleOrderItem">{status:{{it.activeStatus}},afterSaleOrder:{{v}} }</widget>
         </div>
         {{end}}
     </div>

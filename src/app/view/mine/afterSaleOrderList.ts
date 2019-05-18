@@ -1,6 +1,6 @@
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { getReturnGoods, ReturnGoodsStatus } from '../../net/pull';
+import { getReturnGoods, returnGoods, ReturnGoodsStatus } from '../../net/pull';
 import { AfterSale, register } from '../../store/memstore';
 
 // tslint:disable-next-line:no-reserved-keywords
@@ -31,6 +31,7 @@ export class AfterSaleOrderList extends Widget {
     
     // 切换订单类型
     public typeClick(status:ReturnGoodsStatus) {
+        getReturnGoods(status);
         this.props.activeStatus = status;
         this.paint();
     }
@@ -38,12 +39,14 @@ export class AfterSaleOrderList extends Widget {
     // 点击按钮
     public async btnClick(e:any,index:number) {
         const btn = e.btn;
-        const order = this.state.orders.get(this.props.activeStatus)[index].order;
+        const afterOrder = this.state.orders.get(this.props.activeStatus)[index];
         const activeStatus = this.props.activeStatus;
-        console.log('order=====',order);
+        console.log('order=====',afterOrder);
         console.log('activeStatus=====',activeStatus);
-        if (btn === 1) {  // 确定按钮
-           
+        if (btn === 1) {  // 确定按钮  
+            if (activeStatus === ReturnGoodsStatus.CANRETURN) { // 申请退货
+                returnGoods(afterOrder.id,'退货');
+            }
         } else {  // 取消按钮
             
         }

@@ -2,7 +2,7 @@ import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
 import { ReturnGoodsStatus } from '../../../net/pull';
-import { OrderStatus, register } from '../../../store/memstore';
+import { Order, OrderStatus, register } from '../../../store/memstore';
 import { getUserTypeShow } from '../../../utils/logic';
 import { priceFormat } from '../../../utils/tools';
 
@@ -71,7 +71,8 @@ const State = {
     userType:'',
     inviteCode:'',
     userName:'',
-    avatar:''
+    avatar:'',
+    orders:new Map<OrderStatus,Order[]>()
 };
 register('balance',r => {
     State.balance[0].value = priceFormat(r.cash);
@@ -84,5 +85,10 @@ register('user',r => {
     State.inviteCode = r.inviteCode;
     State.userName = r.userName;
     State.avatar = r.avatar;
+    forelet.paint(State);
+});
+
+register('mall/orders',(orders:Map<OrderStatus,Order[]>) => {
+    State.orders = orders;
     forelet.paint(State);
 });
