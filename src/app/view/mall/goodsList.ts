@@ -36,11 +36,21 @@ export class GoodsList extends Widget {
     public attach() {
         super.attach();
         const viewPortWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
-        // const activeDom = document.querySelector('.item-active');
-        // const rect = activeDom.getBoundingClientRect();
+        const activeDom:HTMLElement = document.querySelector('.groups2-item-active');
+        const rect = activeDom.getBoundingClientRect();
+        const offsetLeft = activeDom.offsetLeft;
+        console.log('offsetLeft ======',activeDom.offsetLeft);
         console.log('viewPortWidth ===',viewPortWidth);
         // console.log('rect ===',rect);
+        // const overFlowWidth = rect.right + rect.width - viewPortWidth;
+        const overFlowWidth = offsetLeft + rect.width - viewPortWidth;
+        console.log('overFlowWidth ====',overFlowWidth);
+        if (overFlowWidth > 0) {   // 元素不在可视范围内
+            const groups2Dom = document.querySelector('.groups2');
+            groups2Dom.scrollLeft = overFlowWidth;
+        }
     }
+    
     // 一级分组页切换
     public level1GroupsExpandedClick() {
         this.props.level1GroupsExpanded = !this.props.level1GroupsExpanded;

@@ -1,4 +1,4 @@
-import { Address, Area, CartGoods, Freight, GoodsDetails, GoodsSegmentationDetails, Groups, GroupsLocation, MallImages, Order, SKU } from '../store/memstore';
+import { Address, AfterSale, Area, CartGoods, Freight, GoodsDetails, GoodsSegmentationDetails, Groups, GroupsLocation, MallImages, Order, SKU } from '../store/memstore';
 import { getCartGoodsSelected, unicode2Str } from '../utils/tools';
 
 /**
@@ -265,4 +265,27 @@ export const parseArea = (info:any) => {
     };
 
     return area;
+};
+
+/**
+ * 解析售后订单
+ */
+export const parseAfterSale = (infos:any,order:Order) => {
+    const afterSaleOrders = [];
+    for (const info of infos) {
+        const afterSaleOrder:AfterSale = {
+            id:info[0],		      // 售后订单id
+            order,                // 售后商品订单详情
+            tax:info[5],           // 商品总税费，单位分
+            weight:info[6],        // 商品总重量，单位克
+            status:info[7],		  // 售后状态，-1退货失败，0无售后，1退货
+            reason:info[8],	      // 原因，根据status，则为退货失败原因，无，退货原因
+            request_time:info[9],  // 请求售后时间
+            reply_time:info[10],    // 回应售后时间
+            finish_time:info[11]   // 完成售后时间
+        };
+        afterSaleOrders.push(afterSaleOrder);
+    }
+
+    return afterSaleOrders;
 };

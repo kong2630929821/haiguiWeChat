@@ -17,7 +17,7 @@
             <div w-class="groups1">
                 <div w-class="groups1-scroll">
                     {{for i,v of it.classificationGroups}}
-                    <div w-class="groups1-item" class="{{v.id === it.selectedLevel1Groups.id ? 'item-active' : ''}}">
+                    <div w-class="groups1-item">
                         <div w-class="groups1-item-text {{v.id === it.selectedLevel1Groups.id ? 'groups1-item-active' : ''}}" on-tap="selectLevel1Groups(e,{{i}})">{{v.name}}</div>
                     </div>
                     {{end}}
@@ -26,9 +26,9 @@
             <div w-class="drop-down-mask"></div>
         </div>
         {{end}}
-        <div w-class="groups2">
+        <div w-class="groups2" class="groups2">
             {{for i,v of it.selectedLevel1Groups.childs}}
-            <div w-class="groups2-item {{v.id === it.selectedLevel2Groups.id ? 'groups2-item-active' : ''}}" on-tap="selectLevel2Groups(e,{{i}})">{{v.name}}</div>
+            <div w-class="groups2-item {{v.id === it.selectedLevel2Groups.id ? 'groups2-item-active' : ''}}" on-tap="selectLevel2Groups(e,{{i}})" class="{{v.id === it.selectedLevel2Groups.id ? 'groups2-item-active' : ''}}">{{v.name}}</div>
             {{end}}
         </div>
         <div w-class="goods-list">

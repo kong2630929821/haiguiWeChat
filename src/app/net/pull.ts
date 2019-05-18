@@ -347,7 +347,12 @@ export const getReturnGoods = (rtype:ReturnGoodsStatus) => {
     };
 
     return requestAsync(msg).then(res => {
-        console.log('getReturnGoods ======',res);
+        const infos = JSON.parse(res.value);
+        const orderIds = [];
+        for (const info of infos) {
+            orderIds.push(info[1]);
+        }
+        console.log('getReturnGoods ======',infos);
     });
 };
 
