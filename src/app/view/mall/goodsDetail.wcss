@@ -159,7 +159,6 @@
     display: flex;
 }
 .fix-item{
-    position: relative;
     flex: 1 0 0;
 }
 .fix-item-1{
