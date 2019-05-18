@@ -1,4 +1,5 @@
 import { HandlerMap } from '../../pi/util/event';
+import { ReturnGoodsStatus } from '../net/pull';
 
 /**
  * 判断是否是对象
@@ -179,28 +180,10 @@ export interface Order {
     ship_id:string;         // 物流单号
 }
 
-// 售后商品订单详情
-export interface AfterSaleOrder {
-    id:number;		       // 订单id
-    pay_type:number;       // 支付类型，1现金，2积分，3表示同时支持现金和积分
-    origin:number;         // 商品原支付金额，单位分，即所有商品单价乘数量
-    name:string;           // 收件人姓名
-    tel:string;            // 收件人电话
-    area:string;           // 收件人地区
-    address:string;        // 收件人详细地址
-    order_time:number;     // 下单时间，单位毫秒
-    pay_time:number;       // 支付时间，单位毫秒
-    ship_time:number;      // 发货时间，单位毫秒
-    receipt_time:number;   // 收货时间，单位毫秒
-    finish_time:number;    // 完成时间，单位毫秒，已收货，但未完成，例如退货
-}
-
 // 售后详情
 export interface AfterSale {
     id:number;		      // 售后订单id
-    order:AfterSaleOrder; // 售后商品订单详情
-    goods:GoodsDetails;   // 商品详情
-    amount:number;        // 商品数量
+    order:Order; // 售后商品订单详情
     tax:number;           // 商品总税费，单位分
     weight:number;        // 商品总重量，单位克
     status:number;		  // 售后状态，-1退货失败，0无售后，1退货
@@ -291,7 +274,7 @@ interface Mall {
     groups:Map<GroupsLocation, Groups[]>;   // 分组数据
     cartGoods:CartGoods[];           // 购物车
     orders:Map<OrderStatus,Order[]>;      // 订单列表   待付款 待发货 待收货 已完成
-    afterSales:AfterSale[];          // 售后列表
+    afterSales:Map<ReturnGoodsStatus,AfterSale[]>;          // 售后列表
     addresses:Address[];             // 收件人地址列表
     brands:Brand[];                  // 品牌列表
     areas:Area[];                    // 地区列表
@@ -369,7 +352,7 @@ const store:Store = {
         groups:new Map<GroupsLocation, Groups[]>(),    // 分组数据
         cartGoods:[],                                      // 购物车 
         orders:new Map<OrderStatus,Order[]>(),             // 订单列表
-        afterSales:[],                          // 售后列表
+        afterSales:new Map<ReturnGoodsStatus,AfterSale[]>(),                          // 售后列表
         addresses:[],                           // 收件人地址列表
         brands:[],                              // 品牌列表
         areas:[],                               // 地区列表

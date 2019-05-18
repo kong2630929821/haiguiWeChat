@@ -1,0 +1,35 @@
+.page{
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+}
+.content{
+    flex: 1 0 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.orderType{
+    display: flex;
+    justify-content: space-around;
+    height: 100px;
+    align-items: center;
+    border-bottom: 1px solid #E5E5E5;
+}
+.item{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 60px;
+}
+.name{
+    width: 100px;
+    height: 100px;
+    font-size:28px;
+    color:rgba(136,136,136,1);
+    line-height:100px;
+    text-align: center;
+}
+.active{
+    border-bottom: 6px solid #8A4AF3;
+}
