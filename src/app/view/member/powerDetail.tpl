@@ -27,6 +27,6 @@
     </div>
 
     {{if !it.code}}
-    <div w-class="btn" on-tap="upgradeUser">立即开通</div>
+    <div w-class="btn" on-tap="upgradeUser">立即申请</div>
     {{end}}
 </div>

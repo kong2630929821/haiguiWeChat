@@ -15,14 +15,17 @@
             <div w-class="btn" on-tap="getPhoneCode">获取验证码</div>
             {{end}}
         </div>
+        {{if it.fcode}}
+        <div w-class="row" style="border-bottom:1px solid #888;">
+            <div w-class="addr" style="color:#222;">{{it.fcode}}</div>
+            <div style="font-size:24px;color:#B2B2B2">*不可修改</div>
+        </div>
+        {{else}}
         <div w-class="row" ev-input-change="inviteCodeChange">
-            {{if it.inviteCode}}
-            <div w-class="addr">{{it.inviteCode}}</div>
-            {{else}}
             <widget w-tag="app-components-input-input">{placeHolder:"推荐人邀请码",style:"padding:10px;font-size:28px;",input:{{it.inviteCode}} }</widget>
-            {{end}}
             <div w-class="btn" on-tap="getInvoteCode">推荐一个</div>
         </div>
+        {{end}}
 
         {{if it.selectAddr}}
         <div w-class="row">

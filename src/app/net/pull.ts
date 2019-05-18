@@ -682,8 +682,9 @@ export const uploadFile = (id:string) => {
 /**
  * 获取微信签名
  */
-export const getWX_sign = () => {
-    return fetch(`http://${sourceIp}:${sourcePort}/pt/wx/sign?url=${location.href}`).then(res => res.json());
+export const getWX_sign = (url:string) => {
+
+    return fetch(`http://${sourceIp}:${sourcePort}/pt/wx/sign?url=${url}`).then(res => res.json());
 };
 
 /**
@@ -740,3 +741,8 @@ export const getExpressInfo = (LogisticCode:string,ShipperCode:string) => {
         
     });
 };
+
+/**
+ * 获取活动商品价格
+ */
+export const getActivePrice = () => {};

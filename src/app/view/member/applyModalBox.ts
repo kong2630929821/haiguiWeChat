@@ -13,6 +13,7 @@ interface Props {
     nowCount:number;  // 倒计时
     phoneCode:string;  // 手机验证码
     inviteCode:string;  // 邀请码
+    fcode:string;  // 已绑过的邀请码
 }
 /**
  * 填信息输入框弹窗
@@ -27,7 +28,8 @@ export class ModalBoxInput extends Widget {
         address:'',
         nowCount:0,
         phoneCode:'',
-        inviteCode:''
+        inviteCode:'',
+        fcode:''
     };
 
     public setProps(props:any) {
@@ -39,7 +41,7 @@ export class ModalBoxInput extends Widget {
         const user = getStore('user');
         this.props.userName = user.userName;
         this.props.phoneNum = user.phoneNum;
-        this.props.inviteCode = user.fcode || 'WSGHJA';
+        this.props.fcode = user.fcode;
         const addr = getLastAddress()[2];
         this.props.address = addr ? addr.address :'详细地址信息';
     }
@@ -113,9 +115,10 @@ export class ModalBoxInput extends Widget {
             const loadding = popNewLoading('请稍后');
 
             try {  // 验证手机号
-                const phoneRes = await bindPhone(this.props.phoneNum,this.props.phoneCode);
-                if (phoneRes) setStore('user/phoneNum',this.props.phoneNum);
-
+                if (this.props.phoneNum !== getStore('user/phoneNum')) {
+                    const phoneRes = await bindPhone(this.props.phoneNum,this.props.phoneCode);
+                    if (phoneRes) setStore('user/phoneNum',this.props.phoneNum);
+                } 
             } catch (err) {
                 loadding.callback(loadding.widget);
                 if (err.result === 1023) {
@@ -138,7 +141,8 @@ export class ModalBoxInput extends Widget {
             }
 
             try {   // 绑定邀请码
-                await bindUser(this.props.inviteCode);
+                if (!getStore('user/fcode','')) await bindUser(this.props.inviteCode);
+
             } catch (err) {
                 loadding.callback(loadding.widget);
                 popNewMessage('邀请码填写有误');

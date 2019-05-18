@@ -1,7 +1,7 @@
 import { Widget } from '../../../pi/widget/widget';
 import { applyWithdraw } from '../../net/pull';
 import { getStore } from '../../store/memstore';
-import { popNewMessage } from '../../utils/tools';
+import { popNewMessage, priceFormat } from '../../utils/tools';
 
 /**
  * 提现
@@ -9,7 +9,7 @@ import { popNewMessage } from '../../utils/tools';
 export class Withdraw extends Widget {
     public ok :() => void;
     public props:any = {
-        balance:getStore('balance/cash',0),
+        balance:priceFormat(getStore('balance/cash',0)),
         tax:0,    // 税费
         tariff:0.06,  // 税率 6%
         inputMoney:0,
