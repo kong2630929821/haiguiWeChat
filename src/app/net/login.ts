@@ -7,7 +7,7 @@ import { popNew } from '../../pi/ui/root';
 import { wsUrl } from '../config';
 import { getStore, GroupsLocation, OrderStatus, setStore, UserType } from '../store/memstore';
 import { registerWXAPI } from '../utils/wxAPI';
-import { getAddress, getBalance, getCart, getEarningTotal, getFreight, getGroups, getInviteCode, getOrders, getUserInfo } from './pull';
+import { getAddress, getBalance, getCart, getEarningTotal, getFreight, getGroups, getInviteCode, getOrders, getUserInfo, setUserName } from './pull';
 import { payComplete } from './push';
 
 /**
@@ -96,7 +96,7 @@ const userLoginCheck = () => {
     if (location.search.indexOf('debug') >= 0) {
         openId = localStorage.getItem('openid');
         if (!openId) {
-            openId = new Date().getTime();
+            openId = new Date().getTime().toString();
             localStorage.setItem('openid',openId);
         }
         userStr = {
@@ -161,13 +161,19 @@ const userLogin = (openId:number,userStr:any) => {
         // 获取用户信息
         getUserInfo().then(res => {
             const user = getStore('user');
+            if (res.wx_name !== userStr.nickname) {
+                setUserName(userStr.nickname);
+            }
+
             user.avatar = userStr.headimgurl;
-            user.userName = res.wx_name || userStr.nickname;
+            user.userName = userStr.nickname;
+            user.realName = res.name;
             user.phoneNum = res.phone;
             if (res.level < UserType.other) {
                 user.fcode = res.fcode;  // 上级的邀请码
             } 
             setStore('user',user);
+           
         });
 
         // 监听支付成功推送

@@ -1,6 +1,6 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
-import { bindPhone, bindUser, randomInviteCode, sendCode, setUserName } from '../../net/pull';
+import { bindPhone, bindUser, randomInviteCode, sendCode, setUserName, verifyIDCard } from '../../net/pull';
 import { getStore, setStore } from '../../store/memstore';
 import { getLastAddress } from '../../utils/logic';
 import { popNewLoading, popNewMessage } from '../../utils/tools';
@@ -39,7 +39,7 @@ export class ModalBoxInput extends Widget {
         };
         super.setProps(this.props);
         const user = getStore('user');
-        this.props.userName = user.userName;
+        this.props.userName = user.realName;
         this.props.phoneNum = user.phoneNum;
         this.props.fcode = user.fcode;
         this.props.inviteCode = user.fcode;
@@ -126,8 +126,10 @@ export class ModalBoxInput extends Widget {
             }
 
             try {   // 设置用户名
-                const nameRes = await setUserName(this.props.userName);
-                if (nameRes) setStore('user/userName',this.props.userName);
+                if (this.props.userName !== getStore('user/realName')) {
+                    const nameRes = await verifyIDCard(this.props.userName,'','','','');
+                    if (nameRes) setStore('user/realName',this.props.userName);
+                }  
             } catch (err) {
                 loadding.callback(loadding.widget);
                 popNewMessage('用户名设置失败');
