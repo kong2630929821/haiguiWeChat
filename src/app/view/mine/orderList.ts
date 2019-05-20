@@ -60,7 +60,7 @@ export class OrderList extends Widget {
         const activeStatus = this.props.activeStatus;
         if (btn === 1) {  // 确定按钮
             if (activeStatus === OrderStatus.PENDINGPAYMENT) {   // 待付款 去付款
-                payOrderNow(order,this.paySuccess);  // 去付款
+                payOrderNow(order,this.paySuccess.bind(this));  // 去付款
             } else if (activeStatus === OrderStatus.PENDINGRECEIPT) {  // 待收货  确认收货
                 receiptOrder(order.id).then(() => {
                     this.typeClick(OrderStatus.PENDINGFINISH);
@@ -97,6 +97,7 @@ export const payOrderNow = async (order:Order,success:Function) => {
     const loading = popNewLoading('支付中');
     try {
         if (totalFee > cash) {
+            console.log('余额不足 充值');
             setPayOids(oids); // 存储即将付款的订单id
             setPayLoading(loading);
             noResponse();
@@ -111,6 +112,7 @@ export const payOrderNow = async (order:Order,success:Function) => {
             loading.callback(loading.widget);
             success && success();        }
     } catch (e) {
+        console.log('payOrderNow err',e);
         loading.callback(loading.widget);
         popNewMessage('支付失败');
     }

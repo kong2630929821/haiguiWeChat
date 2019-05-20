@@ -151,6 +151,7 @@ export class ConfirmOrder extends Widget {
             } else {
                 popNewMessage('支付失败');
             }
+            console.log('错误 ',res);
         }
     }
 
@@ -177,7 +178,7 @@ export const noResponse = (cb?:Function) => {
     timer = setTimeout(() => {
         closeLoading();
         cb && cb();
-    },15 * 1000);
+    },12 * 1000);
 };
 
 export const clearNoResponse = () => {
@@ -202,13 +203,13 @@ register('flags/mallRecharge',async () => {
     const w:any = forelet.getWidget(WIDGET_NAME);
     clearNoResponse();
     try {
-        alert(JSON.stringify(payOids));
         await orderPay(payOids);
         popNewMessage('支付成功');
         w && w.paySuccess();
         closeLoading();
         payOids = undefined;
     } catch (e) {
+        console.log('充值成功之后 支付失败',e);
         popNewMessage('支付失败');
         payLoading.callback(payLoading.widget);
         payLoading = undefined;
