@@ -97,7 +97,8 @@ enum CashLogType {
     reInvite,  // 邀请返利
     recharge,   // 充值
     withdraw,  // 提现
-    shopping    // 购物
+    shopping,    // 购物
+    reCash     // 提现退款
 }
 // 现金来源名称
 const CashLogName = {
@@ -107,7 +108,8 @@ const CashLogName = {
     reInvite:'邀请返利',
     recharge:'充值',
     withdraw:'提现',
-    shopping:'购物'
+    shopping:'购物',
+    reCash:'提现退款'
 };
 
 /**
