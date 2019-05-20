@@ -86,6 +86,13 @@ export class GoodsDetailHome extends Widget {
     // 选择规则
     public chooseSpecClick(buyNow:boolean) {
         this.props.buyNow = buyNow;
+        this.props.chooseSpec = true;
+        this.paint();
+    }
+
+    // 选择规则
+    public chooseSpecClick1(buyNow:boolean) {
+        this.props.buyNow = buyNow;
         const skus = this.props.goods.labels;
         if (skus.length === 1) {
             this.sureClick({ buyNow });
