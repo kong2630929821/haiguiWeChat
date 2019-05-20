@@ -325,6 +325,7 @@ interface User {
     userType:UserType;  // 用户会员等级 
     inviteCode:string;  // 我的邀请码
     userName:string;    // 用户名
+    realName:string;    // 真实姓名
     phoneNum:string;       // 手机号
     avatar:string;         // 头像
     fcode:string;        // 上级的邀请码
@@ -369,6 +370,7 @@ const store:Store = {
         userType: UserType.other,
         inviteCode:'',
         userName:'',
+        realName:'',
         phoneNum:'',
         avatar:'',
         fcode:''     // 上级的邀请码
