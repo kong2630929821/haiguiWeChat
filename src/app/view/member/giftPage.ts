@@ -75,24 +75,20 @@ export class GiftPage extends Widget {
             // 下单商品
             orderActiveGoods([goods,1,res.labels[0][0]],addr.id).then(order => { 
                 // 获取商品价格
-                getActiveGoodsPrice(goods,addr.area_id).then(price => {
-                    const cash = getStore('balance/cash');
-                    if (cash < price.money) { 
-                        register('flags/activityGoods',() => {
-                            this.buyGoods(goods,order.orderInfo[0]);
-                        });
-                        payMoney(price.money - cash,'activity');
-                    } else {
+                const cash = getStore('balance/cash');
+                const price = order.orderInfo[3] + order.orderInfo[5]; // 商品总价+运费
+                if (cash < price) { 
+                    register('flags/activityGoods',() => {
                         this.buyGoods(goods,order.orderInfo[0]);
-                    }
-                    loadding && loadding.callback(loadding.widget);
+                    });
+                    payMoney(price - cash,'activity');
+                } else {
+                    this.buyGoods(goods,order.orderInfo[0]);
+                }
+                loadding && loadding.callback(loadding.widget);
 
-                }).catch(err => {
-                    popNewMessage('获取商品价格失败');
-                    loadding && loadding.callback(loadding.widget);
-                });
-                
             }).catch(r => {
+                alert(r);
                 popNewMessage('下单失败');
                 loadding && loadding.callback(loadding.widget);
             });
