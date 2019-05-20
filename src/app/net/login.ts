@@ -3,6 +3,7 @@
  */
 
 import { open, request, setReloginCallback, setUrl } from '../../pi/net/ui/con_mgr';
+import { popNew } from '../../pi/ui/root';
 import { wsUrl } from '../config';
 import { getStore, GroupsLocation, OrderStatus, setStore, UserType } from '../store/memstore';
 import { registerWXAPI } from '../utils/wxAPI';
@@ -15,7 +16,12 @@ import { payComplete } from './push';
  * 如果是浏览器环境，直接模拟一个WXUSERINFO
  */
 const getWxUserInfo = () => {
-    return JSON.parse(localStorage.WXUSERINFO);
+    const wxuserinfo = localStorage.WXUSERINFO;
+    if (!wxuserinfo) {
+        return;
+    }
+    
+    return JSON.parse(wxuserinfo);
 };
 
 /**
@@ -60,7 +66,7 @@ export const openConnect = () => {
  */
 const conSuccess = () => {
     console.log('con Success');
-    userLogin();
+    userLoginCheck();
 };
 
 /**
@@ -84,10 +90,7 @@ const conReOpen = () => {
     console.log('con reopen');
 };
 
-/**
- * 用户登录
- */
-const userLogin = () => {
+const userLoginCheck = () => {
     let userStr;
     let openId;
     if (location.search.indexOf('debug') >= 0) {
@@ -102,8 +105,21 @@ const userLogin = () => {
             nickname:'默认名字'
         };
     } else {
-        userStr = getWxUserInfo().uinfo;
+        const wxuserInfo = getWxUserInfo();
+        userStr = wxuserInfo && wxuserInfo.uinfo;
     }
+
+    if (userStr) {
+        userLogin(openId,userStr);
+    } else {
+        popNew('app-components-authModel-authModel');   // 授权
+    }
+};
+
+/**
+ * 用户登录
+ */
+const userLogin = (openId:number,userStr:any) => {
     const msg = { 
         type: 'login', 
         param: { 
