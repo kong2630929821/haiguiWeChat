@@ -23,6 +23,30 @@ export const getVipLevel = () => {
 export const priceFormat = (price:number) => {
     return (price / 100).toFixed(2);
 };
+
+// 价格格式化1  超出10000单位改为万
+export const priceFormat1 = (price:number) => {
+    let newPrice = price / 100;
+    if (newPrice > 10000) {
+        newPrice = newPrice / 10000;
+        
+        return `${newPrice.toFixed(2)}万`;
+    }
+
+    return newPrice.toFixed(2);
+};
+
+// 积分 海贝格式化  超出10000单位改为万
+export const priceFormat2 = (price:number) => {
+    if (price > 10000) {
+        price = price / 10000;
+        
+        return `${price.toFixed(2)}万`;
+    }
+    
+    return price;
+};
+
 // 计算打折力度
 export const calcDiscount = (discount:number,origin:number) => {
     return Number((discount / origin * 10).toFixed(1));

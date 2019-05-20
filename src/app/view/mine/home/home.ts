@@ -4,7 +4,7 @@ import { Widget } from '../../../../pi/widget/widget';
 import { ReturnGoodsStatus } from '../../../net/pull';
 import { Order, OrderStatus, register } from '../../../store/memstore';
 import { getUserTypeShow } from '../../../utils/logic';
-import { priceFormat } from '../../../utils/tools';
+import { priceFormat, priceFormat1, priceFormat2 } from '../../../utils/tools';
 
 export const forelet = new Forelet();
 
@@ -75,9 +75,10 @@ const State = {
     orders:new Map<OrderStatus,Order[]>()
 };
 register('balance',r => {
-    State.balance[0].value = priceFormat(r.cash);
-    State.balance[1].value = r.shell;
-    State.balance[2].value = r.integral;
+    
+    State.balance[0].value = priceFormat1(r.cash);
+    State.balance[1].value = priceFormat2(r.shell);
+    State.balance[2].value = priceFormat2(r.integral);
     forelet.paint(State);
 });
 register('user',r => {
