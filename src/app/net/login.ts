@@ -15,7 +15,16 @@ import { payComplete } from './push';
  * 如果是浏览器环境，直接模拟一个WXUSERINFO
  */
 const getWxUserInfo = () => {
-    return JSON.parse(localStorage.WXUSERINFO);
+    const wxuserinfo = localStorage.WXUSERINFO;
+    if (!wxuserinfo) {
+        alert('用户授权');
+        const search = location.search.slice(1);
+        window.location.href = `${location.href}?auth=t&${search}`;
+
+        return;
+    }
+    
+    return JSON.parse(wxuserinfo);
 };
 
 /**
