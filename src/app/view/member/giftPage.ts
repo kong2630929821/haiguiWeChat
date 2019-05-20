@@ -2,7 +2,7 @@ import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { freeMaskGoodsId, OffClassGoodsId, saleClassGoodsId, vipClassGoodsId, whiteGoodsId_10000, whiteGoodsId_399 } from '../../config';
 import { getActiveGoodsPrice, getGoodsDetails, getInviteRebate, orderActiveGoods, payMoney, upgradeHWang } from '../../net/pull';
-import { getStore, register, UserType } from '../../store/memstore';
+import { Address, getStore, register, UserType } from '../../store/memstore';
 import { payToUpHbao } from '../../utils/logic';
 import { popNewLoading, popNewMessage } from '../../utils/tools';
 import { shareWithUrl } from '../../utils/wxAPI';
@@ -38,16 +38,16 @@ export class GiftPage extends Widget {
     public freeReceive() {
         popNew('app-view-member-applyModalBox',{ selectAddr:true },(addr) => {
             if (this.props.fg === PowerFlag.free) {
-                this.confirmGoods(freeMaskGoodsId, addr.area_id);
+                this.confirmGoods(freeMaskGoodsId, addr);
 
             } else if (this.props.fg === PowerFlag.gift) {
                 if (this.props.userType === UserType.hBao) {
-                    this.confirmGoods(whiteGoodsId_399, addr.area_id);
+                    this.confirmGoods(whiteGoodsId_399, addr);
                 } else {
-                    this.confirmGoods(whiteGoodsId_10000, addr.area_id);
+                    this.confirmGoods(whiteGoodsId_10000, addr);
                 }
             } else {
-                this.confirmGoods(freeMaskGoodsId, addr.area_id);
+                this.confirmGoods(freeMaskGoodsId, addr);
             }
             
         });
@@ -55,30 +55,30 @@ export class GiftPage extends Widget {
 
     // 报名课程
     public applyClass() {
-        popNew('app-view-member-applyModalBox',null,() => {
+        popNew('app-view-member-applyModalBox',{ selectAddr:true },(addr) => {
             if (this.props.fg === PowerFlag.offClass) {
-                this.confirmGoods(OffClassGoodsId,0);
+                this.confirmGoods(OffClassGoodsId,addr);
             } else if (this.props.fg === PowerFlag.vipClass) {
-                this.confirmGoods(vipClassGoodsId,0);
+                this.confirmGoods(vipClassGoodsId,addr);
             } else {
-                this.confirmGoods(saleClassGoodsId,0);
+                this.confirmGoods(saleClassGoodsId,addr);
             }
            
         });
     }
 
     // 确认商品信息
-    public confirmGoods(goods:number,addrId:number) {
+    public confirmGoods(goods:number,addr:Address) {
         const loadding = popNewLoading('请稍候');
-        getActiveGoodsPrice(goods,addrId).then(r => {
+        getActiveGoodsPrice(goods,addr.area_id).then(r => {
             const cash = getStore('balance/cash');
             if (cash < r.money) { 
                 register('flags/activityGoods',() => {
-                    this.bugGoods(goods,addrId);
+                    this.bugGoods(goods,addr);
                 });
                 payMoney(r.money - cash,'activity');
             } else {
-                this.bugGoods(goods,addrId);
+                this.bugGoods(goods,addr);
             }
             loadding && loadding.callback(loadding.widget);
         }).catch(err => {
@@ -88,10 +88,10 @@ export class GiftPage extends Widget {
     }
 
     // 购买商品
-    public bugGoods(goods:number,addrId:number) {
+    public bugGoods(goods:number,addr:Address) {
         const loadding = popNewLoading('请稍候');
         getGoodsDetails(goods).then(res => {
-            orderActiveGoods([goods,1,res.labels[0][0]],addrId).then(r => {
+            orderActiveGoods([goods,1,res.labels[0][0]],addr.id).then(r => {
                 if (this.props.fg === PowerFlag.free || this.props.fg === PowerFlag.offClass) {
                     getInviteRebate(goods);  // 试用装和线下课程需要调返利接口给上级返利
                 } 
