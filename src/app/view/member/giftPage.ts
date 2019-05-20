@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { freeMaskGoodsId, OffClassGoodsId, saleClassGoodsId, vipClassGoodsId, whiteGoodsId_10000, whiteGoodsId_399 } from '../../config';
-import { getActiveGoodsPrice, getGoodsDetails, getInviteRebate, orderActiveGoods, payMoney, upgradeHWang } from '../../net/pull';
+import { getActiveGoodsPrice, getGoodsDetails, getInviteRebate, orderActiveGoods, payMoney, payOrder, upgradeHWang } from '../../net/pull';
 import { Address, getStore, register, UserType } from '../../store/memstore';
 import { payToUpHbao } from '../../utils/logic';
 import { popNewLoading, popNewMessage } from '../../utils/tools';
@@ -67,37 +67,31 @@ export class GiftPage extends Widget {
         });
     }
 
-    // 确认商品信息
+    // 购买商品
     public confirmGoods(goods:number,addr:Address) {
         const loadding = popNewLoading('请稍候');
-        getActiveGoodsPrice(goods,addr.area_id).then(r => {
-            const cash = getStore('balance/cash');
-            if (cash < r.money) { 
-                register('flags/activityGoods',() => {
-                    this.bugGoods(goods,addr);
+        // 获取商品详情
+        getGoodsDetails(goods).then(res => {  
+            // 下单商品
+            orderActiveGoods([goods,1,res.labels[0][0]],addr.id).then(order => { 
+                // 获取商品价格
+                getActiveGoodsPrice(goods,addr.area_id).then(price => {
+                    const cash = getStore('balance/cash');
+                    if (cash < price.money) { 
+                        register('flags/activityGoods',() => {
+                            this.buyGoods(goods,order.orderInfo[0]);
+                        });
+                        payMoney(price.money - cash,'activity');
+                    } else {
+                        this.buyGoods(goods,order.orderInfo[0]);
+                    }
+                    loadding && loadding.callback(loadding.widget);
+
+                }).catch(err => {
+                    popNewMessage('获取商品价格失败');
+                    loadding && loadding.callback(loadding.widget);
                 });
-                payMoney(r.money - cash,'activity');
-            } else {
-                this.bugGoods(goods,addr);
-            }
-            loadding && loadding.callback(loadding.widget);
-        }).catch(err => {
-            loadding && loadding.callback(loadding.widget);
-            popNewMessage('获取商品价格失败');
-        });
-    }
-
-    // 购买商品
-    public bugGoods(goods:number,addr:Address) {
-        const loadding = popNewLoading('请稍候');
-        getGoodsDetails(goods).then(res => {
-            orderActiveGoods([goods,1,res.labels[0][0]],addr.id).then(r => {
-                if (this.props.fg === PowerFlag.free || this.props.fg === PowerFlag.offClass) {
-                    getInviteRebate(goods);  // 试用装和线下课程需要调返利接口给上级返利
-                } 
-                popNewMessage('下单成功');
-                loadding && loadding.callback(loadding.widget);
-
+                
             }).catch(r => {
                 popNewMessage('下单失败');
                 loadding && loadding.callback(loadding.widget);
@@ -106,6 +100,19 @@ export class GiftPage extends Widget {
         }).catch(err => {
             loadding && loadding.callback(loadding.widget);
             popNewMessage('获取商品信息失败');
+        });
+    }
+
+    // 购买商品
+    public buyGoods(goods:number,oid:number) {
+        payOrder(oid).then(pay => {
+            if (this.props.fg === PowerFlag.free || this.props.fg === PowerFlag.offClass) {
+                getInviteRebate(goods);  // 试用装和线下课程需要调返利接口给上级返利
+            } 
+            popNewMessage('支付成功');
+
+        }).catch(err => {
+            popNewMessage('支付失败');
         });
     }
 
