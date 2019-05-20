@@ -130,14 +130,11 @@ const userLogin = () => {
         getOrders(OrderStatus.PENDINGDELIVERED);
         getOrders(OrderStatus.PENDINGRECEIPT);
         // 获取收益统计
-        getEarningTotal().then(res => {
-            const earning = getStore('earning');
-            earning.baby = res.hbaoCount;
-            earning.cash = res.cash;
-            earning.partner = res.partnerCount;
-            earning.shell = res.hbei;
-            setStore('earning',earning);
-        });
+        getEarningTotal();
+        
+        // 获取账户余额
+        getBalance();
+
         // 只有海宝和海王才有邀请码
         if (r.level < UserType.normal) {  
             getInviteCode().then(res => {
@@ -145,15 +142,15 @@ const userLogin = () => {
             });
         }
 
-        // 获取账户余额
-        getBalance();
-
         // 获取用户信息
-        getUserInfo().then(r => {
+        getUserInfo().then(res => {
             const user = getStore('user');
             user.avatar = userStr.headimgurl;
-            user.userName = r.wx_name || userStr.nickname;
-            user.phoneNum = r.phone;
+            user.userName = res.wx_name || userStr.nickname;
+            user.phoneNum = res.phone;
+            if (res.level < UserType.other) {
+                user.fcode = res.fcode;  // 上级的邀请码
+            } 
             setStore('user',user);
         });
 

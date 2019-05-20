@@ -13,7 +13,10 @@
             {{end}}
             <div w-class="row" on-tap="goDetail">
                 <div w-class="name">{{it1.userTypeShow}}会员</div>
-                <div w-class="code">我的邀请码&nbsp;{{it1.inviteCode}}</div>
+                <div style="display:flex;align-items:center;">
+                    <div w-class="code" on-tap="copy">我的邀请码&nbsp;{{it1.inviteCode}}</div>
+                    <img src="../../../res/image/copyBtn.png" on-tap="copy" w-class="copybtn"/>
+                </div>
             </div>
         </div>
 

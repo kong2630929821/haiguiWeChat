@@ -74,9 +74,14 @@
     line-height:50px;
 }
 .code{
-    height:28px;
+    height:30px;
     font-size:20px;
     color:rgba(136,136,136,1);
-    line-height:28px;
+    line-height:30px;
     margin-top: 5px;
+}
+.copybtn{
+    width: 30px;
+    height: 30px;
+    margin-left: 10px;
 }

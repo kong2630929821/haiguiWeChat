@@ -323,10 +323,11 @@ export enum GroupsLocation {
 // 用户信息
 interface User {
     userType:UserType;  // 用户会员等级 
-    inviteCode:string;  // 邀请码
+    inviteCode:string;  // 我的邀请码
     userName:string;    // 用户名
     phoneNum:string;       // 手机号
     avatar:string;         // 头像
+    fcode:string;        // 上级的邀请码
 }
 
 // 用户余额
@@ -369,7 +370,8 @@ const store:Store = {
         inviteCode:'',
         userName:'',
         phoneNum:'',
-        avatar:''
+        avatar:'',
+        fcode:''     // 上级的邀请码
     },
     balance:{
         cash:0,

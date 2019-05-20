@@ -2,43 +2,35 @@ import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { bindPhone, bindUser, randomInviteCode, sendCode, setUserName } from '../../net/pull';
 import { getStore, setStore } from '../../store/memstore';
+import { getLastAddress } from '../../utils/logic';
 import { popNewLoading, popNewMessage } from '../../utils/tools';
 
 interface Props {
     userName:string;  // 用户名
     selectAddr:boolean;  // 是否显示地区选择
     phoneNum:string;  // 手机号
-    area:string;  // 地区
-    address:string;  // 地址
-    areaSelect:any[]; // 地区选择结果
+    address:any;  // 地址 Address
     nowCount:number;  // 倒计时
     phoneCode:string;  // 手机验证码
     inviteCode:string;  // 邀请码
+    fcode:string;  // 已绑过的邀请码
 }
 /**
  * 填信息输入框弹窗
  */
 export class ModalBoxInput extends Widget {
-    public ok:() => void;
+    public ok:(addr:any) => void;  // 地址信息
     public cancel:() => void;
     public props:Props = {
         userName:'',
         selectAddr:false,
         phoneNum:'',
-        area:'',
-        address:'',
-        areaSelect:[],
+        address:{},
         nowCount:0,
         phoneCode:'',
-        inviteCode:''
+        inviteCode:'',
+        fcode:''
     };
-
-    public create() {
-        super.create();
-        const user = getStore('user');
-        this.props.userName = user.userName;
-        this.props.phoneNum = user.phoneNum;
-    }
 
     public setProps(props:any) {
         this.props = {
@@ -46,7 +38,12 @@ export class ModalBoxInput extends Widget {
             ...props
         };
         super.setProps(this.props);
-       
+        const user = getStore('user');
+        this.props.userName = user.userName;
+        this.props.phoneNum = user.phoneNum;
+        this.props.fcode = user.fcode;
+        this.props.inviteCode = user.fcode;
+        this.props.address = getLastAddress()[2];
     }
 
     // 输入用户名
@@ -69,11 +66,6 @@ export class ModalBoxInput extends Widget {
     // 输入邀请码
     public inviteCodeChange(e:any) {
         this.props.inviteCode = e.value;
-        this.paint();
-    }
-
-    public addressChange(e:any) {
-        this.props.address = e.value;
         this.paint();
     }
 
@@ -112,15 +104,16 @@ export class ModalBoxInput extends Widget {
 
     // 确认
     public async confirm() {
-        if (!this.props.userName || !this.props.phoneNum || !this.props.phoneCode || !this.props.inviteCode) {
+        if (!this.props.userName || !this.props.phoneNum || !this.props.phoneCode || !this.props.inviteCode || (this.props.selectAddr && !this.props.address)) {
             popNewMessage('请将内容填写完整');
         } else {
             const loadding = popNewLoading('请稍后');
 
             try {  // 验证手机号
-                const phoneRes = await bindPhone(this.props.phoneNum,this.props.phoneCode);
-                if (phoneRes) setStore('user/phoneNum',this.props.phoneNum);
-
+                if (this.props.phoneNum !== getStore('user/phoneNum')) {
+                    const phoneRes = await bindPhone(this.props.phoneNum,this.props.phoneCode);
+                    if (phoneRes) setStore('user/phoneNum',this.props.phoneNum);
+                } 
             } catch (err) {
                 loadding.callback(loadding.widget);
                 if (err.result === 1023) {
@@ -143,7 +136,8 @@ export class ModalBoxInput extends Widget {
             }
 
             try {   // 绑定邀请码
-                await bindUser(this.props.inviteCode);
+                if (!getStore('user/fcode','')) await bindUser(this.props.inviteCode);
+
             } catch (err) {
                 loadding.callback(loadding.widget);
                 popNewMessage('邀请码填写有误');
@@ -152,21 +146,15 @@ export class ModalBoxInput extends Widget {
             }
             
             loadding.callback(loadding.widget);
-            this.ok && this.ok();  // 所有接口都请求成功后关闭弹窗
+            this.ok && this.ok(this.props.address);  // 所有接口都请求成功后关闭弹窗
         }
     }
 
-    // 选择省 市 区
-    public selectArea() {
-        popNew('app-components-areaSelect-areaSelect',{ selected:this.props.areaSelect },(r) => {
-            if (r && r.length > 0) {
-                this.props.areaSelect = r;
-                const res = r.map(item => {
-                    return item.name;
-                });
-                this.props.area = res.join('');
-                this.paint();
-            }
+    public selAddr() {
+        popNew('app-view-mine-addressList',{ isChoose:true },(index:number) => {
+            this.props.address = getStore('mall/addresses')[index];
+            this.paint();
         });
     }
+
 }

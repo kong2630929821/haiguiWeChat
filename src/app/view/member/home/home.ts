@@ -4,7 +4,7 @@ import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
 import { register, UserType } from '../../../store/memstore';
 import { getUserTypeShow } from '../../../utils/logic';
-import { priceFormat } from '../../../utils/tools';
+import { copyToClipboard, popNewMessage, priceFormat } from '../../../utils/tools';
 import { hBaoPower, hWangPower } from '../powerConstant';
 
 export const PageFg = {
@@ -59,6 +59,11 @@ export class Home extends Widget {
         popNew('app-view-member-applyModalBox');
     }
 
+    // 复制邀请码
+    public copy() {
+        copyToClipboard(this.props.inviteCode);
+        popNewMessage('复制成功');
+    }
 }
 
 const State = {

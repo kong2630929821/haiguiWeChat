@@ -16,7 +16,8 @@ export const registerWXAPI = () => {
     loadJS('http://res2.wx.qq.com/open/js/jweixin-1.4.0.js', (info) => {
         if (info.result === 1) {
             if ((<any>self).wx) {
-                getWX_sign().then((resp:any) => {
+                // 安卓获取签名需要完整的URL，不完整则签名无效
+                getWX_sign(location.href).then((resp:any) => {
                     resp.debug = false;
                     resp.jsApiList = ['onMenuShareTimeline', 'hideMenuItems','onMenuShareAppMessage', 'chooseImage','uploadImage', 'getLocalImgData','scanQRCode'];
                     (<any>self).wx.config(resp);
@@ -28,9 +29,20 @@ export const registerWXAPI = () => {
                         });
                     });
 
-                    (<any>self).wx.error((res) => {
-                        // warn(logLevel,"config验证失败");
-                        // config信息验证失败会执行error函数，如签名过期导致验证失败，具体错误信息可以打开config的debug模式查看，也可以在返回的res参数中查看，对于SPA可以在这里更新签名。
+                    (<any>self).wx.error((res) => {  
+                        // config信息验证失败会执行error函数，iOS获取签名只能是不带参数的URL，否则签名无效
+                        getWX_sign(location.origin + location.pathname).then((resp:any) => {
+                            resp.debug = false;
+                            resp.jsApiList = ['onMenuShareTimeline', 'hideMenuItems','onMenuShareAppMessage', 'chooseImage','uploadImage', 'getLocalImgData','scanQRCode'];
+                            (<any>self).wx.config(resp);
+        
+                            (<any>self).wx.ready(() => {
+                                apiReady = true;
+                                (<any>self).wx.hideMenuItems({
+                                    menuList: ['menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:facebook', 'menuItem:share:QZone'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+                                });
+                            });
+                        });
                     });
                 });
             }

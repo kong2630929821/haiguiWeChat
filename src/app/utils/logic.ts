@@ -1,4 +1,6 @@
-import { getStore, UserType } from '../store/memstore';
+import { getInviteCode, payMoney, upgradeHBao } from '../net/pull';
+import { getStore, setStore, UserType } from '../store/memstore';
+import { popNewMessage } from './tools';
 /**
  * 本地方法
  */
@@ -114,4 +116,33 @@ const CashLogName = {
  */
 export const getCashLogName = (ttype:number) => {
     return CashLogName[CashLogType[ttype]];
+};
+
+/**
+ * 升级海宝支付
+ */
+export const payToUpHbao = () => {
+    const cash = getStore('balance/cash');
+    if (cash < 39900) { 
+        payMoney(39900 - cash,'hBao');
+    } else {
+        upgradeHBao().then(() => {
+            popNewMessage('升级海宝成功');
+            setStore('user/userType', UserType.hBao);
+            getInviteCode().then(res => {
+                setStore('user/inviteCode',res.code);
+            });
+        });
+    }
+};
+
+/**
+ * 获取上次选中的地址
+ */
+export const getLastAddress = () => {
+    const list = getStore('mall/addresses');
+    let selected = localStorage.getItem('addressIndex') ? Number(localStorage.getItem('addressIndex')) :0;
+    if (selected > list.length) selected = 0;
+
+    return [list, selected, list[selected]];
 };

@@ -386,13 +386,20 @@ export const getOrderById = (oids:number[]) => {
 /**
  * 获取收益统计
  */
-export const getEarningTotal = () => {
+export const getEarningTotal = async () => {
     const msg = {
         type:'mall/members@earnings_total',
         param:{}
     };
 
-    return requestAsync(msg);
+    const res = await requestAsync(msg);
+    const earning = {
+        baby: res.hbaoCount,
+        cash: res.cash,
+        partner: res.partnerCount,
+        shell: res.hbei
+    };
+    setStore('earning',earning);
 };
 
 /**
@@ -574,9 +581,7 @@ export const setUserName = (name:string) => {
 export const upgradeHBao = () => {
     const msg = {
         type:'mall/members@up_haibao',
-        param:{
-            wx_name:name
-        }
+        param:{}
     };
 
     return requestAsync(msg);
@@ -588,9 +593,7 @@ export const upgradeHBao = () => {
 export const upgradeHWang = () => {
     const msg = {
         type:'mall/members@up_haiwang',
-        param:{
-            wx_name:name
-        }
+        param:{}
     };
 
     return requestAsync(msg);
@@ -632,7 +635,7 @@ export const payMoney = (money:number,ttype:string,count:number= 1,failed?:Funct
     const msg = {
         type:'mall/pay@pay',
         param:{
-            money:money,
+            money:Math.floor(money),
             type:ttype,
             count,
             channel:'wxpay'
@@ -687,16 +690,20 @@ export const identifyIDCard = (url:string) => {
 /**
  * 实名认证
  * @param name 姓名
- * @param card 身份证号
- * @param sid 身份证图片ID
+ * @param id 身份证号
+ * @param front 身份证正面图片ID
+ * @param back 身份证背面图片ID
+ * @param valid_date 身份证有效期
  */
-export const verifyIDCard = (name:string,card:string,sid:string) => {
+export const verifyIDCard = (name:string,id:string,front:string,back:string,valid_date:string) => {
     const msg = {
         type:'mall/withdraw@get_withdraw_log',
         param:{
             name,
-            card,
-            sid
+            id,
+            front,
+            back,
+            valid_date
         }
     };
 
@@ -714,8 +721,9 @@ export const uploadFile = (id:string) => {
 /**
  * 获取微信签名
  */
-export const getWX_sign = () => {
-    return fetch(`http://${sourceIp}:${sourcePort}/pt/wx/sign?url=${location.href}`).then(res => res.json());
+export const getWX_sign = (url:string) => {
+
+    return fetch(`http://${sourceIp}:${sourcePort}/pt/wx/sign?url=${url}`).then(res => res.json());
 };
 
 /**
@@ -771,4 +779,38 @@ export const getExpressInfo = (LogisticCode:string,ShipperCode:string) => {
         return data.Traces;
         
     });
+};
+
+/**
+ * 获取活动商品价格
+ * @param goods 商品ID
+ * @param addr 地址
+ */
+export const getActiveGoodsPrice = (goods:number, addr:number) => {
+    const msg = {
+        type:'mall/members@get_activity_goods',
+        param:{
+            goods_id: goods,
+            addr_id: addr
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 购买活动商品
+ * @param goods 商品ID, 商品数量, SKU 
+ * @param addr 地址
+ */
+export const orderActiveGoods = (goods:[number,number,string],addr:number) => {
+    const msg = {
+        type:'order',
+        param:{
+            good_info: goods,
+            address_no: addr
+        }
+    };
+
+    return requestAsync(msg);
 };

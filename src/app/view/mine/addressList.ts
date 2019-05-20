@@ -1,7 +1,8 @@
 import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { Address, getStore, register } from '../../store/memstore';
+import { Address, register } from '../../store/memstore';
+import { getLastAddress } from '../../utils/logic';
 
 // tslint:disable-next-line:no-reserved-keywords
 declare var module: any;
@@ -19,13 +20,11 @@ interface Props {
 export class AddressList extends Widget {
     public ok:(index:number) => void;
     public setProps(props:Props) {
-        const list = getStore('mall/addresses');
-        let selected = Number(localStorage.getItem('addressIndex')) || 0;
-        if (selected > list.length) selected = 0;
+        const addr = getLastAddress();
         this.props = {
             ...props,
-            list,
-            selected
+            list:addr[0],
+            selected:addr[1]
         };
         super.setProps(this.props);
     }

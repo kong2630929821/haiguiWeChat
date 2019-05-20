@@ -1,7 +1,9 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
-import { getGoodsDetails, payMoney, upgradeHWang } from '../../net/pull';
-import { CartGoods, getStore, UserType } from '../../store/memstore';
+import { freeMaskGoodsId, OffClassGoodsId, saleClassGoodsId, vipClassGoodsId, whiteGoodsId_10000, whiteGoodsId_399 } from '../../config';
+import { getActiveGoodsPrice, getGoodsDetails, getInviteRebate, orderActiveGoods, payMoney, upgradeHWang } from '../../net/pull';
+import { getStore, register, UserType } from '../../store/memstore';
+import { payToUpHbao } from '../../utils/logic';
 import { popNewLoading, popNewMessage } from '../../utils/tools';
 import { shareWithUrl } from '../../utils/wxAPI';
 import { PowerFlag } from './powerConstant';
@@ -34,45 +36,76 @@ export class GiftPage extends Widget {
 
     // 免费领取
     public freeReceive() {
-        // 不是会员需要填写一些基础信息
-        if (getStore('user/userType',-1) >= UserType.normal) {
-            popNew('app-view-member-applyModalBox',null,() => {
-                
-                this.confirmOrder(10010007);
-            });
-        } else {
-            this.confirmOrder(10010007);            
-        }
+        popNew('app-view-member-applyModalBox',{ selectAddr:true },(addr) => {
+            if (this.props.fg === PowerFlag.free) {
+                this.confirmGoods(freeMaskGoodsId, addr.area_id);
+
+            } else if (this.props.fg === PowerFlag.gift) {
+                if (this.props.userType === UserType.hBao) {
+                    this.confirmGoods(whiteGoodsId_399, addr.area_id);
+                } else {
+                    this.confirmGoods(whiteGoodsId_10000, addr.area_id);
+                }
+            } else {
+                this.confirmGoods(freeMaskGoodsId, addr.area_id);
+            }
+            
+        });
     }
 
     // 报名课程
     public applyClass() {
-        // 不是会员需要填写一些基础信息
-        if (getStore('user/userType',-1) >= UserType.normal) {
-            popNew('app-view-member-applyModalBox',null,() => {
-                
-                this.confirmOrder(10010008);
-            });
-        } else {
-            this.confirmOrder(10010008);
-        }
+        popNew('app-view-member-applyModalBox',null,() => {
+            if (this.props.fg === PowerFlag.offClass) {
+                this.confirmGoods(OffClassGoodsId,0);
+            } else if (this.props.fg === PowerFlag.vipClass) {
+                this.confirmGoods(vipClassGoodsId,0);
+            } else {
+                this.confirmGoods(saleClassGoodsId,0);
+            }
+           
+        });
     }
 
-    // 确认下单
-    public confirmOrder (id:number) {
+    // 确认商品信息
+    public confirmGoods(goods:number,addrId:number) {
         const loadding = popNewLoading('请稍候');
-        getGoodsDetails(id).then(goods => {
-            const cartGood:CartGoods = {
-                index:-1,
-                goods,
-                amount:1,
-                selected:true
-            };
-            loadding.callback(loadding.widget);
-            popNew('app-view-shoppingCart-confirmOrder',{ orderGoods:[cartGood],buyNow:true });
-        }).catch(() => {
-            popNewMessage('下单失败');
-            loadding.callback(loadding.widget);
+        getActiveGoodsPrice(goods,addrId).then(r => {
+            const cash = getStore('balance/cash');
+            if (cash < r.money) { 
+                register('flags/activityGoods',() => {
+                    this.bugGoods(goods,addrId);
+                });
+                payMoney(r.money - cash,'activity');
+            } else {
+                this.bugGoods(goods,addrId);
+            }
+            loadding && loadding.callback(loadding.widget);
+        }).catch(err => {
+            loadding && loadding.callback(loadding.widget);
+            popNewMessage('获取商品价格失败');
+        });
+    }
+
+    // 购买商品
+    public bugGoods(goods:number,addrId:number) {
+        const loadding = popNewLoading('请稍候');
+        getGoodsDetails(goods).then(res => {
+            orderActiveGoods([goods,1,res.labels[0][0]],addrId).then(r => {
+                if (this.props.fg === PowerFlag.free || this.props.fg === PowerFlag.offClass) {
+                    getInviteRebate(goods);  // 试用装和线下课程需要调返利接口给上级返利
+                } 
+                popNewMessage('下单成功');
+                loadding && loadding.callback(loadding.widget);
+
+            }).catch(r => {
+                popNewMessage('下单失败');
+                loadding && loadding.callback(loadding.widget);
+            });
+            
+        }).catch(err => {
+            loadding && loadding.callback(loadding.widget);
+            popNewMessage('获取商品信息失败');
         });
     }
 
@@ -80,7 +113,7 @@ export class GiftPage extends Widget {
     public openVIP() {
         popNew('app-view-member-applyModalBox',null,() => {
             if (this.props.userType === UserType.hBao) {
-                payMoney(39900,'hBao');
+                payToUpHbao();
             } else {
                 upgradeHWang().then(() => {
                     popNewMessage('成功发送海王申请');
@@ -93,7 +126,7 @@ export class GiftPage extends Widget {
     public share(name:string) {
         if (name === 'free') {
             shareWithUrl('免费领面膜','好友送了你一份面膜，快来领取吧',`${location.href}?page=${name}`,'');
-            
+
         } else {
             shareWithUrl('免费领课程','好友送了你一个线下课程，快来领取吧',`${location.href}?page=${name}`,'');
         }
