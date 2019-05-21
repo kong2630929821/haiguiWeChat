@@ -1,11 +1,12 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
-import { bindPhone, bindUser, randomInviteCode, sendCode, setUserName, verifyIDCard } from '../../net/pull';
+import { bindPhone, bindUser, randomInviteCode, sendCode, verifyIDCard } from '../../net/pull';
 import { getStore, setStore } from '../../store/memstore';
 import { getLastAddress } from '../../utils/logic';
 import { popNewLoading, popNewMessage } from '../../utils/tools';
 
 interface Props {
+    realName:string;  // 用户名
     userName:string;  // 用户名
     selectAddr:boolean;  // 是否显示地区选择
     phoneNum:string;  // 手机号
@@ -22,6 +23,7 @@ export class ModalBoxInput extends Widget {
     public ok:(addr:any) => void;  // 地址信息
     public cancel:() => void;
     public props:Props = {
+        realName:'',
         userName:'',
         selectAddr:false,
         phoneNum:'',
@@ -39,6 +41,7 @@ export class ModalBoxInput extends Widget {
         };
         super.setProps(this.props);
         const user = getStore('user');
+        this.props.realName = user.realName;
         this.props.userName = user.realName;
         this.props.phoneNum = user.phoneNum;
         this.props.fcode = user.fcode;
@@ -126,7 +129,7 @@ export class ModalBoxInput extends Widget {
             }
 
             try {   // 设置用户名
-                if (this.props.userName !== getStore('user/realName')) {
+                if (this.props.realName) {
                     const nameRes = await verifyIDCard(this.props.userName,'','','','');
                     if (nameRes) setStore('user/realName',this.props.userName);
                 }  

@@ -1,9 +1,16 @@
 <div class="new-page" w-class="page">
     <div w-class="contain">
         <div w-class="title">填写申请信息</div>
+        {{if it.realName}}
+        <div w-class="row" style="border-bottom:1px solid #888;">
+            <div w-class="addr" style="color:#222;">{{it.realName}}</div>
+            <div style="font-size:24px;color:#B2B2B2">*不可修改</div>
+        </div>
+        {{else}}
         <div w-class="row" ev-input-change="nameChange">
             <widget w-tag="app-components-input-input">{placeHolder:"输入你的姓名",style:"padding:10px;font-size:28px;",input:{{it.userName}} }</widget>
         </div>
+        {{end}}
         <div w-class="row" ev-input-change="phoneChange">
             <widget w-tag="app-components-input-input">{placeHolder:"输入你的手机",style:"padding:10px;font-size:28px;",itype:"integer",input:{{it.phoneNum}} }</widget>
         </div>
