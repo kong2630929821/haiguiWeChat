@@ -4,7 +4,7 @@ import { Widget } from '../../../../pi/widget/widget';
 import { ReturnGoodsStatus } from '../../../net/pull';
 import { Order, OrderStatus, register } from '../../../store/memstore';
 import { getUserTypeShow } from '../../../utils/logic';
-import { priceFormat, priceFormat1, priceFormat2 } from '../../../utils/tools';
+import { copyToClipboard, popNewMessage, priceFormat1, priceFormat2 } from '../../../utils/tools';
 
 export const forelet = new Forelet();
 
@@ -60,6 +60,12 @@ export class Home extends Widget {
     // 实名认证
     public verified() {
         popNew('app-view-mine-IDCardUpload');
+    }
+
+    // 复制邀请码
+    public copy() {
+        copyToClipboard(this.props.inviteCode);
+        popNewMessage('复制成功');
     }
 }
 const State = {

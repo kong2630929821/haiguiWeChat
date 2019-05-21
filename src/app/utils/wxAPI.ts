@@ -57,7 +57,6 @@ export const shareWithUrl = (title:string, desc:string, url: string, img:string,
     const linkObj = {
         title: title,
         desc: desc,
-        debug: true,
         link: url,
         imgUrl: img,
         success: () => {

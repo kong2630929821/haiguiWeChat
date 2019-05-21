@@ -330,6 +330,7 @@ interface User {
     avatar:string;         // 头像
     fcode:string;        // 上级的邀请码
     label:string;        // 标签 省，市代理
+    IDCard:string;       // 身份证号码 表示实名认证成功
 }
 
 // 用户余额
@@ -375,7 +376,8 @@ const store:Store = {
         phoneNum:'',
         avatar:'',
         fcode:'',     // 上级的邀请码
-        label:''      // 标签 省，市代理
+        label:'',      // 标签 省，市代理
+        IDCard:''
     },
     balance:{
         cash:0,

@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { bindPhone, bindUser, randomInviteCode, sendCode, verifyIDCard } from '../../net/pull';
-import { getStore, setStore } from '../../store/memstore';
+import { getStore, setStore, UserType } from '../../store/memstore';
 import { getLastAddress } from '../../utils/logic';
 import { popNewLoading, popNewMessage } from '../../utils/tools';
 
@@ -14,7 +14,7 @@ interface Props {
     nowCount:number;  // 倒计时
     phoneCode:string;  // 手机验证码
     inviteCode:string;  // 邀请码
-    fcode:string;  // 已绑过的邀请码
+    fcode:string;  // 已绑过的邀请码 只有海宝升级海王时不能修改
 }
 /**
  * 填信息输入框弹窗
@@ -41,10 +41,14 @@ export class ModalBoxInput extends Widget {
         };
         super.setProps(this.props);
         const user = getStore('user');
-        this.props.realName = user.realName;
+        if (user.IDCard) {// 有身份证号，表示实名认证成功，不允许再修改名字
+            this.props.realName = user.realName;
+        }
         this.props.userName = user.realName;
         this.props.phoneNum = user.phoneNum;
-        this.props.fcode = user.fcode;
+        if (user.userType <= UserType.hBao) {// 成为会员后不允许修改父级邀请码
+            this.props.fcode = user.fcode;
+        }
         this.props.inviteCode = user.fcode;
         this.props.address = getLastAddress()[2];
     }
