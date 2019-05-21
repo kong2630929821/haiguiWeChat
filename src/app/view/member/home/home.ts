@@ -96,7 +96,7 @@ register('earning',r => {
 });
 register('user',r => {
     State.userType = r.userType;
-    State.userTypeShow = getUserTypeShow(r.userType);
+    State.userTypeShow = getUserTypeShow();
     State.inviteCode = r.inviteCode;
     State.powerList = r.userType === UserType.hWang ? hWangPower :hBaoPower;
     forelet.paint(State);

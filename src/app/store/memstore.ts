@@ -329,6 +329,7 @@ interface User {
     phoneNum:string;       // 手机号
     avatar:string;         // 头像
     fcode:string;        // 上级的邀请码
+    label:string;        // 标签 省，市代理
 }
 
 // 用户余额
@@ -373,7 +374,8 @@ const store:Store = {
         realName:'',
         phoneNum:'',
         avatar:'',
-        fcode:''     // 上级的邀请码
+        fcode:'',     // 上级的邀请码
+        label:''      // 标签 省，市代理
     },
     balance:{
         cash:0,

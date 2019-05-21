@@ -81,7 +81,7 @@ register('balance',r => {
     forelet.paint(State);
 });
 register('user',r => {
-    State.userType = getUserTypeShow(r.userType);
+    State.userType = getUserTypeShow().split('会员')[0];
     State.inviteCode = r.inviteCode;
     State.userName = r.userName;
     State.avatar = r.avatar;

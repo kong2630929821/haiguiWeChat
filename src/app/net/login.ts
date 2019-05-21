@@ -120,6 +120,7 @@ const userLoginCheck = () => {
  * 用户登录
  */
 const userLogin = (openId:number,userStr:any) => {
+    alert(document.cookie);
     const msg = { 
         type: 'login', 
         param: { 
@@ -165,6 +166,7 @@ const userLogin = (openId:number,userStr:any) => {
                 setUserName(userStr.nickname);
             }
 
+            user.label = UserLabel[res.label];
             user.avatar = userStr.headimgurl;
             user.userName = userStr.nickname;
             user.realName = res.name;
@@ -183,3 +185,5 @@ const userLogin = (openId:number,userStr:any) => {
         registerWXAPI();
     });
 };
+
+const UserLabel = ['','市代理','省代理'];
