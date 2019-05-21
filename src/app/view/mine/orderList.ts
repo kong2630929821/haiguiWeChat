@@ -64,6 +64,7 @@ export class OrderList extends Widget {
             } else if (activeStatus === OrderStatus.PENDINGRECEIPT) {  // 待收货  确认收货
                 receiptOrder(order.id).then(() => {
                     this.typeClick(OrderStatus.PENDINGFINISH);
+                    getOrders(OrderStatus.PENDINGRECEIPT);
                 });
             }
         } else {  // 取消按钮
@@ -83,6 +84,7 @@ export class OrderList extends Widget {
     }
 
     public paySuccess() {
+        getOrders(OrderStatus.PENDINGPAYMENT);
         getOrders(OrderStatus.PENDINGDELIVERED);
         this.props.activeStatus = OrderStatus.PENDINGDELIVERED;
         this.paint();
