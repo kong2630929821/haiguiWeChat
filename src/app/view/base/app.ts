@@ -93,7 +93,11 @@ export class App extends Widget {
         this.paint();
     }
 
-    public updateCartGoodsIcon(len:number) {
+    public updateCartGoodsIcon(cartGoods:CartGoods[]) {
+        let len = 0;
+        for (const v of cartGoods) {
+            len += v.amount;
+        }
         this.props.cartGoodsLen = len;
         this.paint();
     }
@@ -127,5 +131,5 @@ register('flags/gotoClass',() => {
 // 购物车变动
 register('mall/cartGoods',(cartGoods:CartGoods[]) => {
     const w:any = forelet.getWidget(WIDGET_NAME);
-    w && w.updateCartGoodsIcon(cartGoods.length);
+    w && w.updateCartGoodsIcon(cartGoods);
 });
