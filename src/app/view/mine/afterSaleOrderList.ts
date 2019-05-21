@@ -46,6 +46,7 @@ export class AfterSaleOrderList extends Widget {
         if (btn === 1) {  // 确定按钮  
             if (activeStatus === ReturnGoodsStatus.CANRETURN) { // 申请退货
                 returnGoods(afterOrder.id,'退货');
+                getReturnGoods(ReturnGoodsStatus.CANRETURN);
             }
         } else {  // 取消按钮
             
