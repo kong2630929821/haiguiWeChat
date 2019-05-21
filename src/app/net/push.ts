@@ -11,7 +11,7 @@ import { payToUpHbao } from '../utils/logic';
 export const payComplete = () => {
     // 支付成功
     setMsgHandler('event_pay_ok', (r) => {
-        alert(JSON.stringify(r));
+        // alert(JSON.stringify(r));
         if (r.msg && r.msg[2] === 'hBao') {
             payToUpHbao();
         } else if (r.msg && r.msg[2] === 'activity') {

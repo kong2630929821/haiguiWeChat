@@ -54,7 +54,6 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 60px;
     position: relative;
 }
 .divideLine{
