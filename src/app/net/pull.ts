@@ -753,7 +753,7 @@ export const getExpressCompany = (sid:string) => {
         const data = JSON.parse(res.ResponseData);
         console.log('getExpressCompany====',data);
 
-        return data.Shippers[0];    // 接口识别会返回一家或者多家快递公司，返回的数据根据快递鸟大数据分析结果排序，排名靠前的命中率更高。
+        return data[0].comCode;    // 接口识别会返回一家或者多家快递公司，返回的数据根据快递鸟大数据分析结果排序，排名靠前的命中率更高。
         
     });
 };
@@ -763,12 +763,13 @@ export const getExpressCompany = (sid:string) => {
  * @param LogisticCode 物流单号
  * @param ShipperCode 物流公司编码
  */
-export const getExpressInfo = (LogisticCode:string,ShipperCode:string) => {
+export const getExpressInfo = (LogisticCode:string,ShipperCode:string,phone:string) => {
     const msg = {
         type:'get_express_info',
         param:{
             LogisticCode,
-            ShipperCode
+            ShipperCode,
+            phone
         }
     };
 
@@ -776,7 +777,7 @@ export const getExpressInfo = (LogisticCode:string,ShipperCode:string) => {
         const data = JSON.parse(res.ResponseData);
         console.log('getExpressInfo====',data);
 
-        return data.Traces;
+        return data.data || [];
         
     });
 };

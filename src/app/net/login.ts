@@ -7,7 +7,7 @@ import { popNew } from '../../pi/ui/root';
 import { wsUrl } from '../config';
 import { getStore, GroupsLocation, OrderStatus, setStore, UserType } from '../store/memstore';
 import { registerWXAPI } from '../utils/wxAPI';
-import { getAddress, getBalance, getCart, getEarningTotal, getFreight, getGroups, getInviteCode, getOrders, getUserInfo, setUserName } from './pull';
+import { getAddress, getBalance, getCart, getEarningTotal , getFreight, getGroups, getInviteCode, getOrders, getUserInfo, setUserName } from './pull';
 import { payComplete } from './push';
 
 /**
@@ -140,7 +140,7 @@ const userLogin = (openId:number,userStr:any) => {
         getCart();
         getAddress();  //
         getFreight();
-
+      
         // 获取订单
         getOrders(OrderStatus.PENDINGPAYMENT);
         getOrders(OrderStatus.PENDINGDELIVERED);

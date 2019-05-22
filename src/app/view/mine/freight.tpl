@@ -9,8 +9,8 @@
         <div w-class="process-box">
         {{for i,v of it.traces}}
         <div w-class="process">
-            <div>{{v.AcceptStation}}</div>
-            <div style="font-size: 26px;margin-top: 10px;">{{v.AcceptTime}}</div>
+            <div>{{v.context}}</div>
+            <div style="font-size: 26px;margin-top: 10px;">{{v.time}}</div>
         </div>
         {{end}}
         </div>

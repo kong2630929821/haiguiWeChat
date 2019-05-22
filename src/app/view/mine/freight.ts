@@ -2,6 +2,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { getExpressCompany, getExpressInfo } from '../../net/pull';
 import { Order } from '../../store/memstore';
 import { copyToClipboard, popNewMessage, timestampFormat } from '../../utils/tools';
+import { logisticsCode } from './logisticsCode';
 
 interface Props {
     order:Order; 
@@ -20,12 +21,10 @@ export class Freight extends Widget {
         super.setProps(this.props);
         console.log('Freight ======',this.props);
         if (props.order.ship_id) {
-            getExpressCompany(props.order.ship_id).then(res => {
-                console.log(res);
-                const ShipperCode = res.ShipperCode;
-                this.props.ShipperName = res.ShipperName;
+            getExpressCompany(props.order.ship_id).then((ShipperCode:string) => {
+                this.props.ShipperName = logisticsCode[ShipperCode] || '未知';
                 this.paint();
-                getExpressInfo(props.order.ship_id,ShipperCode).then(res => {
+                getExpressInfo(props.order.ship_id,ShipperCode,props.order.tel).then(res => {
                     console.log(res);
                     this.props.traces = res;
                     this.paint();
