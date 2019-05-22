@@ -58,8 +58,11 @@ export class ImgSwiper extends Widget {
             },
             on:{
                 slideChangeTransitionStart: (r) => {
-                    this.props.activeIndex = this.swiper ? (this.swiper.activeIndex > this.props.list.length ? 1 : this.swiper.activeIndex) : 1; // 切换结束时，告诉我现在是第几个slide
-                    this.paint();
+                    if (this.swiper) {
+                        const activeIndex = this.swiper.activeIndex > this.props.list.length ? 1 : (this.swiper.activeIndex < 1 ? this.props.list.length : this.swiper.activeIndex);
+                        this.props.activeIndex = activeIndex;
+                        this.paint();
+                    }
                 }
             }
         });   
