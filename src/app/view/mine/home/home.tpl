@@ -10,8 +10,8 @@
             </div>
             {{if it1.inviteCode}}
             <div style="display:flex;align-items:center;">
-                <div w-class="code">邀请码：&nbsp;{{it1.inviteCode}}</div>
-                <img src="../../../res/image/copyBtn.png" w-class="copybtn"/>
+                <div w-class="code" on-tap="copy">邀请码：&nbsp;{{it1.inviteCode}}</div>
+                <img src="../../../res/image/copyBtn.png" w-class="copybtn" on-tap="copy"/>
             </div>
             {{end}}
         </div>

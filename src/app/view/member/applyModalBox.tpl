@@ -1,9 +1,16 @@
 <div class="new-page" w-class="page">
     <div w-class="contain">
         <div w-class="title">填写申请信息</div>
+        {{if it.realName}}
+        <div w-class="row" style="border-bottom:1px solid #888;">
+            <div w-class="addr" style="color:#222;">{{it.realName}}</div>
+            <div style="font-size:24px;color:#B2B2B2">*不可修改</div>
+        </div>
+        {{else}}
         <div w-class="row" ev-input-change="nameChange">
             <widget w-tag="app-components-input-input">{placeHolder:"输入你的姓名",style:"padding:10px;font-size:28px;",input:{{it.userName}} }</widget>
         </div>
+        {{end}}
         <div w-class="row" ev-input-change="phoneChange">
             <widget w-tag="app-components-input-input">{placeHolder:"输入你的手机",style:"padding:10px;font-size:28px;",itype:"integer",input:{{it.phoneNum}} }</widget>
         </div>
@@ -26,13 +33,11 @@
             <div w-class="btn" on-tap="getInvoteCode">推荐一个</div>
         </div>
         {{end}}
-
-        {{if it.selectAddr}}
-        <div w-class="row">
-            <div w-class="addr">{{it.address ? it.address.address:"详细地址"}}</div>
-            <div w-class="btn" on-tap="selAddr">选择地址</div>
+        <div w-class="row" style="justify-content: space-between;">
+            <div w-class="selbtn {{it.selected=='A'?'active':''}}" on-tap="changeSel('A')">选择A礼包</div>
+            <div w-class="selbtn {{it.selected=='B'?'active':''}}" on-tap="changeSel('B')">选择B礼包</div>
         </div>
-        {{end}}
+
         <div w-class="btns">
             <div w-class="cancel" on-tap="close">取消</div>
             <div w-class="sure" on-tap="confirm">确定</div>

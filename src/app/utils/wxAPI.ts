@@ -57,11 +57,13 @@ export const shareWithUrl = (title:string, desc:string, url: string, img:string,
     const linkObj = {
         title: title,
         desc: desc,
-        debug: true,
         link: url,
         imgUrl: img,
         success: () => {
             cb && cb();
+        },
+        fail: () => {
+            popNewMessage('分享失败');
         }
     };
     if (!apiReady) {
@@ -70,9 +72,9 @@ export const shareWithUrl = (title:string, desc:string, url: string, img:string,
         return;
     } 
     // 分享到朋友圈
-    (<any>self).wx.onMenuShareTimeline(linkObj);
+    (<any>self).wx.updateTimelineShareData(linkObj);
     // 分享给朋友
-    (<any>self).wx.onMenuShareAppMessage(linkObj);
+    (<any>self).wx.updateAppMessageShareData(linkObj);
 };
 
 /**

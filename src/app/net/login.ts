@@ -4,10 +4,11 @@
 
 import { open, request, setReloginCallback, setUrl } from '../../pi/net/ui/con_mgr';
 import { popNew } from '../../pi/ui/root';
+import { getCookie } from '../../pi/util/html';
 import { wsUrl } from '../config';
 import { getStore, GroupsLocation, OrderStatus, setStore, UserType } from '../store/memstore';
 import { registerWXAPI } from '../utils/wxAPI';
-import { getAddress, getBalance, getCart, getEarningTotal, getFreight, getGroups, getInviteCode, getOrders, getUserInfo, setUserName } from './pull';
+import { getAddress, getAllGifts, getBalance, getCart, getEarningTotal, getFreight, getGroups, getInviteCode, getOrders, getUserInfo, setUserName } from './pull';
 import { payComplete } from './push';
 
 /**
@@ -110,7 +111,7 @@ const userLoginCheck = () => {
     }
 
     if (userStr) {
-        userLogin(openId,userStr);
+        userLogin(userStr);
     } else {
         popNew('app-components-authModel-authModel');   // 授权
     }
@@ -119,13 +120,13 @@ const userLoginCheck = () => {
 /**
  * 用户登录
  */
-const userLogin = (openId:number,userStr:any) => {
+const userLogin = (userStr:any) => {
     const msg = { 
         type: 'login', 
         param: { 
             type:1,
             user:userStr.openid,
-            password:''
+            password:getCookie('ZMSCID_WX') || ''
         } 
     };
     console.log('userLogin = ',msg);
@@ -165,9 +166,11 @@ const userLogin = (openId:number,userStr:any) => {
                 setUserName(userStr.nickname);
             }
 
+            user.label = UserLabel[res.label];
             user.avatar = userStr.headimgurl;
             user.userName = userStr.nickname;
-            user.realName = res.name;
+            user.realName = res.name[0];
+            user.IDCard = res.name[1];
             user.phoneNum = res.phone;
             if (res.level < UserType.other) {
                 user.fcode = res.fcode;  // 上级的邀请码
@@ -181,5 +184,10 @@ const userLogin = (openId:number,userStr:any) => {
         
         // 注册微信api
         registerWXAPI();
+
+        // 获取所有可领的礼包
+        getAllGifts();
     });
 };
+
+const UserLabel = ['','市代理','省代理'];

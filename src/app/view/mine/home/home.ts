@@ -4,7 +4,7 @@ import { Widget } from '../../../../pi/widget/widget';
 import { ReturnGoodsStatus } from '../../../net/pull';
 import { Order, OrderStatus, register } from '../../../store/memstore';
 import { getUserTypeShow } from '../../../utils/logic';
-import { priceFormat, priceFormat1, priceFormat2 } from '../../../utils/tools';
+import { copyToClipboard, popNewMessage, priceFormat1, priceFormat2 } from '../../../utils/tools';
 
 export const forelet = new Forelet();
 
@@ -61,6 +61,12 @@ export class Home extends Widget {
     public verified() {
         popNew('app-view-mine-IDCardUpload');
     }
+
+    // 复制邀请码
+    public copy() {
+        copyToClipboard(this.state.inviteCode);
+        popNewMessage('复制成功');
+    }
 }
 const State = {
     balance:[
@@ -82,7 +88,7 @@ register('balance',r => {
     forelet.paint(State);
 });
 register('user',r => {
-    State.userType = getUserTypeShow(r.userType);
+    State.userType = getUserTypeShow().split('会员')[0];
     State.inviteCode = r.inviteCode;
     State.userName = r.userName;
     State.avatar = r.avatar;

@@ -1,5 +1,5 @@
 <div class="new-page" w-class="page" ev-update="upgradeUser">
-    <widget w-tag="app-view-member-home-powerCard">{name:"{{it.userTypeShow}}会员",money:{{it.userType==2 ? 399:10000}},code:{{it.code}} }</widget>
+    <widget w-tag="app-view-member-home-powerCard">{name:"{{it.userTypeShow}}",money:{{it.userType==2 ? 399:10000}},code:{{it.code}} }</widget>
     <div w-class="title">
         <img src="../../res/image/iconArrow.png"/>
         <span style="margin-left:20px;">权益介绍</span>
@@ -23,7 +23,7 @@
 
     <div w-class="title">
         <img src="../../res/image/iconArrow.png"/>
-        <span style="margin-left:20px;">仅{{it.userTypeShow}}会员享受此权益</span>
+        <span style="margin-left:20px;">仅{{it.userTypeShow}}享受此权益</span>
     </div>
 
     {{if !it.code}}

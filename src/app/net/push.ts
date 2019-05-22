@@ -3,7 +3,6 @@
  */
 import { setMsgHandler } from '../../pi/net/ui/con_mgr';
 import { setStore } from '../store/memstore';
-import { payToUpHbao } from '../utils/logic';
 
 /**
  * 支付成功
@@ -13,7 +12,7 @@ export const payComplete = () => {
     setMsgHandler('event_pay_ok', (r) => {
         // alert(JSON.stringify(r));
         if (r.msg && r.msg[2] === 'hBao') {
-            payToUpHbao();
+            setStore('flags/upgradeHbao',true);
         } else if (r.msg && r.msg[2] === 'activity') {
             setStore('flags/activityGoods',true);
         } else if (r.msg && r.msg[2] === '105') {
