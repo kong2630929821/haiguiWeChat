@@ -1,8 +1,8 @@
 <div class="new-page" w-class="new-page">
-    {{if it.order.ship_id}}
+    {{if it.shipId}}
         <div w-class="row row1">
             <div w-class="order">
-                <span>{{it.ShipperName}}</span>&nbsp;<span style="color:#000;">{{it.order.ship_id}}</span>
+                <span>{{it.ShipperName}}</span>&nbsp;<span style="color:#000;">{{it.shipId}}</span>
             </div>
             <img src="../../res/image/copy.png" w-class="copy" on-tap="copyClick"/>
         </div>
