@@ -26,12 +26,12 @@ export const priceFormat = (price:number) => {
 
 // 价格格式化1  超出10000单位改为万
 export const priceFormat1 = (price:number) => {
-    let newPrice = price / 100;
-    if (newPrice > 10000) {
-        newPrice = newPrice / 10000;
+    const newPrice = price / 100;
+    // if (newPrice > 10000) {
+    //     newPrice = newPrice / 10000;
         
-        return `${newPrice.toFixed(2)}万`;
-    }
+    //     return `${newPrice.toFixed(2)}万`;
+    // }
 
     return newPrice.toFixed(2);
 };

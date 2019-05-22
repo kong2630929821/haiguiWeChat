@@ -2,8 +2,9 @@
 import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
+import { upgradeHWang } from '../../../net/pull';
 import { register, UserType } from '../../../store/memstore';
-import { getUserTypeShow } from '../../../utils/logic';
+import { getUserTypeShow, payToUpHbao } from '../../../utils/logic';
 import { copyToClipboard, popNewMessage, priceFormat } from '../../../utils/tools';
 import { hBaoPower, hWangPower } from '../powerConstant';
 
@@ -56,12 +57,23 @@ export class Home extends Widget {
 
     // 升级会员等级
     public upgradeUser() {
-        popNew('app-view-member-applyModalBox');
+        popNew('app-view-member-applyModalBox',null,(sel) => {
+            if (this.props.userType === UserType.hWang) {
+                upgradeHWang(sel).then(() => {
+                    popNewMessage('成功发送海王申请');
+                });
+            } else {
+                payToUpHbao(sel);
+                register('flags/upgradeHbao',() => {
+                    payToUpHbao(sel);
+                });
+            }
+        });
     }
 
     // 复制邀请码
     public copy() {
-        copyToClipboard(this.props.inviteCode);
+        copyToClipboard(this.state.inviteCode);
         popNewMessage('复制成功');
     }
 }
@@ -87,7 +99,7 @@ register('earning',r => {
 });
 register('user',r => {
     State.userType = r.userType;
-    State.userTypeShow = getUserTypeShow(r.userType);
+    State.userTypeShow = getUserTypeShow();
     State.inviteCode = r.inviteCode;
     State.powerList = r.userType === UserType.hWang ? hWangPower :hBaoPower;
     forelet.paint(State);

@@ -82,9 +82,11 @@ export const openWXPay = (param:any,failed?:Function) => {
  * 获取会员等级名称
  */
 export const getUserTypeShow = (user?:UserType) => {
-    if (!user) user = getStore('user/userType',0);
-    if (user === UserType.hWang) return '海王';
-    if (user === UserType.hBao) return '海宝';
+    const curUser = getStore('user/userType',0);
+    if (!user) user = curUser;
+    if (curUser === UserType.hWang) return getStore('user/label','海王会员');
+    if (user === UserType.hWang) return '海王会员';
+    if (user === UserType.hBao) return '海宝会员';
     
     return '';
 };
@@ -97,7 +99,8 @@ enum CashLogType {
     reInvite,  // 邀请返利
     recharge,   // 充值
     withdraw,  // 提现
-    shopping    // 购物
+    shopping,    // 购物
+    reCash     // 提现退款
 }
 // 现金来源名称
 const CashLogName = {
@@ -107,7 +110,8 @@ const CashLogName = {
     reInvite:'邀请返利',
     recharge:'充值',
     withdraw:'提现',
-    shopping:'购物'
+    shopping:'购物',
+    reCash:'提现退款'
 };
 
 /**
@@ -121,12 +125,12 @@ export const getCashLogName = (ttype:number) => {
 /**
  * 升级海宝支付
  */
-export const payToUpHbao = () => {
+export const payToUpHbao = (sel:string) => {
     const cash = getStore('balance/cash');
     if (cash < 39900) { 
         payMoney(39900 - cash,'hBao');
     } else {
-        upgradeHBao().then(() => {
+        upgradeHBao(sel).then(() => {
             popNewMessage('升级海宝成功');
             setStore('user/userType', UserType.hBao);
             getInviteCode().then(res => {

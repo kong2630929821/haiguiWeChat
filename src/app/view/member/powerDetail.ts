@@ -48,13 +48,16 @@ export class PowerDetail extends Widget {
 
     // 升级会员等级
     public upgradeUser() {
-        popNew('app-view-member-applyModalBox',null,() => {
+        popNew('app-view-member-applyModalBox',null,(sel) => {
             if (this.props.userType === UserType.hWang) {
-                upgradeHWang().then(() => {
+                upgradeHWang(sel).then(() => {
                     popNewMessage('成功发送海王申请');
                 });
             } else {
-                payToUpHbao();
+                payToUpHbao(sel);
+                register('flags/upgradeHbao',() => {
+                    payToUpHbao(sel);
+                });
             }
         });
     }

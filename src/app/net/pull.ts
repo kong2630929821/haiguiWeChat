@@ -1,5 +1,5 @@
 import { request } from '../../pi/net/ui/con_mgr';
-import { sourceIp, sourcePort } from '../config';
+import { freeMaskGoodsId, OffClassGoodsId, saleClassGoodsId, sourceIp, sourcePort, vipClassGoodsId, whiteGoodsId_10000, whiteGoodsId_399 } from '../config';
 import { getStore,GroupsLocation, OrderStatus, setStore } from '../store/memstore';
 import { openWXPay } from '../utils/logic';
 import { popNewMessage } from '../utils/tools';
@@ -578,10 +578,14 @@ export const setUserName = (name:string) => {
 /**
  * 升级海宝
  */
-export const upgradeHBao = () => {
+export const upgradeHBao = (sel:string) => {
+    let optional = whiteGoodsId_399;
+    if (sel === 'B') optional = whiteGoodsId_399;
     const msg = {
         type:'mall/members@up_haibao',
-        param:{}
+        param:{
+            optional
+        }
     };
 
     return requestAsync(msg);
@@ -590,10 +594,14 @@ export const upgradeHBao = () => {
 /**
  * 升级海王
  */
-export const upgradeHWang = () => {
+export const upgradeHWang = (sel:string) => {
+    let optional = whiteGoodsId_10000;
+    if (sel === 'B') optional = whiteGoodsId_10000;
     const msg = {
         type:'mall/members@up_haiwang',
-        param:{}
+        param:{
+            optional
+        }
     };
 
     return requestAsync(msg);
@@ -697,7 +705,7 @@ export const identifyIDCard = (url:string) => {
  */
 export const verifyIDCard = (name:string,id:string,front:string,back:string,valid_date:string) => {
     const msg = {
-        type:'mall/withdraw@get_withdraw_log',
+        type:'set_id_card',
         param:{
             name,
             id,
@@ -814,4 +822,34 @@ export const orderActiveGoods = (goods:[number,number,string],addr:number) => {
     };
 
     return requestAsync(msg);
+};
+
+/**
+ * 用户可领的所有礼包
+ */
+export const getAllGifts = async () => {
+    const msg = {
+        type:'mall/members@get_activity_goods_all',
+        param:{}
+    };
+
+    const data = await requestAsync(msg);
+    const memberGifts = getStore('user/memberGifts');
+    for (const v of data.value) {
+        if (v[0] === whiteGoodsId_399) {
+            memberGifts.gift = v[1];
+        } else if (v[0] === whiteGoodsId_10000) {
+            memberGifts.gift = v[1];
+        } else if (v[0] === freeMaskGoodsId) {
+            memberGifts.vipGift = v[1];
+        } else if (v[0] === OffClassGoodsId) {
+            memberGifts.offClass = v[1];
+        } else if (v[0] === vipClassGoodsId) {
+            memberGifts.vipClass = v[1];
+        } else if (v[0] === saleClassGoodsId) {
+            memberGifts.saleClass = v[1];
+        }
+    }
+    
+    setStore('user/memberGifts',memberGifts);
 };
