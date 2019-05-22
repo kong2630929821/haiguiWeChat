@@ -331,6 +331,7 @@ interface User {
     fcode:string;        // 上级的邀请码
     label:string;        // 标签 省，市代理
     IDCard:string;       // 身份证号码 表示实名认证成功
+    memberGifts:MemberGifts;   // 会员领取礼记录
 }
 
 // 用户余额
@@ -338,6 +339,18 @@ interface Balance {
     cash:number;  // 现金
     shell:number;  // 海贝
     integral:number;  // 积分
+}
+
+// 礼包领取记录
+type GiftLog = [number,number,number,number,number,number,number];  // [已领数量，领取上限，第一次领取时间，下次可领时间，间隔时间，结束时间，返利]
+
+// 会员领取礼记录
+interface MemberGifts {
+    gift:GiftLog;         // 美白礼包
+    vipGift:GiftLog;      // 尊享礼包
+    offClass:GiftLog;     // 线下课程
+    vipClass:GiftLog;     // 精品课程 海王可领
+    saleClass:GiftLog;    // 销售课程 海王可领
 }
 
 /******************************store初始化**********************************/
@@ -377,7 +390,14 @@ const store:Store = {
         avatar:'',
         fcode:'',     // 上级的邀请码
         label:'',      // 标签 省，市代理
-        IDCard:''
+        IDCard:'',
+        memberGifts:{
+            gift:[0,0,0,0,0,0,0],
+            vipGift:[0,0,0,0,0,0,0],
+            offClass:[0,0,0,0,0,0,0],
+            vipClass:[0,0,0,0,0,0,0],
+            saleClass:[0,0,0,0,0,0,0]
+        }
     },
     balance:{
         cash:0,

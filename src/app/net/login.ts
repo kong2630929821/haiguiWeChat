@@ -8,7 +8,7 @@ import { getCookie } from '../../pi/util/html';
 import { wsUrl } from '../config';
 import { getStore, GroupsLocation, OrderStatus, setStore, UserType } from '../store/memstore';
 import { registerWXAPI } from '../utils/wxAPI';
-import { getAddress, getBalance, getCart, getEarningTotal, getFreight, getGroups, getInviteCode, getOrders, getUserInfo, setUserName } from './pull';
+import { getAddress, getAllGifts, getBalance, getCart, getEarningTotal, getFreight, getGroups, getInviteCode, getOrders, getUserInfo, setUserName } from './pull';
 import { payComplete } from './push';
 
 /**
@@ -184,6 +184,9 @@ const userLogin = (userStr:any) => {
         
         // 注册微信api
         registerWXAPI();
+
+        // 获取所有可领的礼包
+        getAllGifts();
     });
 };
 

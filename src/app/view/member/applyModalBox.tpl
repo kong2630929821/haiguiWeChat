@@ -33,13 +33,11 @@
             <div w-class="btn" on-tap="getInvoteCode">推荐一个</div>
         </div>
         {{end}}
-
-        {{if it.selectAddr}}
-        <div w-class="row">
-            <div w-class="addr">{{it.address ? it.address.address:"详细地址"}}</div>
-            <div w-class="btn" on-tap="selAddr">选择地址</div>
+        <div w-class="row" style="justify-content: space-between;">
+            <div w-class="selbtn {{it.selected=='A'?'active':''}}" on-tap="changeSel('A')">选择A礼包</div>
+            <div w-class="selbtn {{it.selected=='B'?'active':''}}" on-tap="changeSel('B')">选择B礼包</div>
         </div>
-        {{end}}
+
         <div w-class="btns">
             <div w-class="cancel" on-tap="close">取消</div>
             <div w-class="sure" on-tap="confirm">确定</div>

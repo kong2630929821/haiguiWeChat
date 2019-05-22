@@ -125,12 +125,12 @@ export const getCashLogName = (ttype:number) => {
 /**
  * 升级海宝支付
  */
-export const payToUpHbao = () => {
+export const payToUpHbao = (sel:string) => {
     const cash = getStore('balance/cash');
     if (cash < 39900) { 
         payMoney(39900 - cash,'hBao');
     } else {
-        upgradeHBao().then(() => {
+        upgradeHBao(sel).then(() => {
             popNewMessage('升级海宝成功');
             setStore('user/userType', UserType.hBao);
             getInviteCode().then(res => {

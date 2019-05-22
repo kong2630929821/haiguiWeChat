@@ -5,13 +5,14 @@ import { getGoodsDetails, getInviteRebate, orderActiveGoods, payMoney, payOrder,
 import { Address, getStore, register, UserType } from '../../store/memstore';
 import { payToUpHbao } from '../../utils/logic';
 import { popNewLoading, popNewMessage } from '../../utils/tools';
-import { shareWithUrl } from '../../utils/wxAPI';
 import { PowerFlag } from './powerConstant';
 interface Props {
     fg:PowerFlag;   // 进入此页面的标记
     img:string;    // 展示的图片
     isCurVip:boolean;  // 是否是当前等级的会员 例如海宝会员查看海王会员的权益时为false
     userType:UserType;  // 用户会员等级
+    btn:string;     // 按钮名称
+    isAble:boolean;  // 是否可以领取
 }
 /**
  * 大礼包
@@ -30,32 +31,60 @@ export class GiftPage extends Widget {
         } else {
             this.props.img = `399_${PowerFlag[props.fg]}.png`;
         }
+        this.props.isAble = true;  // 默认值可以领取
+        const memberGifts = getStore('user/memberGifts');
+
+        if (props.fg === PowerFlag.gift) { // 美白礼包
+            const v = memberGifts.gift;
+            if (v[0] > 0) {
+                this.props.btn = '已全部领取';
+                this.props.isAble = false;
+            } else {
+                this.props.btn = '免费领取';
+            }
+            
+        } else if (props.fg === PowerFlag.vipGift) { // 尊享礼包
+            const v = memberGifts.vipGift;
+            if (v[0] < v[1] && v[3] > Date.now()) {
+                // 未到下次可领时间
+                this.props.btn = `本周已领，还剩 ${v[1] - v[0]} 盒`;
+                
+            } else if (v[0] === v[1]) {
+                this.props.btn = '已全部领取';
+                this.props.isAble = false;
+            } else {
+                this.props.btn = '领取本期面膜';
+            }
+            
+        }
         this.props.isCurVip = getStore('user/userType',-1) === props.userType;  
         console.log(this.props);
     }
 
     // 免费领取
     public freeReceive() {
-        popNew('app-view-member-applyModalBox',{ selectAddr:true },(addr) => {
-            if (this.props.fg === PowerFlag.free) {
-                this.confirmGoods(freeMaskGoodsId, addr);
+        if (this.props.isAble) {
+            popNew('app-view-member-fillAddrModalBox',{ selectAddr:true },(addr) => {
+                if (this.props.fg === PowerFlag.free) {
+                    this.confirmGoods(freeMaskGoodsId, addr);
 
-            } else if (this.props.fg === PowerFlag.gift) {
-                if (this.props.userType === UserType.hBao) {
-                    this.confirmGoods(whiteGoodsId_399, addr);
+                } else if (this.props.fg === PowerFlag.gift) {
+                    if (this.props.userType === UserType.hBao) {
+                        this.confirmGoods(whiteGoodsId_399, addr);
+                    } else {
+                        this.confirmGoods(whiteGoodsId_10000, addr);
+                    }
                 } else {
-                    this.confirmGoods(whiteGoodsId_10000, addr);
+                    this.confirmGoods(freeMaskGoodsId, addr);
                 }
-            } else {
-                this.confirmGoods(freeMaskGoodsId, addr);
-            }
             
-        });
+            });
+        }
     }
 
     // 报名课程
     public applyClass() {
-        popNew('app-view-member-applyModalBox',{ selectAddr:true },(addr) => {
+        popNew('app-view-member-fillAddrModalBox',{ selectAddr:true },(addr) => {
             if (this.props.fg === PowerFlag.offClass) {
                 this.confirmGoods(OffClassGoodsId,addr);
             } else if (this.props.fg === PowerFlag.vipClass) {
@@ -88,7 +117,6 @@ export class GiftPage extends Widget {
                 loadding && loadding.callback(loadding.widget);
 
             }).catch(r => {
-                alert(r);
                 popNewMessage('下单失败');
                 loadding && loadding.callback(loadding.widget);
             });
@@ -114,24 +142,27 @@ export class GiftPage extends Widget {
 
     // 开通会员
     public openVIP() {
-        popNew('app-view-member-applyModalBox',null,() => {
+        popNew('app-view-member-applyModalBox',null,(sel) => {
             if (this.props.userType === UserType.hBao) {
-                payToUpHbao();
+                payToUpHbao(sel);
+                register('flags/upgradeHbao',() => {
+                    payToUpHbao(sel);
+                });
             } else {
-                upgradeHWang().then(() => {
+                upgradeHWang(sel).then(() => {
                     popNewMessage('成功发送海王申请');
                 });
             }
         });
     }
 
-    // 分享给好友
-    public share(name:string) {
-        if (name === 'free') {
-            shareWithUrl('免费领面膜','好友送了你一份面膜，快来领取吧',`${location.href}?page=${name}`,'');
+    // // 分享给好友
+    // public share(name:string) {
+    //     if (name === 'free') {
+    //         shareWithUrl('免费领面膜','好友送了你一份面膜，快来领取吧',`${location.href}?page=${name}`,'');
 
-        } else {
-            shareWithUrl('免费领课程','好友送了你一个线下课程，快来领取吧',`${location.href}?page=${name}`,'');
-        }
-    }
+    //     } else {
+    //         shareWithUrl('免费领课程','好友送了你一个线下课程，快来领取吧',`${location.href}?page=${name}`,'');
+    //     }
+    // }
 }

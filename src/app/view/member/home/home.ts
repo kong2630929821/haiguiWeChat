@@ -57,20 +57,23 @@ export class Home extends Widget {
 
     // 升级会员等级
     public upgradeUser() {
-        popNew('app-view-member-applyModalBox',null,() => {
+        popNew('app-view-member-applyModalBox',null,(sel) => {
             if (this.props.userType === UserType.hWang) {
-                upgradeHWang().then(() => {
+                upgradeHWang(sel).then(() => {
                     popNewMessage('成功发送海王申请');
                 });
             } else {
-                payToUpHbao();
+                payToUpHbao(sel);
+                register('flags/upgradeHbao',() => {
+                    payToUpHbao(sel);
+                });
             }
         });
     }
 
     // 复制邀请码
     public copy() {
-        copyToClipboard(this.props.inviteCode);
+        copyToClipboard(this.state.inviteCode);
         popNewMessage('复制成功');
     }
 }

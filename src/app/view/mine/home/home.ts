@@ -64,7 +64,7 @@ export class Home extends Widget {
 
     // 复制邀请码
     public copy() {
-        copyToClipboard(this.props.inviteCode);
+        copyToClipboard(this.state.inviteCode);
         popNewMessage('复制成功');
     }
 }

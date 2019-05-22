@@ -60,7 +60,8 @@ export class LogList extends Widget {
                     return {
                         name: getCashLogName(item[2]),
                         time: timestampFormat(item[5], 4),
-                        money: `${itype === 1 ? '￥' :''}${priceFormat(item[3])}`
+                        // tslint:disable-next-line:prefer-template
+                        money: `${itype === 1 ? '￥' + priceFormat(item[3]) :item[3]}`
                     };
                 });
             } else {

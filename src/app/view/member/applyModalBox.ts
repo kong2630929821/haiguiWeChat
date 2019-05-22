@@ -1,37 +1,33 @@
-import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { bindPhone, bindUser, randomInviteCode, sendCode, verifyIDCard } from '../../net/pull';
 import { getStore, setStore, UserType } from '../../store/memstore';
-import { getLastAddress } from '../../utils/logic';
 import { popNewLoading, popNewMessage } from '../../utils/tools';
 
 interface Props {
     realName:string;  // 用户名
     userName:string;  // 用户名
-    selectAddr:boolean;  // 是否显示地区选择
     phoneNum:string;  // 手机号
-    address:any;  // 地址 Address
     nowCount:number;  // 倒计时
     phoneCode:string;  // 手机验证码
     inviteCode:string;  // 邀请码
     fcode:string;  // 已绑过的邀请码 只有海宝升级海王时不能修改
+    selected:string; // 选择的礼包
 }
 /**
  * 填信息输入框弹窗
  */
 export class ModalBoxInput extends Widget {
-    public ok:(addr:any) => void;  // 地址信息
+    public ok:(select:string) => void;  // 地址信息
     public cancel:() => void;
     public props:Props = {
         realName:'',
         userName:'',
-        selectAddr:false,
         phoneNum:'',
-        address:{},
         nowCount:0,
         phoneCode:'',
         inviteCode:'',
-        fcode:''
+        fcode:'',
+        selected:'A'
     };
 
     public setProps(props:any) {
@@ -50,7 +46,6 @@ export class ModalBoxInput extends Widget {
             this.props.fcode = user.fcode;
         }
         this.props.inviteCode = user.fcode;
-        this.props.address = getLastAddress()[2];
     }
 
     // 输入用户名
@@ -104,6 +99,12 @@ export class ModalBoxInput extends Widget {
         });
     }
 
+    // 切换礼包选择
+    public changeSel(sel:string) {
+        this.props.selected = sel;
+        this.paint();
+    }
+
     // 取消
     public close() {
         this.cancel && this.cancel();
@@ -111,7 +112,7 @@ export class ModalBoxInput extends Widget {
 
     // 确认
     public async confirm() {
-        if (!this.props.userName || !this.props.phoneNum || !this.props.phoneCode || !this.props.inviteCode || (this.props.selectAddr && !this.props.address)) {
+        if (!this.props.userName || !this.props.phoneNum || !this.props.phoneCode || !this.props.inviteCode) {
             popNewMessage('请将内容填写完整');
         } else {
             const loadding = popNewLoading('请稍后');
@@ -132,8 +133,8 @@ export class ModalBoxInput extends Widget {
                 return;
             }
 
-            try {   // 设置用户名
-                if (this.props.realName) {
+            try {   // 设置用户名 实名认证过不允许再修改
+                if (!this.props.realName) {
                     const nameRes = await verifyIDCard(this.props.userName,'','','','');
                     if (nameRes) setStore('user/realName',this.props.userName);
                 }  
@@ -155,15 +156,8 @@ export class ModalBoxInput extends Widget {
             }
             
             loadding.callback(loadding.widget);
-            this.ok && this.ok(this.props.address);  // 所有接口都请求成功后关闭弹窗
+            this.ok && this.ok(this.props.selected);  // 所有接口都请求成功后关闭弹窗
         }
-    }
-
-    public selAddr() {
-        popNew('app-view-mine-addressList',{ isChoose:true },(index:number) => {
-            this.props.address = getStore('mall/addresses')[index];
-            this.paint();
-        });
     }
 
 }

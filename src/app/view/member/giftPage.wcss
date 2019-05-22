@@ -27,16 +27,11 @@
     text-align: center;
     margin: 40px;
 }
-.btns{
-    display: flex;
-    align-items: center;
-    width: 100%;
-}
 .btn1{
-    height:40px;
-    font-size:28px;
+    height:50px;
+    font-size:36px;
     color:rgba(113,158,130,1);
-    line-height:40px;
+    line-height:50px;
     text-decoration: underline;
     margin-top: 40px;
 }
