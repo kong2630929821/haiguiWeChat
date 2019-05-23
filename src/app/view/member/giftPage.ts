@@ -1,6 +1,6 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
-import { freeMaskGoodsId, OffClassGoodsId, saleClassGoodsId, vipClassGoodsId, whiteGoodsId_10000, whiteGoodsId_399 } from '../../config';
+import { freeMaskGoodsId, OffClassGoodsId, saleClassGoodsId, vipClassGoodsId, vipMaskGoodsId } from '../../config';
 import { getGoodsDetails, getInviteRebate, orderActiveGoods, payMoney, payOrder, upgradeHWang } from '../../net/pull';
 import { Address, getStore, register, UserType } from '../../store/memstore';
 import { payToUpHbao } from '../../utils/logic';
@@ -45,12 +45,12 @@ export class GiftPage extends Widget {
             
         } else if (props.fg === PowerFlag.vipGift) { // 尊享礼包
             const v = memberGifts.vipGift;
-            if (v[0] < v[1] && v[3] > Date.now()) {
-                // 未到下次可领时间
+            if (v[0] < v[1] && v[3] < Date.now() && Date.now() < v[5]) {
+                // 未到下次可领时间，且未超过结束时间，且未领完
                 this.props.btn = `本周已领，还剩 ${v[1] - v[0]} 盒`;
                 this.props.isAble = false;
             } else if (v[0] === v[1] || v[5] < Date.now()) {
-                // 已超过结束时间，不能再领
+                // 已超过结束时间，或已经全部领完
                 this.props.btn = '已全部领完';
                 this.props.isAble = false;
             } else {
@@ -69,13 +69,9 @@ export class GiftPage extends Widget {
                     this.confirmGoods(freeMaskGoodsId, addr);
 
                 } else if (this.props.fg === PowerFlag.gift) {
-                    if (this.props.userType === UserType.hBao) {
-                        this.confirmGoods(whiteGoodsId_399, addr);
-                    } else {
-                        this.confirmGoods(whiteGoodsId_10000, addr);
-                    }
+                    this.confirmGoods(getStore('user/MemberGifts/optionalGift'), addr);
                 } else {
-                    this.confirmGoods(freeMaskGoodsId, addr);
+                    this.confirmGoods(vipMaskGoodsId, addr);
                 }
             
             });
