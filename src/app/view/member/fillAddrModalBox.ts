@@ -20,7 +20,7 @@ interface Props {
  * 领取礼包填写地址
  */
 export class FillAddrModalBox extends Widget {
-    public ok:() => void;
+    public ok:(addr:any) => void;  // 选择的地址详情
     public cancel:() => void;
     public props:Props;
 
@@ -102,7 +102,7 @@ export class FillAddrModalBox extends Widget {
     // 确认
     public async confirm() {
         if (this.props.address && this.props.isVip) {
-            this.ok && this.ok();
+            this.ok && this.ok(this.props.address);
         } else if (this.props.isVip) {
             popNewMessage('请选择地址');
 
@@ -151,7 +151,7 @@ export class FillAddrModalBox extends Widget {
                 }
                 
                 loadding.callback(loadding.widget);
-                this.ok && this.ok();  // 所有接口都请求成功后关闭弹窗
+                this.ok && this.ok(this.props.address);  // 所有接口都请求成功后关闭弹窗
             }
         }
         
