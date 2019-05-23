@@ -1,6 +1,6 @@
 <div class="new-page" w-class="page">
     <div w-class="contain">
-        <div w-class="title">填写申请信息</div>
+        <div w-class="title">{{it.title ? it.title : "填写申请信息"}}</div>
         {{if it.realName}}
         <div w-class="row" style="border-bottom:1px solid #888;">
             <div w-class="addr" style="color:#222;">{{it.realName}}</div>
@@ -33,7 +33,7 @@
             <div w-class="btn" on-tap="getInvoteCode">推荐一个</div>
         </div>
         {{end}}
-        
+
         {{if it.needSelGift}}
         <div w-class="row" style="justify-content: space-between;">
             <div w-class="selbtn {{it.selected=='A'?'active':''}}" on-tap="changeSel('A')">选择A礼包</div>

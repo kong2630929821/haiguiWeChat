@@ -59,7 +59,7 @@ export class ConfirmOrder extends Widget {
             totalSale += v.finalSale * v.cartGood.amount;
             const supplierId = v.cartGood.goods.supplier;
             if (v.cartGood.goods.has_tax) {     // 保税商品只有税费没有运费
-                totalTax += v.cartGood.goods.tax;
+                totalTax += v.cartGood.goods.tax * v.cartGood.amount;
             } else {
                 if (frieghts.indexOf(supplierId) < 0) frieghts.push(supplierId);
             }
@@ -96,7 +96,7 @@ export class ConfirmOrder extends Widget {
             return;
         }
         if (!getStore('user/fcode')) {
-            popNew('app-view-member-applyModalBox',{ needSelGift:false },() => {
+            popNew('app-view-member-applyModalBox',{ needSelGift:false,title:'请填写个人信息' },() => {
                 this.order();
             });
         } else {
