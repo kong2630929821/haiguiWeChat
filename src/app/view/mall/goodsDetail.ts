@@ -113,6 +113,11 @@ export class GoodsDetailHome extends Widget {
     // 立即购买
     public sureClick(res:any) {
         const sku = this.props.goods.labels[this.props.skuIndex];
+        if (sku[3] === 0) {
+            popNewMessage('库存不足');
+
+            return;
+        }
         if (res.buyNow) {
             console.log('立即购买');
             const goods = JSON.parse(JSON.stringify(this.props.goods));

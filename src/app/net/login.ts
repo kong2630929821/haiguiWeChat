@@ -141,7 +141,7 @@ const userLogin = (userStr:any) => {
         getCart();
         getAddress();  //
         getFreight();
-
+      
         // 获取订单
         getOrders(OrderStatus.PENDINGPAYMENT);
         getOrders(OrderStatus.PENDINGDELIVERED);

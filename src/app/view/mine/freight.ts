@@ -2,6 +2,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { getExpressCompany, getExpressInfo } from '../../net/pull';
 import { Order } from '../../store/memstore';
 import { copyToClipboard, popNewMessage, timestampFormat } from '../../utils/tools';
+import { logisticsCode } from './logisticsCode';
 
 interface Props {
     order:Order; 
@@ -11,21 +12,22 @@ interface Props {
  */
 export class Freight extends Widget {
     public setProps(props:Props) {
+        const shipId = props.order.ship_id.split('/')[0];
+
         this.props = {
             ...props,
+            shipId,
             ShipperName:'',
             traces:[],
             shipTimeShow:timestampFormat(props.order.ship_time)
         };
         super.setProps(this.props);
         console.log('Freight ======',this.props);
-        if (props.order.ship_id) {
-            getExpressCompany(props.order.ship_id).then(res => {
-                console.log(res);
-                const ShipperCode = res.ShipperCode;
-                this.props.ShipperName = res.ShipperName;
+        if (shipId) {
+            getExpressCompany(shipId).then((ShipperCode:string) => {
+                this.props.ShipperName = logisticsCode[ShipperCode] || '未知';
                 this.paint();
-                getExpressInfo(props.order.ship_id,ShipperCode).then(res => {
+                getExpressInfo(shipId,ShipperCode,props.order.tel).then(res => {
                     console.log(res);
                     this.props.traces = res;
                     this.paint();
@@ -35,7 +37,7 @@ export class Freight extends Widget {
     }
 
     public copyClick() {
-        copyToClipboard(this.props.order.ship_id);
+        copyToClipboard(this.props.shipId);
         popNewMessage('复制成功');
     }
 }
