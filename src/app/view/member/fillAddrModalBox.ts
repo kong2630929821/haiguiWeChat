@@ -1,17 +1,28 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
-import { getStore } from '../../store/memstore';
+import { bindPhone, bindUser, randomInviteCode, sendCode, verifyIDCard } from '../../net/pull';
+import { getStore, setStore, UserType } from '../../store/memstore';
 import { getLastAddress } from '../../utils/logic';
-import { popNewMessage } from '../../utils/tools';
+import { popNewLoading, popNewMessage } from '../../utils/tools';
+interface Props {
+    realName:string;  // 用户名
+    userName:string;  // 用户名
+    phoneNum:string;  // 手机号
+    nowCount:number;  // 倒计时
+    phoneCode:string;  // 手机验证码
+    inviteCode:string;  // 邀请码
+    fcode:string;  // 已绑过的邀请码 只有海宝升级海王时不能修改
+    selected:string; // 选择的礼包
+    address:any;  // 地址
+    isVip:boolean; // 是否是会员
+}
 /**
  * 领取礼包填写地址
  */
 export class FillAddrModalBox extends Widget {
     public ok:() => void;
     public cancel:() => void;
-    public props:any = {
-        address:getLastAddress()[2]
-    };
+    public props:Props;
 
     public setProps(props:any) {
         this.props = {
@@ -19,6 +30,14 @@ export class FillAddrModalBox extends Widget {
             ...props
         };
         super.setProps(this.props);
+        this.props.address = getLastAddress()[2];
+        this.props.isVip = getStore('user/userType') <= UserType.hBao;
+        if (!this.props.isVip) {
+            const user = getStore('user');
+            this.props.userName = user.realName;
+            this.props.phoneNum = user.phoneNum;
+            this.props.inviteCode = user.fcode;
+        }
     }
 
     // 选择地址
@@ -29,13 +48,113 @@ export class FillAddrModalBox extends Widget {
         });
     }
 
-    // 确认
-    public confirm() {
-        if (this.props.address) {
-            this.ok && this.ok();
+    // 输入用户名
+    public nameChange(e:any) {
+        this.props.userName = e.value;
+        this.paint();
+    }
+
+    // 输入手机号
+    public phoneChange(e:any) {
+        this.props.phoneNum = e.value;
+    }
+
+    // 输入手机验证码
+    public phoneCodeChange(e:any) {
+        this.props.phoneCode = e.value;
+        this.paint();
+    }
+
+    // 输入邀请码
+    public inviteCodeChange(e:any) {
+        this.props.inviteCode = e.value;
+        this.paint();
+    }
+
+    // 获取手机验证码
+    public getPhoneCode() {
+        if (this.props.phoneNum) {
+            sendCode(this.props.phoneNum).then(r => {
+                this.props.nowCount = 60;
+                popNewMessage('验证码已发送');
+                this.paint();
+                const countdown = setInterval(() => {
+                    this.props.nowCount--;
+                    if (this.props.nowCount === 0) {
+                        clearInterval(countdown);
+                    }
+                    this.paint();
+                },1000);
+            });
         } else {
-            popNewMessage('请选择地址');
+            popNewMessage('请输入手机号');
         }
+    }
+
+    // 获取邀请码
+    public getInvoteCode() {
+        randomInviteCode().then(r => {
+            this.props.inviteCode = r.code;
+            this.paint();
+        });
+    }
+
+    // 确认
+    public async confirm() {
+        if (this.props.address && this.props.isVip) {
+            this.ok && this.ok();
+        } else if (this.props.isVip) {
+            popNewMessage('请选择地址');
+
+        } else { // 非会员领取试用装
+            if (!this.props.userName || !this.props.phoneNum || !this.props.phoneCode || !this.props.inviteCode) {
+                popNewMessage('请将内容填写完整');
+            } else {
+                const loadding = popNewLoading('请稍后');
+    
+                try {  // 验证手机号
+                    if (this.props.phoneNum !== getStore('user/phoneNum')) {
+                        const phoneRes = await bindPhone(this.props.phoneNum,this.props.phoneCode);
+                        if (phoneRes) setStore('user/phoneNum',this.props.phoneNum);
+                    } 
+                } catch (err) {
+                    loadding.callback(loadding.widget);
+                    if (err.result === 1023) {
+                        popNewMessage('手机号已被注册');
+                    } else {
+                        popNewMessage('验证码填写有误');
+                    }
+    
+                    return;
+                }
+    
+                try {   // 设置用户名 实名认证过不允许再修改
+                    if (getStore('user/realName')) {
+                        const nameRes = await verifyIDCard(this.props.userName,'','','','');
+                        if (nameRes) setStore('user/realName',this.props.userName);
+                    }  
+                } catch (err) {
+                    loadding.callback(loadding.widget);
+                    popNewMessage('用户名设置失败');
+    
+                    return;
+                }
+    
+                try {   // 绑定邀请码
+                    if (!getStore('user/fcode','')) await bindUser(this.props.inviteCode);
+    
+                } catch (err) {
+                    loadding.callback(loadding.widget);
+                    popNewMessage('邀请码填写有误');
+    
+                    return;
+                }
+                
+                loadding.callback(loadding.widget);
+                this.ok && this.ok();  // 所有接口都请求成功后关闭弹窗
+            }
+        }
+        
     }
 
     // 取消

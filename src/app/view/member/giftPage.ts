@@ -37,7 +37,7 @@ export class GiftPage extends Widget {
         if (props.fg === PowerFlag.gift) { // 美白礼包
             const v = memberGifts.gift;
             if (v[0] > 0) {
-                this.props.btn = '已全部领取';
+                this.props.btn = '已全部领完';
                 this.props.isAble = false;
             } else {
                 this.props.btn = '免费领取';
@@ -48,9 +48,10 @@ export class GiftPage extends Widget {
             if (v[0] < v[1] && v[3] > Date.now()) {
                 // 未到下次可领时间
                 this.props.btn = `本周已领，还剩 ${v[1] - v[0]} 盒`;
-                
-            } else if (v[0] === v[1]) {
-                this.props.btn = '已全部领取';
+                this.props.isAble = false;
+            } else if (v[0] === v[1] || v[5] < Date.now()) {
+                // 已超过结束时间，不能再领
+                this.props.btn = '已全部领完';
                 this.props.isAble = false;
             } else {
                 this.props.btn = '领取本期面膜';
@@ -58,7 +59,6 @@ export class GiftPage extends Widget {
             
         }
         this.props.isCurVip = getStore('user/userType',-1) === props.userType;  
-        console.log(this.props);
     }
 
     // 免费领取
