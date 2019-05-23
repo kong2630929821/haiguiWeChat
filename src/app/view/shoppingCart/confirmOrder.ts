@@ -95,6 +95,17 @@ export class ConfirmOrder extends Widget {
 
             return;
         }
+        if (!getStore('user/fcode')) {
+            popNew('app-view-member-applyModalBox',{ needSelGift:false },() => {
+                this.order();
+            });
+        } else {
+            this.order();
+        }
+
+    }
+
+    public async order() {
         const allOrderPromise = [];
         const loading = popNewLoading('提交订单');
         for (const [k,v] of this.props.suppliers) {
