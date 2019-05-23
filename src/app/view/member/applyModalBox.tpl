@@ -33,10 +33,13 @@
             <div w-class="btn" on-tap="getInvoteCode">推荐一个</div>
         </div>
         {{end}}
+        
+        {{if it.needSelGift}}
         <div w-class="row" style="justify-content: space-between;">
             <div w-class="selbtn {{it.selected=='A'?'active':''}}" on-tap="changeSel('A')">选择A礼包</div>
             <div w-class="selbtn {{it.selected=='B'?'active':''}}" on-tap="changeSel('B')">选择B礼包</div>
         </div>
+        {{end}}
 
         <div w-class="btns">
             <div w-class="cancel" on-tap="close">取消</div>

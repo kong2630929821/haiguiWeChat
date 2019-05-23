@@ -3,7 +3,7 @@ import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { addCart, getAreas, getGoodsDetails } from '../../net/pull';
 import { Area, CartGoods, getStore, GoodsDetails, ImageType, register, setStore } from '../../store/memstore';
-import { calcPrices, getImageMainPath, getImagePath, popNewMessage, priceFormat } from '../../utils/tools';
+import { calcFreightDesc, calcPrices, getImageMainPath, getImagePath, popNewMessage, priceFormat } from '../../utils/tools';
 
 // tslint:disable-next-line:no-reserved-keywords
 declare var module: any;
@@ -17,28 +17,30 @@ interface Props {
  * 商品详情
  */
 export class GoodsDetailHome extends Widget {
-    public goodsItemDescs:any = {
-        freight:{ 
-            title:'运费说明',
-            descs:[
-                { title:'运费说明',content:'普通运费10元，内蒙古自治区、海南省、西藏自治区、新疆维吾尔自治区运费20元' }
-            ] 
-        },
-        tax:{ 
-            title:'税费说明',
-            descs:[
-                { title:'商品进口税',content:'进口税=海关认定完税价*认定税率（完税价格由海关最终认定）' }
-            ] 
-        },
-        service:{ 
-            title:'服务说明',
-            descs:[
-                { title:'7天售后无忧',content:'收到商品之日起7天(含)内如有商品质量问题可申请售后进行退货' }
-            ] 
-        }
-    
-    };
     public setProps(props:Props,oldProps:Props) {
+        const obj = calcFreightDesc(getStore('mall/freights'));
+        const goodsItemDescs = {
+            freight:{ 
+                title:'运费说明',
+                itemContent:obj.freightInterval,
+                descs:[
+                    { title:'运费说明',content:obj.freightDesc }
+                ] 
+            },
+            tax:{ 
+                title:'税费说明',
+                descs:[
+                    { title:'商品进口税',content:'进口税=海关认定完税价*认定税率（完税价格由海关最终认定）' }
+                ] 
+            },
+            service:{ 
+                title:'服务说明',
+                descs:[
+                    { title:'7天售后无忧',content:'收到商品之日起7天(含)内如有商品质量问题可申请售后进行退货' }
+                ] 
+            }
+        
+        };
         const ret = calcPrices(props.goods);
         const skus = props.goods.labels;
         let skuIndex = -1;
@@ -46,6 +48,7 @@ export class GoodsDetailHome extends Widget {
         this.props = {
             ...props,
             ...ret,
+            goodsItemDescs,
             cartGoodsLen:getStore('mall/cartGoods').length,
             priceFormat,
             getImageMainPath,
@@ -73,7 +76,7 @@ export class GoodsDetailHome extends Widget {
 
     // 点击描述
     public clickDescs(e:any,key:string) {
-        this.props.descProps = this.goodsItemDescs[key];
+        this.props.descProps = this.props.goodsItemDescs[key];
         this.paint();
     }
 

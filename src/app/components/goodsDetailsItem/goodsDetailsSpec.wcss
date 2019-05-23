@@ -94,7 +94,7 @@
     flex-wrap: wrap;
 }
 .item{
-    height:60px;
+    min-height:60px;
     background-color:rgba(248,248,248,1);
     border-radius:6px;
     border:1px solid rgba(5,5,5,0.1);
@@ -106,8 +106,9 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    word-break: break-all;
     min-width: 120px;
-    padding: 0 20px;
+    padding:10px 20px;
     box-sizing: border-box;
     margin-right: 15px; 
     margin-bottom: 10px;

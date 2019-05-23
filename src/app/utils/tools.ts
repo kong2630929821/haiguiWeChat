@@ -2,7 +2,7 @@
  * 常用工具
  */
 import { popNew } from '../../pi/ui/root';
-import { getStore, GoodsDetails, ImageType, MallImages, SKU, UserType } from '../store/memstore';
+import { Freight, getStore, GoodsDetails, ImageType, MallImages, SKU, UserType } from '../store/memstore';
 
 // 弹出提示框
 export const popNewMessage = (content: any) => {
@@ -191,4 +191,40 @@ export const checkPhone = (phoneNumber:string) => {
     } 
 
     return false;
+};
+
+/**
+ * 运费说明描述
+ */
+export const calcFreightDesc = (freights:Freight[]) => {
+    const obj = {};
+    const freightsArr = [];
+    for (const v of freights) {
+        let arr = obj[v.price];
+        if (!arr) {
+            arr = [];
+        }
+        arr.push(v.province);
+        obj[v.price] = arr;
+        if (freightsArr.indexOf(v.price) < 0) freightsArr.push(v.price);
+    }
+    
+    freightsArr.sort((a1,a2) => a1 - a2);
+    const minFreight = freightsArr[0];
+    const maxFreight = freightsArr[freightsArr.length - 1];
+    const freightInterval = `${priceFormat(minFreight)}-${priceFormat(maxFreight)}`;
+    let freightDesc = `普通运费${priceFormat(minFreight)}元`;
+    for (let i = 1;i < freightsArr.length;i++) {
+        const k = freightsArr[i];
+        const str = obj[k].join('、');
+        freightDesc += `,${str}运费${priceFormat(k)}元`; 
+    }
+    console.log('obj ====',obj);
+    console.log('freightDesc ====',freightDesc);
+    console.log('freightInterval ===',freightInterval);
+
+    return {
+        freightInterval,
+        freightDesc
+    };
 };
