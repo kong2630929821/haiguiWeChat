@@ -351,6 +351,7 @@ interface MemberGifts {
     offClass:GiftLog;     // 线下课程
     vipClass:GiftLog;     // 精品课程 海王可领
     saleClass:GiftLog;    // 销售课程 海王可领
+    optionalGift:number;  // 可选美白礼包的商品ID
 }
 
 /******************************store初始化**********************************/
@@ -396,7 +397,8 @@ const store:Store = {
             vipGift:[0,0,0,0,0,0,0],
             offClass:[0,0,0,0,0,0,0],
             vipClass:[0,0,0,0,0,0,0],
-            saleClass:[0,0,0,0,0,0,0]
+            saleClass:[0,0,0,0,0,0,0],
+            optionalGift:0
         }
     },
     balance:{
