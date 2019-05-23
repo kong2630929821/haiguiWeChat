@@ -12,6 +12,7 @@ interface Props {
     inviteCode:string;  // 邀请码
     fcode:string;  // 已绑过的邀请码 只有海宝升级海王时不能修改
     selected:string; // 选择的礼包
+    needSelGift:boolean; // 是否需要选择礼包
 }
 /**
  * 填信息输入框弹窗
@@ -27,7 +28,8 @@ export class ModalBoxInput extends Widget {
         phoneCode:'',
         inviteCode:'',
         fcode:'',
-        selected:'A'
+        selected:'A',
+        needSelGift:true
     };
 
     public setProps(props:any) {
