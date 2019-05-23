@@ -4,6 +4,7 @@ import { getStore, setStore, UserType } from '../../store/memstore';
 import { popNewLoading, popNewMessage } from '../../utils/tools';
 
 interface Props {
+    title?:string;   // 标题
     realName:string;  // 用户名
     userName:string;  // 用户名
     phoneNum:string;  // 手机号

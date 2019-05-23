@@ -62,6 +62,7 @@ export const timestampFormat = (timestamp: number,timeType?: number) => {
  */
 export const openWXPay = (param:any,failed?:Function) => {
     const onBridgeReady = () => {
+        console.log('WeixinJSBridge has ready');
         WeixinJSBridge.invoke('getBrandWCPayRequest', JSON.parse(param), (res) => {
             // alert(JSON.stringify(res));
             if (res.err_msg) {

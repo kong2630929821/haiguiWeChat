@@ -8,7 +8,11 @@ import { loadJS } from './logic';
 import { popNewMessage } from './tools';
  
 // ===================================  导出
+let wxconfig;
 
+export const setWxConfig = () => {
+    if (wxconfig) (<any>self).wx.config(wxconfig);
+};
 /**
  * 理论上程序一运行就需要调用该函数，去微信获取分享的API
  */
@@ -20,6 +24,7 @@ export const registerWXAPI = () => {
                 getWX_sign(location.href).then((resp:any) => {
                     resp.debug = false;
                     resp.jsApiList = ['onMenuShareTimeline', 'hideMenuItems','onMenuShareAppMessage', 'chooseImage','uploadImage', 'getLocalImgData','scanQRCode'];
+                    wxconfig = resp;
                     (<any>self).wx.config(resp);
 
                     (<any>self).wx.ready(() => {
