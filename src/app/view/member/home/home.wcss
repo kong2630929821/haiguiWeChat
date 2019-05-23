@@ -73,12 +73,18 @@
     color:rgba(244,241,184,1);
     line-height:50px;
 }
+.codeRow{
+    display:flex;
+    align-items:center;
+    width: 250px;
+    border: 10px solid transparent;
+    border-left: none;
+}
 .code{
     height:30px;
     font-size:20px;
     color:rgba(136,136,136,1);
     line-height:30px;
-    margin-top: 5px;
 }
 .copybtn{
     width: 30px;
