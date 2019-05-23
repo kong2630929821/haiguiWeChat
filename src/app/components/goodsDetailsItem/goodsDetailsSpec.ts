@@ -47,7 +47,7 @@ export class GoodsDetailsSpec extends Widget {
     // 增加购买数量
     public addClick(e:any) {
         const nowAmount = ++this.props.amount;
-        this.props.amount = nowAmount > this.props.inventorys ? this.props.inventorys : nowAmount;
+        this.props.amount = nowAmount;
         this.paint();
     }
 

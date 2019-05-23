@@ -2,7 +2,7 @@ import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { serverFilePath } from '../../config';
 import { popNewMessage } from '../../utils/tools';
-import { takeImage, upImage } from '../../utils/wxAPI';
+import { setWxConfig, takeImage, upImage } from '../../utils/wxAPI';
 interface Props {
     firstClick:boolean; // 是否是第一次点击上传按钮
     img1:string;
@@ -38,6 +38,7 @@ export class IDCardUpload extends Widget {
 
     // 选择图片
     public chooseImg(num:number) {
+        setWxConfig();
         takeImage(1,(r) => {
             console.log(r);
             if (num === 1) {

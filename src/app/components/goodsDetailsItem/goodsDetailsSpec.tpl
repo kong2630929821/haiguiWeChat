@@ -15,7 +15,7 @@
                         <div w-class="left-num">剩余{{it.inventorys}}件</div>
                     </div>
                 </div>
-                <img src="../../res/image/close.png" w-class="close-icon" on-tap="closeClick"/>
+                <div on-tap="closeClick" w-class="close-item"><img src="../../res/image/close.png" w-class="close-icon" /></div>
             </div>
            
             <div w-class="choose-item">
@@ -30,9 +30,9 @@
         <div w-class="buy">
             <div w-class="buy-title">购买数量</div>
             <div w-class="buy-box">
-                <img src="../../res/image/less_icon.png" on-tap="lessClick"/>
+                <div on-tap="addClick" w-class="click-item"><img src="../../res/image/less_icon.png" on-tap="lessClick"/></div>
                 <div w-class="buy-num">{{it.amount}}</div>
-                <img src="../../res/image/add_icon.png" on-tap="addClick"/>
+                <div on-tap="addClick" w-class="click-item"><img src="../../res/image/add_icon.png" /></div>
             </div>
         </div>
     </div>
