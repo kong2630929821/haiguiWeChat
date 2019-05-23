@@ -1,5 +1,5 @@
 <div class="new-page" w-class="new-page">
-    <div w-class="mask"></div>
+    <div w-class="mask" on-tap="closeClick"></div>
     <div w-class="body">
         <div w-class="desc">
             <div w-class="basic-msg">

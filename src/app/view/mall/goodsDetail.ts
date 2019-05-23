@@ -45,11 +45,16 @@ export class GoodsDetailHome extends Widget {
         const skus = props.goods.labels;
         let skuIndex = -1;
         if (skus.length === 1) skuIndex = 0;
+        const cartGoods = getStore('mall/cartGoods');
+        let len = 0;
+        for (const v of cartGoods) {
+            len += v.amount;
+        }
         this.props = {
             ...props,
             ...ret,
             goodsItemDescs,
-            cartGoodsLen:getStore('mall/cartGoods').length,
+            cartGoodsLen:len,
             priceFormat,
             getImageMainPath,
             descProps:undefined,   
