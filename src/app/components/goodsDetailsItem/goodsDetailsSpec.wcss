@@ -29,7 +29,14 @@
     border-bottom: 1px solid #e5e5e5;
 }
 .close-icon{
-    margin: 20px 20px 0 0;
+    
+}
+.close-item{
+    width: 80px;
+    height: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .img{
     width: 140px;
@@ -119,7 +126,7 @@
 }
 .item-sold-out{
     background-color: rgba(248,248,248,1);
-    color: #e5e5e5;
+    color: #353535;
     border: 1px solid rgba(5,5,5,0.1);
     opacity:0.6;
 }
@@ -194,4 +201,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
+}
+.click-item{
+    width: 100px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
