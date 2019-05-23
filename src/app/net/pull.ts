@@ -1,5 +1,5 @@
 import { request } from '../../pi/net/ui/con_mgr';
-import { freeMaskGoodsId, OffClassGoodsId, saleClassGoodsId, sourceIp, sourcePort, vipClassGoodsId, whiteGoodsId_10000, whiteGoodsId_399 } from '../config';
+import { OffClassGoodsId, saleClassGoodsId, sourceIp, sourcePort, vipClassGoodsId, vipMaskGoodsId, whiteGoodsId_10000A, whiteGoodsId_10000B, whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
 import { getStore,GroupsLocation, OrderStatus, setStore } from '../store/memstore';
 import { openWXPay } from '../utils/logic';
 import { popNewMessage } from '../utils/tools';
@@ -579,8 +579,8 @@ export const setUserName = (name:string) => {
  * 升级海宝
  */
 export const upgradeHBao = (sel:string) => {
-    let optional = whiteGoodsId_399;
-    if (sel === 'B') optional = whiteGoodsId_399;
+    let optional = whiteGoodsId_399A;
+    if (sel === 'B') optional = whiteGoodsId_399B;
     const msg = {
         type:'mall/members@up_haibao',
         param:{
@@ -595,8 +595,8 @@ export const upgradeHBao = (sel:string) => {
  * 升级海王
  */
 export const upgradeHWang = (sel:string) => {
-    let optional = whiteGoodsId_10000;
-    if (sel === 'B') optional = whiteGoodsId_10000;
+    let optional = whiteGoodsId_10000A;
+    if (sel === 'B') optional = whiteGoodsId_10000B;
     const msg = {
         type:'mall/members@up_haiwang',
         param:{
@@ -836,16 +836,31 @@ export const getAllGifts = async () => {
     const data = await requestAsync(msg);
     const memberGifts = getStore('user/memberGifts');
     for (const v of data.value) {
-        if (v[0] === whiteGoodsId_399) {
+        if (v[0] === whiteGoodsId_399A) {
             memberGifts.gift = v[1];
-        } else if (v[0] === whiteGoodsId_10000) {
+            memberGifts.optionalGift = whiteGoodsId_399A;
+
+        } else if (v[0] === whiteGoodsId_399B) {
             memberGifts.gift = v[1];
-        } else if (v[0] === freeMaskGoodsId) {
+            memberGifts.optionalGift = whiteGoodsId_399B;
+
+        } else if (v[0] === whiteGoodsId_10000A) {
+            memberGifts.gift = v[1];
+            memberGifts.optionalGift = whiteGoodsId_10000A;
+
+        } else if (v[0] === whiteGoodsId_10000B) {
+            memberGifts.gift = v[1];
+            memberGifts.optionalGift = whiteGoodsId_10000B;
+
+        } else if (v[0] === vipMaskGoodsId) {
             memberGifts.vipGift = v[1];
+
         } else if (v[0] === OffClassGoodsId) {
             memberGifts.offClass = v[1];
+
         } else if (v[0] === vipClassGoodsId) {
             memberGifts.vipClass = v[1];
+
         } else if (v[0] === saleClassGoodsId) {
             memberGifts.saleClass = v[1];
         }
