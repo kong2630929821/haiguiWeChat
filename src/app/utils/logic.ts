@@ -128,8 +128,10 @@ export const getCashLogName = (ttype:number) => {
  */
 export const payToUpHbao = (sel:string) => {
     const cash = getStore('balance/cash');
-    if (cash < 39900) { 
-        payMoney(39900 - cash,'hBao');
+    // const fee = 39900;
+    const fee = 1;
+    if (cash < fee) { 
+        payMoney(fee - cash,'hBao');
     } else {
         upgradeHBao(sel).then(() => {
             popNewMessage('升级海宝成功');

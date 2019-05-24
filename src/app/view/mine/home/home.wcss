@@ -33,7 +33,6 @@
     font-size:26px;
     color:rgba(255,255,255,1);
     line-height:37px;
-    margin-top: 10px;
     display: flex;
     align-items: center;
 }
@@ -124,4 +123,11 @@
     width: 30px;
     height: 30px;
     margin-left: 15px;
+}
+.codeRow{
+    display:flex;
+    align-items:center;
+    width: 300px;
+    border: 10px solid transparent;
+    border-left: none;
 }

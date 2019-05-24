@@ -13,9 +13,9 @@
             {{end}}
             <div w-class="row" on-tap="goDetail">
                 <div w-class="name">{{it1.userTypeShow}}</div>
-                <div style="display:flex;align-items:center;">
-                    <div w-class="code" on-tap="copy">我的邀请码&nbsp;{{it1.inviteCode}}</div>
-                    <img src="../../../res/image/copyBtn.png" on-tap="copy" w-class="copybtn"/>
+                <div w-class="codeRow" on-tap="copy">
+                    <div w-class="code" >我的邀请码&nbsp;{{it1.inviteCode}}</div>
+                    <img src="../../../res/image/copyBtn.png" w-class="copybtn"/>
                 </div>
             </div>
         </div>

@@ -34,6 +34,7 @@ export class Home extends Widget {
 
     // 当前用户的会员等级
     public goDetail() {
+        // popNew('app-view-member-turntable');
         popNew('app-view-member-powerDetail',{ userType:this.state.userType, code:this.state.inviteCode });
     }
 
