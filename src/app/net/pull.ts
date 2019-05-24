@@ -868,3 +868,46 @@ export const getAllGifts = async () => {
     
     setStore('user/memberGifts',memberGifts);
 };
+
+// 获取抽奖次数
+export const getNumberOfDraws = () => {
+    const msg = {
+        type:'mall/members@lottery_count',
+        param:{}
+    };
+
+    return requestAsync(msg).then(r => {
+
+        return r;
+    }).catch(e => {
+        console.log(e);
+    });
+};
+
+// 抽奖
+export const getDraws = () => {
+    const msg = {
+        type:'mall/members@lottery',
+        param:{}
+    };
+
+    return requestAsync(msg).then(r => {
+        return r;
+    }).catch(e => {
+        console.log(e);
+    });
+};
+
+// 抽奖记录
+export const getDrawsLog = () => {
+    const msg = {
+        type:'mall/members@lottery_log',
+        param:{}
+    };
+
+    return requestAsync(msg).then(r => {
+        return r;
+    }).catch(e => {
+        console.log(e);
+    });
+};
