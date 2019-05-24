@@ -34,7 +34,6 @@ export class Home extends Widget {
 
     // 当前用户的会员等级
     public goDetail() {
-        // popNew('app-view-member-turntable');
         popNew('app-view-member-powerDetail',{ userType:this.state.userType, code:this.state.inviteCode });
     }
 
@@ -57,9 +56,9 @@ export class Home extends Widget {
     }
 
     // 升级会员等级
-    public upgradeUser() {
+    public upgradeUser(user:string) {
         popNew('app-view-member-applyModalBox',null,(sel) => {
-            if (this.props.userType === UserType.hWang) {
+            if (user === 'hWang') {
                 upgradeHWang(sel).then(() => {
                     popNewMessage('成功发送海王申请');
                 });

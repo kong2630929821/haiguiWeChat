@@ -6,8 +6,9 @@
                 <widget w-tag="app-components-input-input">{placeHolder:"输入你的姓名",style:"padding:10px;font-size:28px;",input:{{it.userName}} }</widget>
             </div>
             <div w-class="row" ev-input-change="phoneChange">
-                <widget w-tag="app-components-input-input">{placeHolder:"输入你的手机",style:"padding:10px;font-size:28px;",itype:"integer",input:{{it.phoneNum}} }</widget>
+                <widget w-tag="app-components-input-input">{placeHolder:"输入你的手机",style:"padding:10px;font-size:28px;",itype:"integer",maxLength:11,input:{{it.phoneNum}} }</widget>
             </div>
+            {{if it.changePhone}}
             <div w-class="row" ev-input-change="phoneCodeChange">
                 <widget w-tag="app-components-input-input">{placeHolder:"输入验证码",style:"padding:10px;font-size:28px;"}</widget>
                 {{if it.nowCount}}
@@ -15,6 +16,11 @@
                 {{else}}
                 <div w-class="btn" on-tap="getPhoneCode">获取验证码</div>
                 {{end}}
+            </div>
+            {{end}}
+            <div w-class="row" ev-input-change="inviteCodeChange">
+                <widget w-tag="app-components-input-input">{placeHolder:"推荐人邀请码",style:"padding:10px;font-size:28px;",input:{{it.inviteCode}} }</widget>
+                <div w-class="btn" on-tap="getInvoteCode">推荐一个</div>
             </div>
         {{end}}
         <div w-class="row">

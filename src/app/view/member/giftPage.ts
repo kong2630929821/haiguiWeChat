@@ -4,7 +4,7 @@ import { freeMaskGoodsId, OffClassGoodsId, saleClassGoodsId, vipClassGoodsId, vi
 import { getGoodsDetails, getInviteRebate, orderActiveGoods, payMoney, payOrder, upgradeHWang } from '../../net/pull';
 import { Address, getStore, register, UserType } from '../../store/memstore';
 import { payToUpHbao } from '../../utils/logic';
-import { popNewLoading, popNewMessage } from '../../utils/tools';
+import { popNewLoading, popNewMessage, priceFormat } from '../../utils/tools';
 import { PowerFlag } from './powerConstant';
 interface Props {
     fg:PowerFlag;   // 进入此页面的标记
@@ -31,6 +31,8 @@ export class GiftPage extends Widget {
         } else {
             this.props.img = `399_${PowerFlag[props.fg]}.png`;
         }
+        // 用户会员等级是否等于当前所查看的会员等级
+        this.props.isCurVip = props.isCurVip || getStore('user/userType',-1) === props.userType; 
         this.props.isAble = true;  // 默认值可以领取
         const memberGifts = getStore('user/memberGifts');
 
@@ -45,8 +47,8 @@ export class GiftPage extends Widget {
             
         } else if (props.fg === PowerFlag.vipGift) { // 尊享礼包
             const v = memberGifts.vipGift;
-            if (v[0] < v[1] && v[3] < Date.now() && Date.now() < v[5]) {
-                // 未到下次可领时间，且未超过结束时间，且未领完
+            if (v[0] < v[1] && v[3] > Date.now()) {
+                // 未到下次可领时间，且未领完
                 this.props.btn = `本周已领，还剩 ${v[1] - v[0]} 盒`;
                 this.props.isAble = false;
             } else if (v[0] === v[1] || v[5] < Date.now()) {
@@ -58,7 +60,7 @@ export class GiftPage extends Widget {
             }
             
         }
-        this.props.isCurVip = getStore('user/userType',-1) === props.userType;  
+        
     }
 
     // 免费领取
@@ -69,7 +71,7 @@ export class GiftPage extends Widget {
                     this.confirmGoods(freeMaskGoodsId, addr);
 
                 } else if (this.props.fg === PowerFlag.gift) {
-                    this.confirmGoods(getStore('user/MemberGifts/optionalGift'), addr);
+                    this.confirmGoods(getStore('user/memberGifts/optionalGift',0), addr);
                 } else {
                     this.confirmGoods(vipMaskGoodsId, addr);
                 }
@@ -99,21 +101,28 @@ export class GiftPage extends Widget {
         getGoodsDetails(goods).then(res => {  
             // 下单商品
             orderActiveGoods([goods,1,res.labels[0][0]],addr.id).then(order => { 
-                // 获取商品价格
                 const cash = getStore('balance/cash');
                 const price = order.orderInfo[3] + order.orderInfo[5]; // 商品总价+运费
-                if (cash < price) { 
-                    register('flags/activityGoods',() => {
+                // 提示需要支付费用
+                popNew('app-view-member-confirmPayInfo',{ money: priceFormat(price) },() => {
+                    if (cash < price) { 
+                        register('flags/activityGoods',() => {
+                            this.buyGoods(goods,order.orderInfo[0]);
+                        });
+                        payMoney(price - cash,'activity');
+                    } else {
                         this.buyGoods(goods,order.orderInfo[0]);
-                    });
-                    payMoney(price - cash,'activity');
-                } else {
-                    this.buyGoods(goods,order.orderInfo[0]);
-                }
+                    }
+                });
                 loadding && loadding.callback(loadding.widget);
 
-            }).catch(r => {
-                popNewMessage('下单失败');
+            }).catch(err => {
+                if (err.result === 2124) {
+                    popNewMessage('库存不足');
+                } else {
+                    popNewMessage('下单失败');
+                    
+                }
                 loadding && loadding.callback(loadding.widget);
             });
             
