@@ -1,0 +1,83 @@
+.new-page{
+    background-color:#2A2532;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
+.content{
+    background-image: url(../../res/image/turntableBg.png);
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+}
+.turntable-name{
+    text-align: center;
+    padding-top: 90px;
+}
+.turntable-main-bg{
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+.turntable-container{
+    position: absolute;
+    width: 480px;
+    height: 480px;
+    border-radius: 50%;
+    overflow: hidden;
+    top: 110px;
+}
+.turntable-content{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border-radius: inherit;
+    background-color: white;
+    background-size: 12px 14px;
+}
+.turntable-list{
+    width: inherit;
+    height: inherit;
+}
+.turntable-item{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    font-weight: bold;
+    text-shadow: 0 1px 1px rgba(255,255,255,0.6);
+}
+.turntable-itext{
+    font-weight: 400;
+    display: flex;
+    justify-content: center;
+}
+.turntable-item-bg{
+    width:0px;
+    height:0px;
+    border-top:314px solid blue;
+    border-right:solid transparent;
+    border-left:solid transparent;
+    position:absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.turntable-icontent{
+    position: relative;
+    display: block;
+    font-size:30px;
+    margin: 10px auto 0px;
+    text-align: center;
+}
+.turntable-btn{
+    /* position: absolute; */
+    width: 200px;
+    height: 225px;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+}
