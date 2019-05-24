@@ -5,6 +5,7 @@
 import { Forelet } from '../../../pi/widget/forelet';
 import { getRealNode } from '../../../pi/widget/painter';
 import { Widget } from '../../../pi/widget/widget';
+import { getNumberOfDraws } from '../../net/pull';
 
 // ================================ 导出
 // tslint:disable-next-line:no-reserved-keywords
@@ -19,6 +20,7 @@ interface Props {
     freeCount: number; // 免费次数
     LEDTimer:any;    // LED计时器
     ledShow:boolean; // LED灯
+    showDataList:any;// 中奖人列表
 }
 // tslint:disable-next-line:completed-docs
 export class Turntable extends Widget {
@@ -30,7 +32,13 @@ export class Turntable extends Widget {
         prizeList: [],
         freeCount:0,
         LEDTimer:{},
-        ledShow:false
+        ledShow:false,
+        showDataList:[{ user:1351229890,draws:0.01 },
+                      { user:1351229890,draws:0.01 },
+                      { user:1351229890,draws:0.01 },
+                      { user:1351229890,draws:0.01 },
+                      { user:1351229890,draws:0.01 },
+                      { user:1351229890,draws:0.01 }]
     };
     public create() {
         super.create();
@@ -52,6 +60,11 @@ export class Turntable extends Widget {
             };
             this.props.prizeList.push(prizeItem);
         }
+
+        // 获取抽奖次数
+        getNumberOfDraws().then(r => {
+            console.log('抽奖次数',r);
+        });
     }
 
     /**
@@ -60,15 +73,15 @@ export class Turntable extends Widget {
     public goLottery() {
         if (this.props.isTurn) return;
         this.props.isTurn = true;
-        openTurntable().then((order:any) => {
-            this.props.freeCount--;
-            this.changeDeg(order);
+        // openTurntable().then((order:any) => {
+        //     this.props.freeCount--;
+        //     this.changeDeg(order);
             
-        }).catch((err) => {
-            // this.changeDeg(err);
-            console.log('转盘下单失败',err);
-            this.props.isTurn = false;
-        });
+        // }).catch((err) => {
+        //     // this.changeDeg(err);
+        //     console.log('转盘下单失败',err);
+        //     this.props.isTurn = false;
+        // });
 
     }
 
