@@ -159,6 +159,8 @@ export class ConfirmOrder extends Widget {
             loading.callback(loading.widget);
             if (res.result === 2124) {
                 popNewMessage('库存不足');
+            } else if (res.result === 2127) {
+                popNewMessage('购买免税商品超出限制');
             } else {
                 popNewMessage('支付失败');
             }
