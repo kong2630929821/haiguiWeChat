@@ -39,7 +39,6 @@ export class GoodsDetailHome extends Widget {
                     { title:'7天售后无忧',content:'收到商品之日起7天(含)内如有商品质量问题可申请售后进行退货' }
                 ] 
             }
-        
         };
         const ret = calcPrices(props.goods);
         const skus = props.goods.labels;
@@ -81,7 +80,12 @@ export class GoodsDetailHome extends Widget {
 
     // 点击描述
     public clickDescs(e:any,key:string) {
-        this.props.descProps = this.props.goodsItemDescs[key];
+        if (key === 'verified') {
+            popNew('app-view-mine-IDCardUpload');
+        } else {
+            this.props.descProps = this.props.goodsItemDescs[key];
+        }
+        
         this.paint();
     }
 

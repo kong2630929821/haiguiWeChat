@@ -1,0 +1,52 @@
+.new-page{
+    background-color:rgba(53,53,53,.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+.modal{
+    width:620px;
+    background-color:rgba(255,255,255,1);
+    border-radius:10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.text{
+    font-size:34px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    color:rgba(0,0,0,1);
+    line-height:48px;
+    margin-top: 70px;
+}
+.btns{
+    display: flex;
+    justify-content: space-between;
+    margin:  90px 70px 0;
+    align-self: stretch;
+    margin-bottom: 60px;
+}
+.btn{
+    width:200px;
+    height:82px;
+    border-radius:6px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size:26px;
+    font-family:PingFangSC-Regular;
+    font-weight:400;
+    line-height:36px;
+}
+.btn-cancel{
+    border:2px solid rgba(0,0,0,1);
+    color:rgba(0,0,0,1);
+}
+.btn-ok{
+    border:1px solid rgba(5,5,5,0.08);
+    color: #Fff;
+    background-color: #8A4AF3;
+}
