@@ -7,6 +7,7 @@ import { popNew } from '../../pi/ui/root';
 import { getCookie } from '../../pi/util/html';
 import { wsUrl } from '../config';
 import { getStore, GroupsLocation, OrderStatus, setStore, UserType } from '../store/memstore';
+import { unicode2Str } from '../utils/tools';
 import { registerWXAPI } from '../utils/wxAPI';
 import { getAddress, getAllGifts, getBalance, getCart, getEarningTotal, getFreight, getGroups, getInviteCode, getOrders, getUserInfo, setUserName } from './pull';
 import { payComplete } from './push';
@@ -168,8 +169,8 @@ const userLogin = (userStr:any) => {
 
             user.label = UserLabel[res.label];
             user.avatar = userStr.headimgurl;
-            user.userName = userStr.nickname;
-            user.realName = res.name[0];
+            user.userName = unicode2Str(userStr.nickname);
+            user.realName = unicode2Str(res.name[0]);
             user.IDCard = res.name[1];
             user.phoneNum = res.phone;
             if (res.level < UserType.other) {

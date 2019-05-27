@@ -128,7 +128,7 @@ export const getCashLogName = (ttype:number) => {
  */
 export const payToUpHbao = (sel:string) => {
     const cash = getStore('balance/cash');
-    // const fee = 39900;
+    // const fee = 39900; // 升级海宝的费用
     const fee = 1;
     if (cash < fee) { 
         payMoney(fee - cash,'hBao');

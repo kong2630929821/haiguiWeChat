@@ -14,10 +14,10 @@ export const run = (cb): void =>  {
     const page = /page=([a-zA-Z]+)&*/.exec(location.search) ? /page=([a-zA-Z]+)&*/.exec(location.search)[1] :'';
     if (page === 'free') {
         // 打开免费试用装
-        popNew('app-view-member-giftPage',{ fg:PowerFlag.free });
+        popNew('app-view-member-giftPage',{ fg:PowerFlag.free, isCurVip:true });
     } else if (page === 'offClass') {
         // 打开线下课程
-        popNew('app-view-member-giftPage',{ fg:PowerFlag.offClass });
+        popNew('app-view-member-giftPage',{ fg:PowerFlag.offClass, isCurVip:true  });
     } else {
         // 打开首页面
         popNew('app-view-base-app');

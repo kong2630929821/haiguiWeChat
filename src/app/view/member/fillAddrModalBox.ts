@@ -15,6 +15,7 @@ interface Props {
     selected:string; // 选择的礼包
     address:any;  // 地址
     isVip:boolean; // 是否是会员
+    changePhone:boolean; // 是否修改手机号
 }
 /**
  * 领取礼包填写地址
@@ -36,6 +37,7 @@ export class FillAddrModalBox extends Widget {
             const user = getStore('user');
             this.props.userName = user.realName;
             this.props.phoneNum = user.phoneNum;
+            this.props.changePhone = !user.phoneNum;
             this.props.inviteCode = user.fcode;
         }
     }
@@ -57,6 +59,8 @@ export class FillAddrModalBox extends Widget {
     // 输入手机号
     public phoneChange(e:any) {
         this.props.phoneNum = e.value;
+        this.props.changePhone = e.value !== getStore('user/phoneNum');
+        this.paint();
     }
 
     // 输入手机验证码
@@ -107,13 +111,13 @@ export class FillAddrModalBox extends Widget {
             popNewMessage('请选择地址');
 
         } else { // 非会员领取试用装
-            if (!this.props.userName || !this.props.phoneNum || !this.props.phoneCode || !this.props.inviteCode) {
+            if (!this.props.userName || !this.props.phoneNum || (!this.props.phoneCode && this.props.changePhone) || !this.props.inviteCode) {
                 popNewMessage('请将内容填写完整');
             } else {
                 const loadding = popNewLoading('请稍后');
     
                 try {  // 验证手机号
-                    if (this.props.phoneNum !== getStore('user/phoneNum')) {
+                    if (this.props.changePhone) {
                         const phoneRes = await bindPhone(this.props.phoneNum,this.props.phoneCode);
                         if (phoneRes) setStore('user/phoneNum',this.props.phoneNum);
                     } 
