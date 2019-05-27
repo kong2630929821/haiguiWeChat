@@ -45,7 +45,7 @@
                 {{end}}
                 <div w-class="items-father2" on-tap="clickDescs(e,'service')"><app-components-goodsDetailsItem-goodsDetailsItem>{title:"服务",content:"7天内售后无忧",style:"padding-left:30px;"}</app-components-goodsDetailsItem-goodsDetailsItem></div>
                 {{if it.goods.has_tax}}
-                <div w-class="items-father2"><app-components-goodsDetailsItem-goodsDetailsItem>{title:"实名",content:"该商品需实名认证",style:"padding-left:30px;"}</app-components-goodsDetailsItem-goodsDetailsItem></div>
+                <div w-class="items-father2" on-tap="clickDescs(e,'verified')"><app-components-goodsDetailsItem-goodsDetailsItem>{title:"实名",content:"该商品需实名认证",style:"padding-left:30px;"}</app-components-goodsDetailsItem-goodsDetailsItem></div>
                 {{end}}
             </div>
             <div w-class="items-father3" on-tap="chooseSpecClick({{false}})"><app-components-goodsDetailsItem-goodsDetailsItem>{title:"选择",content:"规格",style:"padding-left:30px;"}</app-components-goodsDetailsItem-goodsDetailsItem></div>

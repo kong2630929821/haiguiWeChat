@@ -99,6 +99,10 @@ export class ConfirmOrder extends Widget {
             popNew('app-view-member-applyModalBox',{ needSelGift:false,title:'请填写个人信息' },() => {
                 this.order();
             });
+        } else if (!getStore('user/IDCard')) {
+            popNew('app-components-popModel-popModel',{ title:'海外购商品必须实名' },() => {
+                popNew('app-view-mine-IDCardUpload');
+            });
         } else {
             this.order();
         }

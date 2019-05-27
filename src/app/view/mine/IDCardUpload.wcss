@@ -1,6 +1,7 @@
 .page{
     overflow-x: hidden;
     overflow-y: auto;
+    z-index: 10;
 }
 .title{
     height:88px;
