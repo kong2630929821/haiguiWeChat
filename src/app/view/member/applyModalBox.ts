@@ -14,6 +14,7 @@ interface Props {
     fcode:string;  // 已绑过的邀请码 只有海宝升级海王时不能修改
     selected:string; // 选择的礼包
     needSelGift:boolean; // 是否需要选择礼包
+    changePhone:boolean; // 是否修改手机号
 }
 /**
  * 填信息输入框弹窗
@@ -30,7 +31,8 @@ export class ModalBoxInput extends Widget {
         inviteCode:'',
         fcode:'',
         selected:'A',
-        needSelGift:true
+        needSelGift:true,
+        changePhone:true
     };
 
     public setProps(props:any) {
@@ -45,6 +47,7 @@ export class ModalBoxInput extends Widget {
         }
         this.props.userName = user.realName;
         this.props.phoneNum = user.phoneNum;
+        this.props.changePhone = !user.phoneNum;  // 已经绑过则默认不修改手机号
         if (user.userType <= UserType.hBao) {// 成为会员后不允许修改父级邀请码
             this.props.fcode = user.fcode;
         }
@@ -60,6 +63,8 @@ export class ModalBoxInput extends Widget {
     // 输入手机号
     public phoneChange(e:any) {
         this.props.phoneNum = e.value;
+        this.props.changePhone = e.value !== getStore('user/phoneNum');
+        this.paint();
     }
 
     // 输入手机验证码
@@ -115,13 +120,13 @@ export class ModalBoxInput extends Widget {
 
     // 确认
     public async confirm() {
-        if (!this.props.userName || !this.props.phoneNum || !this.props.phoneCode || !this.props.inviteCode) {
+        if (!this.props.userName || !this.props.phoneNum || (!this.props.phoneCode && this.props.changePhone) || !this.props.inviteCode) {
             popNewMessage('请将内容填写完整');
         } else {
             const loadding = popNewLoading('请稍后');
 
             try {  // 验证手机号
-                if (this.props.phoneNum !== getStore('user/phoneNum')) {
+                if (this.props.changePhone) {
                     const phoneRes = await bindPhone(this.props.phoneNum,this.props.phoneCode);
                     if (phoneRes) setStore('user/phoneNum',this.props.phoneNum);
                 } 

@@ -12,8 +12,11 @@
         </div>
         {{end}}
         <div w-class="row" ev-input-change="phoneChange">
-            <widget w-tag="app-components-input-input">{placeHolder:"输入你的手机",style:"padding:10px;font-size:28px;",itype:"integer",input:{{it.phoneNum}} }</widget>
+            <widget w-tag="app-components-input-input">{placeHolder:"输入你的手机",style:"padding:10px;font-size:28px;",itype:"integer",maxLength:11,input:{{it.phoneNum}} }</widget>
         </div>
+
+        {{% ===================修改手机号显示验证码===================}}
+        {{if it.changePhone}}
         <div w-class="row" ev-input-change="phoneCodeChange">
             <widget w-tag="app-components-input-input">{placeHolder:"输入验证码",style:"padding:10px;font-size:28px;"}</widget>
             {{if it.nowCount}}
@@ -22,6 +25,9 @@
             <div w-class="btn" on-tap="getPhoneCode">获取验证码</div>
             {{end}}
         </div>
+        {{end}}
+
+        {{% ===================绑定过邀请码不可修改===================}}
         {{if it.fcode}}
         <div w-class="row" style="border-bottom:1px solid #888;">
             <div w-class="addr" style="color:#222;">{{it.fcode}}</div>
