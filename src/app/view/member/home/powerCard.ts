@@ -14,8 +14,7 @@ export class PowerCard extends Widget {
     public props:Props;
 
     public update(e:any) {
-        // notify(e.node,'ev-update',null);
-        popNew('app-view-member-turntable');
+        notify(e.node,'ev-update',null);
     }
 
     public copy() {
