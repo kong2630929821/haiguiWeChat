@@ -139,7 +139,7 @@ export const delAddress = (no:number) => {
     };
 
     return requestAsync(msg).then(res => {
-        const addresses = parseAddress(res.addressInfo);
+        const addresses = parseAddress2(res.addressInfo);
         console.log('delAddress ======',addresses);
         setStore('mall/addresses',addresses);
 
