@@ -5,6 +5,7 @@
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     background: #F9F9F9;
+    padding-bottom:120px; 
 }
 .btn{
     height:98px;

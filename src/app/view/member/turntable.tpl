@@ -12,12 +12,12 @@
                     {{for i,item in it.prizeList}}
                     <div w-class="turntable-item" style="transform: rotate({{i*(360/it.prizeList.length)}}deg)">
                         <div w-class="turntable-itembg" style="border-width:240px {{240*Math.tan(3.14/it.prizeList.length-0.02)}}px 0px;border-top-color:{{i%2==0?'#FFC637':'#FF5251'}}"></div>
-                        <div w-class="award">￥8888.00</div>
+                        <div w-class="award">￥{{item.draw}}</div>
                     </div>
                     {{end}}
                 </div>
 
-                <div w-class="turntable-inner">
+                <div w-class="turntable-inner" id="turntable1">
                     {{for i,v of it.prizeList}}
                     <div w-class="turntable-item" style="transform: rotate({{i*(360/it.prizeList.length)}}deg)">
                         <div w-class="turntable-itembg" style="border-width:175px {{175*Math.tan(3.14/it.prizeList.length)}}px 0px;"></div>
@@ -29,14 +29,20 @@
             </div>
         </div>
         
-        <div w-class="drawsNum">你还有0次机会</div>
+        <div w-class="drawsNum">你还有{{it.freeCount}}次机会</div>
         <div w-class="drawsList">
             <div w-class="drawsListTitle">中奖公告</div>
-            <div style="margin-top: 50px;">
-                {{for i,item in it.showDataList}}
+            <div w-class="draw-box-content">
+                {{for i,item of it.showDataList}}
                     <div w-class="list">
-                        <div w-class="user">用户&nbsp;{{item.user}}</div>
-                        <div w-class="drawsGood">抽中 ￥{{item.draws}}元</div>
+                        <div w-class="user">
+                            <span w-class="user-title">用户</span>
+                            {{item[0]}}
+                        </div>
+                        <div w-class="drawsGood">
+                            <span w-class="draw-title">抽中</span>
+                             ￥{{item[1]}}元
+                        </div>
                     </div>
                 {{end}}
             </div>

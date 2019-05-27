@@ -1,3 +1,4 @@
+import { popNew } from '../../../../pi/ui/root';
 import { notify } from '../../../../pi/widget/event';
 import { Widget } from '../../../../pi/widget/widget';
 import { copyToClipboard, popNewMessage } from '../../../utils/tools';
