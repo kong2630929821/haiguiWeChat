@@ -3,7 +3,7 @@
     <div w-class="content">
         <div w-class="row row1">
             <div>配送至</div>
-            <img src="../../res/image/close_gray.png" w-class="close" on-tap="close"/>
+            <img src="../../res/image/close.png" w-class="close" on-tap="close"/>
         </div>
         <div w-class="row row1" style="justify-content:flex-start;">
             {{for i,v of it.selected}}

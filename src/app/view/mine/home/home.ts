@@ -2,7 +2,7 @@ import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
 import { ReturnGoodsStatus } from '../../../net/pull';
-import { Order, OrderStatus, register } from '../../../store/memstore';
+import { getStore, Order, OrderStatus, register } from '../../../store/memstore';
 import { getUserTypeShow } from '../../../utils/logic';
 import { copyToClipboard, popNewMessage, priceFormat1, priceFormat2 } from '../../../utils/tools';
 
@@ -33,6 +33,7 @@ export class Home extends Widget {
         };
         super.setProps(this.props);
         this.state = State;
+        this.props.verified = getStore('user/IDCard');  // 有身份证号码表示实名认证成功
     }
 
     public goAddress() {
@@ -59,7 +60,9 @@ export class Home extends Widget {
 
     // 实名认证
     public verified() {
-        popNew('app-view-mine-IDCardUpload');
+        if (!this.props.verified) {
+            popNew('app-view-mine-IDCardUpload');
+        }
     }
 
     // 复制邀请码
