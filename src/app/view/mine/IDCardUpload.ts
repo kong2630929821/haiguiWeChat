@@ -33,6 +33,14 @@ export class IDCardUpload extends Widget {
         setWxConfig();
     }
     
+    public nameChange(e:any) {
+        this.props.name = e.value;
+    }
+
+    public cardChange(e:any) {
+        this.props.card = e.value;
+    }
+
     // 点击上传按钮
     public uploadBtn(num:number) {
         popNew('app-components-modalBox-modalBoxImg',{ img: num === 1 ? 'uploadIDCard1.png' :'uploadIDCard2.png' },() => {
@@ -86,6 +94,7 @@ export class IDCardUpload extends Widget {
             const loadding = popNewLoading('身份认证中');
             // 识别正面照
             identifyIDCard(serverFilePath + this.props.front).then(res => {
+                console.log(res.body);
                 const data = JSON.parse(res.body);
                 if (this.props.name !== data.name || this.props.card !== data.id) {
                     popNewMessage('实名认证失败，请认真核对信息');
@@ -97,6 +106,7 @@ export class IDCardUpload extends Widget {
                 // 识别背面照
                 identifyIDCard(serverFilePath + this.props.back).then(res => {
                     loadding && loadding.callback(loadding.widget);
+                    console.log(res.body);
                     const data = JSON.parse(res.body);
                     this.props.validDate = data.valid_date;
 

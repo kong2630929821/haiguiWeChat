@@ -1,10 +1,10 @@
 <div class="new-page" w-class="page">
     <div w-class="title">身份信息（必填）</div>
-    <div w-class="input">
+    <div w-class="input" ev-input-change="nameChange">
     <widget w-tag="app-components-input-input">{placeHolder:"您的真实姓名",style:"font-size: 26px;"}</widget>
     </div>
-    <div w-class="input">
-        <widget w-tag="app-components-input-input">{placeHolder:"您的身份证号（将加密处理）",style:"font-size: 26px;"}</widget>
+    <div w-class="input" ev-input-change="cardChange">
+        <widget w-tag="app-components-input-input">{placeHolder:"您的身份证号（将加密处理）",style:"font-size: 26px;",maxLength:18}</widget>
     </div>
 
     <div w-class="title">身份证正反照片（必填）</div>
