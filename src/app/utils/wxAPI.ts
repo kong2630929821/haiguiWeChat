@@ -1,64 +1,77 @@
-/**
- * 小馒头重写了从微信分享链接的功能,代码来源于YSZZ项目
- */
-
 // ===================================  导入
+import { userAgent } from '../../pi/util/html';
 import { getWX_sign, uploadFile } from '../net/pull';
 import { loadJS } from './logic';
 import { popNewMessage } from './tools';
  
 // ===================================  导出
 let wxconfig;
+let apiReady: boolean = false;
 
-export const setWxConfig = () => {
-    if (wxconfig) (<any>self).wx.config(wxconfig);
-};
 /**
- * 理论上程序一运行就需要调用该函数，去微信获取分享的API
+ * 注册wxapi
  */
-export const registerWXAPI = () => {
+export const registerWXAPI = (cb?:any) => {
     loadJS('http://res2.wx.qq.com/open/js/jweixin-1.4.0.js', (info) => {
         if (info.result === 1) {
             if ((<any>self).wx) {
-                // 安卓获取签名需要完整的URL，不完整则签名无效
-                getWX_sign(location.href).then((resp:any) => {
-                    resp.debug = false;
-                    resp.jsApiList = ['onMenuShareTimeline', 'hideMenuItems','onMenuShareAppMessage', 'chooseImage','uploadImage', 'getLocalImgData','scanQRCode'];
-                    wxconfig = resp;
-                    (<any>self).wx.config(resp);
-
-                    (<any>self).wx.ready(() => {
-                        apiReady = true;
-                        (<any>self).wx.hideMenuItems({
-                            menuList: ['menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:facebook', 'menuItem:share:QZone'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-                        });
+                const agent = userAgent('');
+                if (agent.os.name === 'ios') {
+                     // iOS获取签名只能是不带参数的URL，否则签名无效
+                    getWX_sign(location.origin + location.pathname).then((resp:any) => {
+                        initWxConfig(resp,cb);
                     });
 
-                    (<any>self).wx.error((res) => {  
-                        // config信息验证失败会执行error函数，iOS获取签名只能是不带参数的URL，否则签名无效
-                        getWX_sign(location.origin + location.pathname).then((resp:any) => {
-                            resp.debug = false;
-                            resp.jsApiList = ['onMenuShareTimeline', 'hideMenuItems','onMenuShareAppMessage', 'chooseImage','uploadImage', 'getLocalImgData','scanQRCode'];
-                            (<any>self).wx.config(resp);
-        
-                            (<any>self).wx.ready(() => {
-                                apiReady = true;
-                                (<any>self).wx.hideMenuItems({
-                                    menuList: ['menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:facebook', 'menuItem:share:QZone'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
-                                });
-                            });
-                        });
+                } else {
+                    // 安卓获取签名需要完整的URL，不完整则签名无效
+                    getWX_sign(location.href.split('#')[0]).then((resp:any) => {
+                        initWxConfig(resp,cb);
                     });
-                });
+                }
             }
         }
     });
 };
 
 /**
- * 分享链接
+ * 初始化wxconfig
+ */
+const initWxConfig = (resp:any,cb:any) => {
+    resp.debug = false;
+    resp.jsApiList = ['hideMenuItems', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseImage','uploadImage', 'getLocalImgData','scanQRCode'];
+    wxconfig = resp;
+    (<any>self).wx.config(resp);
+
+    (<any>self).wx.ready(() => {
+        apiReady = true;
+        (<any>self).wx.hideMenuItems({
+            menuList: ['menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:facebook', 'menuItem:share:QZone'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
+        });
+        cb && cb();
+    });
+
+    (<any>self).wx.error(() => {  
+        // config信息验证失败会执行error函数
+        console.log('wxconfig验证失败');
+    });
+};
+
+/**
+ * 重新设置wxconfig
+ */
+export const setWxConfig = () => {
+    if (wxconfig) (<any>self).wx.config(wxconfig);
+};
+
+/**
+ * 分享链接，需要在点击分享按钮之前调用
  */
 export const shareWithUrl = (title:string, desc:string, url: string, img:string, cb?) => {
+    if (!apiReady) {
+        // popNewMessage('获取微信API失败,无法分享');
+            
+        return;
+    } 
     const linkObj = {
         title: title,
         desc: desc,
@@ -71,15 +84,13 @@ export const shareWithUrl = (title:string, desc:string, url: string, img:string,
             popNewMessage('分享失败');
         }
     };
-    if (!apiReady) {
-        popNewMessage('获取微信API失败,无法分享');
-        
-        return;
-    } 
-    // 分享到朋友圈
-    (<any>self).wx.updateTimelineShareData(linkObj);
+
     // 分享给朋友
-    (<any>self).wx.updateAppMessageShareData(linkObj);
+    (<any>self).wx.onMenuShareAppMessage(linkObj);
+            
+    // 分享到朋友圈
+    (<any>self).wx.onMenuShareTimeline(linkObj);
+    
 };
 
 /**
@@ -88,7 +99,7 @@ export const shareWithUrl = (title:string, desc:string, url: string, img:string,
  */
 export const takeImage = (num:number,cb) => {
     if (!apiReady) {
-        popNewMessage('获取微信API失败,无法拍照');
+        // popNewMessage('获取微信API失败,无法拍照');
         
         return;
     }
@@ -112,7 +123,7 @@ export const takeImage = (num:number,cb) => {
  */
 export const upImage = (imgid: string, cb) => {
     if (!apiReady) {
-        popNewMessage('获取微信API失败,无法上传图片');
+        // popNewMessage('获取微信API失败,无法上传图片');
         
         return;
     }
@@ -137,7 +148,7 @@ export const upImage = (imgid: string, cb) => {
  */
 export const scanQR = (cb) => {
     if (!apiReady) {
-        popNewMessage('获取微信API失败,无法扫描');
+        // popNewMessage('获取微信API失败,无法扫描');
 
         return;
     }
@@ -152,8 +163,3 @@ export const scanQR = (cb) => {
         }
     });
 };
-
-// ===================================  本地
-
-let apiReady: boolean = false;
-// ===================================  执行

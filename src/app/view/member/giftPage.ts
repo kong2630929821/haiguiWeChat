@@ -1,10 +1,12 @@
 import { popNew } from '../../../pi/ui/root';
+import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { freeMaskGoodsId, OffClassGoodsId, saleClassGoodsId, vipClassGoodsId, vipMaskGoodsId } from '../../config';
 import { getGoodsDetails, getInviteRebate, orderActiveGoods, payMoney, payOrder, upgradeHWang } from '../../net/pull';
 import { Address, getStore, register, UserType } from '../../store/memstore';
 import { payToUpHbao } from '../../utils/logic';
 import { popNewLoading, popNewMessage, priceFormat } from '../../utils/tools';
+import { setWxConfig, shareWithUrl } from '../../utils/wxAPI';
 import { PowerFlag } from './powerConstant';
 interface Props {
     fg:PowerFlag;   // 进入此页面的标记
@@ -14,6 +16,11 @@ interface Props {
     btn:string;     // 按钮名称
     isAble:boolean;  // 是否可以领取
 }
+// tslint:disable-next-line:no-reserved-keywords
+declare var module: any;
+export const forelet = new Forelet();
+export const WIDGET_NAME = module.id.replace(/\//g, '-');
+
 /**
  * 大礼包
  */
@@ -24,7 +31,9 @@ export class GiftPage extends Widget {
         super.setProps(props);
         if (props.fg === PowerFlag.offClass || props.fg === PowerFlag.free) {
             this.props.img = `${PowerFlag[props.fg]}.png`;
-
+            setWxConfig();
+            this.share();
+            
         } else if (props.userType === UserType.hWang) {
             this.props.img = `10000_${PowerFlag[props.fg]}.png`;
 
@@ -58,9 +67,7 @@ export class GiftPage extends Widget {
             } else {
                 this.props.btn = '领取本期面膜';
             }
-            
         }
-        
     }
 
     // 免费领取
@@ -161,13 +168,25 @@ export class GiftPage extends Widget {
         });
     }
 
-    // // 分享给好友
-    // public share(name:string) {
-    //     if (name === 'free') {
-    //         shareWithUrl('免费领面膜','好友送了你一份面膜，快来领取吧',`${location.href}?page=${name}`,'');
+    // 点击分享按钮
+    public shareBtn() {
+        popNew('app-components-bigImage-bigImage',{ img:'../../res/image/shareBg.png' });
+    }
 
-    //     } else {
-    //         shareWithUrl('免费领课程','好友送了你一个线下课程，快来领取吧',`${location.href}?page=${name}`,'');
-    //     }
-    // }
+    // 分享给好友
+    public share() {
+        if (this.props.fg === PowerFlag.free) {
+            shareWithUrl('免费领面膜','好友送了你一份面膜，快来领取吧',`${location.origin + location.pathname}?page=free&inviteCode=${getStore('user/inviteCode','')}`,'');
+
+        } else if (this.props.fg === PowerFlag.offClass) {
+            shareWithUrl('免费领课程','好友送了你一个线下课程，快来领取吧',`${location.origin + location.pathname}?page=offClass&inviteCode=${getStore('user/inviteCode','')}`,'');
+        } else {
+            shareWithUrl('海龟壹号','更多精彩，就等你来',`${location.origin + location.pathname}`,'');
+        }
+    }
 }
+
+register('flags/wxReady',() => {
+    const w = forelet.getWidget(WIDGET_NAME);
+    w && w.share();
+});

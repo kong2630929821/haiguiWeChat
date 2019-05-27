@@ -184,7 +184,9 @@ const userLogin = (userStr:any) => {
         payComplete();
         
         // 注册微信api
-        registerWXAPI();
+        registerWXAPI(() => {
+            setStore('flags/wxReady',true);  // 微信jssdk准备好了
+        });
 
         // 获取所有可领的礼包
         getAllGifts();

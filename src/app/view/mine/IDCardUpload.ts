@@ -1,14 +1,17 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { serverFilePath } from '../../config';
-import { popNewMessage } from '../../utils/tools';
+import { identifyIDCard, verifyIDCard } from '../../net/pull';
+import { popNewLoading, popNewMessage } from '../../utils/tools';
 import { setWxConfig, takeImage, upImage } from '../../utils/wxAPI';
 interface Props {
-    firstClick:boolean; // 是否是第一次点击上传按钮
     img1:string;
     img2:string;
     front:string; // 身份证正面照ID
     back:string;  // 身份证正面照ID
+    name:string;  // 姓名
+    card:string;  // 身份证号
+    validDate:string;  // 身份证有效期
 }
 /**
  * 上传身份证
@@ -16,29 +19,30 @@ interface Props {
 export class IDCardUpload extends Widget {
     public ok:() => void;
     public props:Props = {
-        firstClick:true,
         img1:'',
         img2:'',
         front:'',
-        back:''
+        back:'',
+        name:'',
+        card:'',
+        validDate:''
     };
+
+    public create() {
+        super.create();
+        setWxConfig();
+    }
     
     // 点击上传按钮
     public uploadBtn(num:number) {
-        if (this.props.firstClick) {
-            this.props.firstClick = false;
-            this.paint();
-            popNew('app-components-modalBox-modalBoxImg',null,() => {
-                this.chooseImg(num);
-            });
-        } else {
+        popNew('app-components-modalBox-modalBoxImg',{ img: num === 1 ? 'uploadIDCard1.png' :'uploadIDCard2.png' },() => {
             this.chooseImg(num);
-        }
+        });
+        
     }
 
     // 选择图片
     public chooseImg(num:number) {
-        setWxConfig();
         takeImage(1,(r) => {
             console.log(r);
             if (num === 1) {
@@ -63,19 +67,54 @@ export class IDCardUpload extends Widget {
         });
     }
 
-    public verifyImg() {
-        if (this.props.front && this.props.back) {
-            popNew('app-view-mine-verified',{
-                front: this.props.front,
-                back:this.props.back
-            },(fg) => {
-                if (fg) {
-                    this.ok && this.ok();
+    // 删除图片
+    public delImg(num:number) {
+        if (num === 1) {
+            this.props.img1 = '';
+            this.props.front = '';
+        } else {
+            this.props.img2 = '';
+            this.props.back = '';
+        }
+        this.paint();
+    }
+
+    // 实名认证
+    public verify() {
+       
+        if (this.props.front && this.props.back && this.props.name && this.props.card) {
+            const loadding = popNewLoading('身份认证中');
+            // 识别正面照
+            identifyIDCard(serverFilePath + this.props.front).then(res => {
+                const data = JSON.parse(res.body);
+                if (this.props.name !== data.name || this.props.card !== data.id) {
+                    popNewMessage('实名认证失败，请认真核对信息');
+                    loadding && loadding.callback(loadding.widget);
+
+                    return;
                 }
+
+                // 识别背面照
+                identifyIDCard(serverFilePath + this.props.back).then(res => {
+                    loadding && loadding.callback(loadding.widget);
+                    const data = JSON.parse(res.body);
+                    this.props.validDate = data.valid_date;
+
+                    // 上传身份信息
+                    verifyIDCard(this.props.name,this.props.card,this.props.front,this.props.back,this.props.validDate).then(() => {
+                        loadding && loadding.callback(loadding.widget);
+                        popNewMessage('实名认证成功');
+                        this.ok && this.ok();
+        
+                    }).catch(() => {
+                        popNewMessage('实名认证失败，请认真核对信息');
+                        loadding && loadding.callback(loadding.widget);
+                    });
+                });
             });
             
         } else {
-            popNewMessage('请先上传图片');
+            popNewMessage('请将信息填写完整');
         }
     }
 }
