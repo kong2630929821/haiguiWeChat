@@ -49,6 +49,10 @@
     <div w-class="row" on-tap="verified">
         <img src="../../../res/image/IDcard.png"/>
         <div w-class="text">实名认证</div>
+        {{if it.verified}}
+        <div style="font-size: 28px;color: rgb(136, 136, 136);">已认证</div>
+        {{else}}
         <img src="../../../res/image/arrowRight.png"/>
+        {{end}}
     </div>
 </div>
