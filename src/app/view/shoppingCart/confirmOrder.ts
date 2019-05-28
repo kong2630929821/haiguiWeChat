@@ -89,7 +89,10 @@ export class ConfirmOrder extends Widget {
     // 添加地址
     public addAddress() {
         popNew('app-view-mine-editAddress',undefined,() => {
-            this.props.address = getStore('mall/addresses')[0];
+            const addr = getLastAddress();
+            this.props.address = addr[2];
+            const ret = this.calcAllFees(this.props.orderGoodsShow);
+            this.props.totalFreight = ret.totalFreight;
             this.paint();
         });
     }
@@ -190,10 +193,11 @@ export class ConfirmOrder extends Widget {
             } else {
                 popNew('app-view-member-confirmPayInfo',{ money:priceFormat(totalFee) },async () => {
                     await orderPay(oids);
+                    this.ok && this.ok();
                     popNewMessage('支付成功');
                     loading.callback(loading.widget);
                     popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGDELIVERED,allStaus:allOrderStatus.slice(0,4) });
-                    this.ok && this.ok();
+                    
                 },() => {
                     loading.callback(loading.widget);
                 });
@@ -212,8 +216,8 @@ export class ConfirmOrder extends Widget {
     }
 
     public paySuccess() {
-        popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGDELIVERED,allStaus:allOrderStatus.slice(0,4) });
         this.ok && this.ok();
+        popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGDELIVERED,allStaus:allOrderStatus.slice(0,4) });
     }
 }
 
