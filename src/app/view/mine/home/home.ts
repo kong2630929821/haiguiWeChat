@@ -81,7 +81,7 @@ const State = {
     uid:0,
     userType:'',
     inviteCode:'',
-    userName:'',
+    userName:'微信名',
     avatar:'',
     orders:new Map<OrderStatus,Order[]>(),
     verified:false 
