@@ -2,7 +2,7 @@ import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { freeMaskGoodsId, OffClassGoodsId, saleClassGoodsId, vipClassGoodsId, vipMaskGoodsId } from '../../config';
-import { getGoodsDetails, getInviteRebate, orderActiveGoods, payMoney, payOrder, upgradeHWang } from '../../net/pull';
+import { getAllGifts, getGoodsDetails, getInviteRebate, orderActiveGoods, payMoney, payOrder, upgradeHWang } from '../../net/pull';
 import { Address, getStore, register, UserType } from '../../store/memstore';
 import { payToUpHbao } from '../../utils/logic';
 import { popNewLoading, popNewMessage, priceFormat } from '../../utils/tools';
@@ -169,7 +169,8 @@ export class GiftPage extends Widget {
                 getInviteRebate(goods);  // 试用装和线下课程需要调返利接口给上级返利
             } 
             popNewMessage('支付成功');
-
+            getAllGifts();  // 重新获取所有礼包
+            
         }).catch(err => {
             popNewMessage('支付失败');
         });

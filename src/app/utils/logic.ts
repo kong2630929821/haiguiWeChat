@@ -1,4 +1,4 @@
-import { getInviteCode, payMoney, upgradeHBao } from '../net/pull';
+import { getAllGifts, getInviteCode, payMoney, upgradeHBao } from '../net/pull';
 import { getStore, setStore, UserType } from '../store/memstore';
 import { popNewMessage } from './tools';
 /**
@@ -102,7 +102,8 @@ enum CashLogType {
     withdraw,  // 提现
     shopping,    // 购物
     reCash,     // 提现退款
-    other       // 其他
+    other,       // 其他
+    turntable    // 大转盘
 }
 // 现金来源名称
 const CashLogName = {
@@ -114,7 +115,8 @@ const CashLogName = {
     withdraw:'提现',
     shopping:'购物',
     reCash:'提现退款',
-    other:'其他'
+    other:'其他',
+    turntable:'大转盘'
 };
 
 /**
@@ -141,6 +143,7 @@ export const payToUpHbao = (sel:string) => {
             getInviteCode().then(res => {
                 setStore('user/inviteCode',res.code);
             });
+            getAllGifts();  // 重新获取所有礼包
         });
     }
 };
