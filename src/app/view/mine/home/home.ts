@@ -33,7 +33,6 @@ export class Home extends Widget {
         };
         super.setProps(this.props);
         this.state = State;
-        this.props.verified = getStore('user/IDCard');  // 有身份证号码表示实名认证成功
     }
 
     public goAddress() {
@@ -60,8 +59,10 @@ export class Home extends Widget {
 
     // 实名认证
     public verified() {
-        if (!this.props.verified) {
+        if (!this.state.verified) {
             popNew('app-view-mine-IDCardUpload');
+        } else {
+            popNew('app-view-mine-verify');
         }
     }
 
@@ -81,7 +82,8 @@ const State = {
     inviteCode:'',
     userName:'',
     avatar:'',
-    orders:new Map<OrderStatus,Order[]>()
+    orders:new Map<OrderStatus,Order[]>(),
+    verified:false 
 };
 register('balance',r => {
     
@@ -95,6 +97,7 @@ register('user',r => {
     State.inviteCode = r.inviteCode;
     State.userName = r.userName;
     State.avatar = r.avatar;
+    State.verified = !!r.IDCard; // 有身份证号码表示实名认证成功
     forelet.paint(State);
 });
 
