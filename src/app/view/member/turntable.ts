@@ -7,6 +7,8 @@ import { Forelet } from '../../../pi/widget/forelet';
 import { getRealNode } from '../../../pi/widget/painter';
 import { Widget } from '../../../pi/widget/widget';
 import { getDraws, getDrawsLog, getNumberOfDraws } from '../../net/pull';
+import { register } from '../../store/memstore';
+import { popNewMessage } from '../../utils/tools';
 
 // ================================ 导出
 // tslint:disable-next-line:no-reserved-keywords
@@ -44,7 +46,7 @@ export class Turntable extends Widget {
         this.ledTimer();
         clearInterval(this.props.timer);
         // 获取第一次数据
-        this.getDrawsLogData();
+        // this.getDrawsLogData();
         // 10秒刷新一次中奖列表
         this.timedRefresh();
     }
@@ -152,7 +154,12 @@ export class Turntable extends Widget {
         setTimeout(() => {
             $dom.className = '';
         }, 100);
-        this.goLottery();
+        if (this.props.freeCount === 0) {
+            popNewMessage('次数不足');
+        } else {
+            this.goLottery();
+        }
+        
     }
     /**
      * led定时器
@@ -178,5 +185,11 @@ export class Turntable extends Widget {
         this.ok && this.ok();
     }
 }
+// user/userType
+register('user/userType',() => {
+    const w: any = forelet.getWidget(WIDGET_NAME);
+    console.log(111111111111);
+    w && w.getDrawsLogData();
+});
 
 // ===================================================== 立即执行
