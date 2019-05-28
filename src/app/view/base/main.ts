@@ -6,18 +6,25 @@
 
 import { popNew } from '../../../pi/ui/root';
 import { addWidget } from '../../../pi/widget/util';
+import { setStore } from '../../store/memstore';
 import { PowerFlag } from '../member/powerConstant';
 
 // ============================== 导出
 export const run = (cb): void =>  {
     addWidget(document.body, 'pi-ui-root');
     const page = /page=([a-zA-Z]+)&*/.exec(location.search) ? /page=([a-zA-Z]+)&*/.exec(location.search)[1] :'';
+    const inviteCode = /inviteCode=([a-zA-Z]+)&*/.exec(location.search) ? /inviteCode=([a-zA-Z]+)&*/.exec(location.search)[1] :'';
+    if (inviteCode && inviteCode !== 'undefined') setStore('user/fcode',inviteCode);
+
     if (page === 'free') {
         // 打开免费试用装
         popNew('app-view-member-giftPage',{ fg:PowerFlag.free, isCurVip:true });
     } else if (page === 'offClass') {
         // 打开线下课程
         popNew('app-view-member-giftPage',{ fg:PowerFlag.offClass, isCurVip:true  });
+    } else if (page === 'turntable') {
+        // 打开大转盘
+        popNew('app-view-member-turntable');
     } else {
         // 打开首页面
         popNew('app-view-base-app');

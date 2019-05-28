@@ -38,10 +38,6 @@
     border-radius: inherit;
     background-size: 12px 14px;
 }
-.turntable-list{
-    width: inherit;
-    height: inherit;
-}
 .turntable-item{
     position: absolute;
     left: 0;
@@ -51,53 +47,36 @@
     font-weight: bold;
     text-shadow: 0 1px 1px rgba(255,255,255,0.6);
 }
-.turntable-itext{
-    font-weight: 400;
-    display: flex;
-    justify-content: center;
-}
-.turntable-item-bg{
+.turntable-itembg{
     width:0px;
     height:0px;
-    border-top:314px solid blue;
+    border-top:solid #FFF1D6;
     border-right:solid transparent;
     border-left:solid transparent;
     position:absolute;
     left: 50%;
     transform: translateX(-50%);
 }
-.turntable-icontent{
+.award{
     position: relative;
-    display: block;
-    font-size:30px;
     margin: 10px auto 0px;
     text-align: center;
+    height:42px;
+    font-size:26px;
+    line-height: 42px;
+    color: white;
 }
 .turntable-btn{
     position: absolute;
-    width: 200px;
-    height: 225px;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
-}
-.tunrntable-item-bot{
-    display: block;
-    text-align: center;
-    width:0px;
-    height:0px;
-    border-top:314px solid blue;
-    border-right:solid transparent;
-    border-left:solid transparent;
-    position:absolute;
-    left: 50%;
-    transform: translateX(-50%);
+    width: 186px;
+    height: 227px;
+    top: 106px;
+    left: 147px;
 }
 .turntable-img{
     position: relative;
     display: block;
-    font-size:30px;
-    margin: 32px auto 0px;
+    margin: 20px auto 0px;
     text-align: center;
 }
 .drawsNum{
@@ -139,14 +118,13 @@
     margin-left: -150px;
 } 
 .list{
-    height: 60px;
     display: flex;
     font-size:28px;
     font-family:PingFangSC-Regular;
     font-weight:400;
     color:rgba(18,18,18,1);
-    line-height:60px;
-    justify-content: space-around;
+    justify-content: flex-start;
+    padding: 18px 0;
 }
 .rule{
     width:650px;
@@ -169,4 +147,32 @@
     font-weight:400;
     color:rgba(0,0,0,1);
     line-height:33px;
+}
+.turntable-inner{
+    border-radius:50%;
+    width: 360px;
+    height: 360px;
+    position: absolute;
+    overflow: hidden;
+    top: 60px;
+    left: 60px;
+}
+.user-title{
+    margin-right: 10px;
+}
+.draw-title{
+    margin-right: 50px;
+}
+.drawsGood{
+    padding: 0 0 0 70px ;
+}
+.user{
+    padding: 0 0 0 50px
+}
+.draw-box-content{
+    height: 388px;
+    margin-top: 50px;
+    display: flex;
+    flex-direction: column;
+    align-content: space-around;
 }

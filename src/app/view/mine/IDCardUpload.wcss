@@ -15,8 +15,7 @@
 }
 .upload{
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: space-around;
 }
 .uploadImg{
     width:323px;
@@ -26,8 +25,8 @@
     flex-direction: column;
     align-items: center;
     font-size: 26px;
-    padding-top: 30px;
     margin-top: 60px;
+    position: relative;
 }
 .text{
     font-size: 26px;
@@ -52,4 +51,12 @@
     position: absolute;
     bottom: 0;
     width: 100%;
+}
+.closeBtn{
+    width: 30px;
+    height: 30px;
+    border: 15px solid transparent;
+    position: absolute;
+    top: -20px;
+    right: -20px;
 }

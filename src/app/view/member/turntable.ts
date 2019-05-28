@@ -2,10 +2,13 @@
  * 大转盘 - 首页
  */
 
+import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { getRealNode } from '../../../pi/widget/painter';
 import { Widget } from '../../../pi/widget/widget';
-import { getNumberOfDraws } from '../../net/pull';
+import { getDraws, getDrawsLog, getNumberOfDraws } from '../../net/pull';
+import { register } from '../../store/memstore';
+import { popNewMessage } from '../../utils/tools';
 
 // ================================ 导出
 // tslint:disable-next-line:no-reserved-keywords
@@ -21,6 +24,7 @@ interface Props {
     LEDTimer:any;    // LED计时器
     ledShow:boolean; // LED灯
     showDataList:any;// 中奖人列表
+    timer:any;// 刷新列表定时器
 }
 // tslint:disable-next-line:completed-docs
 export class Turntable extends Widget {
@@ -33,55 +37,68 @@ export class Turntable extends Widget {
         freeCount:0,
         LEDTimer:{},
         ledShow:false,
-        showDataList:[{ user:1351229890,draws:0.01 },
-                      { user:1351229890,draws:0.01 },
-                      { user:1351229890,draws:0.01 },
-                      { user:1351229890,draws:0.01 },
-                      { user:1351229890,draws:0.01 },
-                      { user:1351229890,draws:0.01 }]
+        showDataList:[],
+        timer:null
     };
     public create() {
         super.create();
         this.initTurntable();
         this.ledTimer();
+        clearInterval(this.props.timer);
+        // 获取第一次数据
+        // this.getDrawsLogData();
+        // 10秒刷新一次中奖列表
+        this.timedRefresh();
     }
-
     /**
      * 初始转盘
      */
     public initTurntable() {
         // 奖品配置  
         const prizeList = [1,2,3,4,5,6];
-        this.props.prizeList = [];
-        
-        for (let i = 0, length = prizeList.length; i < length; i++) {
-            const prizeItem = {
-                deg: (-360 / length) * i
-            };
-            this.props.prizeList.push(prizeItem);
-        }
+        this.props.prizeList = [{ draw:'0.01' },{ draw:'1.00' },{ draw:'5.00' },{ draw:'10.00' },{ draw:'20.00' },{ draw:'8888.00' }];
 
+        for (let i = 0, length = prizeList.length; i < length; i++) {
+            this.props.prizeList[i].deg = (-360 / length) * i;
+        }
+        console.log(this.props.prizeList);
         // 获取抽奖次数
         getNumberOfDraws().then(r => {
             console.log('抽奖次数',r);
+            this.props.freeCount = r.value[0];
+            this.paint();
         });
     }
-
+    // 定时定时刷新中奖列表
+    public timedRefresh() {
+        this.props.timer = setInterval(this.getDrawsLogData.bind(this),10000);
+    }
+    // 中奖列表
+    public getDrawsLogData() {
+        getDrawsLog().then(r => {
+            this.props.showDataList = r.value;
+            this.props.showDataList.forEach((element,index) => {
+                this.props.showDataList[index][0] = element[0].replace(/(\d{3})\d{4}(\d{4})/,'$1****$2');
+                this.props.showDataList[index][1] = (element[1] / 100).toFixed(2);
+            });
+            this.paint();
+        });
+    }
     /**
      * 开奖
      */
     public goLottery() {
         if (this.props.isTurn) return;
         this.props.isTurn = true;
-        // openTurntable().then((order:any) => {
-        //     this.props.freeCount--;
-        //     this.changeDeg(order);
+        getDraws().then((order:any) => {
+            this.props.freeCount--;
+            this.changeDeg(order);
             
-        // }).catch((err) => {
-        //     // this.changeDeg(err);
-        //     console.log('转盘下单失败',err);
-        //     this.props.isTurn = false;
-        // });
+        }).catch((err) => {
+            // this.changeDeg(err);
+            console.log('转盘下单失败',err);
+            this.props.isTurn = false;
+        });
 
     }
 
@@ -92,31 +109,38 @@ export class Turntable extends Widget {
         console.log('changeDeg------------------',resData);
         this.props.isTurn = true;
         const $turnStyle = document.getElementById('turntable').style;
+        const $turnStyle1 = document.getElementById('turntable1').style;
+
         this.props.prizeList.forEach(element => {
-            if (element.awardType === resData.awardType && element.num === resData.count) {
+            if (parseFloat(element.draw) === resData.money) {
                 this.props.turnNum = element.deg;
             }
         });
 
         $turnStyle.transition = 'transform 3.5s ease-in-out';
+        $turnStyle1.transition = 'transform 3.5s ease-in-out';
+
         $turnStyle.transform = `rotate(${this.props.turnNum + 1440}deg)`;
+        $turnStyle1.transform = `rotate(${this.props.turnNum + 1440}deg)`;
 
         setTimeout(() => {
             this.endLottery();
-            
+            const data = resData.money;
+            popNew('app-components-lotteryModal-lotteryModal', { prizeName:data.toFixed(2) });
         }, 3500);
     }
-
     /**
      * 结束开奖
      */
     public endLottery() {
         const $turnStyle = document.getElementById('turntable').style;
+        const $turnStyle1 = document.getElementById('turntable1').style;
         this.props.isTurn = false;
         $turnStyle.transition = 'none';
+        $turnStyle1.transition = 'none';
         $turnStyle.transform = `rotate(${this.props.turnNum}deg)`;
+        $turnStyle1.transform = `rotate(${this.props.turnNum}deg)`;
     }
-
     /**
      * 点击效果
      */
@@ -130,9 +154,13 @@ export class Turntable extends Widget {
         setTimeout(() => {
             $dom.className = '';
         }, 100);
-        this.goLottery();
+        if (this.props.freeCount === 0) {
+            popNewMessage('次数不足');
+        } else {
+            this.goLottery();
+        }
+        
     }
-
     /**
      * led定时器
      */
@@ -157,5 +185,11 @@ export class Turntable extends Widget {
         this.ok && this.ok();
     }
 }
+// user/userType
+register('user/userType',() => {
+    const w: any = forelet.getWidget(WIDGET_NAME);
+    console.log(111111111111);
+    w && w.getDrawsLogData();
+});
 
 // ===================================================== 立即执行

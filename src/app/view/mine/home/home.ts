@@ -2,7 +2,7 @@ import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
 import { ReturnGoodsStatus } from '../../../net/pull';
-import { Order, OrderStatus, register } from '../../../store/memstore';
+import { getStore, Order, OrderStatus, register } from '../../../store/memstore';
 import { getUserTypeShow } from '../../../utils/logic';
 import { copyToClipboard, popNewMessage, priceFormat1, priceFormat2 } from '../../../utils/tools';
 
@@ -59,7 +59,11 @@ export class Home extends Widget {
 
     // 实名认证
     public verified() {
-        popNew('app-view-mine-IDCardUpload');
+        if (!this.state.verified) {
+            popNew('app-view-mine-IDCardUpload');
+        } else {
+            popNew('app-view-mine-verify');
+        }
     }
 
     // 复制邀请码
@@ -78,7 +82,8 @@ const State = {
     inviteCode:'',
     userName:'',
     avatar:'',
-    orders:new Map<OrderStatus,Order[]>()
+    orders:new Map<OrderStatus,Order[]>(),
+    verified:false 
 };
 register('balance',r => {
     
@@ -92,6 +97,7 @@ register('user',r => {
     State.inviteCode = r.inviteCode;
     State.userName = r.userName;
     State.avatar = r.avatar;
+    State.verified = !!r.IDCard; // 有身份证号码表示实名认证成功
     forelet.paint(State);
 });
 
