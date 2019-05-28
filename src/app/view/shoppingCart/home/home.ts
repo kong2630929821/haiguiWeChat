@@ -3,7 +3,7 @@ import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
 import { addCart, deductCart } from '../../../net/pull';
 import { CartGoods, register, setStore } from '../../../store/memstore';
-import { calcPrices, getImageThumbnailPath, priceFormat } from '../../../utils/tools';
+import { calcPrices, getImageThumbnailPath, popNewMessage, priceFormat } from '../../../utils/tools';
 
 export const forelet = new Forelet();
 
@@ -111,8 +111,14 @@ export class ShoppingCart extends Widget {
 
     // 增加商品数量
     public addGoodsNum(index:number) {
-        const goods = this.state.cartGoodsShow[index].cartGood.goods;
+        const cartGood = this.state.cartGoodsShow[index].cartGood;
+        const goods = cartGood.goods;
         const sku = goods.labels[0];
+        if (cartGood.amount > sku[3]) {
+            popNewMessage('库存不足');
+
+            return;
+        }
         addCart(goods.id,1,sku[0]).then(() => {
             this.calcTotalFee();
             this.paint();

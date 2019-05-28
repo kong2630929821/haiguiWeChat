@@ -1,5 +1,7 @@
 <div>
+    
     {{for i,v of it.afterSaleOrder.order.orderGoods}}
+    <div w-class="id">退货单号:{{it.afterSaleOrder.id}}</div>
     <div w-class="row" style="margin:20px 30px;" on-tap="itemClick">
         {{: goods = v[0]}}
         <img src="../../res/image/{{it.getImageThumbnailPath(goods.images)}}" w-class="goodsImg"/>

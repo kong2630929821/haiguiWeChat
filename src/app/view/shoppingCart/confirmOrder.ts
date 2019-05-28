@@ -3,6 +3,7 @@ import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { order, orderNow, payMoney, payOrder } from '../../net/pull';
 import { CartGoods, getStore, OrderStatus, register } from '../../store/memstore';
+import { getLastAddress } from '../../utils/logic';
 import { calcFreight, getImageThumbnailPath, popNewLoading, popNewMessage, priceFormat } from '../../utils/tools';
 import { allOrderStatus } from '../mine/home/home';
 import { calcCartGoodsShow, CartGoodsShow } from './home/home';
@@ -24,12 +25,13 @@ export class ConfirmOrder extends Widget {
     public loading:any;
     public setProps(props:Props,oldProps:Props) {
         const orderGoodsShow = calcCartGoodsShow(props.orderGoods);
+        const addr = getLastAddress();
         this.props = {
             ...props,
             getImageThumbnailPath,
             priceFormat,
             orderGoodsShow,
-            address:getStore('mall/addresses')[0]
+            address:addr[2]
         };
         const ret = this.calcAllFees(orderGoodsShow);
         this.props = {
@@ -41,8 +43,11 @@ export class ConfirmOrder extends Widget {
     }
 
     public selectAddr() {
-        popNew('app-view-mine-addressList',{ isChoose:true },(index:number) => {
-            this.props.address = getStore('mall/addresses')[index];
+        popNew('app-view-mine-addressList',{ isChoose:true },() => {
+            const addr = getLastAddress();
+            this.props.address = addr[2];
+            const ret = this.calcAllFees(this.props.orderGoodsShow);
+            this.props.totalFreight = ret.totalFreight;
             this.paint();
         });
     }
@@ -99,14 +104,28 @@ export class ConfirmOrder extends Widget {
             popNew('app-view-member-applyModalBox',{ needSelGift:false,title:'请填写个人信息' },() => {
                 this.order();
             });
-        } else if (!getStore('user/IDCard')) {
+
+            return;
+        } 
+        const cartGood = this.props.orderGoods; 
+        let hasTax = false;  // 是否有保税商品
+        for (let i = 0;i < cartGood.length;i++) {
+            const goods = cartGood[i].goods;
+            if (goods.has_tax) {
+                hasTax = true;
+                break;
+            }
+        }
+        if (hasTax && !getStore('user/IDCard')) {
             popNew('app-components-popModel-popModel',{ title:'海外购商品必须实名' },() => {
                 popNew('app-view-mine-IDCardUpload');
             });
-        } else {
-            this.order();
-        }
 
+            return;
+        } 
+           
+        this.order();
+        
     }
 
     public async order() {
@@ -128,9 +147,25 @@ export class ConfirmOrder extends Widget {
             
             allOrderPromise.push(promise);
         }
+        let ordersRes;
         try {
-            const ordersRes = await Promise.all(allOrderPromise);
+            ordersRes = await Promise.all(allOrderPromise);
             console.log('ordersRes ====',ordersRes);
+        } catch (res) {
+            loading.callback(loading.widget);
+            if (res.result === 2124) {
+                popNewMessage('库存不足');
+            } else if (res.result === 2127) {
+                popNewMessage('购买免税商品超出限制');
+            } else {
+                popNewMessage('下单失败');
+            }
+            console.log('错误 ',res);
+
+            return;
+        }
+        try {
+           
             const oids = [];
             for (const res of ordersRes) {
                 const oid = res.orderInfo[0];
@@ -153,11 +188,15 @@ export class ConfirmOrder extends Widget {
                     popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGPAYMENT,allStaus:allOrderStatus.slice(0,4) });
                 });
             } else {
-                await orderPay(oids);
-                popNewMessage('支付成功');
-                loading.callback(loading.widget);
-                popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGDELIVERED,allStaus:allOrderStatus.slice(0,4) });
-                this.ok && this.ok();
+                popNew('app-view-member-confirmPayInfo',{ money:priceFormat(totalFee) },async () => {
+                    await orderPay(oids);
+                    popNewMessage('支付成功');
+                    loading.callback(loading.widget);
+                    popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGDELIVERED,allStaus:allOrderStatus.slice(0,4) });
+                    this.ok && this.ok();
+                },() => {
+                    loading.callback(loading.widget);
+                });
             }
         } catch (res) {
             loading.callback(loading.widget);
