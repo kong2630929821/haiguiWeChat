@@ -29,11 +29,11 @@
             </div>
         </div>
         
-        <div w-class="drawsNum">你还有{{it.freeCount}}次机会</div>
+        <div w-class="drawsNum">你还有{{it1.freeCount}}次机会</div>
         <div w-class="drawsList">
             <div w-class="drawsListTitle">中奖公告</div>
             <div w-class="draw-box-content">
-                {{for i,item of it.showDataList}}
+                {{for i,item of it1.showDataList}}
                     <div w-class="list">
                         <div w-class="user">
                             <span w-class="user-title">用户</span>

@@ -20,10 +20,8 @@ interface Props {
     prizeList: any;    // 奖品列表
     turnNum: number;   // 旋转角度
     isTurn: boolean;   // 正在转
-    freeCount: number; // 免费次数
     LEDTimer:any;    // LED计时器
     ledShow:boolean; // LED灯
-    showDataList:any;// 中奖人列表
     timer:any;// 刷新列表定时器
 }
 // tslint:disable-next-line:completed-docs
@@ -34,10 +32,8 @@ export class Turntable extends Widget {
         turnNum: 0,
         isTurn: false,
         prizeList: [],
-        freeCount:0,
         LEDTimer:{},
         ledShow:false,
-        showDataList:[],
         timer:null
     };
     public create() {
@@ -45,8 +41,7 @@ export class Turntable extends Widget {
         this.initTurntable();
         this.ledTimer();
         clearInterval(this.props.timer);
-        // 获取第一次数据
-        // this.getDrawsLogData();
+        this.state = State;
         // 10秒刷新一次中奖列表
         this.timedRefresh();
     }
@@ -62,12 +57,6 @@ export class Turntable extends Widget {
             this.props.prizeList[i].deg = (-360 / length) * i;
         }
         console.log(this.props.prizeList);
-        // 获取抽奖次数
-        getNumberOfDraws().then(r => {
-            console.log('抽奖次数',r);
-            this.props.freeCount = r.value[0];
-            this.paint();
-        });
     }
     // 定时定时刷新中奖列表
     public timedRefresh() {
@@ -76,10 +65,10 @@ export class Turntable extends Widget {
     // 中奖列表
     public getDrawsLogData() {
         getDrawsLog().then(r => {
-            this.props.showDataList = r.value;
-            this.props.showDataList.forEach((element,index) => {
-                this.props.showDataList[index][0] = element[0].replace(/(\d{3})\d{4}(\d{4})/,'$1****$2');
-                this.props.showDataList[index][1] = (element[1] / 100).toFixed(2);
+            State.showDataList = r.value;
+            State.showDataList.forEach((element,index) => {
+                State.showDataList[index][0] = element[0].replace(/(\d{3})\d{4}(\d{4})/,'$1****$2');
+                State.showDataList[index][1] = (element[1] / 100).toFixed(2);
             });
             this.paint();
         });
@@ -91,7 +80,7 @@ export class Turntable extends Widget {
         if (this.props.isTurn) return;
         this.props.isTurn = true;
         getDraws().then((order:any) => {
-            this.props.freeCount--;
+            State.freeCount--;
             this.changeDeg(order);
             
         }).catch((err) => {
@@ -154,7 +143,7 @@ export class Turntable extends Widget {
         setTimeout(() => {
             $dom.className = '';
         }, 100);
-        if (this.props.freeCount === 0) {
+        if (State.freeCount === 0) {
             popNewMessage('次数不足');
         } else {
             this.goLottery();
@@ -185,11 +174,26 @@ export class Turntable extends Widget {
         this.ok && this.ok();
     }
 }
+const State = {
+    showDataList:[],
+    freeCount:0
+};
 // user/userType
-register('user/userType',() => {
-    const w: any = forelet.getWidget(WIDGET_NAME);
-    console.log(111111111111);
-    w && w.getDrawsLogData();
+register('user/userType',(r) => {
+    // 获取中奖列表
+    getDrawsLog().then(r => {
+        State.showDataList = r.value;
+        State.showDataList.forEach((element,index) => {
+            State.showDataList[index][0] = element[0].replace(/(\d{3})\d{4}(\d{4})/,'$1****$2');
+            State.showDataList[index][1] = (element[1] / 100).toFixed(2);
+        });
+    });
+     // 获取抽奖次数
+    getNumberOfDraws().then(r => {
+        console.log('抽奖次数',r);
+        State.freeCount = r.value[0];
+    });
+    forelet.paint(State);
 });
 
 // ===================================================== 立即执行
