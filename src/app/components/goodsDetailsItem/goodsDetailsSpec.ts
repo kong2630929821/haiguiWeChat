@@ -47,6 +47,12 @@ export class GoodsDetailsSpec extends Widget {
     // 增加购买数量
     public addClick(e:any) {
         const nowAmount = ++this.props.amount;
+        const sku = this.props.goods.labels[this.props.skuIndex];
+        if (nowAmount > sku[3]) {
+            popNewMessage('库存不足');
+
+            return;
+        }
         this.props.amount = nowAmount;
         this.paint();
     }
