@@ -322,6 +322,7 @@ export enum GroupsLocation {
 
 // 用户信息
 interface User {
+    uid:number;         // uid
     userType:UserType;  // 用户会员等级 
     inviteCode:string;  // 我的邀请码
     userName:string;    // 用户名
@@ -383,6 +384,7 @@ const store:Store = {
         shell:0
     },
     user:{
+        uid:0,
         userType: UserType.other,
         inviteCode:'',
         userName:'',

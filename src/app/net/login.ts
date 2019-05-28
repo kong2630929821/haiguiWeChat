@@ -133,6 +133,7 @@ const userLogin = (userStr:any) => {
     console.log('userLogin = ',msg);
     requestAsync(msg).then(r => {
         console.log('userLogin success = ',r);
+        setStore('user/uid',r.uid, false);   // uid
         setStore('user/userType',r.level); // 用户会员等级
         for (const k in GroupsLocation) {
             if (parseInt(GroupsLocation[k]) >= 0) {
