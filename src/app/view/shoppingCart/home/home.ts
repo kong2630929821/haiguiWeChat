@@ -114,7 +114,7 @@ export class ShoppingCart extends Widget {
         const cartGood = this.state.cartGoodsShow[index].cartGood;
         const goods = cartGood.goods;
         const sku = goods.labels[0];
-        if (cartGood.amount > sku[3]) {
+        if (cartGood.amount  + 1 > sku[3]) {
             popNewMessage('库存不足');
 
             return;
