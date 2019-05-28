@@ -172,11 +172,15 @@ export class ConfirmOrder extends Widget {
                     popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGPAYMENT,allStaus:allOrderStatus.slice(0,4) });
                 });
             } else {
-                await orderPay(oids);
-                popNewMessage('支付成功');
-                loading.callback(loading.widget);
-                popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGDELIVERED,allStaus:allOrderStatus.slice(0,4) });
-                this.ok && this.ok();
+                popNew('app-view-member-confirmPayInfo',{ money:priceFormat(totalFee) },async () => {
+                    await orderPay(oids);
+                    popNewMessage('支付成功');
+                    loading.callback(loading.widget);
+                    popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGDELIVERED,allStaus:allOrderStatus.slice(0,4) });
+                    this.ok && this.ok();
+                },() => {
+                    loading.callback(loading.widget);
+                });
             }
         } catch (res) {
             loading.callback(loading.widget);
