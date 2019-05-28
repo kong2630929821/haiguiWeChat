@@ -35,5 +35,5 @@ export class MyCash extends Widget {
     }
 }
 register('balance',r => {
-    forelet.paint(r.cash);
+    forelet.paint(priceFormat(r.cash));
 });
