@@ -149,9 +149,10 @@ export class GiftPage extends Widget {
             }).catch(err => {
                 if (err.result === 2124) {
                     popNewMessage('库存不足');
+                } else if (err.type === 2132) {
+                    popNewMessage('已全部领完');
                 } else {
                     popNewMessage('领取失败');
-                    
                 }
                 loadding && loadding.callback(loadding.widget);
             });
