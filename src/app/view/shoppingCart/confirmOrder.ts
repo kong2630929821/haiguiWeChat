@@ -3,6 +3,7 @@ import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { order, orderNow, payMoney, payOrder } from '../../net/pull';
 import { CartGoods, getStore, OrderStatus, register } from '../../store/memstore';
+import { getLastAddress } from '../../utils/logic';
 import { calcFreight, getImageThumbnailPath, popNewLoading, popNewMessage, priceFormat } from '../../utils/tools';
 import { allOrderStatus } from '../mine/home/home';
 import { calcCartGoodsShow, CartGoodsShow } from './home/home';
@@ -24,12 +25,13 @@ export class ConfirmOrder extends Widget {
     public loading:any;
     public setProps(props:Props,oldProps:Props) {
         const orderGoodsShow = calcCartGoodsShow(props.orderGoods);
+        const addr = getLastAddress();
         this.props = {
             ...props,
             getImageThumbnailPath,
             priceFormat,
             orderGoodsShow,
-            address:getStore('mall/addresses')[0]
+            address:addr[2]
         };
         const ret = this.calcAllFees(orderGoodsShow);
         this.props = {
@@ -41,8 +43,9 @@ export class ConfirmOrder extends Widget {
     }
 
     public selectAddr() {
-        popNew('app-view-mine-addressList',{ isChoose:true },(index:number) => {
-            this.props.address = getStore('mall/addresses')[index];
+        popNew('app-view-mine-addressList',{ isChoose:true },() => {
+            const addr = getLastAddress();
+            this.props.address = addr[2];
             const ret = this.calcAllFees(this.props.orderGoodsShow);
             this.props.totalFreight = ret.totalFreight;
             this.paint();

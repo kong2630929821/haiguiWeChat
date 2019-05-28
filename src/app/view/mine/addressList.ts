@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { Address, register } from '../../store/memstore';
+import { Address, getStore, register } from '../../store/memstore';
 import { getLastAddress } from '../../utils/logic';
 
 // tslint:disable-next-line:no-reserved-keywords
@@ -18,7 +18,7 @@ interface Props {
  * 收货地址列表
  */
 export class AddressList extends Widget {
-    public ok:(index:number) => void;
+    public ok:() => void;
     public setProps(props:Props) {
         const addr = getLastAddress();
         this.props = {
@@ -36,7 +36,7 @@ export class AddressList extends Widget {
         localStorage.setItem('addressIndex',num.toString());
         this.paint();
         setTimeout(() => {
-            this.ok && this.ok(num);
+            this.ok && this.ok();
         },50);
     }
 
@@ -47,7 +47,13 @@ export class AddressList extends Widget {
     }
 
     public addAddr() {
-        popNew('app-view-mine-editAddress');
+        popNew('app-view-mine-editAddress',undefined,() => {
+            const address = getStore('mall/addresses');
+            localStorage.setItem('addressIndex',(address.length - 1).toString());
+            if (this.props.isChoose) {
+                this.ok && this.ok();
+            }
+        });
     }
     public updateAddress(addresses:Address[]) {
         this.props.list = addresses;
