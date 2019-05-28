@@ -1,5 +1,5 @@
 import { request } from '../../pi/net/ui/con_mgr';
-import { OffClassGoodsId, saleClassGoodsId, sourceIp, sourcePort, vipClassGoodsId, vipMaskGoodsId, whiteGoodsId_10000A, whiteGoodsId_10000B, whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
+import { freeMaskGoodsId, OffClassGoodsId, saleClassGoodsId, sourceIp, sourcePort, vipClassGoodsId, vipMaskGoodsId, whiteGoodsId_10000A, whiteGoodsId_10000B, whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
 import { getStore,GroupsLocation, OrderStatus, setStore } from '../store/memstore';
 import { openWXPay } from '../utils/logic';
 import { popNewMessage } from '../utils/tools';
@@ -855,6 +855,9 @@ export const getAllGifts = async () => {
         } else if (v[0] === vipMaskGoodsId) {
             memberGifts.vipGift = v[1];
 
+        } else if (v[0] === freeMaskGoodsId) {
+            memberGifts.free = v[1];
+            
         } else if (v[0] === OffClassGoodsId) {
             memberGifts.offClass = v[1];
 

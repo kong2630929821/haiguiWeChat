@@ -11,9 +11,9 @@ export const payComplete = () => {
     // 支付成功
     setMsgHandler('event_pay_ok', (r) => {
         // alert(JSON.stringify(r));
-        if (r.msg && r.msg[2] === 'hBao') {
+        if (r.msg && r.msg[2] === 'hBao') {  // 升级海宝支付
             setStore('flags/upgradeHbao',true);
-        } else if (r.msg && r.msg[2] === 'activity') {
+        } else if (r.msg && r.msg[2] === 'activity') {  // 购买权益特殊商品
             setStore('flags/activityGoods',true);
         } else if (r.msg && r.msg[2] === '105') {
             setStore('flags/mallRecharge',true);

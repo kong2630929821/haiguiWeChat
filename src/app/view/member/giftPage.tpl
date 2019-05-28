@@ -10,14 +10,14 @@
     
     {{% ========================试用装领取======================}}
     {{elseif it.fg == 3 && it.isCurVip}}
-    <div w-class="btn1" on-tap="freeReceive">免费领取</div>
+    <div w-class="btn1" on-tap="freeReceive">{{it.btn}}</div>
     <div w-class="shareBtn1" on-tap="shareBtn">分享给好友</div>
     
     {{% ========================线下课程======================}}
     {{elseif it.fg == 4 && it.isCurVip}}
     <div style="display: flex;align-items: center;">
         <div w-class="shareBtn" on-tap="shareBtn">分享给好友</div>
-        <div w-class="btn" style="width: 200px;margin-top:0;" on-tap="applyClass">报名听课</div>
+        <div w-class="btn" style="width: 200px;margin-top:0;" on-tap="applyClass">{{it.btn}}</div>
     </div>
     
     {{% ========================开通获得积分======================}}
@@ -26,6 +26,6 @@
     
     {{% ========================精品课程，销售课程======================}}
     {{elseif (it.fg ==8 || it.fg ==9) && it.isCurVip }}
-    <div w-class="btn" style="margin-top:40;" on-tap="applyClass">报名听课</div>
+    <div w-class="btn" style="margin-top:40;" on-tap="applyClass">{{it.btn}}</div>
     {{end}}
 </div>

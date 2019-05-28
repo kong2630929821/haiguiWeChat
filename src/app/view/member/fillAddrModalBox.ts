@@ -44,8 +44,8 @@ export class FillAddrModalBox extends Widget {
 
     // 选择地址
     public selAddr() {
-        popNew('app-view-mine-addressList',{ isChoose:true },(index:number) => {
-            this.props.address = getStore('mall/addresses')[index];
+        popNew('app-view-mine-addressList',{ isChoose:true },() => {
+            this.props.address = getLastAddress()[2];
             this.paint();
         });
     }

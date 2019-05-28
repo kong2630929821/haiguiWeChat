@@ -52,7 +52,7 @@ const initWxConfig = (resp:any,cb:any) => {
 
     (<any>self).wx.error(() => {  
         // config信息验证失败会执行error函数
-        console.log('wxconfig验证失败');
+        // console.log('wxconfig验证失败');
     });
 };
 
