@@ -88,15 +88,15 @@ export class EditAddress extends Widget {
             return;
         }
         addAddress(this.props.name,this.props.tel,this.props.area_id,`${this.props.province}${this.props.address}`).then(() => {
-            popNewMessage('保存成功');
             this.ok && this.ok();
+            popNewMessage('保存成功');
         });
     }
 
     public delAddress() {
         delAddress(this.props.id).then(() => {
-            popNewMessage('删除成功');
             this.ok && this.ok();
+            popNewMessage('删除成功');
         });
     }
 }
