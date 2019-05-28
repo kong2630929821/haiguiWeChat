@@ -2,6 +2,7 @@ import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { serverFilePath } from '../../config';
 import { identifyIDCard, verifyIDCard } from '../../net/pull';
+import { setStore } from '../../store/memstore';
 import { popNewLoading, popNewMessage } from '../../utils/tools';
 import { setWxConfig, takeImage, upImage } from '../../utils/wxAPI';
 interface Props {
@@ -114,6 +115,7 @@ export class IDCardUpload extends Widget {
                     verifyIDCard(this.props.name,this.props.card,this.props.front,this.props.back,this.props.validDate).then(() => {
                         loadding && loadding.callback(loadding.widget);
                         popNewMessage('实名认证成功');
+                        setStore('user/IDCard',this.props.card);
                         this.ok && this.ok();
         
                     }).catch(() => {
