@@ -46,11 +46,12 @@
     color: #fff;
     line-height: 98px;
     text-align: center;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
 }
 .bottom{
-    position: absolute;
-    bottom: 0;
-    width: 100%;
+    margin-top: 60px;
 }
 .closeBtn{
     width: 30px;
