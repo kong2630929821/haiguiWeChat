@@ -347,6 +347,7 @@ type GiftLog = [number,number,number,number,number,number,number];  // [已领�
 
 // 会员领取礼记录
 interface MemberGifts {
+    free:GiftLog;         // 免费试用装
     gift:GiftLog;         // 美白礼包
     vipGift:GiftLog;      // 尊享礼包
     offClass:GiftLog;     // 线下课程
@@ -395,6 +396,7 @@ const store:Store = {
         label:'',      // 标签 省，市代理
         IDCard:'',
         memberGifts:{
+            free:[0,0,0,0,0,0,0],
             gift:[0,0,0,0,0,0,0],
             vipGift:[0,0,0,0,0,0,0],
             offClass:[0,0,0,0,0,0,0],

@@ -29,6 +29,8 @@ export class GiftPage extends Widget {
 
     public setProps(props:any) {
         super.setProps(props);
+        // 用户会员等级是否等于当前所查看的会员等级
+        this.props.isCurVip = props.isCurVip || getStore('user/userType',-1) === props.userType; 
         if (props.fg === PowerFlag.offClass || props.fg === PowerFlag.free) {
             this.props.img = `${PowerFlag[props.fg]}.png`;
             setWxConfig();
@@ -40,21 +42,11 @@ export class GiftPage extends Widget {
         } else {
             this.props.img = `399_${PowerFlag[props.fg]}.png`;
         }
-        // 用户会员等级是否等于当前所查看的会员等级
-        this.props.isCurVip = props.isCurVip || getStore('user/userType',-1) === props.userType; 
+        
+        // 领取按钮
         this.props.isAble = true;  // 默认值可以领取
         const memberGifts = getStore('user/memberGifts');
-
-        if (props.fg === PowerFlag.gift) { // 美白礼包
-            const v = memberGifts.gift;
-            if (v[0] > 0) {
-                this.props.btn = '已全部领完';
-                this.props.isAble = false;
-            } else {
-                this.props.btn = '免费领取';
-            }
-            
-        } else if (props.fg === PowerFlag.vipGift) { // 尊享礼包
+        if (props.fg === PowerFlag.vipGift) { // 尊享礼包
             const v = memberGifts.vipGift;
             if (v[0] < v[1] && v[3] > Date.now()) {
                 // 未到下次可领时间，且未领完
@@ -67,7 +59,38 @@ export class GiftPage extends Widget {
             } else {
                 this.props.btn = '领取本期面膜';
             }
+        } else if (props.fg === PowerFlag.free) {  // 免费试用装
+            this.initBtn(memberGifts.free,1);
+           
+        } else if (props.fg === PowerFlag.offClass) {  // 线下课程 
+            this.initBtn(memberGifts.offClass,2);
+            
+        } else if (props.fg === PowerFlag.gift) {  // 美白礼包 
+            this.initBtn(memberGifts.gift,1);
+            
+        } else if (props.fg === PowerFlag.vipClass) { // 精品课程
+            this.initBtn(memberGifts.vipClass,2);
+
+        } else if (props.fg === PowerFlag.saleClass) { // 销售课程
+            this.initBtn(memberGifts.saleClass,2);
         }
+    }
+
+    /**
+     * 更新按钮名称
+     * @param v v[0] 已领数量 v[1] 领取上限
+     * @param fg 1 免费领取 2 报名听课
+     */
+    public initBtn(v:number[],fg:number) {
+        if (v[0] >= v[1]) {
+            this.props.btn = '已全部领完';
+            this.props.isAble = false;
+        } else if (fg === 1) { 
+            this.props.btn = '免费领取';
+        } else {
+            this.props.btn = '报名听课';
+        }
+        
     }
 
     // 免费领取
@@ -127,7 +150,7 @@ export class GiftPage extends Widget {
                 if (err.result === 2124) {
                     popNewMessage('库存不足');
                 } else {
-                    popNewMessage('下单失败');
+                    popNewMessage('领取失败');
                     
                 }
                 loadding && loadding.callback(loadding.widget);
