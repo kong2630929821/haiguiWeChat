@@ -147,9 +147,25 @@ export class ConfirmOrder extends Widget {
             
             allOrderPromise.push(promise);
         }
+        let ordersRes;
         try {
-            const ordersRes = await Promise.all(allOrderPromise);
+            ordersRes = await Promise.all(allOrderPromise);
             console.log('ordersRes ====',ordersRes);
+        } catch (res) {
+            loading.callback(loading.widget);
+            if (res.result === 2124) {
+                popNewMessage('库存不足');
+            } else if (res.result === 2127) {
+                popNewMessage('购买免税商品超出限制');
+            } else {
+                popNewMessage('下单失败');
+            }
+            console.log('错误 ',res);
+
+            return;
+        }
+        try {
+           
             const oids = [];
             for (const res of ordersRes) {
                 const oid = res.orderInfo[0];
