@@ -322,6 +322,7 @@ export enum GroupsLocation {
 
 // 用户信息
 interface User {
+    isLogin:boolean;     // 用户是否登录
     uid:number;         // uid
     userType:UserType;  // 用户会员等级 
     inviteCode:string;  // 我的邀请码
@@ -385,6 +386,7 @@ const store:Store = {
         shell:0
     },
     user:{
+        isLogin:false,
         uid:0,
         userType: UserType.other,
         inviteCode:'',

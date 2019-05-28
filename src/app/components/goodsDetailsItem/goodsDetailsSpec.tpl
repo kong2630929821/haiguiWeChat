@@ -30,7 +30,7 @@
         <div w-class="buy">
             <div w-class="buy-title">购买数量</div>
             <div w-class="buy-box">
-                <div on-tap="addClick" w-class="click-item"><img src="../../res/image/less_icon.png" on-tap="lessClick"/></div>
+                <div on-tap="lessClick" w-class="click-item"><img src="../../res/image/less_icon.png"/></div>
                 <div w-class="buy-num">{{it.amount}}</div>
                 <div on-tap="addClick" w-class="click-item"><img src="../../res/image/add_icon.png" /></div>
             </div>

@@ -2,7 +2,7 @@
  * 钱包登录模块
  */
 
-import { open, request, setReloginCallback, setUrl } from '../../pi/net/ui/con_mgr';
+import { open, reopen, request, setBottomLayerReloginMsg, setReloginCallback, setUrl } from '../../pi/net/ui/con_mgr';
 import { popNew } from '../../pi/ui/root';
 import { getCookie } from '../../pi/util/html';
 import { wsUrl } from '../config';
@@ -12,6 +12,14 @@ import { registerWXAPI } from '../utils/wxAPI';
 import { getAddress, getAllGifts, getBalance, getCart, getEarningTotal, getFreight, getGroups, getInviteCode, getOrders, getUserInfo, setUserName } from './pull';
 import { payComplete } from './push';
 
+document.addEventListener('visibilitychange', () => {
+    console.log('visibilitychange',document.visibilityState);
+    const isLogin = getStore('user/isLogin');
+    console.log('isLogin ===',isLogin);
+    if (document.visibilityState === 'visible' && !isLogin) {
+        reopen();
+    }
+});
 /**
  * 获取微信用户信息
  * 公众号环境下由后端通过微信授权后把用户信息挂到了localStorage.WXUSERINFO上,前端直接获取即可
@@ -51,7 +59,8 @@ setReloginCallback((res) => {
     if (rtype === 'logerror') {  //  重登录失败，登录流程重走一遍
         openConnect();
     } else {
-       // 
+        // 
+        setStore('user/isLogin',true);
     }
 });
 
@@ -76,6 +85,7 @@ const conSuccess = () => {
  */
 const conError = (err) => {
     console.log('con error');
+    setStore('user/isLogin',false);
 };
 
 /**
@@ -83,6 +93,7 @@ const conError = (err) => {
  */
 const conClose = () => {
     console.log('con close');
+    setStore('user/isLogin',false);
 };
 
 /**
@@ -134,6 +145,8 @@ const userLogin = (userStr:any) => {
     requestAsync(msg).then(r => {
         console.log('userLogin success = ',r);
         setStore('user/uid',r.uid, false);   // uid
+        setBottomLayerReloginMsg(userStr.openid,1,r.password);
+        setStore('user/isLogin',true);
         setStore('user/userType',r.level); // 用户会员等级
         for (const k in GroupsLocation) {
             if (parseInt(GroupsLocation[k]) >= 0) {

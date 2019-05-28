@@ -9,7 +9,10 @@ export class ConfirmPayIfo extends Widget {
     public props:any = {
         money:0
     };
-    
+    public create() {
+        super.create();
+        this.config = { value: { group: 'top' } };
+    }
     // 确认
     public confirm() {
         this.ok && this.ok();

@@ -1,12 +1,13 @@
-/**
- * 消息框
- */
+
 import { Widget } from '../../../pi/widget/widget';
 
 interface Props {
     content: string;
 }
 
+/**
+ * 消息框
+ */
 export class Message extends Widget {
     public props: any;
     public ok: () => void;
