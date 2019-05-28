@@ -43,6 +43,8 @@ export class ConfirmOrder extends Widget {
     public selectAddr() {
         popNew('app-view-mine-addressList',{ isChoose:true },(index:number) => {
             this.props.address = getStore('mall/addresses')[index];
+            const ret = this.calcAllFees(this.props.orderGoodsShow);
+            this.props.totalFreight = ret.totalFreight;
             this.paint();
         });
     }
