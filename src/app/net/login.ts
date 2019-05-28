@@ -144,6 +144,7 @@ const userLogin = (userStr:any) => {
     console.log('userLogin = ',msg);
     requestAsync(msg).then(r => {
         console.log('userLogin success = ',r);
+        setStore('user/uid',r.uid, false);   // uid
         setBottomLayerReloginMsg(userStr.openid,1,r.password);
         setStore('user/isLogin',true);
         setStore('user/userType',r.level); // 用户会员等级

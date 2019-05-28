@@ -14,6 +14,7 @@
                 <img src="../../../res/image/copyBtn.png" w-class="copybtn"/>
             </div>
             {{end}}
+            <div w-class="code">ID：&nbsp;{{it1.uid}}</div>
         </div>
     </div>
     <div w-class="orderType">

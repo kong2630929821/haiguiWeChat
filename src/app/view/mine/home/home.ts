@@ -2,7 +2,7 @@ import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
 import { ReturnGoodsStatus } from '../../../net/pull';
-import { getStore, Order, OrderStatus, register } from '../../../store/memstore';
+import { Order, OrderStatus, register } from '../../../store/memstore';
 import { getUserTypeShow } from '../../../utils/logic';
 import { copyToClipboard, popNewMessage, priceFormat1, priceFormat2 } from '../../../utils/tools';
 
@@ -78,6 +78,7 @@ const State = {
         { key:'海贝',value:0 },
         { key:'积分',value:0 }
     ],
+    uid:0,
     userType:'',
     inviteCode:'',
     userName:'',
@@ -86,13 +87,13 @@ const State = {
     verified:false 
 };
 register('balance',r => {
-    
     State.balance[0].value = priceFormat1(r.cash);
     State.balance[1].value = priceFormat2(r.shell);
     State.balance[2].value = priceFormat2(r.integral);
     forelet.paint(State);
 });
 register('user',r => {
+    State.uid = r.uid;
     State.userType = getUserTypeShow().split('会员')[0];
     State.inviteCode = r.inviteCode;
     State.userName = r.userName;

@@ -1,22 +1,23 @@
 import { popNew } from '../../../pi/ui/root';
+import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { checkWithdraw } from '../../net/pull';
-import { getStore } from '../../store/memstore';
+import { getStore, register } from '../../store/memstore';
 import { priceFormat } from '../../utils/tools';
-
+export const forelet = new Forelet();
 /**
  * 我的现金
  */
 export class MyCash extends Widget {
     public props:any = {
-        balance:priceFormat(getStore('balance/cash',0)),
         ableWithdraw:false
     };
 
     public create() {
         super.create();
+        this.state = priceFormat(getStore('balance/cash',0));
         checkWithdraw().then(r => {
-            this.props.ableWithdraw = this.props.balance > 0;
+            this.props.ableWithdraw = this.state > 0;
             this.paint();
         });
     }
@@ -33,3 +34,6 @@ export class MyCash extends Widget {
         }
     }
 }
+register('balance',r => {
+    forelet.paint(r.cash);
+});
