@@ -101,7 +101,8 @@ export class Turntable extends Widget {
         const $turnStyle1 = document.getElementById('turntable1').style;
 
         this.props.prizeList.forEach(element => {
-            if (parseFloat(element.draw) === resData.money) {
+            const m = (resData.money / 100).toFixed(2);
+            if (element.draw === m) {
                 this.props.turnNum = element.deg;
             }
         });
@@ -114,7 +115,7 @@ export class Turntable extends Widget {
 
         setTimeout(() => {
             this.endLottery();
-            const data = resData.money;
+            const data = resData.money / 100;
             popNew('app-components-lotteryModal-lotteryModal', { prizeName:data.toFixed(2) });
         }, 3500);
     }
