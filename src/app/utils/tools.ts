@@ -232,6 +232,7 @@ export const calcFreightDesc = (freights:Freight[]) => {
     }
     console.log('obj ====',obj);
     console.log('freightDesc ====',freightDesc);
+    
     console.log('freightInterval ===',freightInterval);
 
     return {

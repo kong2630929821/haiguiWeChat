@@ -557,7 +557,7 @@ export const sendCode = (phone:string) => {
  */
 export const bindPhone = (phone:string,code:string) => {
     const msg = {
-        type:'build_phone',
+        type:'build_phone', 
         param:{
             phone,
             code
