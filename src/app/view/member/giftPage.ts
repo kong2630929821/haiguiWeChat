@@ -82,7 +82,7 @@ export class GiftPage extends Widget {
      * @param fg 1 免费领取 2 报名听课
      */
     public initBtn(v:number[],fg:number) {
-        if (v[0] >= v[1]) {
+        if (v[1] > 0 && v[0] >= v[1]) {
             this.props.btn = '已全部领完';
             this.props.isAble = false;
         } else if (fg === 1) { 
