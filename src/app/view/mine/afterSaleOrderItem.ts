@@ -49,7 +49,9 @@ const statusShows:any = {
     [ReturnGoodsStatus.RETURNED]:{
         btn1:'',
         btn2:'',
-        text:'退货完成'
+        text:'退货完成',
+        text1:'退货成功',
+        text2:'退货失败'
     }
     
 };

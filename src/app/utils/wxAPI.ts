@@ -24,6 +24,7 @@ export const registerWXAPI = (cb?:any) => {
 
                 } else {
                     // 安卓获取签名需要完整的URL，不完整则签名无效
+                    console.log('android wxsign =',location.href.split('#')[0]);
                     getWX_sign(location.href.split('#')[0]).then((resp:any) => {
                         initWxConfig(resp,cb);
                     });

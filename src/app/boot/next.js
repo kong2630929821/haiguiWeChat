@@ -59,16 +59,24 @@ winit.initNext = function () {
 
 		html.checkWebpFeature(function (r) {
 			flags.webp = flags.webp || r;
-			loadChatApp();
-		});
-
-		//加载APP部分代码，实际项目中会分的更细致
-		var loadChatApp = function () {
 			var sourceList = [
 				"pi/ui/root.js",
 				"pi/ui/root.tpl",
 				"pi/ui/html.js",
-				"pi/ui/html.tpl",
+				"pi/ui/html.tpl"
+			];
+			util.loadDir(sourceList, flags, fm, suffixCfg, function (fileMap) {
+				loadMallApp();
+			}, function (r) {
+				alert("加载目录失败, " + r.error + ":" + r.reason);
+			}, dirProcess.handler);
+
+			
+		});
+
+		//加载APP部分代码，实际项目中会分的更细致
+		var loadMallApp = function () {
+			var sourceList = [
 				"app/net/",
 				"app/view/",
 				"app/components/",

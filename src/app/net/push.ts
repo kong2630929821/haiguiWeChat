@@ -44,6 +44,7 @@ export const payComplete = () => {
 
     // 退货状态变动
     setMsgHandler('event_return_change',r => {
+        setStore('flags/returnChange',r.type);
         console.log('退货状态变动========event_return_change',r);
     });
 };

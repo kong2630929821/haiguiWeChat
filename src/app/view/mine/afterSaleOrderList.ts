@@ -2,6 +2,7 @@ import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { getReturnGoods, returnGoods, ReturnGoodsStatus } from '../../net/pull';
 import { AfterSale, register } from '../../store/memstore';
+import { popNewMessage } from '../../utils/tools';
 
 // tslint:disable-next-line:no-reserved-keywords
 declare var module: any;
@@ -45,8 +46,11 @@ export class AfterSaleOrderList extends Widget {
         console.log('activeStatus=====',activeStatus);
         if (btn === 1) {  // 确定按钮  
             if (activeStatus === ReturnGoodsStatus.CANRETURN) { // 申请退货
-                returnGoods(afterOrder.id,'退货');
-                getReturnGoods(ReturnGoodsStatus.CANRETURN);
+                returnGoods(afterOrder.id,'退货').then(() => {
+                    getReturnGoods(ReturnGoodsStatus.CANRETURN);
+                }).catch(() => {
+                    popNewMessage('出错啦');
+                });
             }
         } else {  // 取消按钮
             
@@ -54,6 +58,24 @@ export class AfterSaleOrderList extends Widget {
 
         console.log(e.btn, index);
     }
+
+    // 退货状态变化
+    public returnChnage(rtype:ReturnChangeType) {
+        if (rtype === ReturnChangeType.ACCEPT) {
+            this.typeClick(ReturnGoodsStatus.RETURNING);
+        } else if (rtype === ReturnChangeType.SUCCESS) {
+            this.typeClick(ReturnGoodsStatus.RETURNED);
+        } else if (rtype === ReturnChangeType.FAILED) {
+            this.typeClick(ReturnGoodsStatus.RETURNED);
+        }
+    }
+}
+
+// 退货状态变动
+export enum ReturnChangeType {
+    ACCEPT = 0,   // 接受退货申请
+    SUCCESS = 1,  // 退货成功
+    FAILED = -1   // 退货失败
 }
 
 const STATE = {
@@ -63,4 +85,9 @@ const STATE = {
 register('mall/afterSales',(afterSaleOrders:Map<ReturnGoodsStatus,AfterSale[]>) => {
     STATE.orders = afterSaleOrders;
     forelet.paint(STATE);
+});
+
+register('flags/returnChange',(rtype:ReturnChangeType) => {
+    const w:any = forelet.getWidget(WIDGET_NAME);
+    w && w.returnChnage(rtype);
 });
