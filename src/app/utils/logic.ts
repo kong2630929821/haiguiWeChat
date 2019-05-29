@@ -130,7 +130,7 @@ export const getCashLogName = (ttype:number) => {
 /**
  * 升级海宝支付
  */
-export const payToUpHbao = (sel:string) => {
+export const payToUpHbao = (sel:string,cb?:any) => {
     const cash = getStore('balance/cash');
     const fee = 39900; // 升级海宝的费用
     // const fee = 1;     // 测试费用
@@ -144,6 +144,7 @@ export const payToUpHbao = (sel:string) => {
                 setStore('user/inviteCode',res.code);
             });
             getAllGifts();  // 重新获取所有礼包
+            cb && cb();
         });
     }
 };

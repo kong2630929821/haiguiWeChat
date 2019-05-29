@@ -23,6 +23,13 @@
     {{% ========================开通获得积分======================}}
     {{elseif it.fg==5 && !it.isCurVip}}
     <div w-class="open" on-tap="openVIP">立即开通</div>
+
+    {{% ========================邀请好友======================}}
+    {{elseif it.fg==6 && it.isCurVip}}
+    <div w-class="invites">
+        <div w-class="invitebtn" on-tap="inviteShare('hBao')">邀请好友开通海宝</div>
+        <div w-class="invitebtn" on-tap="inviteShare('hWang')">邀请好友开通海王</div>
+    </div>
     
     {{% ========================精品课程，销售课程======================}}
     {{elseif (it.fg ==8 || it.fg ==9) && it.isCurVip }}

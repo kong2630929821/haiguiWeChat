@@ -6,7 +6,7 @@
 
 import { popNew } from '../../../pi/ui/root';
 import { addWidget } from '../../../pi/widget/util';
-import { setStore } from '../../store/memstore';
+import { setStore, UserType } from '../../store/memstore';
 import { PowerFlag } from '../member/powerConstant';
 
 // ============================== 导出
@@ -25,6 +25,12 @@ export const run = (cb): void =>  {
     } else if (page === 'turntable') {
         // 打开大转盘
         popNew('app-view-member-turntable');
+    } else if (page === 'upHbao') {
+        // 升级海宝
+        popNew('app-view-member-powerDetail',{ userType:UserType.hBao,upgrade:true });
+    } else if (page === 'upHwang') { 
+        // 升级海王
+        popNew('app-view-member-powerDetail',{ userType:UserType.hWang,upgrade:true });
     } else {
         // 打开首页面
         popNew('app-view-base-app');
