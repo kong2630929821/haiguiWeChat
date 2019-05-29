@@ -82,7 +82,7 @@ export class GiftPage extends Widget {
      * @param fg 1 免费领取 2 报名听课
      */
     public initBtn(v:number[],fg:number) {
-        if (v[0] >= v[1]) {
+        if (v[1] > 0 && v[0] >= v[1]) {
             this.props.btn = '已全部领完';
             this.props.isAble = false;
         } else if (fg === 1) { 
@@ -149,9 +149,10 @@ export class GiftPage extends Widget {
             }).catch(err => {
                 if (err.result === 2124) {
                     popNewMessage('库存不足');
+                } else if (err.type === 2132) {
+                    popNewMessage('已全部领完');
                 } else {
                     popNewMessage('领取失败');
-                    
                 }
                 loadding && loadding.callback(loadding.widget);
             });

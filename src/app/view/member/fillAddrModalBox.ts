@@ -104,6 +104,7 @@ export class FillAddrModalBox extends Widget {
     }
 
     // 确认
+    // tslint:disable-next-line:cyclomatic-complexity
     public async confirm() {
         if (this.props.address && this.props.isVip) {
             this.ok && this.ok(this.props.address);
@@ -116,7 +117,7 @@ export class FillAddrModalBox extends Widget {
             } else {
                 const loadding = popNewLoading('请稍后');
     
-                try {  // 验证手机号
+                try {  // 验证手机号 修改过需要重新验证
                     if (this.props.changePhone) {
                         const phoneRes = await bindPhone(this.props.phoneNum,this.props.phoneCode);
                         if (phoneRes) setStore('user/phoneNum',this.props.phoneNum);
@@ -133,7 +134,7 @@ export class FillAddrModalBox extends Widget {
                 }
     
                 try {   // 设置用户名 实名认证过不允许再修改
-                    if (getStore('user/realName')) {
+                    if (!getStore('user/realName')) {
                         const nameRes = await verifyIDCard(this.props.userName,'','','','');
                         if (nameRes) setStore('user/realName',this.props.userName);
                     }  
@@ -145,7 +146,10 @@ export class FillAddrModalBox extends Widget {
                 }
     
                 try {   // 绑定邀请码
-                    if (!getStore('user/fcode','')) await bindUser(this.props.inviteCode);
+                    if (getStore('user/fcode','') !== this.props.inviteCode) {
+                        const code = await bindUser(this.props.inviteCode);
+                        if (code) setStore('user/fcode',this.props.inviteCode);
+                    }
     
                 } catch (err) {
                     loadding.callback(loadding.widget);
