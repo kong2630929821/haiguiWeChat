@@ -33,8 +33,6 @@ export class GiftPage extends Widget {
         this.props.isCurVip = props.isCurVip || getStore('user/userType',-1) === props.userType; 
         if (props.fg === PowerFlag.offClass || props.fg === PowerFlag.free) {
             this.props.img = `${PowerFlag[props.fg]}.png`;
-            setWxConfig();
-            this.share();
             
         } else if (props.userType === UserType.hWang) {
             this.props.img = `10000_${PowerFlag[props.fg]}.png`;
@@ -73,7 +71,7 @@ export class GiftPage extends Widget {
 
         } else if (props.fg === PowerFlag.saleClass) { // 销售课程
             this.initBtn(memberGifts.saleClass,2);
-        }
+        } 
     }
 
     /**
@@ -112,16 +110,18 @@ export class GiftPage extends Widget {
 
     // 报名课程
     public applyClass() {
-        popNew('app-view-member-fillAddrModalBox',{ selectAddr:true },(addr) => {
-            if (this.props.fg === PowerFlag.offClass) {
-                this.confirmGoods(OffClassGoodsId,addr);
-            } else if (this.props.fg === PowerFlag.vipClass) {
-                this.confirmGoods(vipClassGoodsId,addr);
-            } else {
-                this.confirmGoods(saleClassGoodsId,addr);
-            }
+        if (this.props.isAble) {
+            popNew('app-view-member-fillAddrModalBox',{ selectAddr:true },(addr) => {
+                if (this.props.fg === PowerFlag.offClass) {
+                    this.confirmGoods(OffClassGoodsId,addr);
+                } else if (this.props.fg === PowerFlag.vipClass) {
+                    this.confirmGoods(vipClassGoodsId,addr);
+                } else {
+                    this.confirmGoods(saleClassGoodsId,addr);
+                }
            
-        });
+            });
+        }
     }
 
     // 购买商品
@@ -193,21 +193,30 @@ export class GiftPage extends Widget {
         });
     }
 
-    // 点击分享按钮
-    public shareBtn() {
-        popNew('app-components-bigImage-bigImage',{ img:'../../res/image/shareBg.png' });
-    }
-
     // 分享给好友
     public share() {
+        setWxConfig();
         if (this.props.fg === PowerFlag.free) {
             shareWithUrl('免费领面膜','好友送了你一份面膜，快来领取吧',`${location.origin + location.pathname}?page=free&inviteCode=${getStore('user/inviteCode','')}`,'');
 
         } else if (this.props.fg === PowerFlag.offClass) {
             shareWithUrl('免费领课程','好友送了你一个线下课程，快来领取吧',`${location.origin + location.pathname}?page=offClass&inviteCode=${getStore('user/inviteCode','')}`,'');
+
         } else {
             shareWithUrl('海龟壹号','更多精彩，就等你来',`${location.origin + location.pathname}`,'');
         }
+        popNew('app-components-bigImage-bigImage',{ img:'../../res/image/shareBg.png' });
+    }
+
+    // 邀请好友开通会员
+    public inviteShare(str:string) {
+        setWxConfig();
+        if (str === 'hBao') {
+            shareWithUrl('升级海宝','好友邀请你来成为海宝，享受海宝专属福利',`${location.origin + location.pathname}?page=upHbao&inviteCode=${getStore('user/inviteCode','')}`,'');
+        } else {
+            shareWithUrl('升级海王','好友邀请你来成为海王，享受海王专属福利',`${location.origin + location.pathname}?page=upHwang&inviteCode=${getStore('user/inviteCode','')}`,'');
+        }
+        popNew('app-components-bigImage-bigImage',{ img:'../../res/image/shareBg.png' });
     }
 }
 

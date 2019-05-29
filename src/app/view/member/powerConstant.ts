@@ -40,7 +40,7 @@ export const hBaoPower = [
     { name: '尊享礼包', img: 'power_gift.png', tpl: 'app-view-member-giftPage', fg: PowerFlag.vipGift },
     { name: '免费试用装', img: 'power_test.png', tpl: 'app-view-member-giftPage', fg: PowerFlag.free },
     { name: '线下课程', img: 'power_book.png', tpl: 'app-view-member-giftPage', fg: PowerFlag.offClass },
-    { name: '邀请码', img: 'power_invite.png', tpl: 'app-view-member-giftPage', fg: PowerFlag.inviteCode },
+    { name: '邀请好友', img: 'power_invite.png', tpl: 'app-view-member-giftPage', fg: PowerFlag.inviteCode },
     { name: '海宝返利', img: 'power_return.png', tpl: 'app-view-member-giftPage', fg: PowerFlag.rebate },
     { name: '百倍积分', img: 'power_integral.png', tpl: 'app-view-member-giftPage', fg: PowerFlag.integral }
 ];
@@ -53,7 +53,7 @@ export const hWangPower = [
     { name: '线下课程', img: 'power_book.png',tpl: 'app-view-member-giftPage', fg: PowerFlag.offClass },
     { name: '精品课程', img: 'power_diamond.png',tpl: 'app-view-member-giftPage', fg: PowerFlag.vipClass },
     { name: '销售课程', img: 'power_tv.png', tpl: 'app-view-member-giftPage', fg: PowerFlag.saleClass },
-    { name: '邀请码', img: 'power_invite.png', tpl: 'app-view-member-giftPage', fg: PowerFlag.inviteCode },
+    { name: '邀请好友', img: 'power_invite.png', tpl: 'app-view-member-giftPage', fg: PowerFlag.inviteCode },
     { name: '多方返利', img: 'power_return.png', tpl: 'app-view-member-giftPage', fg: PowerFlag.rebate },
     { name: '百倍积分', img: 'power_integral.png', tpl: 'app-view-member-giftPage', fg: PowerFlag.integral }
 ];

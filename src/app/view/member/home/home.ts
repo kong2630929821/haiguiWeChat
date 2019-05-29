@@ -22,6 +22,7 @@ export class Home extends Widget {
     public create() {
         super.create();
         this.state = State;
+        
     }
 
     // 权益
@@ -34,7 +35,7 @@ export class Home extends Widget {
 
     // 当前用户的会员等级
     public goDetail() {
-        popNew('app-view-member-powerDetail',{ userType:this.state.userType, code:this.state.inviteCode });
+        popNew('app-view-member-powerDetail',{ userType:this.state.userType });
     }
 
     // 会员等级介绍
