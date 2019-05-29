@@ -147,6 +147,7 @@ export const parseCart = (infos:any) => {
  * 收货地址解析
  */
 export const parseAddress = (infos:any) => {
+    
     const addresses = [];
     for (const info of infos) {
         const id = info[0][1];

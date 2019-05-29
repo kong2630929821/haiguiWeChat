@@ -176,6 +176,7 @@ const userLogin = (userStr:any) => {
 
         // 获取用户信息
         getUserInfo().then(res => {
+            
             const user = getStore('user');
             if (res.wx_name !== userStr.nickname) {
                 setUserName(userStr.nickname);
