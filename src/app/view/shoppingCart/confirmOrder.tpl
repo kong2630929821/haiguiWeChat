@@ -16,7 +16,7 @@
     <div w-class="goodsList">
         {{for i,v of it.orderGoodsShow}}
         <div w-class="row" style="padding:20px 30px;" on-tap="itemClick">
-            <img src="../../res/image/{{it.getImageThumbnailPath(v.cartGood.goods.images)}}" w-class="goodsImg"/>
+            <img src="{{it.mallImagPre + it.getImageThumbnailPath(v.cartGood.goods.images)}}" w-class="goodsImg"/>
             <div w-class="column">
                 <div w-class="goodsTitle" class="line2-overflow">{{v.cartGood.goods.name}}</div>
                 <div style="margin-bottom: 20px;">{{v.labelShow}}</div>

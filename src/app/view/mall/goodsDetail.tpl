@@ -11,7 +11,7 @@
                 <div w-class="name-box">
                     <div w-class="goods-name" class="line2-overflow">{{it.goods.name}}</div>
                     <div w-class="area">
-                        <img src="../../res/image/{{it.areaIcon}}" />
+                        <img src="{{it.mallImagPre + it.areaIcon}}" />
                         <div w-class="area-text">{{it.area}}</div>
                     </div>
                 </div>
@@ -54,7 +54,7 @@
         <div w-class="goods-desc">
             <div w-class="desc-title">商品详情</div>
             {{for i,v of it.goods.detail}}
-            <img src="../../res/image/{{v.image.path}}" w-class="desc-img"/>
+            <img src="{{it.mallImagPre + v.image.path}}" w-class="desc-img"/>
             {{end}}
         </div>
         

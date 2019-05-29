@@ -8,7 +8,7 @@
         {{if it1.groups.length > 0}}
         {{for i,v of it1.groups[it1.activeIndex].childs}}
         <div w-class="group2-item" on-tap="clickLevel2Item(e,{{i}})">
-            <div style="background-image: url(../../../res/image/{{it.getImageThumbnailPath(v.images)}});" w-class="group-icon" class="bg-img"></div>
+            <div style="background-image: url({{it.mallImagPre + it.getImageThumbnailPath(v.images)}});" w-class="group-icon" class="bg-img"></div>
             <div>{{v.name}}</div>
         </div>
         {{end}}

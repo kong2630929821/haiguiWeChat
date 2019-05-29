@@ -3,7 +3,7 @@
     <div w-class="body">
         <div w-class="desc">
             <div w-class="basic-msg">
-                <div style="background-image:url(../../res/image/{{it.image}});" class="bg-img" w-class="img"></div>
+                <div style="background-image:url({{it.mallImagPre + it.image}});" class="bg-img" w-class="img"></div>
                 <div w-class="content-box">
                     <div w-class="box1">
                         <div w-class="good-price">

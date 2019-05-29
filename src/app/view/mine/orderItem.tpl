@@ -6,7 +6,7 @@
     {{for i,v of it.order.orderGoods}}
     <div w-class="row" style="margin:20px 30px;" on-tap="itemClick">
         {{: goods = v[0]}}
-        <img src="../../res/image/{{it.getImageThumbnailPath(goods.images)}}" w-class="goodsImg"/>
+        <img src="{{it.mallImagPre + it.getImageThumbnailPath(goods.images)}}" w-class="goodsImg"/>
         <div w-class="column">
             <div w-class="goodsTitle" class="line2-overflow">{{goods.name}}</div>
             <div style="margin-bottom: 20px;">{{goods.labels[0][1]}}</div>

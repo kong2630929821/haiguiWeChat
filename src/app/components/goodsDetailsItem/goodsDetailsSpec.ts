@@ -1,5 +1,6 @@
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
+import { mallImagPre } from '../../config';
 import { GoodsDetails } from '../../store/memstore';
 import { calcInventorys, calcPrices, getImageThumbnailPath, popNewMessage, priceFormat } from '../../utils/tools';
 
@@ -21,7 +22,8 @@ export class GoodsDetailsSpec extends Widget {
             priceFormat,
             inventorys:calcInventorys(props.goods.labels),  // 库存
             finalSale:ret.sale,  // 卖价加上标签影响的价格
-            image:getImageThumbnailPath(props.goods.images)
+            image:getImageThumbnailPath(props.goods.images),
+            mallImagPre
         };
         super.setProps(this.props,oldProps);
     }
