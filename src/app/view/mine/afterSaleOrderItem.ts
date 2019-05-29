@@ -32,6 +32,7 @@ export class OrderItem extends Widget {
 
     public itemClick(e:any) {
         notify(e.node,'ev-item-click',null);
+        
     }
 }
 
@@ -44,12 +45,14 @@ const statusShows:any = {
     [ReturnGoodsStatus.RETURNING]:{
         btn1:'',
         btn2:'',
-        text:'客服稍后将与您联系'
+        text:'退货进行中'
     },
     [ReturnGoodsStatus.RETURNED]:{
         btn1:'',
         btn2:'',
-        text:'退货完成'
+        text:'退货完成',
+        text1:'退货成功',
+        text2:'退货失败'
     }
     
 };

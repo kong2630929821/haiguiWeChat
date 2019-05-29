@@ -102,7 +102,13 @@ export class ShoppingCart extends Widget {
 
     // 减少商品数量
     public delGoodsNum(index:number) {
-        const no = this.state.cartGoodsShow[index].cartGood.index;
+        const cartGood = this.state.cartGoodsShow[index].cartGood;
+        if (cartGood.amount - 1 === 0) {
+            popNewMessage('该宝贝不能减少了哟');
+
+            return;
+        }
+        const no = cartGood.index;
         deductCart(no,1).then(() => {
             this.calcTotalFee();
             this.paint();

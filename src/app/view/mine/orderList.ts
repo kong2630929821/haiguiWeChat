@@ -3,7 +3,7 @@ import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { cancelOrder, getOrders, payMoney, receiptOrder } from '../../net/pull';
 import { getStore, Order, OrderStatus, register } from '../../store/memstore';
-import { popNewLoading, popNewMessage } from '../../utils/tools';
+import { popNewLoading, popNewMessage, priceFormat } from '../../utils/tools';
 import { clearNoResponse, closeLoading, noResponse, orderPay, setPayLoading, setPayOids } from '../shoppingCart/confirmOrder';
 
 // tslint:disable-next-line:no-reserved-keywords
@@ -62,10 +62,15 @@ export class OrderList extends Widget {
             if (activeStatus === OrderStatus.PENDINGPAYMENT) {   // 待付款 去付款
                 payOrderNow(order,this.paySuccess.bind(this));  // 去付款
             } else if (activeStatus === OrderStatus.PENDINGRECEIPT) {  // 待收货  确认收货
-                receiptOrder(order.id).then(() => {
-                    this.typeClick(OrderStatus.PENDINGFINISH);
-                    getOrders(OrderStatus.PENDINGRECEIPT);
+                popNew('app-components-popModel-popModel',{ title:'是否确认收货' },() => {
+                    receiptOrder(order.id).then(() => {
+                        this.typeClick(OrderStatus.PENDINGFINISH);
+                        getOrders(OrderStatus.PENDINGRECEIPT);
+                    }).catch(err => {
+                        popNewMessage('出错了');
+                    });
                 });
+               
             }
         } else {  // 取消按钮
             if (activeStatus === OrderStatus.PENDINGPAYMENT) { // 待付款  取消订单
@@ -109,10 +114,15 @@ export const payOrderNow = async (order:Order,success:Function) => {
                 closeLoading();
             });
         } else {
-            await orderPay(oids);
-            popNewMessage('支付成功');
-            loading.callback(loading.widget);
-            success && success();        }
+            popNew('app-view-member-confirmPayInfo',{ money:priceFormat(totalFee) },async () => {
+                await orderPay(oids);
+                popNewMessage('支付成功');
+                loading.callback(loading.widget);
+                success && success(); 
+            },() => {
+                loading.callback(loading.widget);
+            });
+        }
     } catch (e) {
         console.log('payOrderNow err',e);
         loading.callback(loading.widget);

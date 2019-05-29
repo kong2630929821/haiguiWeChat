@@ -2,7 +2,7 @@ import { request } from '../../pi/net/ui/con_mgr';
 import { freeMaskGoodsId, OffClassGoodsId, saleClassGoodsId, sourceIp, sourcePort, vipClassGoodsId, vipMaskGoodsId, whiteGoodsId_10000A, whiteGoodsId_10000B, whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
 import { getStore,GroupsLocation, OrderStatus, setStore } from '../store/memstore';
 import { openWXPay } from '../utils/logic';
-import { popNewMessage } from '../utils/tools';
+import { popNewMessage, str2Unicode } from '../utils/tools';
 import { requestAsync } from './login';
 import { parseAddress, parseAddress2, parseAfterSale, parseAllGroups, parseArea, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
 
@@ -348,7 +348,13 @@ export const getReturnGoods = (rtype:ReturnGoodsStatus) => {
 
     return requestAsync(msg).then(res => {
         const infos = JSON.parse(res.value);
-        if (!infos) return;
+        if (!infos) {
+            const afterSales = getStore('mall/afterSales');
+            afterSales.set(rtype,[]);
+            setStore('mall/afterSales',afterSales);
+            
+            return;
+        }
         const orderIds = [];
         for (const info of infos) {
             orderIds.push(info[1]);
@@ -568,7 +574,7 @@ export const setUserName = (name:string) => {
     const msg = {
         type:'set_wx_name',
         param:{
-            wx_name:name
+            wx_name:JSON.stringify(str2Unicode(name))
         }
     };
 

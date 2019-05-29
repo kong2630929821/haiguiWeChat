@@ -24,6 +24,7 @@ export const registerWXAPI = (cb?:any) => {
 
                 } else {
                     // 安卓获取签名需要完整的URL，不完整则签名无效
+                    console.log('android wxsign =',location.href.split('#')[0]);
                     getWX_sign(location.href.split('#')[0]).then((resp:any) => {
                         initWxConfig(resp,cb);
                     });
@@ -37,12 +38,14 @@ export const registerWXAPI = (cb?:any) => {
  * 初始化wxconfig
  */
 const initWxConfig = (resp:any,cb:any) => {
+    console.log('initWxConfig success');
     resp.debug = false;
-    resp.jsApiList = ['hideMenuItems', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseImage','uploadImage', 'getLocalImgData','scanQRCode'];
+    resp.jsApiList = ['closeWindow','hideMenuItems', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseImage','uploadImage', 'getLocalImgData','scanQRCode'];
     wxconfig = resp;
     (<any>self).wx.config(resp);
 
     (<any>self).wx.ready(() => {
+        console.log('initWxConfig ready success');
         apiReady = true;
         (<any>self).wx.hideMenuItems({
             menuList: ['menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:facebook', 'menuItem:share:QZone'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3
