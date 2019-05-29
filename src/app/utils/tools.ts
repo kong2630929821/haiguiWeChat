@@ -151,6 +151,17 @@ export const unicode2Str = (infos:any) => {
     return str;
 };
 
+/**
+ * strign转unicod
+ */
+export const str2Unicode = (str:string) => {
+    const arr = [];
+    for (const v of str) {
+        arr.push(v.charCodeAt(0));
+    }
+
+    return arr;
+};
 // 时间戳格式化 毫秒为单位
 export const timestampFormat = (timestamp: number) => {
     const date = new Date(timestamp);

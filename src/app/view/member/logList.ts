@@ -41,7 +41,7 @@ export class LogList extends Widget {
                 if (r.value && r.value.length > 0) {
                     this.props.list = r.value.map(item => {
                         return {
-                            name: unicode2Str(item[0]),
+                            name: unicode2Str(JSON.parse(item[0])),
                             desc: `我的本月收益：${priceFormat(item[5])}`,
                             tel: item[1]
                         };
@@ -58,7 +58,7 @@ export class LogList extends Widget {
                 if (r.value && r.value.length > 0) {
                     this.props.list = r.value.map(item => {
                         return {
-                            name: unicode2Str(item[0]),
+                            name: unicode2Str(JSON.parse(item[0])),
                             desc: `我的本月收益：${priceFormat(item[3])}`,
                             tel: item[1]
                         };
@@ -76,7 +76,7 @@ export class LogList extends Widget {
         let list = [];
         if (this.props.fg === PageFg.baby) {
             list = [
-                { key: '海宝', value: unicode2Str(item[0]) },
+                { key: '海宝', value: unicode2Str(JSON.parse(item[0])) },
                 { key: '电话', value: item[1] },
                 { key: 'ta的海宝数量', value: `${item[2]}个` },
                 { key: 'ta的本月收益', value: priceFormat(item[3]) },
@@ -86,7 +86,7 @@ export class LogList extends Widget {
             ];
         } else {
             list = [
-                { key: '海王', value: unicode2Str(item[0]) },
+                { key: '海王', value: unicode2Str(JSON.parse(item[0])) },
                 { key: '电话', value: item[1] },
                 { key: '海宝数量', value: `${item[2]}个` },
                 { key: '我的本月收益', value: priceFormat(item[3]) },
