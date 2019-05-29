@@ -57,3 +57,21 @@
     text-align: center;
     line-height: 68px;
 }
+.invites{
+    display:flex;
+    align-items:center;
+    justify-content: space-around;
+    margin-top: 70px;
+    width: 100%;
+}
+.invitebtn{
+    width:300px;
+    height:90px;
+    background: rgba(138,74,243,1);
+    border-radius:10px;
+    border:2px solid rgba(5,5,5,0.08);
+    font-size:32px;
+    color:rgba(255,255,255,1);
+    line-height:90px;
+    text-align: center;
+}

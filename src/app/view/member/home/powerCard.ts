@@ -1,4 +1,3 @@
-import { popNew } from '../../../../pi/ui/root';
 import { notify } from '../../../../pi/widget/event';
 import { Widget } from '../../../../pi/widget/widget';
 import { copyToClipboard, popNewMessage } from '../../../utils/tools';
@@ -14,7 +13,6 @@ export class PowerCard extends Widget {
     public props:Props;
 
     public update(e:any) {
-        // popNew('app-view-member-turntable');
         notify(e.node,'ev-update',null);
     }
 
