@@ -37,8 +37,9 @@ export const registerWXAPI = (cb?:any) => {
  * 初始化wxconfig
  */
 const initWxConfig = (resp:any,cb:any) => {
+    console.log('initWxConfig success');
     resp.debug = false;
-    resp.jsApiList = ['hideMenuItems', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseImage','uploadImage', 'getLocalImgData','scanQRCode'];
+    resp.jsApiList = ['hideMenuItems', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseImage','uploadImage', 'getLocalImgData','scanQRCode','closeWindow'];
     wxconfig = resp;
     (<any>self).wx.config(resp);
 

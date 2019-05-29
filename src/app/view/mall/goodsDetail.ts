@@ -81,7 +81,11 @@ export class GoodsDetailHome extends Widget {
     // 点击描述
     public clickDescs(e:any,key:string) {
         if (key === 'verified') {
-            popNew('app-view-mine-IDCardUpload');
+            if (getStore('mall/IDCard')) {
+                popNew('app-view-mine-verify');
+            } else {
+                popNew('app-view-mine-IDCardUpload');
+            }
         } else {
             this.props.descProps = this.props.goodsItemDescs[key];
         }
