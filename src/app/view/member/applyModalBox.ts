@@ -125,7 +125,7 @@ export class ModalBoxInput extends Widget {
         } else {
             const loadding = popNewLoading('请稍后');
 
-            try {  // 验证手机号
+            try {  // 验证手机号 修改过需要重新验证
                 if (this.props.changePhone) {
                     const phoneRes = await bindPhone(this.props.phoneNum,this.props.phoneCode);
                     if (phoneRes) setStore('user/phoneNum',this.props.phoneNum);
@@ -154,7 +154,10 @@ export class ModalBoxInput extends Widget {
             }
 
             try {   // 绑定邀请码
-                if (!getStore('user/fcode','')) await bindUser(this.props.inviteCode);
+                if (getStore('user/fcode','') !== this.props.inviteCode) {
+                    const code = await bindUser(this.props.inviteCode);
+                    if (code) setStore('user/fcode',this.props.inviteCode);
+                }
 
             } catch (err) {
                 loadding.callback(loadding.widget);
