@@ -17,6 +17,8 @@ export const erlangLogicPort = '2089';
 // websock连接url
 export const wsUrl = `ws://${erlangLogicIp}:${erlangLogicPort}`;
 
+export const mallImagPre = `http://${sourceIp}:${sourcePort}/dst/imgs/`;
+
 // 未支付订单15分钟后回到购物车中，库存也会回退
 export const PendingPaymentDuration = 15 * 60 * 1000;
 
