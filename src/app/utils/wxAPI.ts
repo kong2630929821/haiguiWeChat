@@ -39,11 +39,12 @@ export const registerWXAPI = (cb?:any) => {
 const initWxConfig = (resp:any,cb:any) => {
     console.log('initWxConfig success');
     resp.debug = false;
-    resp.jsApiList = ['hideMenuItems', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseImage','uploadImage', 'getLocalImgData','scanQRCode','closeWindow'];
+    resp.jsApiList = ['closeWindow','hideMenuItems', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseImage','uploadImage', 'getLocalImgData','scanQRCode'];
     wxconfig = resp;
     (<any>self).wx.config(resp);
 
     (<any>self).wx.ready(() => {
+        console.log('initWxConfig ready success');
         apiReady = true;
         (<any>self).wx.hideMenuItems({
             menuList: ['menuItem:share:qq', 'menuItem:share:weiboApp', 'menuItem:share:facebook', 'menuItem:share:QZone'] // 要隐藏的菜单项，只能隐藏“传播类”和“保护类”按钮，所有menu项见附录3

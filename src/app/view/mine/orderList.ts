@@ -65,6 +65,8 @@ export class OrderList extends Widget {
                 receiptOrder(order.id).then(() => {
                     this.typeClick(OrderStatus.PENDINGFINISH);
                     getOrders(OrderStatus.PENDINGRECEIPT);
+                }).catch(err => {
+                    popNewMessage('出错了');
                 });
             }
         } else {  // 取消按钮

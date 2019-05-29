@@ -41,4 +41,9 @@ export const payComplete = () => {
         } 
         console.log('收益变化推送========alter_earnings_ok',r);
     });
+
+    // 退货状态变动
+    setMsgHandler('event_return_change',r => {
+        console.log('退货状态变动========event_return_change',r);
+    });
 };
