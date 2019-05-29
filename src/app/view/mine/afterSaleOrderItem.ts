@@ -1,5 +1,6 @@
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
+import { mallImagPre } from '../../config';
 import { ReturnGoodsStatus } from '../../net/pull';
 import { AfterSale } from '../../store/memstore';
 import { calcPrices, getImageThumbnailPath, priceFormat } from '../../utils/tools';
@@ -20,7 +21,8 @@ export class OrderItem extends Widget {
             getImageThumbnailPath,
             priceFormat,
             calcPrices,
-            ReturnGoodsStatus
+            ReturnGoodsStatus,
+            mallImagPre
         };
         super.setProps(this.props);
         console.log('orderdetailitem ====',this.props);

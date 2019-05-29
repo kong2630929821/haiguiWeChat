@@ -1,6 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
+import { mallImagPre } from '../../config';
 import { order, orderNow, payMoney, payOrder } from '../../net/pull';
 import { CartGoods, getStore, OrderStatus, register } from '../../store/memstore';
 import { getLastAddress } from '../../utils/logic';
@@ -31,7 +32,8 @@ export class ConfirmOrder extends Widget {
             getImageThumbnailPath,
             priceFormat,
             orderGoodsShow,
-            address:addr[2]
+            address:addr[2],
+            mallImagPre
         };
         const ret = this.calcAllFees(orderGoodsShow);
         this.props = {
