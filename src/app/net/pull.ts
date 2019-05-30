@@ -477,11 +477,14 @@ export const getInviteCode = () => {
 
 /**
  * 随机邀请码
+ * @param t 1 只获取海王邀请码 2 只获取海宝邀请码 3 获取海王或海宝邀请码
  */
-export const randomInviteCode = () => {
+export const randomInviteCode = (t:number) => {
     const msg = {
         type:'mall/members@random_invitation_code',
-        param:{}
+        param:{
+            type:t
+        }
     };
 
     return requestAsync(msg);

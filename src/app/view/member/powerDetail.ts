@@ -48,7 +48,7 @@ export class PowerDetail extends Widget {
     // 升级会员等级
     public upgradeUser() {
         if (!this.state) {  // 没有邀请码，不是当前等级的会员可以开通
-            popNew('app-view-member-applyModalBox',null,(sel) => {
+            popNew('app-view-member-applyModalBox',{ userType:this.props.userType },(sel) => {
                 if (this.props.userType === UserType.hWang) {
                     applyToUpHwang(sel);
                 } else {
