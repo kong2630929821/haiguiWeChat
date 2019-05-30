@@ -1,5 +1,5 @@
 <div w-class="good-item" on-tap="goodsItemClick"> 
-    <div w-class="good-img" class="bg-img" style="background-image:url(../../res/image/{{it.goods.images[0].path}})"></div>
+    <div w-class="good-img" class="bg-img" style="background-image:url({{it.mallImagPre + it.getImageThumbnailPath(it.goods.images)}})"></div>
     <div w-class="good-msg">
         <div w-class="good-name" class="{{it.discount || it.rebate ? 'line1-overflow' : 'line2-overflow'}}">{{it.goods.name}}</div>
         {{if it.discount || it.rebate}}

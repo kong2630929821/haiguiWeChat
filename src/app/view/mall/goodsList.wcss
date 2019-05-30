@@ -117,11 +117,13 @@
     overflow-y: auto;
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
-    display: flex;
-    flex-wrap: wrap;
+   
     padding: 20px;
 }
-
+.goods-list-items{
+    display: flex;
+    flex-wrap: wrap;
+}
 .goods-item{
     width: 50%;
 }

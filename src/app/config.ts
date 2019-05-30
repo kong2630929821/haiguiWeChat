@@ -51,3 +51,6 @@ export const vipClassGoodsId = 10020008;
 
 // 29800线下销售课程
 export const saleClassGoodsId = 10020009;
+
+// 分页请求条数
+export const maxCount = 20;

@@ -31,12 +31,14 @@
             <div w-class="groups2-item {{v.id === it.selectedLevel2Groups.id ? 'groups2-item-active' : ''}}" on-tap="selectLevel2Groups(e,{{i}})" class="{{v.id === it.selectedLevel2Groups.id ? 'groups2-item-active' : ''}}">{{v.name}}</div>
             {{end}}
         </div>
-        <div w-class="goods-list">
-            {{for i,v of it.selectedLevel2Groups.childs}}
-            <div w-class="goods-item" style="{{i % 2 === 0 ? 'padding-right:5px;' : 'padding-left:5px;'}}" ev-item-click="goodsItemClick(e,{{i}})">
-                <app-components-goodsItem-goodsItem>{goods:{{v}} }</app-components-goodsItem-goodsItem>
+        <div w-class="goods-list" on-scroll="getMoreList" id="good-list">
+            <div id="good-list-items" w-class="goods-list-items">
+                {{for i,v of it.goodsList}}
+                <div w-class="goods-item" style="{{i % 2 === 0 ? 'padding-right:5px;' : 'padding-left:5px;'}}" ev-item-click="goodsItemClick(e,{{i}})">
+                    <app-components-goodsItem-goodsItem>{goods:{{v}} }</app-components-goodsItem-goodsItem>
+                </div>
+                {{end}}
             </div>
-            {{end}}
         </div>
     </div>  
 </div>
