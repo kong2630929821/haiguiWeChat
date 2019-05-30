@@ -87,7 +87,7 @@ export class GoodsList extends Widget {
     }
 
     public goodsItemClick(e:any,index:number) {
-        popNew('app-view-mall-goodsDetail',{ goods:this.props.selectedLevel2Groups.childs[index] });
+        popNew('app-view-mall-goodsDetail',{ goods:this.props.goodsList[index] });
     }
 
     /**
@@ -98,7 +98,6 @@ export class GoodsList extends Widget {
         const oh1 = document.getElementById('good-list').offsetHeight;
         const oh2 = document.getElementById('good-list-items').offsetHeight;
         const scrollTop = document.getElementById('good-list').scrollTop; 
-        console.log(oh2 - oh1 - scrollTop);
         if (oh2 - oh1 - scrollTop < -38) {
             this.props.refresh = true;
             getGoodsInfo(this.props.selectedLevel2Groups.id,this.props.goodsList[this.props.goodsList.length - 1].id).then((goods:GoodsDetails[]) => {
