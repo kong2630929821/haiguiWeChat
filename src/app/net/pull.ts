@@ -740,7 +740,7 @@ export const uploadFile = (id:string) => {
  */
 export const getWX_sign = (url:string) => {
 
-    return fetch(`http://${sourceIp}:${sourcePort}/pt/wx/sign?url=${url}`).then(res => res.json());
+    return fetch(`http://${sourceIp}:${sourcePort}/pt/wx/sign?url=${encodeURIComponent(url)}`).then(res => res.json());
 };
 
 /**
