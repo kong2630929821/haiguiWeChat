@@ -1,4 +1,4 @@
-import { getAllGifts, getInviteCode, payMoney, upgradeHBao } from '../net/pull';
+import { getAllGifts, getInviteCode, payMoney, upgradeHBao, upgradeHWang } from '../net/pull';
 import { getStore, setStore, UserType } from '../store/memstore';
 import { popNewMessage } from './tools';
 /**
@@ -147,6 +147,21 @@ export const payToUpHbao = (sel:string,cb?:any) => {
             cb && cb();
         });
     }
+};
+
+/**
+ * 申请开通海王
+ */
+export const applyToUpHwang = (sel:string) => {
+    upgradeHWang(sel).then(() => {
+        popNewMessage('成功发送海王申请');
+    }).catch(err => {
+        if (err.result === 4007) {
+            popNewMessage('申请已在处理中');
+        } else {
+            popNewMessage('发送海王申请失败');
+        }
+    });
 };
 
 /**

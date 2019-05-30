@@ -242,6 +242,17 @@ export const calcFreightDesc = (freights:Freight[]) => {
 };
 
 /**
+ * 将Unicode字符串转成可读字符串
+ */
+export const unicode2ReadStr = (item:any) => {
+    if (item && typeof(item) === 'string') {
+        return unicode2Str(JSON.parse(item));
+    }
+
+    return unicode2Str(item);
+};
+
+/**
  * 函数防抖
  * @param func 函数
  */

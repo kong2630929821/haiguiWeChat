@@ -3,7 +3,7 @@
         <div class="swiper-wrapper" on-tap="clickSlide">
             {{for i,v of it.list}}
             {{: let path = it.mod === 1 ? it.getImageThumbnailPath(v.images) : v}}
-            <div class="swiper-slide bg-img" style="background-image:url({{it.mallImagPre + path}});"></div>
+            <div class="swiper-slide bg-img" style="background-image:url(../../res/image/{{path}});"></div>
             {{end}}
         </div>
     </div>
