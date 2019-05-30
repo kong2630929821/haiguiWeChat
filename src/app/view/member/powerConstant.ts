@@ -54,6 +54,6 @@ export const hWangPower = [
     { name: '精品课程', img: 'power_diamond.png',tpl: 'app-view-member-giftPage', fg: PowerFlag.vipClass },
     { name: '销售课程', img: 'power_tv.png', tpl: 'app-view-member-giftPage', fg: PowerFlag.saleClass },
     { name: '邀请好友', img: 'power_invite.png', tpl: 'app-view-member-giftPage', fg: PowerFlag.inviteCode },
-    { name: '多方返利', img: 'power_return.png', tpl: 'app-view-member-giftPage', fg: PowerFlag.rebate },
-    { name: '百倍积分', img: 'power_integral.png', tpl: 'app-view-member-giftPage', fg: PowerFlag.integral }
+    { name: '多方返利', img: 'power_return.png', tpl: 'app-view-member-giftPage', fg: PowerFlag.rebate }
+    // { name: '百倍积分', img: 'power_integral.png', tpl: 'app-view-member-giftPage', fg: PowerFlag.integral }
 ];
