@@ -11,19 +11,19 @@ import { unicode2Str } from '../../utils/tools';
 import { setWxConfig } from '../../utils/wxAPI';
 import { PowerFlag } from '../member/powerConstant';
 
+export const localInviteCode = /inviteCode=([a-zA-Z0-9]+)&*/.exec(location.search) ? /inviteCode=([a-zA-Z0-9]+)&*/.exec(location.search)[1] :'';
 // ============================== 导出
 export const run = (cb): void =>  {
     addWidget(document.body, 'pi-ui-root');
     const page = /page=([a-zA-Z]+)&*/.exec(location.search) ? /page=([a-zA-Z]+)&*/.exec(location.search)[1] :'';
-    const inviteCode = /inviteCode=([a-zA-Z0-9]+)&*/.exec(location.search) ? /inviteCode=([a-zA-Z0-9]+)&*/.exec(location.search)[1] :'';
-    if (inviteCode && inviteCode !== 'undefined') setStore('user/fcode',inviteCode);
+    if (localInviteCode && localInviteCode !== 'undefined') setStore('user/fcode',localInviteCode);
 
     if (page === 'free') {
         // 打开免费试用装
-        popNew('app-view-member-giftPage',{ fg:PowerFlag.free, isCurVip:true });
+        popNew('app-view-member-giftPage',{ fg:PowerFlag.free, isCurVip:true, ableGain:localInviteCode && localInviteCode !== 'undefined'  });
     } else if (page === 'offClass') {
         // 打开线下课程
-        popNew('app-view-member-giftPage',{ fg:PowerFlag.offClass, isCurVip:true  });
+        popNew('app-view-member-giftPage',{ fg:PowerFlag.offClass, isCurVip:true, ableGain:localInviteCode && localInviteCode !== 'undefined' });
     } else if (page === 'turntable') {
         // 打开大转盘
         popNew('app-view-member-turntable');

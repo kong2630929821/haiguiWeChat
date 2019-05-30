@@ -2,11 +2,12 @@ import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { freeMaskGoodsId, OffClassGoodsId, saleClassGoodsId, vipClassGoodsId, vipMaskGoodsId } from '../../config';
-import { getAllGifts, getGoodsDetails, getInviteRebate, orderActiveGoods, payMoney, payOrder } from '../../net/pull';
+import { getAllGifts, getGoodsDetails, orderActiveGoods, payMoney, payOrder } from '../../net/pull';
 import { Address, getStore, register, UserType } from '../../store/memstore';
 import { applyToUpHwang, payToUpHbao } from '../../utils/logic';
 import { popNewLoading, popNewMessage, priceFormat } from '../../utils/tools';
 import { setWxConfig, shareWithUrl } from '../../utils/wxAPI';
+import { localInviteCode } from '../base/main';
 import { PowerFlag } from './powerConstant';
 interface Props {
     fg:PowerFlag;   // 进入此页面的标记
@@ -15,6 +16,7 @@ interface Props {
     userType:UserType;  // 用户会员等级
     btn:string;     // 按钮名称
     isAble:boolean;  // 是否可以领取
+    ableGain:boolean;  // 是否可以领取试用装或线下课程
 }
 // tslint:disable-next-line:no-reserved-keywords
 declare var module: any;
@@ -93,6 +95,11 @@ export class GiftPage extends Widget {
 
     // 免费领取
     public freeReceive() {
+        if (localInviteCode === getStore('user/inviteCode')) {
+            popNewMessage('不能领取自己分享的试用装');
+
+            return;
+        }
         if (this.props.isAble) {
             popNew('app-view-member-fillAddrModalBox',{ selectAddr:true },(addr) => {
                 if (this.props.fg === PowerFlag.free) {
@@ -110,6 +117,11 @@ export class GiftPage extends Widget {
 
     // 报名课程
     public applyClass() {
+        if (localInviteCode === getStore('user/inviteCode')) {
+            popNewMessage('不能领取自己分享的线下课程');
+
+            return;
+        }
         if (this.props.isAble) {
             popNew('app-view-member-fillAddrModalBox',{ selectAddr:true },(addr) => {
                 if (this.props.fg === PowerFlag.offClass) {
@@ -138,15 +150,15 @@ export class GiftPage extends Widget {
                     popNew('app-view-member-confirmPayInfo',{ money: priceFormat(price) },() => {
                         if (cash < price) { 
                             register('flags/activityGoods',() => {
-                                this.buyGoods(goods,order.orderInfo[0]);
+                                this.buyGoods(order.orderInfo[0]);
                             });
                             payMoney(price - cash,'activity');
                         } else {
-                            this.buyGoods(goods,order.orderInfo[0]);
+                            this.buyGoods(order.orderInfo[0]);
                         }
                     });
                 } else {
-                    this.buyGoods(goods,order.orderInfo[0]);
+                    this.buyGoods(order.orderInfo[0]);
                 }
                 loadding && loadding.callback(loadding.widget);
 
@@ -168,10 +180,9 @@ export class GiftPage extends Widget {
     }
 
     // 购买商品
-    public buyGoods(goods:number,oid:number) {
-        payOrder(oid).then(pay => {
+    public buyGoods(oid:number) {
+        payOrder(oid).then(() => {
             if (this.props.fg === PowerFlag.free || this.props.fg === PowerFlag.offClass) {
-                getInviteRebate(goods);  // 试用装和线下课程需要调返利接口给上级返利
                 popNew('app-view-member-turntable');  // 打开大转盘
             } 
             popNewMessage('支付成功');
