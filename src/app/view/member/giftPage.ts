@@ -2,7 +2,7 @@ import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { freeMaskGoodsId, OffClassGoodsId, saleClassGoodsId, vipClassGoodsId, vipMaskGoodsId } from '../../config';
-import { getAllGifts, getGoodsDetails, getInviteRebate, orderActiveGoods, payMoney, payOrder } from '../../net/pull';
+import { getAllGifts, getGoodsDetails, orderActiveGoods, payMoney, payOrder } from '../../net/pull';
 import { Address, getStore, register, UserType } from '../../store/memstore';
 import { applyToUpHwang, payToUpHbao } from '../../utils/logic';
 import { popNewLoading, popNewMessage, priceFormat } from '../../utils/tools';
@@ -138,15 +138,15 @@ export class GiftPage extends Widget {
                     popNew('app-view-member-confirmPayInfo',{ money: priceFormat(price) },() => {
                         if (cash < price) { 
                             register('flags/activityGoods',() => {
-                                this.buyGoods(goods,order.orderInfo[0]);
+                                this.buyGoods(order.orderInfo[0]);
                             });
                             payMoney(price - cash,'activity');
                         } else {
-                            this.buyGoods(goods,order.orderInfo[0]);
+                            this.buyGoods(order.orderInfo[0]);
                         }
                     });
                 } else {
-                    this.buyGoods(goods,order.orderInfo[0]);
+                    this.buyGoods(order.orderInfo[0]);
                 }
                 loadding && loadding.callback(loadding.widget);
 
@@ -168,10 +168,9 @@ export class GiftPage extends Widget {
     }
 
     // 购买商品
-    public buyGoods(goods:number,oid:number) {
-        payOrder(oid).then(pay => {
+    public buyGoods(oid:number) {
+        payOrder(oid).then(() => {
             if (this.props.fg === PowerFlag.free || this.props.fg === PowerFlag.offClass) {
-                getInviteRebate(goods);  // 试用装和线下课程需要调返利接口给上级返利
                 popNew('app-view-member-turntable');  // 打开大转盘
             } 
             popNewMessage('支付成功');
