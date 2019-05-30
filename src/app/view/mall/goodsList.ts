@@ -1,6 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
+import { mallImagPre } from '../../config';
 import { getStore, Groups, GroupsLocation } from '../../store/memstore';
 import { getImageMainPath } from '../../utils/tools';
 
@@ -27,7 +28,8 @@ export class GoodsList extends Widget {
             allStyleMod:StyleMod,
             classificationGroups:getStore('mall/groups').get(GroupsLocation.CLASSIFICATION),    // 分类页一级分组
             level1GroupsExpanded:false,   // 是否展开一级分组下拉页
-            getImageMainPath
+            getImageMainPath,
+            mallImagPre
         };
         super.setProps(this.props);
         console.log('GoodsList ====',this.props);

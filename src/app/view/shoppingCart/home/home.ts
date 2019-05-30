@@ -1,6 +1,7 @@
 import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
+import { mallImagPre } from '../../../config';
 import { addCart, deductCart } from '../../../net/pull';
 import { CartGoods, register, setStore } from '../../../store/memstore';
 import { calcPrices, getImageThumbnailPath, popNewMessage, priceFormat } from '../../../utils/tools';
@@ -34,7 +35,8 @@ export class ShoppingCart extends Widget {
             canOrder:false,           // 是否可以下单
             totalAmount:0,
             getImageThumbnailPath,
-            priceFormat
+            priceFormat,
+            mallImagPre
         };
         super.setProps(this.props);
         this.calcTotalFee();

@@ -1,5 +1,6 @@
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
+import { mallImagPre } from '../../config';
 import { Groups } from '../../store/memstore';
 import { getImageThumbnailPath } from '../../utils/tools';
 
@@ -15,7 +16,8 @@ export class GroupsOne extends Widget {
     public setProps(props:Props,oldProps:Props) {
         this.props = {
             ...props,
-            getImageThumbnailPath
+            getImageThumbnailPath,
+            mallImagPre
         };
         super.setProps(this.props,oldProps);
         // console.log('GroupsOne ----------------',props);

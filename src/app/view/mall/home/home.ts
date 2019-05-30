@@ -1,6 +1,7 @@
 import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
+import { mallImagPre } from '../../../config';
 import { Groups, GroupsLocation, register } from '../../../store/memstore';
 import { getImageThumbnailPath } from '../../../utils/tools';
 import { StyleMod } from '../goodsList';
@@ -26,7 +27,8 @@ export class MallHome extends Widget {
             ...props,
             GroupsLocation,
             getFixLocationGroup,
-            getImageThumbnailPath
+            getImageThumbnailPath,
+            mallImagPre
         };
         super.setProps(this.props);
     }
