@@ -24,7 +24,7 @@
         {{if !it.ableGain}}
         <div w-class="shareBtn" on-tap="share">分享给好友</div>
         {{else}}
-        <div w-class="btn" style="width: 200px;margin-top:0;" on-tap="applyClass">{{it.btn}}</div>
+        <div w-class="btn" style="width: 200px;" on-tap="applyClass">{{it.btn}}</div>
         {{end}}
     </div>
     

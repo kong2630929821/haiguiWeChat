@@ -15,6 +15,7 @@ interface Props {
     selected:string; // 选择的礼包
     needSelGift:boolean; // 是否需要选择礼包
     changePhone:boolean; // 是否修改手机号
+    userType:UserType;  // 用户会员等级
 }
 /**
  * 填信息输入框弹窗
@@ -32,7 +33,8 @@ export class ModalBoxInput extends Widget {
         fcode:'',
         selected:'A',
         needSelGift:true,
-        changePhone:true
+        changePhone:true,
+        userType:UserType.hBao
     };
 
     public setProps(props:any) {
@@ -101,7 +103,8 @@ export class ModalBoxInput extends Widget {
 
     // 获取邀请码
     public getInvoteCode() {
-        randomInviteCode().then(r => {
+        const t = this.props.userType === UserType.hWang ? 1 :3;
+        randomInviteCode(t).then(r => {  // 升级海王只能获取海王邀请码
             this.props.inviteCode = r.code;
             this.paint();
         });
