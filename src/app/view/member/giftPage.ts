@@ -2,9 +2,9 @@ import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { freeMaskGoodsId, OffClassGoodsId, saleClassGoodsId, vipClassGoodsId, vipMaskGoodsId } from '../../config';
-import { getAllGifts, getGoodsDetails, getInviteRebate, orderActiveGoods, payMoney, payOrder, upgradeHWang } from '../../net/pull';
+import { getAllGifts, getGoodsDetails, getInviteRebate, orderActiveGoods, payMoney, payOrder } from '../../net/pull';
 import { Address, getStore, register, UserType } from '../../store/memstore';
-import { payToUpHbao } from '../../utils/logic';
+import { applyToUpHwang, payToUpHbao } from '../../utils/logic';
 import { popNewLoading, popNewMessage, priceFormat } from '../../utils/tools';
 import { setWxConfig, shareWithUrl } from '../../utils/wxAPI';
 import { PowerFlag } from './powerConstant';
@@ -133,24 +133,28 @@ export class GiftPage extends Widget {
             orderActiveGoods([goods,1,res.labels[0][0]],addr.id).then(order => { 
                 const cash = getStore('balance/cash');
                 const price = order.orderInfo[3] + order.orderInfo[5]; // 商品总价+运费
-                // 提示需要支付费用
-                popNew('app-view-member-confirmPayInfo',{ money: priceFormat(price) },() => {
-                    if (cash < price) { 
-                        register('flags/activityGoods',() => {
+                if (price > 0) {
+                    // 提示需要支付费用
+                    popNew('app-view-member-confirmPayInfo',{ money: priceFormat(price) },() => {
+                        if (cash < price) { 
+                            register('flags/activityGoods',() => {
+                                this.buyGoods(goods,order.orderInfo[0]);
+                            });
+                            payMoney(price - cash,'activity');
+                        } else {
                             this.buyGoods(goods,order.orderInfo[0]);
-                        });
-                        payMoney(price - cash,'activity');
-                    } else {
-                        this.buyGoods(goods,order.orderInfo[0]);
-                    }
-                });
+                        }
+                    });
+                } else {
+                    this.buyGoods(goods,order.orderInfo[0]);
+                }
                 loadding && loadding.callback(loadding.widget);
 
             }).catch(err => {
                 if (err.result === 2124) {
                     popNewMessage('库存不足');
                 } else if (err.type === 2132) {
-                    popNewMessage('已全部领完');
+                    popNewMessage('该商品已领过');
                 } else {
                     popNewMessage('领取失败');
                 }
@@ -168,6 +172,7 @@ export class GiftPage extends Widget {
         payOrder(oid).then(pay => {
             if (this.props.fg === PowerFlag.free || this.props.fg === PowerFlag.offClass) {
                 getInviteRebate(goods);  // 试用装和线下课程需要调返利接口给上级返利
+                popNew('app-view-member-turntable');  // 打开大转盘
             } 
             popNewMessage('支付成功');
             getAllGifts();  // 重新获取所有礼包
@@ -186,15 +191,13 @@ export class GiftPage extends Widget {
                     payToUpHbao(sel);
                 });
             } else {
-                upgradeHWang(sel).then(() => {
-                    popNewMessage('成功发送海王申请');
-                });
+                applyToUpHwang(sel);
             }
         });
     }
 
     // 分享给好友
-    public share() {
+    public share(pop:boolean = true) {
         setWxConfig();
         if (this.props.fg === PowerFlag.free) {
             shareWithUrl('免费领面膜','好友送了你一份面膜，快来领取吧',`${location.origin + location.pathname}?page=free&inviteCode=${getStore('user/inviteCode','')}`,'');
@@ -205,7 +208,9 @@ export class GiftPage extends Widget {
         } else {
             shareWithUrl('海龟壹号','更多精彩，就等你来',`${location.origin + location.pathname}`,'');
         }
-        popNew('app-components-bigImage-bigImage',{ img:'../../res/image/shareBg.png' });
+        if (pop) {
+            popNew('app-components-bigImage-bigImage',{ img:'../../res/image/shareBg.png' });
+        }
     }
 
     // 邀请好友开通会员
@@ -222,5 +227,5 @@ export class GiftPage extends Widget {
 
 register('flags/wxReady',() => {
     const w = forelet.getWidget(WIDGET_NAME);
-    w && w.share();
+    w && w.share(false);
 });

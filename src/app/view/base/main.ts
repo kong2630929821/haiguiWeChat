@@ -15,7 +15,7 @@ import { PowerFlag } from '../member/powerConstant';
 export const run = (cb): void =>  {
     addWidget(document.body, 'pi-ui-root');
     const page = /page=([a-zA-Z]+)&*/.exec(location.search) ? /page=([a-zA-Z]+)&*/.exec(location.search)[1] :'';
-    const inviteCode = /inviteCode=([a-zA-Z]+)&*/.exec(location.search) ? /inviteCode=([a-zA-Z]+)&*/.exec(location.search)[1] :'';
+    const inviteCode = /inviteCode=([a-zA-Z0-9]+)&*/.exec(location.search) ? /inviteCode=([a-zA-Z0-9]+)&*/.exec(location.search)[1] :'';
     if (inviteCode && inviteCode !== 'undefined') setStore('user/fcode',inviteCode);
 
     if (page === 'free') {
@@ -29,10 +29,10 @@ export const run = (cb): void =>  {
         popNew('app-view-member-turntable');
     } else if (page === 'upHbao') {
         // 升级海宝
-        popNew('app-view-member-powerDetail',{ userType:UserType.hBao,upgrade:true });
+        popNew('app-view-member-powerDetail',{ userType:UserType.hBao });
     } else if (page === 'upHwang') { 
         // 升级海王
-        popNew('app-view-member-powerDetail',{ userType:UserType.hWang,upgrade:true });
+        popNew('app-view-member-powerDetail',{ userType:UserType.hWang });
     } else {
         // 打开首页面
         popNew('app-view-base-app');
