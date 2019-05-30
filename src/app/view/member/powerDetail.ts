@@ -1,10 +1,8 @@
 import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { upgradeHWang } from '../../net/pull';
 import { getStore, register, UserType } from '../../store/memstore';
-import { getUserTypeShow, payToUpHbao } from '../../utils/logic';
-import { popNewMessage } from '../../utils/tools';
+import { applyToUpHwang, getUserTypeShow, payToUpHbao } from '../../utils/logic';
 import * as Constant from './powerConstant';
 interface Props {
     list:string[];  // 权益详情介绍
@@ -52,9 +50,7 @@ export class PowerDetail extends Widget {
         if (!this.state) {  // 没有邀请码，不是当前等级的会员可以开通
             popNew('app-view-member-applyModalBox',null,(sel) => {
                 if (this.props.userType === UserType.hWang) {
-                    upgradeHWang(sel).then(() => {
-                        popNewMessage('成功发送海王申请');
-                    });
+                    applyToUpHwang(sel);
                 } else {
                     payToUpHbao(sel,() => {
                         this.ok && this.ok();
@@ -72,7 +68,7 @@ export class PowerDetail extends Widget {
 
 register('user',(r) => {
     const w = forelet.getWidget(WIDGET_NAME);
-    if (r.userType === w.props.userType) {
+    if (w && r.userType === w.props.userType) {
         forelet.paint(r.inviteCode);
     }
 });

@@ -2,9 +2,8 @@
 import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
-import { upgradeHWang } from '../../../net/pull';
 import { register, UserType } from '../../../store/memstore';
-import { getUserTypeShow, payToUpHbao } from '../../../utils/logic';
+import { applyToUpHwang, getUserTypeShow, payToUpHbao } from '../../../utils/logic';
 import { copyToClipboard, popNewMessage, priceFormat } from '../../../utils/tools';
 import { hBaoPower, hWangPower } from '../powerConstant';
 
@@ -60,9 +59,7 @@ export class Home extends Widget {
     public upgradeUser(user:string) {
         popNew('app-view-member-applyModalBox',null,(sel) => {
             if (user === 'hWang') {
-                upgradeHWang(sel).then(() => {
-                    popNewMessage('成功发送海王申请');
-                });
+                applyToUpHwang(sel);
             } else {
                 payToUpHbao(sel);
                 register('flags/upgradeHbao',() => {

@@ -115,10 +115,23 @@ export const payOrderNow = async (order:Order,success:Function) => {
             });
         } else {
             popNew('app-view-member-confirmPayInfo',{ money:priceFormat(totalFee) },async () => {
-                await orderPay(oids);
-                popNewMessage('支付成功');
-                loading.callback(loading.widget);
-                success && success(); 
+                try {
+                    await orderPay(oids);
+                    popNewMessage('支付成功');
+                    loading.callback(loading.widget);
+                    success && success(); 
+                } catch (err) {
+                    loading.callback(loading.widget);
+                    if (err.type === 2132) {
+                        popNewMessage('该商品已领过');
+                        cancelOrder(order.id).then(() => {
+                            getOrders(OrderStatus.PENDINGPAYMENT);
+                        });
+                    } else {
+                        popNewMessage('支付失败');
+                    }
+                }
+               
             },() => {
                 loading.callback(loading.widget);
             });
