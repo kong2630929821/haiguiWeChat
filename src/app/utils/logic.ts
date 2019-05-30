@@ -103,7 +103,8 @@ enum CashLogType {
     shopping,    // 购物
     reCash,     // 提现退款
     other,       // 其他
-    turntable    // 大转盘
+    turntable,    // 大转盘
+    shopReturn     // 购物退款
 }
 // 现金来源名称
 const CashLogName = {
@@ -116,7 +117,8 @@ const CashLogName = {
     shopping:'购物',
     reCash:'提现退款',
     other:'其他',
-    turntable:'大转盘'
+    turntable:'大转盘',
+    shopReturn:'购物退款'     // 购物退款
 };
 
 /**

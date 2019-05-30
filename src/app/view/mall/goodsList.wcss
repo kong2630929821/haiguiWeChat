@@ -71,16 +71,16 @@
 .groups1{
     background-color: #fff;
     padding: 20px 28px;
-    max-height: 300px;
+    max-height: 500px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
 }
 .groups1-scroll{
     display: flex;
     flex-wrap: wrap;
     height: 100%;
-    overflow-x: hidden;
-    overflow-y: auto;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
     background-color: #fff;
 }
 .groups1-item{

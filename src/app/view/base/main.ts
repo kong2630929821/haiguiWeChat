@@ -5,6 +5,7 @@
  */
 
 import { backCall1, backList, popNew } from '../../../pi/ui/root';
+import { userAgent } from '../../../pi/util/html';
 import { addWidget } from '../../../pi/widget/util';
 import { setStore, UserType } from '../../store/memstore';
 import { unicode2Str } from '../../utils/tools';
@@ -50,6 +51,7 @@ declare var wx;
 const backCall = () => {
     // 当前URL
     const CUR_URL = location.origin + location.pathname;
+    const agent = userAgent('');
     let search = location.search.split('?from=0')[0];
     search = search.split('&from=0')[0];
     if (search) {
@@ -61,7 +63,11 @@ const backCall = () => {
         const win = top.window; // 取顶层窗口
     // 注册系统返回事件
         win.onpopstate = () => {
-            win.history.pushState({}, '',  `${CUR_URL}${search}from=0`);
+            if (agent.os.name !== 'ios') {  // iOS返回本不会刷新不需要设置状态
+                win.history.pushState({}, '', `${CUR_URL}${search}from=0`);
+            } else {
+                win.history.pushState({}, '', '');
+            }
             if (backList.length > 1) {
                 backCall1();
             } else {
@@ -91,8 +97,13 @@ const backCall = () => {
             console.log('popstate ===',backList.map(item => item.widget.name));
         };
         console.log('location href1',location.href);
-        win.history.pushState({}, '', `${CUR_URL}${search}from=0`);
-        console.log('location href2',location.href);
+       
+        if (agent.os.name !== 'ios') {  // iOS返回本不会刷新不需要设置状态
+            win.history.pushState({}, '', `${CUR_URL}${search}from=0`);
+            console.log('location href2',location.href);
+        } else {
+            win.history.pushState({}, '', '');
+        }
     // tslint:disable-next-line:no-empty
     } catch (e) {
     }

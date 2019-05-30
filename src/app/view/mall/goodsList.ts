@@ -90,6 +90,10 @@ export class GoodsList extends Widget {
         popNew('app-view-mall-goodsDetail',{ goods:this.props.goodsList[index] });
     }
 
+    public closeClick() {
+        this.props.level1GroupsExpanded = false;
+        this.paint();
+    }
     /**
      * 页面滑动，加载更多数据
      */

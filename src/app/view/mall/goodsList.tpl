@@ -23,7 +23,7 @@
                     {{end}}
                 </div>
             </div>
-            <div w-class="drop-down-mask"></div>
+            <div w-class="drop-down-mask" on-tap="closeClick"></div>
         </div>
         {{end}}
         <div w-class="groups2" class="groups2">

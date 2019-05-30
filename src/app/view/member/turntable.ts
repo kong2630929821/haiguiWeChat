@@ -42,6 +42,21 @@ export class Turntable extends Widget {
         this.state = State;
         // 10秒刷新一次中奖列表
         this.timedRefresh();
+         // 获取中奖列表
+        getDrawsLog().then(r => {
+            this.state.showDataList = r.value;
+            this.state.showDataList.forEach((element,index) => {
+                this.state.showDataList[index][0] = element[0].replace(/(\d{3})\d{4}(\d{4})/,'$1****$2');
+                this.state.showDataList[index][1] = (element[1] / 100).toFixed(2);
+            });
+            this.paint();
+        });
+        // 获取抽奖次数
+        getNumberOfDraws().then(r => {
+            console.log('抽奖次数',r);
+            this.state.freeCount = r.value[0];
+            this.paint();
+        });
     }
     /**
      * 初始转盘
@@ -186,13 +201,15 @@ register('user/userType',(r) => {
             State.showDataList[index][0] = element[0].replace(/(\d{3})\d{4}(\d{4})/,'$1****$2');
             State.showDataList[index][1] = (element[1] / 100).toFixed(2);
         });
+        forelet.paint(State);
     });
      // 获取抽奖次数
     getNumberOfDraws().then(r => {
         console.log('抽奖次数',r);
         State.freeCount = r.value[0];
+        forelet.paint(State);
     });
-    forelet.paint(State);
+    
 });
 
 // ===================================================== 立即执行
