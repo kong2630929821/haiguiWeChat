@@ -97,7 +97,7 @@ export class FillAddrModalBox extends Widget {
 
     // 获取邀请码
     public getInvoteCode() {
-        randomInviteCode().then(r => {
+        randomInviteCode(3).then(r => {
             this.props.inviteCode = r.code;
             this.paint();
         });

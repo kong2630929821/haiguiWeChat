@@ -195,7 +195,7 @@ export class GiftPage extends Widget {
 
     // 开通会员
     public openVIP() {
-        popNew('app-view-member-applyModalBox',null,(sel) => {
+        popNew('app-view-member-applyModalBox',{ userType:this.props.userType },(sel) => {
             if (this.props.userType === UserType.hBao) {
                 payToUpHbao(sel);
                 register('flags/upgradeHbao',() => {
