@@ -7,6 +7,7 @@ import { Address, getStore, register, UserType } from '../../store/memstore';
 import { applyToUpHwang, payToUpHbao } from '../../utils/logic';
 import { popNewLoading, popNewMessage, priceFormat } from '../../utils/tools';
 import { setWxConfig, shareWithUrl } from '../../utils/wxAPI';
+import { localInviteCode } from '../base/main';
 import { PowerFlag } from './powerConstant';
 interface Props {
     fg:PowerFlag;   // 进入此页面的标记
@@ -15,6 +16,7 @@ interface Props {
     userType:UserType;  // 用户会员等级
     btn:string;     // 按钮名称
     isAble:boolean;  // 是否可以领取
+    ableGain:boolean;  // 是否可以领取试用装或线下课程
 }
 // tslint:disable-next-line:no-reserved-keywords
 declare var module: any;
@@ -93,6 +95,11 @@ export class GiftPage extends Widget {
 
     // 免费领取
     public freeReceive() {
+        if (localInviteCode === getStore('user/inviteCode')) {
+            popNewMessage('不能领取自己分享的试用装');
+
+            return;
+        }
         if (this.props.isAble) {
             popNew('app-view-member-fillAddrModalBox',{ selectAddr:true },(addr) => {
                 if (this.props.fg === PowerFlag.free) {
@@ -110,6 +117,11 @@ export class GiftPage extends Widget {
 
     // 报名课程
     public applyClass() {
+        if (localInviteCode === getStore('user/inviteCode')) {
+            popNewMessage('不能领取自己分享的线下课程');
+
+            return;
+        }
         if (this.props.isAble) {
             popNew('app-view-member-fillAddrModalBox',{ selectAddr:true },(addr) => {
                 if (this.props.fg === PowerFlag.offClass) {

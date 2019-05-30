@@ -38,9 +38,7 @@ export class Turntable extends Widget {
     };
     public create() {
         super.create();
-        this.initTurntable();
-        this.ledTimer();
-        clearInterval(this.props.timer);
+        this.initTurntable();  
         this.state = State;
         // 10秒刷新一次中奖列表
         this.timedRefresh();
@@ -155,7 +153,6 @@ export class Turntable extends Widget {
      * led定时器
      */
     public ledTimer() {
-
         this.props.LEDTimer = setInterval(() => {
             this.props.ledShow = !this.props.ledShow;
             this.paint();
@@ -164,6 +161,7 @@ export class Turntable extends Widget {
 
     public destroy() {
         clearInterval(this.props.LEDTimer);
+        clearInterval(this.props.timer);
 
         return true;
     }
