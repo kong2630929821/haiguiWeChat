@@ -29,7 +29,7 @@ export enum PowerFlag {
     free,   // 免费试用装
     offClass,  // 线下课程  有分享按钮
     integral,   // 10倍积分
-    inviteCode,   // 邀请码
+    inviteCode,   // 邀请好友
     rebate,    // 返利
     saleClass,   // 销售课程
     vipClass   // 精品课程

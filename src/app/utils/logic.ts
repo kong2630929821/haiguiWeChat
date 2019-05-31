@@ -1,7 +1,6 @@
-import { popNew } from '../../pi/ui/root';
 import { getAllGifts, getInviteCode, payMoney, upgradeHBao, upgradeHWang } from '../net/pull';
 import { getStore, setStore, UserType } from '../store/memstore';
-import { popNewMessage, priceFormat } from './tools';
+import { popNewMessage } from './tools';
 /**
  * 本地方法
  */
@@ -119,7 +118,7 @@ const CashLogName = {
     reCash:'提现退款',
     other:'其他',
     turntable:'大转盘',
-    shopReturn:'购物退款'     // 购物退款
+    shopReturn:'购物退款'
 };
 
 /**
@@ -140,24 +139,21 @@ export const payToUpHbao = (sel:string,cb?:any) => {
     if (cash < fee) { 
         payMoney(fee - cash,'hBao');
     } else {
-        popNew('app-view-member-confirmPayInfo',{ money:priceFormat(fee) },() => {
-            upgradeHBao(sel).then(() => {
-                popNewMessage('升级海宝成功');
-                setStore('user/userType', UserType.hBao);
-                getInviteCode().then(res => {
-                    setStore('user/inviteCode',res.code);
-                });
-                getAllGifts();  // 重新获取所有礼包
-                cb && cb();
-            }).catch(err => {
-                if (err.result === 4012) {
-                    popNewMessage('获取上级失败');
-                } else {
-                    popNewMessage('升级海宝失败');
-                }
+        upgradeHBao(sel).then(() => {
+            popNewMessage('升级海宝成功');
+            setStore('user/userType', UserType.hBao);
+            getInviteCode().then(res => {
+                setStore('user/inviteCode',res.code);
             });
+            getAllGifts();  // 重新获取所有礼包
+            cb && cb();
+        }).catch(err => {
+            if (err.result === 4012) {
+                popNewMessage('获取上级失败');
+            } else {
+                popNewMessage('升级海宝失败');
+            }
         });
-
     }
 };
 
@@ -172,7 +168,7 @@ export const applyToUpHwang = (sel:string) => {
             popNewMessage('申请已在处理中');
         } else if (err.result === 4012) {
             popNewMessage('获取上级失败');
-        } else  {
+        } else {
             popNewMessage('发送海王申请失败');
         }
     });
