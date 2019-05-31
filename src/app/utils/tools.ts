@@ -251,3 +251,21 @@ export const unicode2ReadStr = (item:any) => {
 
     return unicode2Str(item);
 };
+
+/**
+ * 函数防抖
+ * @param func 函数
+ */
+export const throttle = (func) => {
+    const intervel = 300;
+    let lastTime = 0;
+    
+    return  () => {
+        const nowTime = + new Date();
+        const args = arguments;
+        if (nowTime - lastTime > intervel) {
+            func.apply(undefined, args);
+            lastTime = nowTime;
+        }
+    };
+};

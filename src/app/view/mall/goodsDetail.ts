@@ -150,7 +150,14 @@ export class GoodsDetailHome extends Widget {
 
             popNew('app-view-shoppingCart-confirmOrder',{ orderGoods:cartGoods,buyNow:true });
         } else {
-            addCart(this.props.goods.id,this.props.amount,sku[0]).then(() => {
+            const goodId = this.props.goods.id;
+            const num = calcCartGoodsNum(goodId);
+            if (num >= sku[3]) {
+                popNewMessage('库存不足(含已加购件数)'); 
+                
+                return;
+            }
+            addCart(goodId,this.props.amount,sku[0]).then(() => {
                 popNewMessage('添加成功');
             });
         }
@@ -175,6 +182,16 @@ export class GoodsDetailHome extends Widget {
         this.paint();
     }
 }
+
+// 计算加入购物车的商品数量
+const calcCartGoodsNum = (goodId:number) => {
+    const cartGoods = getStore('mall/cartGoods');
+    for (const cart of cartGoods) {
+        if (cart.goods.id === goodId) return cart.amount;
+    }
+
+    return 0;
+};
 
 // 购物车变动
 register('mall/cartGoods',(cartGoods:CartGoods[]) => {

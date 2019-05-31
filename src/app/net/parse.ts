@@ -26,11 +26,12 @@ export const parseGroups = (location:GroupsLocation,info:any) => {
         for (const v of childsOrigin) {
             childs.push(parseGroups(location,v));
         }
-    } else { // 页组
-        for (const v of childsOrigin) {
-            childs.push(parseGoodsDetail(v));
-        }
-    }
+    } 
+    // else { // 页组
+    //     for (const v of childsOrigin) {
+    //         childs.push(parseGoodsDetail(v));
+    //     }
+    // }
     ret = {
         id:info[0],   // 分组id
         name:unicode2Str(info[1]),   // 分组名

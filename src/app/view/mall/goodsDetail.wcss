@@ -20,6 +20,10 @@
 .name-box{
     display: flex;
 }
+.area-icon{
+    width: 80px;
+    height: 50px;
+}
 .goods-name{
     font-size:34px;
     font-family:PingFangSC-Regular;
