@@ -220,9 +220,6 @@ export class GiftPage extends Widget {
         } else if (this.props.fg === PowerFlag.offClass) {
             shareWithUrl('免费领课程','好友送了你一个线下课程，快来领取吧',`${location.origin + location.pathname}?page=offClass&inviteCode=${getStore('user/inviteCode','')}`,'');
 
-        } else if (this.props.fg === PowerFlag.inviteCode) {
-            this.inviteShare('hBao');
-
         } else {
             shareWithUrl('海龟壹号','更多精彩，就等你来',`${location.origin + location.pathname}`,'');
         }
@@ -233,6 +230,7 @@ export class GiftPage extends Widget {
 
     // 邀请好友开通会员
     public inviteShare(str:string) {
+        setWxConfig();
         if (str === 'hBao') {
             shareWithUrl('升级海宝','好友邀请你来成为海宝，享受海宝专属福利',`${location.origin + location.pathname}?page=upHbao&inviteCode=${getStore('user/inviteCode','')}`,'');
 
