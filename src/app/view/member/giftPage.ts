@@ -34,7 +34,11 @@ export class GiftPage extends Widget {
         // 用户会员等级是否等于当前所查看的会员等级
         this.props.isCurVip = props.isCurVip || getStore('user/userType',-1) === props.userType; 
         if (props.fg === PowerFlag.offClass || props.fg === PowerFlag.free) {
-            this.props.img = `${PowerFlag[props.fg]}.png`;
+            if (props.userType <= UserType.hBao) {
+                this.props.img = `${PowerFlag[props.fg]}_vip.png`;
+            } else {
+                this.props.img = `${PowerFlag[props.fg]}.png`;
+            }
             
         } else if (props.userType === UserType.hWang) {
             this.props.img = `10000_${PowerFlag[props.fg]}.png`;
@@ -229,6 +233,7 @@ export class GiftPage extends Widget {
         setWxConfig();
         if (str === 'hBao') {
             shareWithUrl('升级海宝','好友邀请你来成为海宝，享受海宝专属福利',`${location.origin + location.pathname}?page=upHbao&inviteCode=${getStore('user/inviteCode','')}`,'');
+
         } else {
             shareWithUrl('升级海王','好友邀请你来成为海王，享受海王专属福利',`${location.origin + location.pathname}?page=upHwang&inviteCode=${getStore('user/inviteCode','')}`,'');
         }
