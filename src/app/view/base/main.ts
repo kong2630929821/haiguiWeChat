@@ -28,15 +28,16 @@ export const run = (cb): void =>  {
     } else if (page === 'turntable') {
         // 打开大转盘
         popNew('app-view-member-turntable');
-    } else if (page === 'upHbao') {
-        // 升级海宝
-        popNew('app-view-member-powerDetail',{ userType:UserType.hBao });
-    } else if (page === 'upHwang') { 
-        // 升级海王
-        popNew('app-view-member-powerDetail',{ userType:UserType.hWang });
     } else {
         // 打开首页面
         popNew('app-view-base-app');
+        if (page === 'upHbao') {
+            // 升级海宝
+            popNew('app-view-member-powerDetail',{ userType:UserType.hBao });
+        } else if (page === 'upHwang') { 
+            // 升级海王
+            popNew('app-view-member-powerDetail',{ userType:UserType.hWang });
+        }
     }
     const a = '[36229,20154,19981,20250,39134,55357,32,55357]';
     console.log('---------',unicode2Str(JSON.parse(a)));

@@ -2,6 +2,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { bindPhone, bindUser, randomInviteCode, sendCode, verifyIDCard } from '../../net/pull';
 import { getStore, setStore, UserType } from '../../store/memstore';
 import { popNewLoading, popNewMessage } from '../../utils/tools';
+import { localInviteCode } from '../base/main';
 
 interface Props {
     title?:string;   // 标题
@@ -53,7 +54,7 @@ export class ModalBoxInput extends Widget {
         if (user.userType <= UserType.hBao) {// 成为会员后不允许修改父级邀请码
             this.props.fcode = user.fcode;
         }
-        this.props.inviteCode = user.fcode;
+        this.props.inviteCode = localInviteCode || user.fcode;  // 分享人的邀请码
     }
 
     // 输入用户名

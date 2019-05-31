@@ -4,6 +4,7 @@ import { bindPhone, bindUser, randomInviteCode, sendCode, verifyIDCard } from '.
 import { getStore, setStore, UserType } from '../../store/memstore';
 import { getLastAddress } from '../../utils/logic';
 import { popNewLoading, popNewMessage } from '../../utils/tools';
+import { localInviteCode } from '../base/main';
 interface Props {
     realName:string;  // 用户名
     userName:string;  // 用户名
@@ -38,7 +39,7 @@ export class FillAddrModalBox extends Widget {
             this.props.userName = user.realName;
             this.props.phoneNum = user.phoneNum;
             this.props.changePhone = !user.phoneNum;
-            this.props.inviteCode = user.fcode;
+            this.props.inviteCode = localInviteCode || user.fcode;  // 分享人的邀请码
         }
     }
 
