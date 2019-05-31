@@ -297,7 +297,7 @@ export const parseAfterSale = (infos:any,orders:Order[]) => {
 // 过滤固定商品的订单
 const filterOrderGoods = (order:Order,goodsid:number) => {
     const goods = order.orderGoods.filter((v) => {
-        return v[0].id = goodsid;
+        return v[0].id === goodsid;
     });
     order.orderGoods = goods;
     
