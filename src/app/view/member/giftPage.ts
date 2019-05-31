@@ -242,6 +242,6 @@ export class GiftPage extends Widget {
 }
 
 register('flags/wxReady',() => {
-    const w = forelet.getWidget(WIDGET_NAME);
+    const w:any = forelet.getWidget(WIDGET_NAME);
     w && w.share(false);
 });

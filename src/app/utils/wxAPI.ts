@@ -1,4 +1,5 @@
 // ===================================  导入
+import { userAgent } from '../../pi/util/html';
 import { getWX_sign, uploadFile } from '../net/pull';
 import { loadJS } from './logic';
 import { popNewMessage } from './tools';
@@ -30,7 +31,10 @@ const initWxConfig = (resp:any,cb:any) => {
     console.log('initWxConfig success');
     resp.debug = false;
     resp.jsApiList = ['closeWindow','hideMenuItems', 'onMenuShareTimeline', 'onMenuShareAppMessage', 'chooseImage','uploadImage', 'getLocalImgData','scanQRCode'];
-    wxconfig = resp;
+    const agent = userAgent('');
+    if (agent.os.name !== 'ios') {
+        wxconfig = resp;
+    }
     (<any>self).wx.config(resp);
 
     (<any>self).wx.ready(() => {

@@ -2,7 +2,7 @@ import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { PROVINCE_LIST } from '../../components/areaSelect/provinceList';
 import { addAddress, delAddress } from '../../net/pull';
-import { checkPhone, popNewMessage } from '../../utils/tools';
+import { checkPhone, popNewLoading, popNewMessage } from '../../utils/tools';
 
 /**
  * 编辑地址
@@ -87,9 +87,14 @@ export class EditAddress extends Widget {
             
             return;
         }
+        const close = popNewLoading('正在添加');
         addAddress(this.props.name,this.props.tel,this.props.area_id,`${this.props.province}${this.props.address}`).then(() => {
             this.ok && this.ok();
             popNewMessage('保存成功');
+            close.callback(close.widget);
+        }).catch(() => {
+            popNewMessage('保存失败');
+            close.callback(close.widget);
         });
     }
 

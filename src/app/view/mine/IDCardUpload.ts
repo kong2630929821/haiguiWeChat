@@ -58,6 +58,7 @@ export class IDCardUpload extends Widget {
                 this.props.img1 = r;
                 upImage(r, res => {
                     popNewMessage('图片上传成功');
+                    console.log('图片上传成功',res);
                     this.props.img1 = serverFilePath + res;
                     this.props.front = res;
                     this.paint();
@@ -67,6 +68,7 @@ export class IDCardUpload extends Widget {
                 this.props.img2 = r;
                 upImage(r, res => {
                     popNewMessage('图片上传成功');
+                    console.log('图片上传成功',res);
                     this.props.img2 = serverFilePath + res;
                     this.props.back = res;
                     this.paint();
