@@ -14,11 +14,13 @@ import { payComplete } from './push';
 
 document.addEventListener('visibilitychange', () => {
     console.log('visibilitychange',document.visibilityState);
-    const isLogin = getStore('user/isLogin');
-    console.log('isLogin ===',isLogin);
-    if (document.visibilityState === 'visible' && !isLogin) {
-        reopen();
-    }
+    setTimeout(() => {
+        const isLogin = getStore('user/isLogin');
+        console.log('isLogin ===',isLogin);
+        if (document.visibilityState === 'visible' && !isLogin) {
+            reopen();
+        }
+    },100);
 });
 /**
  * 获取微信用户信息

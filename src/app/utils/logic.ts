@@ -1,6 +1,7 @@
+import { popNew } from '../../pi/ui/root';
 import { getAllGifts, getInviteCode, payMoney, upgradeHBao, upgradeHWang } from '../net/pull';
 import { getStore, setStore, UserType } from '../store/memstore';
-import { popNewMessage } from './tools';
+import { popNewMessage, priceFormat } from './tools';
 /**
  * 本地方法
  */
@@ -139,15 +140,24 @@ export const payToUpHbao = (sel:string,cb?:any) => {
     if (cash < fee) { 
         payMoney(fee - cash,'hBao');
     } else {
-        upgradeHBao(sel).then(() => {
-            popNewMessage('升级海宝成功');
-            setStore('user/userType', UserType.hBao);
-            getInviteCode().then(res => {
-                setStore('user/inviteCode',res.code);
+        popNew('app-view-member-confirmPayInfo',{ money:priceFormat(fee) },() => {
+            upgradeHBao(sel).then(() => {
+                popNewMessage('升级海宝成功');
+                setStore('user/userType', UserType.hBao);
+                getInviteCode().then(res => {
+                    setStore('user/inviteCode',res.code);
+                });
+                getAllGifts();  // 重新获取所有礼包
+                cb && cb();
+            }).catch(err => {
+                if (err.result === 4012) {
+                    popNewMessage('获取上级失败');
+                } else {
+                    popNewMessage('升级海宝失败');
+                }
             });
-            getAllGifts();  // 重新获取所有礼包
-            cb && cb();
         });
+
     }
 };
 
@@ -160,7 +170,9 @@ export const applyToUpHwang = (sel:string) => {
     }).catch(err => {
         if (err.result === 4007) {
             popNewMessage('申请已在处理中');
-        } else {
+        } else if (err.result === 4012) {
+            popNewMessage('获取上级失败');
+        } else  {
             popNewMessage('发送海王申请失败');
         }
     });

@@ -2,6 +2,7 @@
 import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
+import { getEarningTotal } from '../../../net/pull';
 import { register, UserType } from '../../../store/memstore';
 import { applyToUpHwang, getUserTypeShow, payToUpHbao } from '../../../utils/logic';
 import { copyToClipboard, popNewMessage, priceFormat } from '../../../utils/tools';
@@ -21,7 +22,7 @@ export class Home extends Widget {
     public create() {
         super.create();
         this.state = State;
-        
+        getEarningTotal();
     }
 
     // 权益
