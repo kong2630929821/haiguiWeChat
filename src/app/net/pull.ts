@@ -1,6 +1,6 @@
 import { request } from '../../pi/net/ui/con_mgr';
-import { freeMaskGoodsId, OffClassGoodsId, saleClassGoodsId, sourceIp, sourcePort, vipClassGoodsId, vipMaskGoodsId, whiteGoodsId_10000A, whiteGoodsId_10000B, whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
-import { getStore,GroupsLocation, OrderStatus, setStore } from '../store/memstore';
+import { freeMaskGoodsId, maxCount, OffClassGoodsId, saleClassGoodsId, sourceIp, sourcePort, vipClassGoodsId, vipMaskGoodsId, whiteGoodsId_10000A, whiteGoodsId_10000B, whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
+import { getStore,GoodsDetails, GroupsLocation, OrderStatus, setStore } from '../store/memstore';
 import { openWXPay } from '../utils/logic';
 import { popNewMessage, str2Unicode } from '../utils/tools';
 import { requestAsync } from './login';
@@ -23,6 +23,32 @@ export const getGroups = (location:GroupsLocation) => {
         const groupsMap = getStore('mall/groups');
         groupsMap.set(location,groups);
         setStore('mall/groups',groupsMap);
+    });
+};
+
+/**
+ * 分页获取商品信息
+ */
+export const getGoodsInfo = (group_id:number,goods_id:number) => {
+    const msg = {
+        type:'get_goods_info',
+        param:{
+            group_id,
+            goods_id,
+            count:maxCount
+        }
+    };
+
+    return requestAsync(msg).then(res => {
+        const goods:GoodsDetails[] = [];
+        for (const v of res.goodsInfo) {
+            const good = parseGoodsDetail(v);
+            goods.push(good);
+        }
+        console.log('get_goods_info ========',res);
+        console.log('get_goods_info ========',goods);
+
+        return goods;
     });
 };
 
@@ -740,7 +766,7 @@ export const uploadFile = (id:string) => {
  */
 export const getWX_sign = (url:string) => {
 
-    return fetch(`http://${sourceIp}:${sourcePort}/pt/wx/sign?url=${url}`).then(res => res.json());
+    return fetch(`http://${sourceIp}:${sourcePort}/pt/wx/sign?url=${encodeURIComponent(url)}`).then(res => res.json());
 };
 
 /**

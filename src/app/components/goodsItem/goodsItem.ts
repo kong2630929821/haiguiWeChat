@@ -1,7 +1,8 @@
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
+import { mallImagPre } from '../../config';
 import { GoodsDetails } from '../../store/memstore';
-import { calcPrices } from '../../utils/tools';
+import { calcPrices, getImageThumbnailPath } from '../../utils/tools';
 
 interface Props {
     goods:GoodsDetails;    // 商品信息
@@ -15,7 +16,9 @@ export class GoodsItem extends Widget {
         const ret = calcPrices(props.goods);
         this.props = {
             ...props,
-            ...ret
+            ...ret,
+            getImageThumbnailPath,
+            mallImagPre
         };
         super.setProps(this.props,oldProps);
         console.log('GoodsItem ----------------',this.props);

@@ -11,7 +11,7 @@
                 <div w-class="name-box">
                     <div w-class="goods-name" class="line2-overflow">{{it.goods.name}}</div>
                     <div w-class="area">
-                        <img src="{{it.mallImagPre + it.areaIcon}}" />
+                        <img src="{{it.mallImagPre + it.areaIcon}}" w-class="area-icon"/>
                         <div w-class="area-text">{{it.area}}</div>
                     </div>
                 </div>

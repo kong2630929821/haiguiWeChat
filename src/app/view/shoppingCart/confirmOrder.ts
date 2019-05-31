@@ -2,7 +2,7 @@ import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { mallImagPre } from '../../config';
-import { order, orderNow, payMoney, payOrder } from '../../net/pull';
+import { getCart, order, orderNow, payMoney, payOrder } from '../../net/pull';
 import { CartGoods, getStore, OrderStatus, register } from '../../store/memstore';
 import { getLastAddress } from '../../utils/logic';
 import { calcFreight, getImageThumbnailPath, popNewLoading, popNewMessage, priceFormat } from '../../utils/tools';
@@ -155,6 +155,7 @@ export class ConfirmOrder extends Widget {
         let ordersRes;
         try {
             ordersRes = await Promise.all(allOrderPromise);
+            getCart();    // 下单成功后刷新购物车
             console.log('ordersRes ====',ordersRes);
         } catch (res) {
             loading.callback(loading.widget);

@@ -1,5 +1,4 @@
 // ===================================  导入
-import { userAgent } from '../../pi/util/html';
 import { getWX_sign, uploadFile } from '../net/pull';
 import { loadJS } from './logic';
 import { popNewMessage } from './tools';
@@ -15,20 +14,10 @@ export const registerWXAPI = (cb?:any) => {
     loadJS('http://res2.wx.qq.com/open/js/jweixin-1.4.0.js', (info) => {
         if (info.result === 1) {
             if ((<any>self).wx) {
-                const agent = userAgent('');
-                if (agent.os.name === 'ios') {
-                     // iOS获取签名只能是不带参数的URL，否则签名无效
-                    getWX_sign(location.origin + location.pathname).then((resp:any) => {
-                        initWxConfig(resp,cb);
-                    });
-
-                } else {
-                    // 安卓获取签名需要完整的URL，不完整则签名无效
-                    console.log('android wxsign =',location.href.split('#')[0]);
-                    getWX_sign(location.href.split('#')[0]).then((resp:any) => {
-                        initWxConfig(resp,cb);
-                    });
-                }
+                console.log('android wxsign =',location.href.split('#')[0]);
+                getWX_sign(location.href.split('#')[0]).then((resp:any) => {
+                    initWxConfig(resp,cb);
+                });
             }
         }
     });
