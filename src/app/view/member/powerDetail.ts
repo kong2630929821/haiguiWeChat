@@ -68,7 +68,7 @@ export class PowerDetail extends Widget {
 
 register('user',(r) => {
     const w = forelet.getWidget(WIDGET_NAME);
-    if (w && r.userType === w.props.userType) {
+    if (w && r.userType <= w.props.userType) {  // 已经是海王 不能再开通海宝
         forelet.paint(r.inviteCode);
     }
 });
