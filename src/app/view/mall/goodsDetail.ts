@@ -122,8 +122,10 @@ export class GoodsDetailHome extends Widget {
 
     // 选择规则关闭
     public specCloseClick(res:any) {
-        this.props.skuIndex = res.skuIndex;
-        this.props.amount = res.amount;
+        if (res.amount && res.skuIndex) {
+            this.props.skuIndex = res.skuIndex;
+            this.props.amount = res.amount;
+        } 
         this.props.chooseSpec = false;
         this.paint();
     }

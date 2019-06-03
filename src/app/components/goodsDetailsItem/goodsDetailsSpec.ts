@@ -61,7 +61,7 @@ export class GoodsDetailsSpec extends Widget {
 
     // 关闭
     public closeClick(e:any) {
-        notify(e.node,'ev-close-spec',{ amount:this.props.amount,skuIndex:this.props.skuIndex });
+        notify(e.node,'ev-close-spec',{ });
     }
 
     public sureClick(e:any) {
@@ -70,7 +70,7 @@ export class GoodsDetailsSpec extends Widget {
             
             return;
         }
-        this.closeClick(e);
+        notify(e.node,'ev-close-spec',{ amount:this.props.amount,skuIndex:this.props.skuIndex });
         notify(e.node,'ev-sure-click',{ buyNow:this.props.buyNow });
     }
 }
