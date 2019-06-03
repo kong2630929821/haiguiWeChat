@@ -3,7 +3,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { mallImagPre, PendingPaymentDuration } from '../../config';
 import { getOrders } from '../../net/pull';
 import { Order, OrderStatus } from '../../store/memstore';
-import { calcPrices, getImageThumbnailPath, priceFormat } from '../../utils/tools';
+import { calcFreight, calcPrices, getImageThumbnailPath, priceFormat } from '../../utils/tools';
 import { statusShows } from './orderDetail';
 
 export interface Props {
@@ -70,4 +70,26 @@ export const calcLeftTime = (start:number) => {
     const leftSeconds = Math.floor(leftTime / 1000) % 60;
 
     return `${leftMinutes}分${leftSeconds}秒`;
+};
+
+// 计算商品费用 包括商品总费用 运费总计  税费总计
+// 同一个供应商运费只计算一次
+const calcAllFees = (order:Order) => {
+    let totalTax = 0;    // 税费总计
+    let totalFreight = 0;           // 运费总计
+    let hasFreight = false;
+    for (const v of order.orderGoods) {
+        const goods = v[0];
+        if (goods.has_tax) {
+            totalTax += goods.tax * v[1];
+        } else {
+            hasFreight = true;
+        }
+    }
+
+    if (hasFreight) {
+        totalFreight += calcFreight(order.area);
+    }
+        
+    return totalFreight;
 };

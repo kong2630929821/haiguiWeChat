@@ -3,7 +3,7 @@ import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { freeMaskGoodsId, mallImagPre, OffClassGoodsId } from '../../config';
 import { getCart, order, orderNow, payMoney, payOrder } from '../../net/pull';
-import { CartGoods, getStore, OrderStatus, register, setStore } from '../../store/memstore';
+import { Address, CartGoods, getStore, OrderStatus, register, setStore } from '../../store/memstore';
 import { getLastAddress } from '../../utils/logic';
 import { calcFreight, getImageThumbnailPath, popNewLoading, popNewMessage, priceFormat } from '../../utils/tools';
 import { allOrderStatus } from '../mine/home/home';
@@ -35,7 +35,7 @@ export class ConfirmOrder extends Widget {
             address:addr[2],
             mallImagPre
         };
-        const ret = this.calcAllFees(orderGoodsShow);
+        const ret = calcAllFees(orderGoodsShow,this.props.address);
         this.props = {
             ...this.props,
             ...ret
@@ -48,44 +48,10 @@ export class ConfirmOrder extends Widget {
         popNew('app-view-mine-addressList',{ isChoose:true },() => {
             const addr = getLastAddress();
             this.props.address = addr[2];
-            const ret = this.calcAllFees(this.props.orderGoodsShow);
+            const ret = calcAllFees(this.props.orderGoodsShow,this.props.address);
             this.props.totalFreight = ret.totalFreight;
             this.paint();
         });
-    }
-
-    // 计算商品费用 包括商品总费用 运费总计  税费总计
-    // 同一个供应商运费只计算一次
-    public calcAllFees(orderGoods:CartGoodsShow[]) {
-        let totalSale = 0;
-        let totalTax = 0;    // 税费总计
-        let totalFreight = 0;           // 运费总计
-        const suppliers = new Map();    // 购买同一供应商的所有商品
-        const frieghts = [];   // 需要运费的供应商id列表
-        for (const v of orderGoods) {
-            totalSale += v.finalSale * v.cartGood.amount;
-            const supplierId = v.cartGood.goods.supplier;
-            if (v.cartGood.goods.has_tax) {     // 保税商品只有税费没有运费
-                totalTax += v.cartGood.goods.tax * v.cartGood.amount;
-            } else {
-                if (frieghts.indexOf(supplierId) < 0) frieghts.push(supplierId);
-            }
-            let oneSupplier = suppliers.get(supplierId);
-            if (!oneSupplier) oneSupplier = [];
-            oneSupplier.push(v.cartGood);
-            suppliers.set(supplierId,oneSupplier);
-        }
-        if (this.props.address) {
-            totalFreight += calcFreight(this.props.address.area_id) * frieghts.length;
-        }
-        
-        return {
-            totalSale,
-            totalTax,
-            totalFreight,
-            suppliers
-        };
-
     }
 
     // 添加地址
@@ -93,7 +59,7 @@ export class ConfirmOrder extends Widget {
         popNew('app-view-mine-editAddress',undefined,() => {
             const addr = getLastAddress();
             this.props.address = addr[2];
-            const ret = this.calcAllFees(this.props.orderGoodsShow);
+            const ret = calcAllFees(this.props.orderGoodsShow,this.props.address);
             this.props.totalFreight = ret.totalFreight;
             this.paint();
         });
@@ -199,7 +165,8 @@ export class ConfirmOrder extends Widget {
                     loading.callback(loading.widget);
                     popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGDELIVERED,allStaus:allOrderStatus.slice(0,4) });
                     
-                },() => {
+                },() => {   // 取消支付
+                    this.payFaile();
                     loading.callback(loading.widget);
                 });
             }
@@ -272,6 +239,40 @@ export const orderPay = (orderIds:number[]) => {
     }
 
     return Promise.all(allPayPromise);
+};
+
+// 计算商品费用 包括商品总费用 运费总计  税费总计
+// 同一个供应商运费只计算一次
+const calcAllFees = (orderGoods:CartGoodsShow[],address:Address) => {
+    let totalSale = 0;
+    let totalTax = 0;    // 税费总计
+    let totalFreight = 0;           // 运费总计
+    const suppliers = new Map();    // 购买同一供应商的所有商品
+    const frieghts = [];   // 需要运费的供应商id列表
+    for (const v of orderGoods) {
+        totalSale += v.finalSale * v.cartGood.amount;
+        const supplierId = v.cartGood.goods.supplier;
+        if (v.cartGood.goods.has_tax) {     // 保税商品只有税费没有运费
+            totalTax += v.cartGood.goods.tax * v.cartGood.amount;
+        } else {
+            if (frieghts.indexOf(supplierId) < 0) frieghts.push(supplierId);
+        }
+        let oneSupplier = suppliers.get(supplierId);
+        if (!oneSupplier) oneSupplier = [];
+        oneSupplier.push(v.cartGood);
+        suppliers.set(supplierId,oneSupplier);
+    }
+    if (address) {
+        totalFreight += calcFreight(address.area_id) * frieghts.length;
+    }
+        
+    return {
+        totalSale,
+        totalTax,
+        totalFreight,
+        suppliers
+    };
+
 };
 
 register('flags/mallRecharge',async () => {

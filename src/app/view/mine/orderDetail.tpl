@@ -7,7 +7,7 @@
             </div>
             <div w-class="text">{{it.order.tel}}</div>
         </div>
-        <div w-class="address">收货地址：{{it.order.address}}</div>
+        <div w-class="address">收货地址：{{it.addressFormat(it.order.address)}}</div>
     </div>
 
     <div w-class="orders"><widget w-tag="app-view-mine-orderItemDetail">{status:{{it.status}},order:{{it.order}} }</widget></div>

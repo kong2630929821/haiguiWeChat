@@ -24,7 +24,7 @@
             </div>
         {{end}}
         <div w-class="row">
-            <div w-class="addr">{{it.address ? it.address.address:"详细地址"}}</div>
+            <div w-class="addr">{{it.address ? it.addressFormat(it.address.address):"详细地址"}}</div>
             <div w-class="btn" on-tap="selAddr">选择地址</div>
         </div>
         <div w-class="btns">

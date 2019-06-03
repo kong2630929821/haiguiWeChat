@@ -2,7 +2,7 @@
  * 常用工具
  */
 import { popNew } from '../../pi/ui/root';
-import { Freight, getStore, GoodsDetails, ImageType, MallImages, SKU, UserType } from '../store/memstore';
+import { Address, Freight, getStore, GoodsDetails, ImageType, MallImages, SKU, UserType } from '../store/memstore';
 
 // 弹出提示框
 export const popNewMessage = (content: any) => {
@@ -268,4 +268,13 @@ export const throttle = (func) => {
             lastTime = nowTime;
         }
     };
+};
+
+/**
+ * 地址格式化
+ */
+export const addressFormat = (addrStr:string) => {
+    const address = JSON.parse(addrStr);
+
+    return `${address[0].join('')}${address[1]}`;
 };
