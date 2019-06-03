@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { cancelOrder, getOrders } from '../../net/pull';
+import { cancelOrder, getOrders, receiptOrder } from '../../net/pull';
 import { Order, OrderStatus, register } from '../../store/memstore';
 import { popNewMessage } from '../../utils/tools';
 import { payOrderNow } from './orderList';
@@ -35,6 +35,16 @@ export class OrderDetail extends Widget {
         if (num === 1) {  // 确认按钮
             if (activeStatus === OrderStatus.PENDINGPAYMENT) {  // 去支付
                 payOrderNow(order,this.paySuccess);  // 去付款
+            } else if (activeStatus === OrderStatus.PENDINGRECEIPT) {  // 待收货  确认收货
+                popNew('app-components-popModel-popModel',{ title:'是否确认收货' },() => {
+                    receiptOrder(order.id).then(() => {
+                        getOrders(OrderStatus.PENDINGRECEIPT);
+                        this.ok && this.ok(OrderStatus.PENDINGRECEIPT);
+                    }).catch(err => {
+                        popNewMessage('出错了');
+                    });
+                });
+               
             }
         } else {  // 取消按钮
             if (activeStatus === OrderStatus.PENDINGPAYMENT) { // 待付款  取消订单

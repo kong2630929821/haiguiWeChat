@@ -96,6 +96,8 @@ export class ModalBoxInput extends Widget {
                     }
                     this.paint();
                 },1000);
+            }).catch(err => {
+                popNewMessage('获取验证码失败');
             });
         } else {
             popNewMessage('请输入手机号');

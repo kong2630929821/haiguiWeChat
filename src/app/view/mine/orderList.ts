@@ -49,6 +49,8 @@ export class OrderList extends Widget {
         popNew('app-view-mine-orderDetail',{ ...props },(status:OrderStatus) => {
             if (status === OrderStatus.PENDINGDELIVERED) {
                 this.paySuccess();
+            } else if (status === OrderStatus.PENDINGRECEIPT) {
+                this.typeClick(OrderStatus.PENDINGFINISH);
             }
         });
     }
