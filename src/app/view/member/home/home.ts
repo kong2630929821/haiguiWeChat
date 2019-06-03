@@ -22,6 +22,10 @@ export class Home extends Widget {
     public create() {
         super.create();
         this.state = State;
+    }
+
+    public setProps(props:any) {
+        super.setProps(props);
         getEarningTotal();
     }
 
