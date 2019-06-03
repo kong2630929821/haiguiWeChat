@@ -12,17 +12,26 @@ export class EditAddress extends Widget {
     public props:any = {
         name:'',
         tel:'',
-        province:'',
+        province:[],
         address:'',
         areaSelect:[],
         area_id:0
     };
 
     public setProps(props:any,oldProps:any) {
+        let province = [];
+        let address = '';
+        if (props.address) {
+            const addr = JSON.parse(props.address);
+            province = addr[0];
+            address = addr[1];
+        }
+        
         this.props = {
             ...this.props,
             ...props,
-            province:this.getProvinceStr(props.area_id)
+            province,
+            address
         };
         super.setProps(this.props);
     }
@@ -41,7 +50,7 @@ export class EditAddress extends Widget {
                     }
                     
                 });
-                this.props.province = res.join('');
+                this.props.province = res;
                 this.paint();
             }
         });
@@ -88,7 +97,9 @@ export class EditAddress extends Widget {
             return;
         }
         const close = popNewLoading('正在添加');
-        addAddress(this.props.name,this.props.tel,this.props.area_id,`${this.props.province}${this.props.address}`).then(() => {
+        
+        const address = [this.props.province,this.props.address];
+        addAddress(this.props.name,this.props.tel,this.props.area_id,`${JSON.stringify(address)}`).then(() => {
             this.ok && this.ok();
             popNewMessage('保存成功');
             close.callback(close.widget);

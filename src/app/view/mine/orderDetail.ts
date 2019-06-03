@@ -3,7 +3,7 @@ import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { cancelOrder, getOrders, receiptOrder } from '../../net/pull';
 import { Order, OrderStatus, register } from '../../store/memstore';
-import { popNewMessage } from '../../utils/tools';
+import { addressFormat, popNewMessage } from '../../utils/tools';
 import { payOrderNow } from './orderList';
 
 // tslint:disable-next-line:no-reserved-keywords
@@ -23,7 +23,8 @@ export class OrderDetail extends Widget {
     public setProps(props:Props) {
         this.props = {
             ...props,
-            statusShow:statusShows[props.status]
+            statusShow:statusShows[props.status],
+            addressFormat
         };
         super.setProps(this.props);
         console.log('OrderDetail ======',this.props);

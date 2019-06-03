@@ -61,7 +61,7 @@ export class GoodsDetailsSpec extends Widget {
 
     // 关闭
     public closeClick(e:any) {
-        notify(e.node,'ev-close-spec',{ });
+        notify(e.node,'ev-close-spec',{});
     }
 
     public sureClick(e:any) {

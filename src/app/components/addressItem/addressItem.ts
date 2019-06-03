@@ -1,6 +1,7 @@
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { Address } from '../../store/memstore';
+import { addressFormat } from '../../utils/tools';
 interface Props {
     left:string; // 左侧图片
     right:string;  // 右侧图片
@@ -11,9 +12,11 @@ interface Props {
  */
 export class AddressItem extends Widget {
     public setProps(props:Props,oldProps:Props) {
+        const addressShow = addressFormat(props.address.address);
         this.props = {
             right:'arrowRight.png',
-            ...props
+            ...props,
+            addressShow
         };
         super.setProps(this.props);
         console.log('AddressItem =======',this.props);

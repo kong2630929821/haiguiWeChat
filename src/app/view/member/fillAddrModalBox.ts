@@ -3,7 +3,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { bindPhone, bindUser, randomInviteCode, sendCode, verifyIDCard } from '../../net/pull';
 import { getStore, setStore, UserType } from '../../store/memstore';
 import { getLastAddress } from '../../utils/logic';
-import { popNewLoading, popNewMessage } from '../../utils/tools';
+import { addressFormat, popNewLoading, popNewMessage } from '../../utils/tools';
 import { localInviteCode } from '../base/main';
 interface Props {
     realName:string;  // 用户名
@@ -29,7 +29,8 @@ export class FillAddrModalBox extends Widget {
     public setProps(props:any) {
         this.props = {
             ...this.props,
-            ...props
+            ...props,
+            addressFormat
         };
         super.setProps(this.props);
         this.props.address = getLastAddress()[2];
