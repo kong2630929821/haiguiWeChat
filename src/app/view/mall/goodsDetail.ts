@@ -122,7 +122,7 @@ export class GoodsDetailHome extends Widget {
 
     // 选择规则关闭
     public specCloseClick(res:any) {
-        if (res.amount && res.skuIndex) {
+        if (res.amount >= 1 && res.skuIndex >= 0) {
             this.props.skuIndex = res.skuIndex;
             this.props.amount = res.amount;
         } 

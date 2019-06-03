@@ -7,7 +7,7 @@
             <div w-class="column">电话</div><div>{{it.tel}}</div>
         </div>
         <div w-class="row row1" >
-            <div w-class="column">地区</div><div>{{it.province}}</div>
+            <div w-class="column">地区</div><div>{{it.province.join("")}}</div>
         </div>
         <div w-class="row row1">
             <div w-class="column">详细地址</div><div>{{it.address}}</div>
@@ -20,7 +20,7 @@
             <widget w-tag="app-components-input-inputLabel">{placeHolder:"收货人手机号",style:"padding:20px;font-size:34px;",label:"电话",itype:"integer",input:{{it.tel}},maxLength:11}</widget>
         </div>
         <div w-class="row" on-tap="selectArea">
-            <widget w-tag="app-components-input-inputLabel">{placeHolder:"选择省/市/区",style:"padding:20px;font-size:34px;",label:"地区",input:{{it.province}}}</widget>
+            <widget w-tag="app-components-input-inputLabel">{placeHolder:"选择省/市/区",style:"padding:20px;font-size:34px;",label:"地区",input:{{it.province.join("")}}}</widget>
         </div>
         <div w-class="row" ev-input-change="addressChange">
             <widget w-tag="app-components-input-inputLabel">{placeHolder:"街道门牌、楼层房间号等",style:"padding:20px;font-size:34px;",label:"详细地址",input:{{it.address}}}</widget>

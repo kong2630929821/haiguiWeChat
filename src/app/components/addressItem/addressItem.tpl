@@ -7,7 +7,7 @@
             <div>收货人：{{it.address.name}}</div>
             <div>{{it.address.tel}}</div>
         </div>
-        <div w-class="address">收货地址：{{it.address.address}}</div>
+        <div w-class="address">收货地址：{{it.addressShow}}</div>
     </div>
     {{if it.right}}
     <img src="../../res/image/{{it.right}}" w-class="img1" on-tap="rightImg"/>
