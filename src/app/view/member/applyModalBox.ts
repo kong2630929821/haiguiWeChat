@@ -161,7 +161,8 @@ export class ModalBoxInput extends Widget {
 
             try {   // 绑定邀请码 非会员用户
                 if (!this.props.fcode) {
-                    const code = await bindUser(this.props.inviteCode);
+                    const t = this.props.userType === UserType.hWang ? 1 :3;
+                    const code = await bindUser(this.props.inviteCode,t);
                     if (code) setStore('user/fcode',this.props.inviteCode);
                 }
 

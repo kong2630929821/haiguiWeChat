@@ -147,7 +147,7 @@ export class FillAddrModalBox extends Widget {
                 }
     
                 try {   // 绑定邀请码
-                    const code = await bindUser(this.props.inviteCode);
+                    const code = await bindUser(this.props.inviteCode,3);
                     if (code) setStore('user/fcode',this.props.inviteCode);
     
                 } catch (err) {
