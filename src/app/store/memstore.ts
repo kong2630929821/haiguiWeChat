@@ -280,6 +280,7 @@ interface Mall {
     areas:Area[];                    // 地区列表
     suppliers:Supplier[];            // 供应商列表
     freights:Freight[];             // 运费信息
+    likedGoods:GoodsDetails[];       // 猜你喜欢列表
 }
 /********************************用户权益*********************************** */
 // 收益统计
@@ -377,7 +378,8 @@ const store:Store = {
         brands:[],                              // 品牌列表
         areas:[],                               // 地区列表
         suppliers:[],                            // 供应商列表
-        freights:[]                            // 运费信息
+        freights:[],                            // 运费信息
+        likedGoods:[]                          // 猜你喜欢列表
     },
     earning:{
         baby:0,

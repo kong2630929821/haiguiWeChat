@@ -1,3 +1,4 @@
+import { popNew } from '../../../pi/ui/root';
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { mallImagPre } from '../../config';
@@ -25,5 +26,9 @@ export class GroupsOne extends Widget {
 
     public clickItem(e:any,index:number) {
         notify(e.node,'ev-click-groups-one',{ group:this.props.list[index] }); 
+    }
+
+    public gotoTurntableClick() {
+        popNew('app-view-member-turntable');
     }
 }

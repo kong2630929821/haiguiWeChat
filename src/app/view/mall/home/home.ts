@@ -1,8 +1,9 @@
 import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
-import { mallImagPre } from '../../../config';
-import { Groups, GroupsLocation, register } from '../../../store/memstore';
+import { likedGoodsMaxLen, mallImagPre, maxCount } from '../../../config';
+import { guessYouLike } from '../../../net/pull';
+import { GoodsDetails, Groups, GroupsLocation, register, setStore } from '../../../store/memstore';
 import { getImageThumbnailPath } from '../../../utils/tools';
 import { StyleMod } from '../goodsList';
 
@@ -28,9 +29,12 @@ export class MallHome extends Widget {
             GroupsLocation,
             getFixLocationGroup,
             getImageThumbnailPath,
-            mallImagPre
+            mallImagPre,
+            refresh:false
         };
         super.setProps(this.props);
+        setStore('mall/likedGoods',[],false);
+        guessYouLike(maxCount);
     }
 
     // 分组点击
@@ -50,17 +54,36 @@ export class MallHome extends Widget {
         const selectedLevel2Groups = selectedLevel1Groups.childs[0];
         popNew('app-view-mall-goodsList',{ selectedLevel1Groups,selectedLevel2Groups,styleMod:StyleMod.ONE });
     }
+
+    /**
+     * 页面滑动，加载更多数据
+     */
+    public getMoreList() {
+        if (this.props.refresh) return;
+        if (this.state.likedGoods.length >= likedGoodsMaxLen) return;
+        const oh1 = document.getElementById('scroll-container').offsetHeight;
+        const oh2 = document.getElementById('scroll-content').offsetHeight;
+        const scrollTop = document.getElementById('scroll-container').scrollTop; 
+        if (oh2 - oh1 - scrollTop < -145) {
+            this.props.refresh = true;
+            guessYouLike(maxCount).then(() => {
+                this.props.refresh = false;
+            });
+        } 
+
+        this.paint();
+    }
+
+    // 商品详情
+    public goodsItemClick(e:any,index:number) {
+        popNew('app-view-mall-goodsDetail',{ goods:this.state.likedGoods[index] });
+    }
 }
 
 const STATE = {
-    groups:new Map<GroupsLocation, Groups[]>()     // 所有分组信息
+    groups:new Map<GroupsLocation, Groups[]>(),     // 所有分组信息
+    likedGoods:[]                  // 猜你喜欢商品列表
 };
-
-// 分组信息监听
-register('mall/groups',(groups:Map<GroupsLocation, Groups[]>) => {   
-    STATE.groups = groups;
-    forelet.paint(STATE);
-});
 
 /**
  * 获取固定位置的分组
@@ -70,3 +93,15 @@ const getFixLocationGroup = (groups:Map<GroupsLocation, Groups[]>,location:Group
 
     return  group ? group[0] : undefined;
 };
+
+// 分组信息监听
+register('mall/groups',(groups:Map<GroupsLocation, Groups[]>) => {   
+    STATE.groups = groups;
+    forelet.paint(STATE);
+});
+
+// 分组信息监听
+register('mall/likedGoods',(likedGoods:GoodsDetails[]) => {   
+    STATE.likedGoods = likedGoods;
+    forelet.paint(STATE);
+});
