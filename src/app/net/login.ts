@@ -5,11 +5,11 @@
 import { open, reopen, request, setBottomLayerReloginMsg, setReloginCallback, setUrl } from '../../pi/net/ui/con_mgr';
 import { popNew } from '../../pi/ui/root';
 import { getCookie } from '../../pi/util/html';
-import { wsUrl } from '../config';
+import { maxCount, wsUrl } from '../config';
 import { getStore, GroupsLocation, OrderStatus, setStore, UserType } from '../store/memstore';
 import { unicode2Str } from '../utils/tools';
 import { registerWXAPI } from '../utils/wxAPI';
-import { getAddress, getAllGifts, getBalance, getCart, getEarningTotal, getFreight, getGroups, getInviteCode, getOrders, getUserInfo, setUserName } from './pull';
+import { getAddress, getAllGifts, getBalance, getCart, getEarningTotal, getFreight, getGroups, getInviteCode, getOrders, getUserInfo, guessYouLike, setUserName } from './pull';
 import { payComplete } from './push';
 
 document.addEventListener('visibilitychange', () => {
@@ -155,10 +155,11 @@ const userLogin = (userStr:any) => {
                 getGroups(<any>GroupsLocation[k]);
             }
         }
-        getCart();
-        getAddress();  //
-        getFreight();
-      
+        getCart();    // 购物车
+        getAddress();  // 地址列表
+        getFreight();   // 运费列表
+        guessYouLike(maxCount);
+        
         // 获取订单
         getOrders(OrderStatus.PENDINGPAYMENT);
         getOrders(OrderStatus.PENDINGDELIVERED);
