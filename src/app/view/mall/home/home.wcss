@@ -31,3 +31,20 @@
 .no-group{
     visibility: hidden;
 }
+.like-goods-box{
+    margin-top: 20px;
+}
+.like-title{
+    font-size: 24px;
+    text-align: center;
+}
+.goods-list{
+    padding: 20px;
+}
+.goods-list-items{
+    display: flex;
+    flex-wrap: wrap;
+}
+.goods-item{
+    width: 50%;
+}

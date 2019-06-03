@@ -21,7 +21,7 @@ export class GoodsItem extends Widget {
             mallImagPre
         };
         super.setProps(this.props,oldProps);
-        console.log('GoodsItem ----------------',this.props);
+        // console.log('GoodsItem ----------------',this.props);
     }
 
     public goodsItemClick(e:any) {

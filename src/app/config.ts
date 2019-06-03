@@ -54,3 +54,6 @@ export const saleClassGoodsId = 10020009;
 
 // 分页请求条数
 export const maxCount = 20;
+
+// 猜你喜欢最大条数
+export const likedGoodsMaxLen = 60;

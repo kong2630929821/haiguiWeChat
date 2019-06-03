@@ -22,3 +22,6 @@
     height: 100px;
     margin-bottom: 10px;
 }
+.turntable-icon{
+    background-image: url(../../res/image/turntable_icon.png);
+}

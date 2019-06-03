@@ -69,6 +69,33 @@ export const getGoodsDetails = (goodsId:number) => {
     });
 };
 
+// 猜你喜欢
+export const guessYouLike = (count:number) => {
+    const msg = {
+        type:'guess_you_like',
+        param:{
+            count
+        }
+    };
+
+    return requestAsync(msg).then(res => {
+        if (!res.goodsInfo) return;
+        const likeGoodsList = [];
+        for (const v of res.goodsInfo) {
+            const goods = parseGoodsDetail(v);
+            likeGoodsList.push(goods);
+        }
+        let likedGoods = getStore('mall/likedGoods');
+        likedGoods = likedGoods.concat(likeGoodsList);
+        console.log('guessYouLike ======',likeGoodsList);
+        setStore('mall/likedGoods',likedGoods);
+
+        return likeGoodsList;
+    }).catch(() => {
+        
+        return [];
+    });
+};
 /**
  * 加入购物车
  */
