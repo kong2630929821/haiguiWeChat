@@ -126,6 +126,8 @@ export const getCart = () => {
         console.log('getCart ======',res);
         const carts = parseCart(res.cartInfo);
         setStore('mall/cartGoods',carts);
+
+        return carts;
     });
 };
 

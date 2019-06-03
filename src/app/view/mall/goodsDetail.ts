@@ -83,7 +83,7 @@ export class GoodsDetailHome extends Widget {
     // 点击描述
     public clickDescs(e:any,key:string) {
         if (key === 'verified') {
-            if (getStore('mall/IDCard')) {
+            if (getStore('user/IDCard')) {
                 popNew('app-view-mine-verify');
             } else {
                 popNew('app-view-mine-IDCardUpload');
@@ -122,8 +122,10 @@ export class GoodsDetailHome extends Widget {
 
     // 选择规则关闭
     public specCloseClick(res:any) {
-        this.props.skuIndex = res.skuIndex;
-        this.props.amount = res.amount;
+        if (res.amount && res.skuIndex) {
+            this.props.skuIndex = res.skuIndex;
+            this.props.amount = res.amount;
+        } 
         this.props.chooseSpec = false;
         this.paint();
     }

@@ -51,6 +51,7 @@ export class OrderDetail extends Widget {
                 cancelOrder(order.id).then(() => {
                     popNewMessage('取消成功');
                     getOrders(activeStatus);
+                    this.ok && this.ok(OrderStatus.PENDINGPAYMENT);
                 }).catch(() => {
                     popNewMessage('取消失败');
                 });

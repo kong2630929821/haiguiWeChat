@@ -93,6 +93,13 @@ export class App extends Widget {
         this.paint();
     }
 
+    // 去我的
+    public gotoMine() {
+        this.props.isActive = 4;
+        closeAllPage();
+        this.paint();
+    }
+
     public updateCartGoodsIcon(cartGoods:CartGoods[]) {
         let len = 0;
         for (const v of cartGoods) {
@@ -113,19 +120,28 @@ const closeAllPage = () => {
 };
 
 // ===================================================== 立即执行
+// 去商城
 register('flags/gotoMallHome',() => {
     const w:any = forelet.getWidget(WIDGET_NAME);
     w && w.gotoMallHome();
 });
 
+// 去购物车
 register('flags/gotoShoppinigCart',() => {
     const w:any = forelet.getWidget(WIDGET_NAME);
     w && w.gotoShoppinigCart();
 });
 
+// 去分类
 register('flags/gotoClass',() => {
     const w:any = forelet.getWidget(WIDGET_NAME);
     w && w.gotoClass();
+});
+
+// 去我的
+register('flags/gotoMine',() => {
+    const w:any = forelet.getWidget(WIDGET_NAME);
+    w && w.gotoMine();
 });
 
 // 购物车变动
