@@ -189,11 +189,11 @@ export class GiftPage extends Widget {
             if (this.props.fg === PowerFlag.free || this.props.fg === PowerFlag.offClass) {
                 popNew('app-view-member-turntable');  // 打开大转盘
             } 
-            popNewMessage('支付成功');
+            popNewMessage('领取成功');
             getAllGifts();  // 重新获取所有礼包
             
         }).catch(err => {
-            popNewMessage('支付失败');
+            popNewMessage('领取失败');
         });
     }
 
