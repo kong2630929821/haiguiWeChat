@@ -107,7 +107,7 @@ export class ConfirmOrder extends Widget {
         }
         if (!getStore('user/fcode')) {
             popNew('app-view-member-applyModalBox',{ needSelGift:false,title:'请填写个人信息' },() => {
-                this.order();
+                this.orderClick();
             });
 
             return;
