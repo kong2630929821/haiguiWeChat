@@ -1,10 +1,11 @@
 import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
+import { freeMaskGoodsId, OffClassGoodsId } from '../../config';
 import { cancelOrder, getOrders, payMoney, receiptOrder } from '../../net/pull';
 import { getStore, Order, OrderStatus, register } from '../../store/memstore';
 import { popNewLoading, popNewMessage, priceFormat } from '../../utils/tools';
-import { clearNoResponse, closeLoading, noResponse, orderPay, setPayLoading, setPayOids } from '../shoppingCart/confirmOrder';
+import { clearNoResponse, closeLoading, noResponse, orderPay, setGoodsId, setPayLoading, setPayOids } from '../shoppingCart/confirmOrder';
 
 // tslint:disable-next-line:no-reserved-keywords
 declare var module: any;
@@ -104,10 +105,12 @@ export const payOrderNow = async (order:Order,success:Function) => {
     const cash = getStore('balance').cash;  // 余额 
     const totalFee = order.origin + order.tax + order.freight;
     const loading = popNewLoading('支付中');
+    const goodsid = order.orderGoods[0][0].id;
     try {
         if (totalFee > cash) {
             console.log('余额不足 充值');
             setPayOids(oids); // 存储即将付款的订单id
+            setGoodsId(goodsid); // 存储即将付款的商品id
             setPayLoading(loading);
             noResponse();
             payMoney(totalFee - cash,'105',1,() => {
@@ -120,6 +123,9 @@ export const payOrderNow = async (order:Order,success:Function) => {
                 try {
                     await orderPay(oids);
                     popNewMessage('支付成功');
+                    if (goodsid === freeMaskGoodsId || goodsid === OffClassGoodsId) {
+                        popNew('app-view-member-turntable');  // 打开大转盘
+                    }
                     loading.callback(loading.widget);
                     success && success(); 
                 } catch (err) {

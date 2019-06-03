@@ -646,12 +646,15 @@ export const upgradeHWang = (sel:string) => {
 
 /**
  * 绑定用户 与邀请用户建立联系
+ * @param code 父级邀请码
+ * @param t 1 只绑定海王邀请码 2 只绑定海宝邀请码 3 可绑定海王或海宝邀请码
  */
-export const bindUser = (code:string) => {
+export const bindUser = (code:string,t:number) => {
     const msg = {
         type:'mall/members@build_user',
         param:{
-            code
+            code,
+            type:t
         }
     };
 
