@@ -2,13 +2,14 @@ import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
 import { mallImagPre } from '../../../config';
-import { addCart, deductCart } from '../../../net/pull';
+import { addCart, deductCart, getCart } from '../../../net/pull';
 import { CartGoods, register, setStore } from '../../../store/memstore';
 import { calcPrices, getImageThumbnailPath, popNewMessage, priceFormat } from '../../../utils/tools';
 
 export const forelet = new Forelet();
 
 interface Props {
+    isActive:boolean;     // 是否激活
     allSelected:boolean;  // 全选
     editStatus:boolean;  // 购物车编辑状态
     totalSale:string;   // 总价显示
@@ -39,7 +40,8 @@ export class ShoppingCart extends Widget {
             mallImagPre
         };
         super.setProps(this.props);
-        this.calcTotalFee();
+        console.log('ShoppingCart ===',this.props);
+        getCart();
     }
 
     // 编辑

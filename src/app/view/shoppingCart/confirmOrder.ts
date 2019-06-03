@@ -3,7 +3,7 @@ import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { mallImagPre } from '../../config';
 import { getCart, order, orderNow, payMoney, payOrder } from '../../net/pull';
-import { CartGoods, getStore, OrderStatus, register } from '../../store/memstore';
+import { CartGoods, getStore, OrderStatus, register, setStore } from '../../store/memstore';
 import { getLastAddress } from '../../utils/logic';
 import { calcFreight, getImageThumbnailPath, popNewLoading, popNewMessage, priceFormat } from '../../utils/tools';
 import { allOrderStatus } from '../mine/home/home';
@@ -184,14 +184,12 @@ export class ConfirmOrder extends Widget {
             if (totalFee > cash) {
                 payOids = oids;// 存储即将付款的订单id
                 payLoading = loading;
-                noResponse(() => {
-                    popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGPAYMENT,allStaus:allOrderStatus.slice(0,4) });
-                });
+                noResponse(this.payFaile.bind(this));
                 payMoney(totalFee - cash,'105',1,() => {
                     popNewMessage('支付失败');
                     clearNoResponse();
                     closeLoading();
-                    popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGPAYMENT,allStaus:allOrderStatus.slice(0,4) });
+                    this.payFaile();
                 });
             } else {
                 popNew('app-view-member-confirmPayInfo',{ money:priceFormat(totalFee) },async () => {
@@ -221,6 +219,13 @@ export class ConfirmOrder extends Widget {
     public paySuccess() {
         this.ok && this.ok();
         popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGDELIVERED,allStaus:allOrderStatus.slice(0,4) });
+    }
+
+    // 支付失败
+    public payFaile() {
+        setStore('flags/gotoMine',true);
+        popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGPAYMENT,allStaus:allOrderStatus.slice(0,4) });
+        this.ok && this.ok();
     }
 }
 
