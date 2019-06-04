@@ -119,7 +119,10 @@ export const getImageDetailPath = (images:MallImages[]) => {
 /**
  * 计算商品库存
  */
-export const calcInventorys = (skus:SKU[]) => {
+export const calcInventorys = (skus:SKU[],skuIndex:number) => {
+    if (skuIndex >= 0) {
+        return skus[skuIndex][3];
+    }
     let num = 0;
     for (const v of skus) {
         num += v[3];

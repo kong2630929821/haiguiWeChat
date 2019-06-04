@@ -35,7 +35,7 @@ export class OrderDetail extends Widget {
         const activeStatus = this.props.status;
         if (num === 1) {  // 确认按钮
             if (activeStatus === OrderStatus.PENDINGPAYMENT) {  // 去支付
-                payOrderNow(order,this.paySuccess);  // 去付款
+                payOrderNow(order,this.paySuccess.bind(this));  // 去付款
             } else if (activeStatus === OrderStatus.PENDINGRECEIPT) {  // 待收货  确认收货
                 popNew('app-components-popModel-popModel',{ title:'是否确认收货' },() => {
                     receiptOrder(order.id).then(() => {

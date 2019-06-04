@@ -20,7 +20,7 @@ export class GoodsDetailsSpec extends Widget {
             ...props,
             ...ret,
             priceFormat,
-            inventorys:calcInventorys(props.goods.labels),  // 库存
+            inventorys:calcInventorys(props.goods.labels,props.skuIndex),  // 库存
             finalSale:ret.sale,  // 卖价加上标签影响的价格
             image:getImageThumbnailPath(props.goods.images),
             mallImagPre
