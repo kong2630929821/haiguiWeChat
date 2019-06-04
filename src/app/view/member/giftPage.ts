@@ -45,12 +45,15 @@ export class GiftPage extends Widget {
 
         } else {
             this.props.img = `399_${PowerFlag[props.fg]}.png`;
-        }
-        
+        }        
+        this.initData();
+    }
+
+    public initData() {
         // 领取按钮
         this.props.isAble = true;  // 默认值可以领取
         const memberGifts = getStore('user/memberGifts');
-        if (props.fg === PowerFlag.vipGift) { // 尊享礼包
+        if (this.props.fg === PowerFlag.vipGift) { // 尊享礼包
             const v = memberGifts.vipGift;
             const endTime = v[5];  // 结束时间
             const nextTime = v[3];  // 下次可领时间
@@ -67,19 +70,19 @@ export class GiftPage extends Widget {
             } else {
                 this.props.btn = '领取本期面膜';
             }
-        } else if (props.fg === PowerFlag.free) {  // 免费试用装
+        } else if (this.props.fg === PowerFlag.free) {  // 免费试用装
             this.initBtn(memberGifts.free,1);
            
-        } else if (props.fg === PowerFlag.offClass) {  // 线下课程 
+        } else if (this.props.fg === PowerFlag.offClass) {  // 线下课程 
             this.initBtn(memberGifts.offClass,2);
             
-        } else if (props.fg === PowerFlag.gift) {  // 美白礼包 
+        } else if (this.props.fg === PowerFlag.gift) {  // 美白礼包 
             this.initBtn(memberGifts.gift,1);
             
-        } else if (props.fg === PowerFlag.vipClass) { // 精品课程
+        } else if (this.props.fg === PowerFlag.vipClass) { // 精品课程
             this.initBtn(memberGifts.vipClass,2);
 
-        } else if (props.fg === PowerFlag.saleClass) { // 销售课程
+        } else if (this.props.fg === PowerFlag.saleClass) { // 销售课程
             this.initBtn(memberGifts.saleClass,2);
         } 
     }
@@ -194,6 +197,9 @@ export class GiftPage extends Widget {
                 popNew('app-view-member-turntable');  // 打开大转盘
             } 
             popNewMessage('领取成功');
+            this.props.isAble = false;
+            this.props.btn = '领取成功';
+            this.paint();
             getAllGifts();  // 重新获取所有礼包
             
         }).catch(err => {
@@ -248,9 +254,4 @@ export class GiftPage extends Widget {
 register('flags/wxReady',() => {
     const w:any = forelet.getWidget(WIDGET_NAME);
     w && w.share(false);
-});
-
-register('user/memberGifts',() => {
-    const w:any = forelet.getWidget(WIDGET_NAME);
-    w && w.setProps(w.props);
 });
