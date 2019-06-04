@@ -170,7 +170,8 @@ export class ShoppingCart extends Widget {
 
     // 商品详情
     public goodsClick(e:any,index:number) {
-        popNew('app-view-mall-goodsDetail',{ goods:this.state.cartGoodsShow[index].cartGood.goods });
+        const goods = this.state.cartGoodsShow[index].cartGood.goods;
+        popNew('app-view-mall-goodsDetail',{ goods,skuId:goods.labels[0][0] });
     }
 }
 const STATE = {

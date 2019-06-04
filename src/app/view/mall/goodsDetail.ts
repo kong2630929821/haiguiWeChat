@@ -13,6 +13,7 @@ export const WIDGET_NAME = module.id.replace(/\//g, '-');
 
 interface Props {
     goods:GoodsDetails;     // 商品详情
+    skuId?:string;
 }
 /**
  * 商品详情
@@ -71,6 +72,15 @@ export class GoodsDetailHome extends Widget {
         console.log('GoodsDetailHome',this.props);
         getGoodsDetails(props.goods.id).then(goods => {
             this.props.goods = goods;
+            if (this.props.skuId) {
+                for (let i = 0;i < goods.labels.length;i++) {
+                    const sku = goods.labels[i];
+                    if (sku[0] === this.props.skuId) {
+                        this.props.skuIndex = i;
+                        break;
+                    }
+                }
+            }
             this.paint();
         });
         getAreas(props.goods.area).then((area:Area) => {
@@ -153,7 +163,7 @@ export class GoodsDetailHome extends Widget {
             popNew('app-view-shoppingCart-confirmOrder',{ orderGoods:cartGoods,buyNow:true });
         } else {
             const goodId = this.props.goods.id;
-            const num = calcCartGoodsNum(goodId);
+            const num = calcCartGoodsNum(goodId,sku[0]);
             if (num >= sku[3]) {
                 popNewMessage('库存不足(含已加购件数)'); 
                 
@@ -186,10 +196,12 @@ export class GoodsDetailHome extends Widget {
 }
 
 // 计算加入购物车的商品数量
-const calcCartGoodsNum = (goodId:number) => {
+const calcCartGoodsNum = (goodId:number,skuId:string) => {
     const cartGoods = getStore('mall/cartGoods');
     for (const cart of cartGoods) {
-        if (cart.goods.id === goodId) return cart.amount;
+        const goods = cart.goods;
+        const sku = goods.labels;
+        if (goods.id === goodId && sku[0][0] === skuId) return cart.amount;
     }
 
     return 0;

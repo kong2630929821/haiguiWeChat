@@ -1,4 +1,5 @@
 import { Widget } from '../../../pi/widget/widget';
+import { mallImagPre } from '../../config';
 import { getImageThumbnailPath, priceFormat } from '../../utils/tools';
 import { SplitOrder } from './confirmOrder';
 
@@ -13,7 +14,8 @@ export class SplitOrderPage extends Widget {
         this.props = {
             ...props,
             getImageThumbnailPath,
-            priceFormat
+            priceFormat,
+            mallImagPre
         };
         super.setProps(this.props);
         console.log('SplitOrderPage props',this.props);
