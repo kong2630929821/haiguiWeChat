@@ -52,11 +52,15 @@ export class GiftPage extends Widget {
         const memberGifts = getStore('user/memberGifts');
         if (props.fg === PowerFlag.vipGift) { // 尊享礼包
             const v = memberGifts.vipGift;
-            if (v[0] < v[1] && v[3] > Date.now()) {
+            const endTime = v[5];  // 结束时间
+            const nextTime = v[3];  // 下次可领时间
+            const nowTime = Date.now();  // 当前时间
+            const perTime = v[4];  // 间隔时间
+            if (v[0] < v[1] && nextTime > nowTime) {
                 // 未到下次可领时间，且未领完
-                this.props.btn = `本周已领，还剩 ${v[1] - v[0]} 盒`;
+                this.props.btn = `本周已领，还剩 ${Math.ceil((endTime - nextTime) / perTime)} 盒`;
                 this.props.isAble = false;
-            } else if (v[0] === v[1] || v[5] < Date.now()) {
+            } else if (v[0] === v[1] || endTime < nowTime) {
                 // 已超过结束时间，或已经全部领完
                 this.props.btn = '已全部领完';
                 this.props.isAble = false;
@@ -244,4 +248,9 @@ export class GiftPage extends Widget {
 register('flags/wxReady',() => {
     const w:any = forelet.getWidget(WIDGET_NAME);
     w && w.share(false);
+});
+
+register('user/memberGifts',() => {
+    const w:any = forelet.getWidget(WIDGET_NAME);
+    w && w.setProps(w.props);
 });

@@ -24,19 +24,23 @@ export class PowerDetail extends Widget {
    
     public setProps(props:any) {
         super.setProps(props);
-        if (props.userType === UserType.hWang) {
+        this.initData();
+        if (getStore('user/userType') === this.props.userType) {
+            this.state = getStore('user/inviteCode','');
+        }
+    }
+
+    public initData() {
+        if (this.props.userType === UserType.hWang) {
             this.props.list = Constant.hWangDesc;
             this.props.powerList = Constant.hWangPower;
         } else {
             this.props.list = Constant.hBaoDesc;
             this.props.powerList = Constant.hBaoPower;
         }
-        if (getStore('user/userType') === props.userType) {
-            this.state = getStore('user/inviteCode','');
-        }
-        this.props.userTypeShow = getUserTypeShow(props.userType);
+        this.props.userTypeShow = getUserTypeShow(this.props.userType);
     }
-
+    
     // 权益
     public itemClick(ind:number) {
         const item = this.props.powerList[ind];
@@ -67,11 +71,11 @@ export class PowerDetail extends Widget {
 }
 
 register('user',(r) => {
-    const w = forelet.getWidget(WIDGET_NAME);
+    const w:any = forelet.getWidget(WIDGET_NAME);
     // 已经是海王 不能再开通海宝
     if (w && r.userType <= w.props.userType) {
         w.props.userType = r.userType;
-        w.props.userTypeShow = getUserTypeShow(r.userType);
+        w.initData();
         forelet.paint(r.inviteCode); 
     }
 });
