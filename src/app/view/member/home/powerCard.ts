@@ -5,6 +5,7 @@ interface Props {
     name:string;
     money:string;
     code:string;
+    privilegeNumber:string;   // 特权数量
 }
 /**
  * 权益升级卡片

@@ -276,7 +276,7 @@ export const parseAfterSale = (infos:any,orders:Order[]) => {
     const afterSaleOrders = [];
     for (let i = 0;i < infos.length;i++) {
         const info = infos[i];
-        const order = filterOrderGoods(orders[i],info[2]);
+        const order = filterOrderGoods(orders[i],info[2],info[4][0]);
         const afterSaleOrder:AfterSale = {
             id:info[0],		      // 售后订单id
             order,                // 售后商品订单详情
@@ -295,9 +295,9 @@ export const parseAfterSale = (infos:any,orders:Order[]) => {
 };
 
 // 过滤固定商品的订单
-const filterOrderGoods = (order:Order,goodsid:number) => {
+const filterOrderGoods = (order:Order,goodsid:number,skuId:string) => {
     const goods = order.orderGoods.filter((v) => {
-        return v[0].id === goodsid;
+        return (v[0].id === goodsid && v[0].labels[0][0] === skuId);
     });
     order.orderGoods = goods;
     
