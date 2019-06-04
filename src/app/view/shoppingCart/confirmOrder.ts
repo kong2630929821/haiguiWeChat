@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { mallImagPre } from '../../config';
+import { freeMaskGoodsId, mallImagPre, OffClassGoodsId } from '../../config';
 import { getCart, order, orderNow, payMoney, payOrder } from '../../net/pull';
 import { Address, CartGoods, getStore, OrderStatus, register, setStore } from '../../store/memstore';
 import { getLastAddress } from '../../utils/logic';
@@ -206,6 +206,12 @@ export const setPayOids = (oids:number[]) => {
     payOids = oids;
 };
 
+export const setGoodsId = (goodsId:number) => {  
+    if (goodsId === freeMaskGoodsId || goodsId === OffClassGoodsId) {
+        turntable = true;
+    }
+};
+
 // 15秒没有收到充值成功的消息  认为失败
 export const noResponse = (cb?:Function) => {
     timer = setTimeout(() => {
@@ -220,6 +226,7 @@ export const clearNoResponse = () => {
 let payLoading;
 let payOids;
 let timer;
+let turntable;
 // 支付
 export const orderPay = (orderIds:number[]) => {
     if (!orderIds) return;
@@ -324,6 +331,10 @@ register('flags/mallRecharge',async () => {
         await orderPay(payOids);
         popNewMessage('支付成功');
         w && w.paySuccess();
+        if (turntable) {
+            popNew('app-view-member-turntable');  // 打开大转盘
+            turntable = false;
+        }
         closeLoading();
         payOids = undefined;
     } catch (e) {

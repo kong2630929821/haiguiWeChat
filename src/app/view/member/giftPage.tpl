@@ -32,11 +32,13 @@
     {{elseif it.fg==5 && !it.isCurVip}}
     <div w-class="open" on-tap="openVIP">立即开通</div>
 
-    {{% ========================邀请好友======================}}
+    {{% ========================邀请好友，海王可以邀请开通海王======================}}
     {{elseif it.fg==6 && it.isCurVip}}
     <div w-class="invites">
         <div w-class="invitebtn" on-tap="inviteShare('hBao')">邀请好友开通海宝</div>
+        {{if it.userType == 1}}
         <div w-class="invitebtn" on-tap="inviteShare('hWang')">邀请好友开通海王</div>
+        {{end}}
     </div>
     
     {{% ========================精品课程，销售课程======================}}
