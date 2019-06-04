@@ -93,13 +93,13 @@ export class ConfirmOrder extends Widget {
                 break;
             }
         }
-        // if (hasTax && !getStore('user/IDCard')) {
-        //     popNew('app-components-popModel-popModel',{ title:'海外购商品必须实名' },() => {
-        //         popNew('app-view-mine-IDCardUpload');
-        //     });
+        if (hasTax && !getStore('user/IDCard')) {
+            popNew('app-components-popModel-popModel',{ title:'海外购商品必须实名' },() => {
+                popNew('app-view-mine-IDCardUpload');
+            });
 
-        //     return;
-        // } 
+            return;
+        } 
            
         this.order();
         
