@@ -123,11 +123,12 @@ export const payOrderNow = async (order:Order,success:Function) => {
                 try {
                     await orderPay(oids);
                     popNewMessage('支付成功');
+                    loading.callback(loading.widget);
+                    success && success(); 
+                    // alert(goodsid);
                     if (goodsid === freeMaskGoodsId || goodsid === OffClassGoodsId) {
                         popNew('app-view-member-turntable');  // 打开大转盘
                     }
-                    loading.callback(loading.widget);
-                    success && success(); 
                 } catch (err) {
                     loading.callback(loading.widget);
                     if (err.type === 2132) {

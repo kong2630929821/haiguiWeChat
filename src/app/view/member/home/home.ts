@@ -63,15 +63,17 @@ export class Home extends Widget {
 
     // 升级会员等级
     public upgradeUser(user:string) {
-        popNew('app-view-member-applyModalBox',{ userType:UserType[user] },(sel) => {
-            if (user === 'hWang') {
-                applyToUpHwang(sel);
-            } else {
-                payToUpHbao(sel);
-                register('flags/upgradeHbao',() => {
+        popNew('app-view-member-privacypolicy',null,() => {
+            popNew('app-view-member-applyModalBox',{ userType:UserType[user] },(sel) => {
+                if (user === 'hWang') {
+                    applyToUpHwang(sel);
+                } else {
                     payToUpHbao(sel);
-                });
-            }
+                    register('flags/upgradeHbao',() => {
+                        payToUpHbao(sel);
+                    });
+                }
+            });
         });
     }
 
