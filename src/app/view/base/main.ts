@@ -8,7 +8,6 @@ import { backCall1, backList, popNew } from '../../../pi/ui/root';
 import { userAgent } from '../../../pi/util/html';
 import { addWidget } from '../../../pi/widget/util';
 import { setStore, UserType } from '../../store/memstore';
-import { unicode2Str } from '../../utils/tools';
 import { setWxConfig } from '../../utils/wxAPI';
 import { PowerFlag } from '../member/powerConstant';
 
@@ -39,8 +38,6 @@ export const run = (cb): void =>  {
             popNew('app-view-member-powerDetail',{ userType:UserType.hWang });
         }
     }
-    const a = '[36229,20154,19981,20250,39134,55357,32,55357]';
-    console.log('---------',unicode2Str(JSON.parse(a)));
     // 解决进入时闪一下问题
     setTimeout(() => {
         if (cb) cb();
