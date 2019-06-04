@@ -291,7 +291,7 @@ const plitOrder = (orderGoods:CartGoodsShow[],address:Address) => {
                 order:v[1],
                 saleFee:totalNoTaxSale,
                 taxFee:0,
-                freightFee:calcFreight(address.area_id)
+                freightFee:calcFreight(address && address.area_id)
             };
             splitOrders.push(splitOrder2);
         }

@@ -165,7 +165,7 @@ export class GoodsDetailHome extends Widget {
             const goodId = this.props.goods.id;
             const num = calcCartGoodsNum(goodId,sku[0]);
             if (num >= sku[3]) {
-                popNewMessage('库存不足(含已加购件数)'); 
+                popNewMessage('库存不足(含已加购物车件数)'); 
                 
                 return;
             }
