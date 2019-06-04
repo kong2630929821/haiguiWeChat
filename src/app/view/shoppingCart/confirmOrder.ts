@@ -48,7 +48,10 @@ export class ConfirmOrder extends Widget {
             const addr = getLastAddress();
             this.props.address = addr[2];
             const ret = plitOrder(this.props.orderGoodsShow,this.props.address);
+            this.props.splitOrders = ret.splitOrders;
             this.props.totalFreight = ret.totalFreight;
+            this.props.totalSale = ret.totalSale;
+            this.props.totalTax = ret.totalTax;
             this.paint();
         });
     }
@@ -59,7 +62,11 @@ export class ConfirmOrder extends Widget {
             const addr = getLastAddress();
             this.props.address = addr[2];
             const ret = plitOrder(this.props.orderGoodsShow,this.props.address);
+            this.props.splitOrders = ret.splitOrders;
             this.props.totalFreight = ret.totalFreight;
+            this.props.totalSale = ret.totalSale;
+            this.props.totalTax = ret.totalTax;
+
             this.paint();
         });
     }
