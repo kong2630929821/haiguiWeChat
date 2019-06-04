@@ -2,7 +2,7 @@
 import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
-import { getEarningTotal } from '../../../net/pull';
+import { getAllGifts, getEarningTotal } from '../../../net/pull';
 import { register, UserType } from '../../../store/memstore';
 import { applyToUpHwang, getUserTypeShow, payToUpHbao } from '../../../utils/logic';
 import { copyToClipboard, popNewMessage, priceFormat } from '../../../utils/tools';
@@ -26,7 +26,8 @@ export class Home extends Widget {
 
     public setProps(props:any) {
         super.setProps(props);
-        getEarningTotal();
+        getEarningTotal();  // 获取收益统计
+        getAllGifts();  // 重新获取所有礼包
     }
 
     // 权益
@@ -62,15 +63,17 @@ export class Home extends Widget {
 
     // 升级会员等级
     public upgradeUser(user:string) {
-        popNew('app-view-member-applyModalBox',{ userType:UserType[user] },(sel) => {
-            if (user === 'hWang') {
-                applyToUpHwang(sel);
-            } else {
-                payToUpHbao(sel);
-                register('flags/upgradeHbao',() => {
+        popNew('app-view-member-privacypolicy',null,() => {
+            popNew('app-view-member-applyModalBox',{ userType:UserType[user] },(sel) => {
+                if (user === 'hWang') {
+                    applyToUpHwang(sel);
+                } else {
                     payToUpHbao(sel);
-                });
-            }
+                    register('flags/upgradeHbao',() => {
+                        payToUpHbao(sel);
+                    });
+                }
+            });
         });
     }
 

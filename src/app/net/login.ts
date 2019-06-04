@@ -7,7 +7,7 @@ import { popNew } from '../../pi/ui/root';
 import { getCookie } from '../../pi/util/html';
 import { maxCount, wsUrl } from '../config';
 import { getStore, GroupsLocation, OrderStatus, setStore, UserType } from '../store/memstore';
-import { unicode2Str } from '../utils/tools';
+import { unicode2ReadStr, unicode2Str } from '../utils/tools';
 import { registerWXAPI } from '../utils/wxAPI';
 import { getAddress, getAllGifts, getBalance, getCart, getEarningTotal, getFreight, getGroups, getInviteCode, getOrders, getUserInfo, guessYouLike, setUserName } from './pull';
 import { payComplete } from './push';
@@ -181,7 +181,8 @@ const userLogin = (userStr:any) => {
         getUserInfo().then(res => {
             
             const user = getStore('user');
-            if (res.wx_name !== userStr.nickname) {
+            console.log(unicode2ReadStr(res.wx_name), userStr.nickname);
+            if (unicode2ReadStr(res.wx_name) !== userStr.nickname) {
                 setUserName(userStr.nickname);
             }
 
