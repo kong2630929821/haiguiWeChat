@@ -5,7 +5,7 @@ import { freeMaskGoodsId, OffClassGoodsId, saleClassGoodsId, vipClassGoodsId, vi
 import { getAllGifts, getGoodsDetails, orderActiveGoods, payMoney, payOrder } from '../../net/pull';
 import { Address, getStore, register, UserType } from '../../store/memstore';
 import { applyToUpHwang, payToUpHbao } from '../../utils/logic';
-import { popNewLoading, popNewMessage, priceFormat } from '../../utils/tools';
+import { copyToClipboard, popNewLoading, popNewMessage, priceFormat } from '../../utils/tools';
 import { setWxConfig, shareWithUrl } from '../../utils/wxAPI';
 import { localInviteCode } from '../base/main';
 import { PowerFlag } from './powerConstant';
@@ -17,6 +17,7 @@ interface Props {
     btn:string;     // 按钮名称
     isAble:boolean;  // 是否可以领取
     ableGain:boolean;  // 是否可以领取试用装或线下课程
+    inviteCode:string;   // 邀请码
 }
 // tslint:disable-next-line:no-reserved-keywords
 declare var module: any;
@@ -31,15 +32,12 @@ export class GiftPage extends Widget {
 
     public setProps(props:any) {
         super.setProps(props);
+        this.props.inviteCode = getStore('user/inviteCode','');
         // 用户会员等级是否等于当前所查看的会员等级
         this.props.isCurVip = props.isCurVip || getStore('user/userType',-1) === props.userType; 
         if (props.fg === PowerFlag.offClass || props.fg === PowerFlag.free) {
-            if (props.userType <= UserType.hBao) {
-                this.props.img = `${PowerFlag[props.fg]}_vip.png`;
-            } else {
-                this.props.img = `${PowerFlag[props.fg]}.png`;
-            }
-            
+            this.props.img = `${PowerFlag[props.fg]}.png`;
+
         } else if (props.userType === UserType.hWang) {
             this.props.img = `10000_${PowerFlag[props.fg]}.png`;
 
@@ -87,6 +85,12 @@ export class GiftPage extends Widget {
         } 
     }
 
+    // 复制邀请码
+    public copyCode() {
+        copyToClipboard(this.props.inviteCode);
+        popNewMessage('复制成功');
+    }
+
     /**
      * 更新按钮名称
      * @param v v[0] 已领数量 v[1] 领取上限
@@ -106,7 +110,7 @@ export class GiftPage extends Widget {
 
     // 免费领取
     public freeReceive() {
-        if (localInviteCode === getStore('user/inviteCode')) {
+        if (localInviteCode === this.props.inviteCode) {
             popNewMessage('不能领取自己分享的试用装');
 
             return;
@@ -128,7 +132,7 @@ export class GiftPage extends Widget {
 
     // 报名课程
     public applyClass() {
-        if (localInviteCode === getStore('user/inviteCode')) {
+        if (localInviteCode === this.props.inviteCode) {
             popNewMessage('不能领取自己分享的线下课程');
 
             return;
@@ -207,31 +211,31 @@ export class GiftPage extends Widget {
         });
     }
 
-    // 开通会员
-    public openVIP() {
-        popNew('app-view-member-privacypolicy',null,() => {
-            popNew('app-view-member-applyModalBox',{ userType:this.props.userType },(sel) => {
-                if (this.props.userType === UserType.hBao) {
-                    payToUpHbao(sel);
-                    register('flags/upgradeHbao',() => {
-                        payToUpHbao(sel);
-                    });
-                } else {
-                    applyToUpHwang(sel);
-                }
-            });
-        });
+    // // 开通会员
+    // public openVIP() {
+    //     popNew('app-view-member-privacypolicy',null,() => {
+    //         popNew('app-view-member-applyModalBox',{ userType:this.props.userType },(sel) => {
+    //             if (this.props.userType === UserType.hBao) {
+    //                 payToUpHbao(sel);
+    //                 register('flags/upgradeHbao',() => {
+    //                     payToUpHbao(sel);
+    //                 });
+    //             } else {
+    //                 applyToUpHwang(sel);
+    //             }
+    //         });
+    //     });
         
-    }
+    // }
 
     // 分享给好友
     public share(pop:boolean = true) {
         setWxConfig();
         if (this.props.fg === PowerFlag.free) {
-            shareWithUrl('免费领面膜','好友送了你一份面膜，快来领取吧',`${location.origin + location.pathname}?page=free&inviteCode=${getStore('user/inviteCode','')}`,'');
+            shareWithUrl('免费领面膜','好友送了你一份面膜，快来领取吧',`${location.origin + location.pathname}?page=free&inviteCode=${this.props.inviteCode}`,'');
 
         } else if (this.props.fg === PowerFlag.offClass) {
-            shareWithUrl('免费领课程','好友送了你一个线下课程，快来领取吧',`${location.origin + location.pathname}?page=offClass&inviteCode=${getStore('user/inviteCode','')}`,'');
+            shareWithUrl('免费领课程','好友送了你一个线下课程，快来领取吧',`${location.origin + location.pathname}?page=offClass&inviteCode=${this.props.inviteCode}`,'');
 
         } else {
             shareWithUrl('海龟壹号','更多精彩，就等你来',`${location.origin + location.pathname}`,'');
@@ -245,10 +249,10 @@ export class GiftPage extends Widget {
     public inviteShare(str:string) {
         setWxConfig();
         if (str === 'hBao') {
-            shareWithUrl('升级海宝','好友邀请你来成为海宝，享受海宝专属福利',`${location.origin + location.pathname}?page=upHbao&inviteCode=${getStore('user/inviteCode','')}`,'');
+            shareWithUrl('升级海宝','好友邀请你来成为海宝，享受海宝专属福利',`${location.origin + location.pathname}?page=upHbao&inviteCode=${this.props.inviteCode}`,'');
 
         } else {
-            shareWithUrl('升级海王','好友邀请你来成为海王，享受海王专属福利',`${location.origin + location.pathname}?page=upHwang&inviteCode=${getStore('user/inviteCode','')}`,'');
+            shareWithUrl('升级海王','好友邀请你来成为海王，享受海王专属福利',`${location.origin + location.pathname}?page=upHwang&inviteCode=${this.props.inviteCode}`,'');
         }
         popNew('app-components-bigImage-bigImage',{ img:'../../res/image/shareBg.png' });
     }

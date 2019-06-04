@@ -36,6 +36,7 @@
     font-size: 32px;
     color: #fff;
     background: #8A4AF3;
-    line-height: 80px;
+    height: 100px;
+    line-height: 100px;
     text-align: center;
 }
