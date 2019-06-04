@@ -274,7 +274,13 @@ export const throttle = (func) => {
  * 地址格式化
  */
 export const addressFormat = (addrStr:string) => {
-    const address = JSON.parse(addrStr);
+    try {
+        const address = JSON.parse(addrStr);
 
-    return `${address[0].join('')}${address[1]}`;
+        return `${address[0].join('')}${address[1]}`;
+
+    } catch (err) {
+        return addrStr;
+        
+    }
 };

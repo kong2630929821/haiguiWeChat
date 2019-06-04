@@ -10,6 +10,12 @@ interface Props {
         value:number[];
     };  // 选择的年月
 }
+const Status = [
+    '申请中',
+    '处理中',
+    '提现成功',
+    '提现失败'
+];
 
 /**
  * 所有列表页面
@@ -41,7 +47,7 @@ export class BalanceLog extends Widget {
                 const list = r.value.map((item,index) => {
                     if (getCashLogName(item[1]) === '提现') {
                         getWithdrawStatus(item[3]).then(res => {
-                            this.props.list[index].status = res.value[3] === 0 ? '申请中' :''; 
+                            this.props.list[index].status = Status[res.value[3]];
                             this.paint();
                         });
                     }

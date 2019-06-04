@@ -1,7 +1,7 @@
 import { Widget } from '../../../pi/widget/widget';
 import { applyWithdraw } from '../../net/pull';
 import { getStore } from '../../store/memstore';
-import { popNewMessage, priceFormat } from '../../utils/tools';
+import { popNewLoading, popNewMessage, priceFormat } from '../../utils/tools';
 interface Props {
     balance:string;  // 余额
     tax:number;    // 税费
@@ -38,10 +38,14 @@ export class Withdraw extends Widget {
     // 确认提现
     public confirm() {
         if (this.props.inputMoney > 0 && this.props.inputMoney <= Number(this.props.balance) && this.props.inputMoney % 10 === 0) {
+            const loadding = popNewLoading('申请提交中');
             applyWithdraw(this.props.inputMoney * 100).then(r => {
+                loadding && loadding.callback(loadding.widget);
                 this.ok && this.ok();
                 popNewMessage('申请提交成功');
+                
             }).catch(r => {
+                loadding && loadding.callback(loadding.widget);
                 popNewMessage('申请提交失败');
             });
         } else {
