@@ -3,7 +3,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { bindPhone, bindUser, randomInviteCode, sendCode, verifyIDCard } from '../../net/pull';
 import { getStore, setStore, UserType } from '../../store/memstore';
 import { getLastAddress } from '../../utils/logic';
-import { addressFormat, popNewLoading, popNewMessage } from '../../utils/tools';
+import { addressFormat, checkPhone, popNewLoading, popNewMessage } from '../../utils/tools';
 import { localInviteCode } from '../base/main';
 interface Props {
     realName:string;  // 用户名
@@ -79,7 +79,9 @@ export class FillAddrModalBox extends Widget {
 
     // 获取手机验证码
     public getPhoneCode() {
-        if (this.props.phoneNum) {
+        if (!checkPhone(this.props.phoneNum)) {
+            popNewMessage('手机号格式错误');
+        } else {
             sendCode(this.props.phoneNum).then(r => {
                 this.props.nowCount = 60;
                 popNewMessage('验证码已发送');
@@ -92,8 +94,6 @@ export class FillAddrModalBox extends Widget {
                     this.paint();
                 },1000);
             });
-        } else {
-            popNewMessage('请输入手机号');
         }
     }
 

@@ -1,7 +1,7 @@
 import { Widget } from '../../../pi/widget/widget';
 import { bindPhone, bindUser, randomInviteCode, sendCode, verifyIDCard } from '../../net/pull';
 import { getStore, setStore, UserType } from '../../store/memstore';
-import { popNewLoading, popNewMessage } from '../../utils/tools';
+import { checkPhone, popNewLoading, popNewMessage } from '../../utils/tools';
 import { localInviteCode } from '../base/main';
 
 interface Props {
@@ -84,7 +84,9 @@ export class ModalBoxInput extends Widget {
 
     // 获取手机验证码
     public getPhoneCode() {
-        if (this.props.phoneNum) {
+        if (!checkPhone(this.props.phoneNum)) {
+            popNewMessage('手机号格式错误');
+        } else {
             sendCode(this.props.phoneNum).then(r => {
                 this.props.nowCount = 60;
                 popNewMessage('验证码已发送');
@@ -99,8 +101,6 @@ export class ModalBoxInput extends Widget {
             }).catch(err => {
                 popNewMessage('获取验证码失败');
             });
-        } else {
-            popNewMessage('请输入手机号');
         }
     }
 

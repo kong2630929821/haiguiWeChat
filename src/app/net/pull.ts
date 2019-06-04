@@ -603,7 +603,7 @@ export const sendCode = (phone:string) => {
         param:{
             phone:phone,
             num:'86',
-            name:'海归一号'
+            name:'海龟壹号'
         }
     };
 
