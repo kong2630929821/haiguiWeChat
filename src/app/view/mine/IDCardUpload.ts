@@ -118,7 +118,8 @@ export class IDCardUpload extends Widget {
                         loadding && loadding.callback(loadding.widget);
                         this.ok && this.ok();
                         popNewMessage('实名认证成功');
-                        setStore('user/IDCard',this.props.card);
+                        setStore('user/realName',this.props.name,false);
+                        setStore('user/IDCard',this.props.card,false);
                     }).catch(() => {
                         popNewMessage('实名认证失败，请认真核对信息');
                         loadding && loadding.callback(loadding.widget);

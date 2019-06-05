@@ -4,7 +4,6 @@ import { Widget } from '../../../pi/widget/widget';
 import { freeMaskGoodsId, OffClassGoodsId, saleClassGoodsId, vipClassGoodsId, vipMaskGoodsId } from '../../config';
 import { getAllGifts, getGoodsDetails, orderActiveGoods, payMoney, payOrder } from '../../net/pull';
 import { Address, getStore, register, UserType } from '../../store/memstore';
-import { applyToUpHwang, payToUpHbao } from '../../utils/logic';
 import { copyToClipboard, popNewLoading, popNewMessage, priceFormat } from '../../utils/tools';
 import { setWxConfig, shareWithUrl } from '../../utils/wxAPI';
 import { localInviteCode } from '../base/main';
@@ -35,10 +34,7 @@ export class GiftPage extends Widget {
         this.props.inviteCode = getStore('user/inviteCode','');
         // 用户会员等级是否等于当前所查看的会员等级
         this.props.isCurVip = props.isCurVip || getStore('user/userType',-1) === props.userType; 
-        if (props.fg === PowerFlag.offClass || props.fg === PowerFlag.free) {
-            this.props.img = `${PowerFlag[props.fg]}.png`;
-
-        } else if (props.userType === UserType.hWang) {
+        if (props.userType === UserType.hWang) {
             this.props.img = `10000_${PowerFlag[props.fg]}.png`;
 
         } else {
