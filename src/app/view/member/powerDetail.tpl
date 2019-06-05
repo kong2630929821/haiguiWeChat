@@ -1,5 +1,5 @@
 <div class="new-page" w-class="page" ev-update="upgradeUser">
-    <widget w-tag="app-view-member-home-powerCard">{name:"{{it.userTypeShow}}",money:{{it.userType==2 ? 399:10000}},code:{{it1}} }</widget>
+    <widget w-tag="app-view-member-home-powerCard">{name:"{{it.userTypeShow}}",money:{{it.userType==2 ? 399:10000}},code:{{it1}},privilegeNumber:{{it.userType==2 ? 6:8}} }</widget>
     <div w-class="title">
         <img src="../../res/image/iconArrow.png"/>
         <span style="margin-left:20px;">权益介绍</span>

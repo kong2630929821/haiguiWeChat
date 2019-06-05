@@ -1,6 +1,6 @@
 <div w-class="tab">
     <div w-class="row">
-        <div w-class="title">尊享8大特权</div>
+        <div w-class="title">尊享{{it.privilegeNumber}}大特权</div>
         {{if it.code}}
         <div w-class="code" on-tap="copy">我的邀请码&nbsp;{{it.code}}</div>
         {{else}}

@@ -1,7 +1,7 @@
 <div w-class="page" >
     {{if it1.userType > 2}}
     <div on-tap="powerDetail('hBao')" ev-update="upgradeUser('hBao')">
-        <widget w-tag="app-view-member-home-powerCard">{name:"海宝会员",money:399}</widget>
+        <widget w-tag="app-view-member-home-powerCard">{name:"海宝会员",money:399,privilegeNumber:6}</widget>
     </div>
     {{else}}
         <div w-class="top">
@@ -33,7 +33,7 @@
 
     {{if it1.userType > 1}}
     <div on-tap="powerDetail('hWang')" ev-update="upgradeUser('hWang')">
-        <widget w-tag="app-view-member-home-powerCard" style="margin-top:60px;">{name:"海王会员",money:10000}</widget>
+        <widget w-tag="app-view-member-home-powerCard" style="margin-top:60px;">{name:"海王会员",money:10000,privilegeNumber:8}</widget>
     </div>
     {{end}}
     
