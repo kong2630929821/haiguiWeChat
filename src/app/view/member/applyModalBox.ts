@@ -1,6 +1,7 @@
 import { Widget } from '../../../pi/widget/widget';
 import { bindPhone, bindUser, randomInviteCode, sendCode, verifyIDCard } from '../../net/pull';
 import { getStore, setStore, UserType } from '../../store/memstore';
+import { judgeRealName } from '../../utils/logic';
 import { checkPhone, popNewLoading, popNewMessage } from '../../utils/tools';
 import { localInviteCode } from '../base/main';
 
@@ -53,6 +54,9 @@ export class ModalBoxInput extends Widget {
         this.props.changePhone = !user.phoneNum;  // 已经绑过则默认不修改手机号
         if (user.userType <= UserType.hBao) {// 成为会员后不允许修改父级邀请码
             this.props.fcode = user.fcode;
+        }
+        if (props.userType === UserType.hWang) {
+            this.props.needSelGift = false;
         }
         this.props.inviteCode = localInviteCode || user.fcode;  // 分享人的邀请码
     }
@@ -128,6 +132,9 @@ export class ModalBoxInput extends Widget {
     public async confirm() {
         if (!this.props.userName || !this.props.phoneNum || (!this.props.phoneCode && this.props.changePhone) || !this.props.inviteCode) {
             popNewMessage('请将内容填写完整');
+        } else if (!judgeRealName(this.props.userName)) {
+            popNewMessage('请输入真实姓名');
+            
         } else {
             const loadding = popNewLoading('请稍后');
 

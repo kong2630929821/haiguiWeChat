@@ -1,8 +1,10 @@
 import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { getStore, register, UserType } from '../../store/memstore';
+import { getAllGifts, getInviteCode, getUserInfo } from '../../net/pull';
+import { getStore, register, setStore, UserType } from '../../store/memstore';
 import { applyToUpHwang, getUserTypeShow, payToUpHbao } from '../../utils/logic';
+import { popNewMessage } from '../../utils/tools';
 import * as Constant from './powerConstant';
 interface Props {
     list:string[];  // 权益详情介绍
@@ -61,9 +63,15 @@ export class PowerDetail extends Widget {
                             this.ok && this.ok();
                         });
                         register('flags/upgradeHbao',() => {
-                            payToUpHbao(sel,() => {
-                                this.ok && this.ok();
+                            popNewMessage('升级海宝成功');
+                            getUserInfo().then(res => {
+                                setStore('user/userType', UserType.hBao);
+                                getInviteCode().then(res => {
+                                    setStore('user/inviteCode',res.code);
+                                });
+                                getAllGifts();  // 重新获取所有礼包
                             });
+                            this.ok && this.ok();
                         });
                     }
                 });

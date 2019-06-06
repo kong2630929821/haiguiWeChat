@@ -44,8 +44,8 @@ export class GoodsDetailHome extends Widget {
         };
         const ret = calcPrices(props.goods);
         const skus = props.goods.labels;
-        let skuIndex = -1;
-        if (skus.length === 1) skuIndex = 0;
+        const skuIndex = -1;
+        // if (skus.length === 1) skuIndex = 0;  // 单规格商品选中规格
         const cartGoods = getStore('mall/cartGoods');
         let len = 0;
         for (const v of cartGoods) {
@@ -122,12 +122,12 @@ export class GoodsDetailHome extends Widget {
     public chooseSpecClick1(buyNow:boolean) {
         this.props.buyNow = buyNow;
         const skus = this.props.goods.labels;
-        if (skus.length === 1) {
-            this.sureClick({ buyNow });
-        } else {
-            this.props.chooseSpec = true;
-            this.paint();
-        }
+        // if (skus.length === 1) {
+        //     this.sureClick({ buyNow });
+        // } else {
+        this.props.chooseSpec = true;
+        this.paint();
+        // }
     }
 
     // 选择规则关闭

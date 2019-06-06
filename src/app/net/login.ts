@@ -7,6 +7,7 @@ import { popNew } from '../../pi/ui/root';
 import { getCookie } from '../../pi/util/html';
 import { maxCount, wsUrl } from '../config';
 import { getStore, GroupsLocation, OrderStatus, setStore, UserType } from '../store/memstore';
+import { judgeRealName } from '../utils/logic';
 import { unicode2ReadStr, unicode2Str } from '../utils/tools';
 import { registerWXAPI } from '../utils/wxAPI';
 import { getAddress, getAllGifts, getBalance, getCart, getEarningTotal, getFreight, getGroups, getInviteCode, getOrders, getUserInfo, guessYouLike, setUserName } from './pull';
@@ -179,7 +180,6 @@ const userLogin = (userStr:any) => {
 
         // 获取用户信息
         getUserInfo().then(res => {
-            
             const user = getStore('user');
             console.log(unicode2ReadStr(res.wx_name), userStr.nickname);
             if (unicode2ReadStr(res.wx_name) !== userStr.nickname) {
@@ -189,8 +189,9 @@ const userLogin = (userStr:any) => {
             user.label = UserLabel[res.label];
             user.avatar = userStr.headimgurl;
             user.userName = unicode2Str(userStr.nickname);
-            user.realName = unicode2Str(res.name[0]);
-            user.IDCard = res.name[1];
+            // 正常中文名字则保留
+            user.realName = judgeRealName(unicode2Str(res.name[0])) ? unicode2Str(res.name[0]) :'';
+            user.IDCard = res.name[1];  // 身份证ID
             user.phoneNum = res.phone;
             if (res.level < UserType.other) {
                 user.fcode = res.fcode;  // 上级的邀请码

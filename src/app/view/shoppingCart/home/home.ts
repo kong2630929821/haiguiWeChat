@@ -171,7 +171,8 @@ export class ShoppingCart extends Widget {
     // 商品详情
     public goodsClick(e:any,index:number) {
         const goods = this.state.cartGoodsShow[index].cartGood.goods;
-        popNew('app-view-mall-goodsDetail',{ goods,skuId:goods.labels[0][0] });
+        // skuId:goods.labels[0][0]
+        popNew('app-view-mall-goodsDetail',{ goods });
     }
 }
 const STATE = {

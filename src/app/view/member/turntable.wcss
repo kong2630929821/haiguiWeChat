@@ -28,6 +28,7 @@
     border-radius: 50%;
     overflow: hidden;
     top: 110px;
+    left: 135px;
     border: 2px solid #fff;
 }
 .turntable-content{

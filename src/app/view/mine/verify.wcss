@@ -1,3 +1,6 @@
+.page{
+    z-index: 10;
+}
 .content{
     height:350px;
     background:rgba(29,145,255,1);

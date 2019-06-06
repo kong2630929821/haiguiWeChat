@@ -35,10 +35,10 @@ export class GiftPage extends Widget {
         // 用户会员等级是否等于当前所查看的会员等级
         this.props.isCurVip = props.isCurVip || getStore('user/userType',-1) === props.userType; 
         if (props.userType === UserType.hWang) {
-            this.props.img = `10000_${PowerFlag[props.fg]}.png`;
+            this.props.img = `10000_${PowerFlag[props.fg]}1.png`;
 
         } else {
-            this.props.img = `399_${PowerFlag[props.fg]}.png`;
+            this.props.img = `399_${PowerFlag[props.fg]}1.png`;
         }        
         this.initData();
     }
@@ -156,20 +156,27 @@ export class GiftPage extends Widget {
             orderActiveGoods([goods,1,res.labels[0][0]],addr.id).then(order => { 
                 const cash = getStore('balance/cash');
                 const price = order.orderInfo[3] + order.orderInfo[5]; // 商品总价+运费
+                const oid = order.orderInfo[0];
+
                 if (price > 0) {
                     // 提示需要支付费用
                     popNew('app-view-member-confirmPayInfo',{ money: priceFormat(price) },() => {
                         if (cash < price) { 
-                            register('flags/activityGoods',() => {
-                                this.buyGoods(order.orderInfo[0]);
-                            });
-                            payMoney(price - cash,'activity');
+                            payMoney(price - cash,'activity',1,['pay_order',[oid]]);
                         } else {
-                            this.buyGoods(order.orderInfo[0]);
+                            payOrder(oid).then(() => {
+                                this.buySuccess();
+                            }).catch(err => {
+                                popNewMessage('领取失败');
+                            });
                         }
                     });
                 } else {
-                    this.buyGoods(order.orderInfo[0]);
+                    payOrder(oid).then(() => {
+                        this.buySuccess();
+                    }).catch(err => {
+                        popNewMessage('领取失败');
+                    });
                 }
                 loadding && loadding.callback(loadding.widget);
 
@@ -190,39 +197,18 @@ export class GiftPage extends Widget {
         });
     }
 
-    // 购买商品
-    public buyGoods(oid:number) {
-        payOrder(oid).then(() => {
-            if (this.props.fg === PowerFlag.free || this.props.fg === PowerFlag.offClass) {
-                popNew('app-view-member-turntable');  // 打开大转盘
-            } 
-            popNewMessage('领取成功');
-            this.props.isAble = false;
-            this.props.btn = '领取成功';
-            this.paint();
-            getAllGifts();  // 重新获取所有礼包
-            
-        }).catch(err => {
-            popNewMessage('领取失败');
-        });
-    }
-
-    // // 开通会员
-    // public openVIP() {
-    //     popNew('app-view-member-privacypolicy',null,() => {
-    //         popNew('app-view-member-applyModalBox',{ userType:this.props.userType },(sel) => {
-    //             if (this.props.userType === UserType.hBao) {
-    //                 payToUpHbao(sel);
-    //                 register('flags/upgradeHbao',() => {
-    //                     payToUpHbao(sel);
-    //                 });
-    //             } else {
-    //                 applyToUpHwang(sel);
-    //             }
-    //         });
-    //     });
+    // 购买商品成功
+    public buySuccess() {
+        if (this.props.fg === PowerFlag.free || this.props.fg === PowerFlag.offClass) {
+            popNew('app-view-member-turntable');  // 打开大转盘
+        } 
+        popNewMessage('领取成功');
+        this.props.isAble = false;
+        this.props.btn = '领取成功';
+        this.paint();
+        getAllGifts();  // 重新获取所有礼包
         
-    // }
+    }
 
     // 分享给好友
     public share(pop:boolean = true) {
@@ -257,4 +243,8 @@ export class GiftPage extends Widget {
 register('flags/wxReady',() => {
     const w:any = forelet.getWidget(WIDGET_NAME);
     w && w.share(false);
+});
+register('flags/activityGoods',() => {
+    const w:any = forelet.getWidget(WIDGET_NAME);
+    w && w.buySuccess();
 });

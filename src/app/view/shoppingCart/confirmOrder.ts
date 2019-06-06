@@ -156,7 +156,7 @@ export class ConfirmOrder extends Widget {
                 payOids = oids;// 存储即将付款的订单id
                 payLoading = loading;
                 noResponse(this.payFaile.bind(this));
-                payMoney(totalFee - cash,'105',1,() => {
+                payMoney(totalFee - cash,'105',1,['pay_order',oids],() => {
                     popNewMessage('支付失败');
                     clearNoResponse();
                     closeLoading();
@@ -335,7 +335,7 @@ register('flags/mallRecharge',async () => {
     const w:any = forelet.getWidget(WIDGET_NAME);
     clearNoResponse();
     try {
-        await orderPay(payOids);
+        // await orderPay(payOids);
         popNewMessage('支付成功');
         w && w.paySuccess();
         if (turntable) {

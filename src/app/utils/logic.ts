@@ -1,4 +1,5 @@
 import { popNew } from '../../pi/ui/root';
+import { whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
 import { getAllGifts, getInviteCode, payMoney, upgradeHBao, upgradeHWang } from '../net/pull';
 import { getStore, setStore, UserType } from '../store/memstore';
 import { popNewMessage, priceFormat } from './tools';
@@ -135,10 +136,12 @@ export const getCashLogName = (ttype:number) => {
  */
 export const payToUpHbao = (sel:string,cb?:any) => {
     const cash = getStore('balance/cash');
-    const fee = 39900; // 升级海宝的费用
-    // const fee = 1;     // 测试费用
+    // const fee = 39900; // 升级海宝的费用
+    const fee = 2;     // 测试费用
     if (cash < fee) { 
-        payMoney(fee - cash,'hBao');
+        let optional = whiteGoodsId_399A;
+        if (sel === 'B') optional = whiteGoodsId_399B;
+        payMoney(fee - cash,'hBao',1,['mall/members@up_haibao',optional]);
     } else {
         popNew('app-view-member-confirmPayInfo',{ money: priceFormat(fee) },() => {
             upgradeHBao(sel).then(() => {
@@ -186,4 +189,12 @@ export const getLastAddress = () => {
     if (selected >= list.length) selected = 0;
 
     return [list, selected, list[selected]];
+};
+
+/**
+ * 判断名字中是否只含有中文或英文
+ * @param name name
+ */
+export const judgeRealName = (name:string) => {
+    return /^[\u4e00-\u9fa5a-zA-Z]+$/.test(name);
 };
