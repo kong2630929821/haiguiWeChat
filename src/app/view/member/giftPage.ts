@@ -154,22 +154,24 @@ export class GiftPage extends Widget {
         getGoodsDetails(goods).then(res => {  
             // 下单商品
             orderActiveGoods([goods,1,res.labels[0][0]],addr.id).then(order => { 
-                const cash = getStore('balance/cash');
                 const price = order.orderInfo[3] + order.orderInfo[5]; // 商品总价+运费
                 const oid = order.orderInfo[0];
 
                 if (price > 0) {
                     // 提示需要支付费用
                     popNew('app-view-member-confirmPayInfo',{ money: priceFormat(price) },() => {
-                        if (cash < price) { 
-                            payMoney(price - cash,'activity',1,['pay_order',[oid]]);
-                        } else {
-                            payOrder(oid).then(() => {
-                                this.buySuccess();
-                            }).catch(err => {
-                                popNewMessage('领取失败');
-                            });
-                        }
+                        payMoney(price,'activity',1,['pay_order',[oid]]);
+
+                        // const cash = getStore('balance/cash');
+                        // if (cash < price) { 
+                        //     payMoney(price - cash,'activity',1,['pay_order',[oid]]);
+                        // } else {
+                        //     payOrder(oid).then(() => {
+                        //         this.buySuccess();
+                        //     }).catch(err => {
+                        //         popNewMessage('领取失败');
+                        //     });
+                        // }
                     });
                 } else {
                     payOrder(oid).then(() => {

@@ -135,32 +135,34 @@ export const getCashLogName = (ttype:number) => {
  * 升级海宝支付
  */
 export const payToUpHbao = (sel:string,cb?:any) => {
-    const cash = getStore('balance/cash');
     const fee = 39900; // 升级海宝的费用
     // const fee = 1;     // 测试费用
-    if (cash < fee) { 
-        let optional = whiteGoodsId_399A;
-        if (sel === 'B') optional = whiteGoodsId_399B;
-        payMoney(fee - cash,'hBao',1,['mall/members@up_haibao',optional]);
-    } else {
-        popNew('app-view-member-confirmPayInfo',{ money: priceFormat(fee) },() => {
-            upgradeHBao(sel).then(() => {
-                popNewMessage('升级海宝成功');
-                setStore('user/userType', UserType.hBao);
-                getInviteCode().then(res => {
-                    setStore('user/inviteCode',res.code);
-                });
-                getAllGifts();  // 重新获取所有礼包
-                cb && cb();
-            }).catch(err => {
-                if (err.result === 4012) {
-                    popNewMessage('获取上级失败');
-                } else {
-                    popNewMessage('升级海宝失败');
-                }
-            });
-        });
-    }
+    let optional = whiteGoodsId_399A;
+    if (sel === 'B') optional = whiteGoodsId_399B;
+    payMoney(fee,'hBao',1,['mall/members@up_haibao',optional]);
+
+    // const cash = getStore('balance/cash');
+    // if (cash < fee) { 
+    //     payMoney(fee - cash,'hBao',1,['mall/members@up_haibao',optional]);
+    // } else {
+    //     popNew('app-view-member-confirmPayInfo',{ money: priceFormat(fee) },() => {
+    //         upgradeHBao(sel).then(() => {
+    //             popNewMessage('升级海宝成功');
+    //             setStore('user/userType', UserType.hBao);
+    //             getInviteCode().then(res => {
+    //                 setStore('user/inviteCode',res.code);
+    //             });
+    //             getAllGifts();  // 重新获取所有礼包
+    //             cb && cb();
+    //         }).catch(err => {
+    //             if (err.result === 4012) {
+    //                 popNewMessage('获取上级失败');
+    //             } else {
+    //                 popNewMessage('升级海宝失败');
+    //             }
+    //         });
+    //     });
+    // }
 };
 
 /**

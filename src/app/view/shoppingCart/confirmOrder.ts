@@ -141,51 +141,58 @@ export class ConfirmOrder extends Widget {
 
             return;
         }
-        try {
-           
-            const oids = [];
-            for (const res of ordersRes) {
-                const oid = res.orderInfo[0];
-                oids.push(oid);
-                console.log('oid ====',oid);
-            }
-            const totalFee = this.props.totalSale + this.props.totalFreight + this.props.totalTax;
-            const cash = getStore('balance').cash;  // 余额
-            console.log('cash ========',cash);
-            if (totalFee > cash) {
-                payOids = oids;// 存储即将付款的订单id
-                payLoading = loading;
-                noResponse(this.payFaile.bind(this));
-                payMoney(totalFee - cash,'105',1,['pay_order',oids],() => {
-                    popNewMessage('支付失败');
-                    clearNoResponse();
-                    closeLoading();
-                    this.payFaile();
-                });
-            } else {
-                popNew('app-view-member-confirmPayInfo',{ money:priceFormat(totalFee) },async () => {
-                    await orderPay(oids);
-                    this.ok && this.ok();
-                    popNewMessage('支付成功');
-                    loading.callback(loading.widget);
-                    popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGDELIVERED,allStaus:allOrderStatus.slice(0,4) });
-                    
-                },() => {   // 取消支付
-                    this.payFaile();
-                    loading.callback(loading.widget);
-                });
-            }
-        } catch (res) {
-            loading.callback(loading.widget);
-            if (res.result === 2124) {
-                popNewMessage('库存不足');
-            } else if (res.result === 2127) {
-                popNewMessage('购买免税商品超出限制');
-            } else {
-                popNewMessage('支付失败');
-            }
-            console.log('错误 ',res);
+
+        const oids = [];
+        for (const res of ordersRes) {
+            const oid = res.orderInfo[0];
+            oids.push(oid);
+            console.log('oid ====',oid);
         }
+        const totalFee = this.props.totalSale + this.props.totalFreight + this.props.totalTax;
+        payOids = oids;// 存储即将付款的订单id
+        payLoading = loading;
+        noResponse(this.payFaile.bind(this));
+        payMoney(totalFee,'105',1,['pay_order',oids],() => {
+            popNewMessage('支付失败');
+            clearNoResponse();
+            closeLoading();
+            this.payFaile();
+        });
+            
+        // try {
+        //     const cash = getStore('balance').cash;  // 余额
+        //     console.log('cash ========',cash);
+        //     if (totalFee > cash) {
+        //         payMoney(totalFee - cash,'105',1,['pay_order',oids],() => {
+        //             popNewMessage('支付失败');
+        //             clearNoResponse();
+        //             closeLoading();
+        //             this.payFaile();
+        //         });
+        //     } else {
+        //         popNew('app-view-member-confirmPayInfo',{ money:priceFormat(totalFee) },async () => {
+        //             await orderPay(oids);
+        //             this.ok && this.ok();
+        //             popNewMessage('支付成功');
+        //             loading.callback(loading.widget);
+        //             popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGDELIVERED,allStaus:allOrderStatus.slice(0,4) });
+                    
+        //         },() => {   // 取消支付
+        //             this.payFaile();
+        //             loading.callback(loading.widget);
+        //         });
+        //     }
+        // } catch (res) {
+        //     loading.callback(loading.widget);
+        //     if (res.result === 2124) {
+        //         popNewMessage('库存不足');
+        //     } else if (res.result === 2127) {
+        //         popNewMessage('购买免税商品超出限制');
+        //     } else {
+        //         popNewMessage('支付失败');
+        //     }
+        //     console.log('错误 ',res);
+        // }
     }
 
     public paySuccess() {
@@ -334,21 +341,21 @@ const calcAllFees = (splitOrder:SplitOrder[]) => {
 register('flags/mallRecharge',async () => {
     const w:any = forelet.getWidget(WIDGET_NAME);
     clearNoResponse();
-    try {
+    // try {
         // await orderPay(payOids);
-        popNewMessage('支付成功');
-        w && w.paySuccess();
-        if (turntable) {
-            popNew('app-view-member-turntable');  // 打开大转盘
-            turntable = false;
-        }
-        closeLoading();
-        payOids = undefined;
-    } catch (e) {
-        console.log('充值成功之后 支付失败',e);
-        popNewMessage('支付失败');
-        payLoading.callback(payLoading.widget);
-        payLoading = undefined;
-        payOids = undefined;
+    popNewMessage('支付成功');
+    w && w.paySuccess();
+    if (turntable) {
+        popNew('app-view-member-turntable');  // 打开大转盘
+        turntable = false;
     }
+    closeLoading();
+    payOids = undefined;
+    // } catch (e) {
+    //     console.log('充值成功之后 支付失败',e);
+    //     popNewMessage('支付失败');
+    //     payLoading.callback(payLoading.widget);
+    //     payLoading = undefined;
+    //     payOids = undefined;
+    // }
 });
