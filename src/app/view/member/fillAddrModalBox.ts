@@ -2,7 +2,7 @@ import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { bindPhone, bindUser, randomInviteCode, sendCode, verifyIDCard } from '../../net/pull';
 import { getStore, setStore, UserType } from '../../store/memstore';
-import { getLastAddress } from '../../utils/logic';
+import { getLastAddress, judgeRealName } from '../../utils/logic';
 import { addressFormat, checkPhone, popNewLoading, popNewMessage } from '../../utils/tools';
 import { localInviteCode } from '../base/main';
 interface Props {
@@ -114,8 +114,11 @@ export class FillAddrModalBox extends Widget {
             popNewMessage('请选择地址');
 
         } else { // 非会员领取试用装
-            if (!this.props.userName || !this.props.phoneNum || (!this.props.phoneCode && this.props.changePhone) || !this.props.inviteCode) {
+            if (!this.props.userName || !this.props.phoneNum || (!this.props.phoneCode && this.props.changePhone) || !this.props.inviteCode || !this.props.address) {
                 popNewMessage('请将内容填写完整');
+            } else if (!judgeRealName(this.props.userName)) {
+                popNewMessage('请输入真实姓名');
+                
             } else {
                 const loadding = popNewLoading('请稍后');
     
@@ -136,7 +139,7 @@ export class FillAddrModalBox extends Widget {
                 }
     
                 try {   // 设置用户名 实名认证过不允许再修改
-                    if (!getStore('user/realName')) {
+                    if (!getStore('user/IDCard')) {
                         const nameRes = await verifyIDCard(this.props.userName,'','','','');
                         if (nameRes) setStore('user/realName',this.props.userName);
                     }  

@@ -705,15 +705,17 @@ export const getUserInfo = () => {
  * @param money 金额 单位分
  * @param ttype 商品ID | 海宝
  * @param count 数量
+ * @param ext 回传参数
  */
-export const payMoney = (money:number,ttype:string,count:number= 1,failed?:Function) => {
+export const payMoney = (money:number,ttype:string,count:number= 1,ext?:any,failed?:Function) => {
     const msg = {
         type:'mall/pay@pay',
         param:{
             money:Math.floor(money),
             type:ttype,
             count,
-            channel:'wxpay'
+            channel:'wxpay',
+            ext
         }
     };
 

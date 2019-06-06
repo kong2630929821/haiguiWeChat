@@ -113,7 +113,7 @@ export const payOrderNow = async (order:Order,success:Function) => {
             setGoodsId(goodsid); // 存储即将付款的商品id
             setPayLoading(loading);
             noResponse();
-            payMoney(totalFee - cash,'105',1,() => {
+            payMoney(totalFee - cash,'105',1,['pay_order',oids],() => {
                 popNewMessage('支付失败');
                 clearNoResponse();
                 closeLoading();
