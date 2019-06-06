@@ -1,4 +1,4 @@
-<div class="new-page">
+<div class="new-page" w-class="page">
     <div w-class="content">
         <img src="{{it.avatar||'../../res/image/income_active.png'}}" w-class="avatar"/>
         <div>

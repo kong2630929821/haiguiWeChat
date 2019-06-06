@@ -191,7 +191,7 @@ const userLogin = (userStr:any) => {
             user.userName = unicode2Str(userStr.nickname);
             // 正常中文名字则保留
             user.realName = judgeRealName(unicode2Str(res.name[0])) ? unicode2Str(res.name[0]) :'';
-            user.IDCard = res.name[1];
+            user.IDCard = res.name[1];  // 身份证ID
             user.phoneNum = res.phone;
             if (res.level < UserType.other) {
                 user.fcode = res.fcode;  // 上级的邀请码
