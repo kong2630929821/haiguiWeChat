@@ -2,7 +2,7 @@
 import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
-import { getAllGifts, getEarningTotal, getInviteCode, getUserInfo } from '../../../net/pull';
+import { getAllGifts, getEarningTotal, getInviteCode } from '../../../net/pull';
 import { register, setStore, UserType } from '../../../store/memstore';
 import { applyToUpHwang, getUserTypeShow, payToUpHbao } from '../../../utils/logic';
 import { copyToClipboard, popNewMessage, priceFormat } from '../../../utils/tools';
@@ -69,16 +69,7 @@ export class Home extends Widget {
                     applyToUpHwang(sel);
                 } else {
                     payToUpHbao(sel);
-                    register('flags/upgradeHbao',() => {
-                        popNewMessage('升级海宝成功');
-                        getUserInfo().then(res => {
-                            setStore('user/userType', UserType.hBao);
-                            getInviteCode().then(res => {
-                                setStore('user/inviteCode',res.code);
-                            });
-                            getAllGifts();  // 重新获取所有礼包
-                        });
-                    });
+                    
                 }
             });
         });
@@ -116,4 +107,12 @@ register('user',r => {
     State.inviteCode = r.inviteCode;
     State.powerList = r.userType === UserType.hWang ? hWangPower :hBaoPower;
     forelet.paint(State);
+});
+register('flags/upgradeHbao',() => {
+    popNewMessage('升级海宝成功');
+    setStore('user/userType', UserType.hBao);
+    getInviteCode().then(res => {
+        setStore('user/inviteCode',res.code);
+    });
+    getAllGifts();  // 重新获取所有礼包
 });

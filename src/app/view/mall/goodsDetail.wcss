@@ -130,19 +130,22 @@
 }
 
 .goods-desc{
+    padding-bottom: 130px;
+    font-size: 0;
+}
+.desc-title{
     font-size:26px;
-    font-family:PingFangSC-Regular;
     font-weight:400;
     color:rgba(153,153,153,1);
     line-height:37px;
     text-align: center;
-    padding-bottom: 130px;
-}
-.desc-title{
     margin:35px 0 30px;
 }
 .desc-img{
     width: 100%;
+    margin: 0;
+    padding: 0;
+    display: block;
 }
 .fix-bottom{
     position: absolute;

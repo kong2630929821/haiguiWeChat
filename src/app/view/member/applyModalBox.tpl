@@ -18,7 +18,7 @@
         {{% ===================修改手机号显示验证码===================}}
         {{if it.changePhone}}
         <div w-class="row" ev-input-change="phoneCodeChange">
-            <widget w-tag="app-components-input-input">{placeHolder:"输入验证码",style:"padding:10px;font-size:28px;"}</widget>
+            <widget w-tag="app-components-input-input">{placeHolder:"输入验证码",style:"padding:10px;font-size:28px;",maxLength:4}</widget>
             {{if it.nowCount}}
             <div w-class="btn" style="color:#ccc;border-color:#ccc;">{{it.nowCount}}&nbsp;秒</div>
             {{else}}
