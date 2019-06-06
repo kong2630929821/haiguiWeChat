@@ -135,6 +135,9 @@ export class Input extends Widget {
      */
     public onBlur(event:any) {
         this.state.focused = false;
+        setTimeout(() => {
+            window.scrollTo(0, document.documentElement.clientHeight);  // ios部分手机页面不能自动下滑
+        },100);
         notify(event.node,'ev-input-blur',{ value:this.state.currentValue });
         this.paint();
     }

@@ -37,6 +37,9 @@ export class FillAddrModalBox extends Widget {
         this.props.isVip = getStore('user/userType') <= UserType.hBao;
         if (!this.props.isVip) {
             const user = getStore('user');
+            if (user.IDCard) {// 有身份证号，表示实名认证成功，不允许再修改名字
+                this.props.realName = user.realName;
+            }
             this.props.userName = user.realName;
             this.props.phoneNum = user.phoneNum;
             this.props.changePhone = !user.phoneNum;
@@ -139,7 +142,7 @@ export class FillAddrModalBox extends Widget {
                 }
     
                 try {   // 设置用户名 实名认证过不允许再修改
-                    if (!getStore('user/IDCard')) {
+                    if (!this.props.realName) {
                         const nameRes = await verifyIDCard(this.props.userName,'','','','');
                         if (nameRes) setStore('user/realName',this.props.userName);
                     }  
