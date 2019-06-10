@@ -33,7 +33,7 @@ export class OrderItemDetail extends Widget {
             mallImagPre
         };
         super.setProps(this.props);
-        console.log('orderdetailitem ====',this.props);
+        // console.log('orderdetailitem ====',this.props);
     }
 
     public btnClick(e:any,num:number) {

@@ -1,7 +1,7 @@
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { getReturnGoods, returnGoods, ReturnGoodsStatus } from '../../net/pull';
-import { AfterSale, register } from '../../store/memstore';
+import { getReturnGoods, returnGoods } from '../../net/pull';
+import { AfterSale, register, ReturnGoodsStatus } from '../../store/memstore';
 import { popNewMessage } from '../../utils/tools';
 
 // tslint:disable-next-line:no-reserved-keywords

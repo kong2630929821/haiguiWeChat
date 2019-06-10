@@ -1,8 +1,7 @@
-import { popNew } from '../../pi/ui/root';
 import { whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
-import { getAllGifts, getInviteCode, payMoney, upgradeHBao, upgradeHWang } from '../net/pull';
-import { getStore, setStore, UserType } from '../store/memstore';
-import { popNewMessage, priceFormat } from './tools';
+import { payMoney, upgradeHWang } from '../net/pull';
+import { getStore, UserType } from '../store/memstore';
+import { popNewMessage } from './tools';
 /**
  * 本地方法
  */
@@ -67,9 +66,11 @@ export const openWXPay = (param:any,failed?:Function) => {
         console.log('WeixinJSBridge has ready');
         WeixinJSBridge.invoke('getBrandWCPayRequest', JSON.parse(param), (res) => {
             // alert(JSON.stringify(res));
-            if (res.err_msg) {
+            if (res.err_msg !== 'get_brand_wcpay_request:ok') {
+                // 使用以上方式判断前端返回,微信团队郑重提示：
+                // res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
                 failed && failed();
-            }
+            } 
         });
     };
 
@@ -140,29 +141,6 @@ export const payToUpHbao = (sel:string,cb?:any) => {
     let optional = whiteGoodsId_399A;
     if (sel === 'B') optional = whiteGoodsId_399B;
     payMoney(fee,'hBao',1,['mall/members@up_haibao',optional]);
-
-    // const cash = getStore('balance/cash');
-    // if (cash < fee) { 
-    //     payMoney(fee - cash,'hBao',1,['mall/members@up_haibao',optional]);
-    // } else {
-    //     popNew('app-view-member-confirmPayInfo',{ money: priceFormat(fee) },() => {
-    //         upgradeHBao(sel).then(() => {
-    //             popNewMessage('升级海宝成功');
-    //             setStore('user/userType', UserType.hBao);
-    //             getInviteCode().then(res => {
-    //                 setStore('user/inviteCode',res.code);
-    //             });
-    //             getAllGifts();  // 重新获取所有礼包
-    //             cb && cb();
-    //         }).catch(err => {
-    //             if (err.result === 4012) {
-    //                 popNewMessage('获取上级失败');
-    //             } else {
-    //                 popNewMessage('升级海宝失败');
-    //             }
-    //         });
-    //     });
-    // }
 };
 
 /**

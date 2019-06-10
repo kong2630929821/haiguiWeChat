@@ -153,6 +153,7 @@ export class ConfirmOrder extends Widget {
         try {
             setNeedPayOrders(oids);
             payMoney(totalFee,'105',1,['pay_order',oids],() => {
+                console.log('payMoney --------------failed');
                 popNewMessage('支付失败');
                 this.payFaile();
             });
@@ -168,12 +169,14 @@ export class ConfirmOrder extends Widget {
 
     public paySuccess() {
         this.ok && this.ok();
+        console.log('paySuccess OrderStatus.PENDINGDELIVERED');
         popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGDELIVERED,allStaus:allOrderStatus.slice(0,4) });
     }
 
     // 支付失败
     public payFaile() {
         setStore('flags/gotoMine',true);
+        console.log('payFaile OrderStatus.PENDINGPAYMENT');
         popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGPAYMENT,allStaus:allOrderStatus.slice(0,4) });
         this.ok && this.ok();
     }
@@ -287,17 +290,24 @@ export const getNeedPayOrders = () => {
 
 // 删除已处理订单
 export const delOrder = (orderId:number) => {
-    return needPayOrders.filter((orderid:number) => {
+    return needPayOrders = needPayOrders.filter((orderid:number) => {
         return orderid !== orderId;
     });
 };
 // 购买成功
-register('flags/payOrder',() => {
+register('flags/payOrder',(successed:boolean) => {
+    console.log('flags/payOrder',successed);
     const w:any = forelet.getWidget(WIDGET_NAME);
-    popNewMessage('支付成功');
-    w && w.paySuccess();
-    if (turntable) {
-        popNew('app-view-member-turntable');  // 打开大转盘
-        turntable = false;
+    if (successed) {
+        popNewMessage('支付成功');
+        w && w.paySuccess();
+        if (turntable) {
+            popNew('app-view-member-turntable');  // 打开大转盘
+            turntable = false;
+        }
+    } else {   // 购买失败
+        console.log('购买失败');
+        w && w.payFaile();
     }
+    
 });
