@@ -703,7 +703,7 @@ export const getUserInfo = () => {
 /**
  * 发起支付
  * @param money 金额 单位分
- * @param ttype 商品ID | 海宝
+ * @param ttype 支付类型 | 海宝
  * @param count 数量
  * @param ext 回传参数
  */
