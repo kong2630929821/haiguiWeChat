@@ -151,6 +151,7 @@ export class ConfirmOrder extends Widget {
         }
         const totalFee = this.props.totalSale + this.props.totalFreight + this.props.totalTax;
         try {
+            setNeedPayOrders(oids);
             payMoney(totalFee,'105',1,['pay_order',oids],() => {
                 popNewMessage('支付失败');
                 this.payFaile();
@@ -182,19 +183,6 @@ export const setGoodsId = (goodsId:number) => {
     if (goodsId === freeMaskGoodsId || goodsId === OffClassGoodsId) {
         turntable = true;
     }
-};
-
-let turntable;
-// 支付
-export const orderPay = (orderIds:number[]) => {
-    if (!orderIds) return;
-    const allPayPromise = [];
-    for (const id of orderIds) {
-        console.log('oid ====',id);
-        allPayPromise.push(payOrder(id));
-    }
-
-    return Promise.all(allPayPromise);
 };
 
 // 拆分订单
@@ -282,6 +270,27 @@ const calcAllFees = (splitOrder:SplitOrder[]) => {
     };
 };
 
+let turntable;
+
+// 需要支付的订单id列表   用来判断多订单支付是否全部响应成功
+let needPayOrders:number[] = [];
+
+// set
+export const setNeedPayOrders = (orders:number[]) => {
+    needPayOrders = orders;
+};
+
+// get
+export const getNeedPayOrders = () => {
+    return needPayOrders;
+};
+
+// 删除已处理订单
+export const delOrder = (orderId:number) => {
+    return needPayOrders.filter((orderid:number) => {
+        return orderid !== orderId;
+    });
+};
 // 购买成功
 register('flags/payOrder',() => {
     const w:any = forelet.getWidget(WIDGET_NAME);

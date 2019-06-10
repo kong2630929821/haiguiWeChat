@@ -3,6 +3,7 @@
  */
 import { setMsgHandler } from '../../pi/net/ui/con_mgr';
 import { setStore } from '../store/memstore';
+import { delOrder, getNeedPayOrders } from '../view/shoppingCart/confirmOrder';
 
 /**
  * 支付成功
@@ -26,7 +27,11 @@ export const payComplete = () => {
     // 购买商品成功
     setMsgHandler('event_pay_order',(res) => {
         console.log('event_pay_order',res);
-        setStore('flags/payOrder',true);     // 购买成功
+        delOrder(res.msg[0]);
+        const needPayOrders = getNeedPayOrders();
+        if (needPayOrders.length === 0) {    // 所有的支付结果已经返回
+            setStore('flags/payOrder',true);     // 购买成功
+        }
     });
 
     // 余额变化
