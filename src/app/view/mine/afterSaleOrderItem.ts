@@ -1,8 +1,7 @@
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { mallImagPre } from '../../config';
-import { ReturnGoodsStatus } from '../../net/pull';
-import { AfterSale } from '../../store/memstore';
+import { AfterSale, ReturnGoodsStatus } from '../../store/memstore';
 import { calcPrices, getImageThumbnailPath, priceFormat } from '../../utils/tools';
 
 export interface Props {

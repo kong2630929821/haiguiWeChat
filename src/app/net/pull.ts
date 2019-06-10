@@ -1,6 +1,6 @@
 import { request } from '../../pi/net/ui/con_mgr';
 import { freeMaskGoodsId, maxCount, OffClassGoodsId, saleClassGoodsId, sourceIp, sourcePort, vipClassGoodsId, vipMaskGoodsId, whiteGoodsId_10000A, whiteGoodsId_10000B, whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
-import { getStore,GoodsDetails, GroupsLocation, OrderStatus, setStore } from '../store/memstore';
+import { getStore,GoodsDetails, GroupsLocation, OrderStatus, ReturnGoodsStatus, setStore } from '../store/memstore';
 import { openWXPay } from '../utils/logic';
 import { popNewMessage, str2Unicode } from '../utils/tools';
 import { requestAsync } from './login';
@@ -383,13 +383,6 @@ export const returnGoods = (aid:number,reason:string) => {
     });
 };
 
-//  退货状态
-export enum ReturnGoodsStatus {  
-    CANRETURN = 0,   // 未退货
-    RETURNING = 1,   // 退货中
-    RETURNED = 2     // 已退货
-
-}
 /**
  * 获取退货信息
  */

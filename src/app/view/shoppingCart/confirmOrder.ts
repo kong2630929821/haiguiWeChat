@@ -151,7 +151,9 @@ export class ConfirmOrder extends Widget {
         }
         const totalFee = this.props.totalSale + this.props.totalFreight + this.props.totalTax;
         try {
+            setNeedPayOrders(oids);
             payMoney(totalFee,'105',1,['pay_order',oids],() => {
+                console.log('payMoney --------------failed');
                 popNewMessage('支付失败');
                 this.payFaile();
             });
@@ -167,12 +169,14 @@ export class ConfirmOrder extends Widget {
 
     public paySuccess() {
         this.ok && this.ok();
+        console.log('paySuccess OrderStatus.PENDINGDELIVERED');
         popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGDELIVERED,allStaus:allOrderStatus.slice(0,4) });
     }
 
     // 支付失败
     public payFaile() {
         setStore('flags/gotoMine',true);
+        console.log('payFaile OrderStatus.PENDINGPAYMENT');
         popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGPAYMENT,allStaus:allOrderStatus.slice(0,4) });
         this.ok && this.ok();
     }
@@ -182,19 +186,6 @@ export const setGoodsId = (goodsId:number) => {
     if (goodsId === freeMaskGoodsId || goodsId === OffClassGoodsId) {
         turntable = true;
     }
-};
-
-let turntable;
-// 支付
-export const orderPay = (orderIds:number[]) => {
-    if (!orderIds) return;
-    const allPayPromise = [];
-    for (const id of orderIds) {
-        console.log('oid ====',id);
-        allPayPromise.push(payOrder(id));
-    }
-
-    return Promise.all(allPayPromise);
 };
 
 // 拆分订单
@@ -282,13 +273,41 @@ const calcAllFees = (splitOrder:SplitOrder[]) => {
     };
 };
 
+let turntable;
+
+// 需要支付的订单id列表   用来判断多订单支付是否全部响应成功
+let needPayOrders:number[] = [];
+
+// set
+export const setNeedPayOrders = (orders:number[]) => {
+    needPayOrders = orders;
+};
+
+// get
+export const getNeedPayOrders = () => {
+    return needPayOrders;
+};
+
+// 删除已处理订单
+export const delOrder = (orderId:number) => {
+    return needPayOrders = needPayOrders.filter((orderid:number) => {
+        return orderid !== orderId;
+    });
+};
 // 购买成功
-register('flags/payOrder',() => {
+register('flags/payOrder',(successed:boolean) => {
+    console.log('flags/payOrder',successed);
     const w:any = forelet.getWidget(WIDGET_NAME);
-    popNewMessage('支付成功');
-    w && w.paySuccess();
-    if (turntable) {
-        popNew('app-view-member-turntable');  // 打开大转盘
-        turntable = false;
+    if (successed) {
+        popNewMessage('支付成功');
+        w && w.paySuccess();
+        if (turntable) {
+            popNew('app-view-member-turntable');  // 打开大转盘
+            turntable = false;
+        }
+    } else {   // 购买失败
+        console.log('购买失败');
+        w && w.payFaile();
     }
+    
 });

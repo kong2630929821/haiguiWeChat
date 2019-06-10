@@ -4,6 +4,7 @@
 import { setMsgHandler } from '../../pi/net/ui/con_mgr';
 import { setStore } from '../store/memstore';
 import { popNewMessage } from '../utils/tools';
+import { delOrder, getNeedPayOrders } from '../view/shoppingCart/confirmOrder';
 
 /**
  * 支付成功
@@ -36,17 +37,25 @@ export const payComplete = () => {
     // 购买商品成功
     setMsgHandler('event_pay_order',(res) => {
         console.log('event_pay_order',res);
-        setStore('flags/payOrder',true);     // 购买成功
+        delOrder(res.msg[0]);
+        if (getNeedPayOrders().length === 0) {
+            setStore('flags/payOrder',true);     // 购买成功
+        }
     });
 
     // 购买商品失败
     setMsgHandler('event_pay_order_fail',(r) => {
+        console.log('event_pay_order_fail',r);
         if (r && r[0] === 2132) {
             popNewMessage('该商品已领过');
         } else if (r && r[0] === 2124) {
             popNewMessage('库存不足');
         } else {
             popNewMessage('支付失败');
+        }
+        delOrder(r[2]);
+        if (getNeedPayOrders().length === 0) {
+            setStore('flags/payOrder',false);     // 购买失败
         }
     
     });
