@@ -19,8 +19,13 @@
         <div w-class="row" ev-input-change="telChange">
             <widget w-tag="app-components-input-inputLabel">{placeHolder:"收货人手机号",style:"padding:20px;font-size:34px;",label:"电话",itype:"integer",input:{{it.tel}},maxLength:11}</widget>
         </div>
-        <div w-class="row" on-tap="selectArea">
-            <widget w-tag="app-components-input-inputLabel">{placeHolder:"选择省/市/区",style:"padding:20px;font-size:34px;",label:"地区",input:{{it.province.join("")}}}</widget>
+        <div w-class="row address" on-tap="selectArea">
+            <div style="width: 160px;flex-shrink: 0;">地区</div>
+            {{if it.province.length === 0}}
+            <div w-class="selectArea" style="color: #B2B2B2;">选择省/市/区</div>
+            {{else}}
+            <div w-class="selectArea">{{it.province.join("")}}</div>
+            {{end}}
         </div>
         <div w-class="row" ev-input-change="addressChange">
             <widget w-tag="app-components-input-inputLabel">{placeHolder:"街道门牌、楼层房间号等",style:"padding:20px;font-size:34px;",label:"详细地址",input:{{it.address}}}</widget>
