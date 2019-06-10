@@ -3,8 +3,8 @@ import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { cancelOrder, getOrders, payMoney, receiptOrder } from '../../net/pull';
 import { Order, OrderStatus, register } from '../../store/memstore';
-import { popNewLoading, popNewMessage } from '../../utils/tools';
-import { clearNoResponse, closeLoading, noResponse, setGoodsId, setPayLoading, setPayOids } from '../shoppingCart/confirmOrder';
+import { popNewMessage } from '../../utils/tools';
+import {  setGoodsId } from '../shoppingCart/confirmOrder';
 
 // tslint:disable-next-line:no-reserved-keywords
 declare var module: any;
@@ -62,7 +62,7 @@ export class OrderList extends Widget {
         const activeStatus = this.props.activeStatus;
         if (btn === 1) {  // 确定按钮
             if (activeStatus === OrderStatus.PENDINGPAYMENT) {   // 待付款 去付款
-                payOrderNow(order,this.paySuccess.bind(this));  // 去付款
+                payOrderNow(order);  // 去付款
             } else if (activeStatus === OrderStatus.PENDINGRECEIPT) {  // 待收货  确认收货
                 popNew('app-components-popModel-popModel',{ title:'是否确认收货' },() => {
                     receiptOrder(order.id).then(() => {
@@ -99,54 +99,17 @@ export class OrderList extends Widget {
 }
 
 // 去付款
-export const payOrderNow = async (order:Order,success:Function) => {
+export const payOrderNow = (order:Order) => {
     const oids = [order.id];
     const totalFee = order.origin + order.tax + order.freight;
-    const loading = popNewLoading('支付中');
     const goodsid = order.orderGoods[0][0].id;
     try {
-        // const cash = getStore('balance').cash;  // 余额 
-        // if (totalFee > cash) {
-        //     console.log('余额不足 充值');
-        setPayOids(oids); // 存储即将付款的订单id
         setGoodsId(goodsid); // 存储即将付款的商品id
-        setPayLoading(loading);
-        noResponse();
         payMoney(totalFee,'105',1,['pay_order',oids],() => {
             popNewMessage('支付失败');
-            clearNoResponse();
-            closeLoading();
         });
-        // } else {
-        //     popNew('app-view-member-confirmPayInfo',{ money:priceFormat(totalFee) },async () => {
-        //         try {
-        //             await orderPay(oids);
-        //             popNewMessage('支付成功');
-        //             loading.callback(loading.widget);
-        //             success && success(); 
-        //             // alert(goodsid);
-        //             if (goodsid === freeMaskGoodsId || goodsid === OffClassGoodsId) {
-        //                 popNew('app-view-member-turntable');  // 打开大转盘
-        //             }
-        //         } catch (err) {
-        //             loading.callback(loading.widget);
-        //             if (err.type === 2132) {
-        //                 popNewMessage('该商品已领过');
-        //                 cancelOrder(order.id).then(() => {
-        //                     getOrders(OrderStatus.PENDINGPAYMENT);
-        //                 });
-        //             } else {
-        //                 popNewMessage('支付失败');
-        //             }
-        //         }
-               
-        //     },() => {
-        //         loading.callback(loading.widget);
-        //     });
-        // }
     } catch (e) {
         console.log('payOrderNow err',e);
-        loading.callback(loading.widget);
         popNewMessage('支付失败');
     }
 };
@@ -160,7 +123,8 @@ register('mall/orders',(orders:Map<OrderStatus,Order[]>) => {
     forelet.paint(STATE);
 });
 
-register('flags/mallRecharge',async () => {
+// 支付成功
+register('flags/payOrder',async () => {
     const w:any = forelet.getWidget(WIDGET_NAME);
     w && w.paySuccess();
 });

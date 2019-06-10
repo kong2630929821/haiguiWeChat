@@ -14,7 +14,7 @@ export const payComplete = () => {
         if (r.msg && r.msg[2] === 'activity') {  // 购买权益特殊商品
             setStore('flags/activityGoods',true);
         } else if (r.msg && r.msg[2] === '105') {
-            setStore('flags/mallRecharge',true);
+            setStore('flags/mallRecharge',true);    // 充值成功
         }
     });
     
@@ -23,10 +23,11 @@ export const payComplete = () => {
         setStore('flags/upgradeHbao',true);
     });
 
-    // // 购买商品成功
-    // setMsgHandler('event_pay_order',() => {
-    //     setStore('flags/mallRecharge',true);
-    // });
+    // 购买商品成功
+    setMsgHandler('event_pay_order',(res) => {
+        console.log('event_pay_order',res);
+        setStore('flags/payOrder',true);     // 购买成功
+    });
 
     // 余额变化
     setMsgHandler('alter_balance_ok',r => {
