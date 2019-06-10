@@ -4,7 +4,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { freeMaskGoodsId, OffClassGoodsId, saleClassGoodsId, vipClassGoodsId, vipMaskGoodsId } from '../../config';
 import { getAllGifts, getGoodsDetails, orderActiveGoods, payMoney, payOrder } from '../../net/pull';
 import { Address, getStore, register, UserType } from '../../store/memstore';
-import { copyToClipboard, popNewLoading, popNewMessage, priceFormat } from '../../utils/tools';
+import { copyToClipboard, popNewLoading, popNewMessage } from '../../utils/tools';
 import { setWxConfig, shareWithUrl } from '../../utils/wxAPI';
 import { localInviteCode } from '../base/main';
 import { PowerFlag } from './powerConstant';
@@ -35,10 +35,10 @@ export class GiftPage extends Widget {
         // 用户会员等级是否等于当前所查看的会员等级
         this.props.isCurVip = props.isCurVip || getStore('user/userType',-1) === props.userType; 
         if (props.userType === UserType.hWang) {
-            this.props.img = `10000_${PowerFlag[props.fg]}1.png`;
+            this.props.img = `10000_${PowerFlag[props.fg]}.png`;
 
         } else {
-            this.props.img = `399_${PowerFlag[props.fg]}1.png`;
+            this.props.img = `399_${PowerFlag[props.fg]}.png`;
         }        
         this.initData();
     }
@@ -158,21 +158,20 @@ export class GiftPage extends Widget {
                 const oid = order.orderInfo[0];
 
                 if (price > 0) {
+                    payMoney(price,'activity',1,['pay_order',[oid]]);
                     // 提示需要支付费用
-                    popNew('app-view-member-confirmPayInfo',{ money: priceFormat(price) },() => {
-                        payMoney(price,'activity',1,['pay_order',[oid]]);
-
-                        // const cash = getStore('balance/cash');
-                        // if (cash < price) { 
-                        //     payMoney(price - cash,'activity',1,['pay_order',[oid]]);
-                        // } else {
-                        //     payOrder(oid).then(() => {
-                        //         this.buySuccess();
-                        //     }).catch(err => {
-                        //         popNewMessage('领取失败');
-                        //     });
-                        // }
-                    });
+                    // popNew('app-view-member-confirmPayInfo',{ money: priceFormat(price) },() => {
+                    //     const cash = getStore('balance/cash');
+                    //     if (cash < price) { 
+                    //         payMoney(price - cash,'activity',1,['pay_order',[oid]]);
+                    //     } else {
+                    //         payOrder(oid).then(() => {
+                    //             this.buySuccess();
+                    //         }).catch(err => {
+                    //             popNewMessage('领取失败');
+                    //         });
+                    //     }
+                    // });
                 } else {
                     payOrder(oid).then(() => {
                         this.buySuccess();

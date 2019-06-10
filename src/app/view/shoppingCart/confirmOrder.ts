@@ -152,47 +152,41 @@ export class ConfirmOrder extends Widget {
         payOids = oids;// 存储即将付款的订单id
         payLoading = loading;
         noResponse(this.payFaile.bind(this));
-        payMoney(totalFee,'105',1,['pay_order',oids],() => {
-            popNewMessage('支付失败');
-            clearNoResponse();
-            closeLoading();
-            this.payFaile();
-        });
-            
-        // try {
-        //     const cash = getStore('balance').cash;  // 余额
-        //     console.log('cash ========',cash);
-        //     if (totalFee > cash) {
-        //         payMoney(totalFee - cash,'105',1,['pay_order',oids],() => {
-        //             popNewMessage('支付失败');
-        //             clearNoResponse();
-        //             closeLoading();
-        //             this.payFaile();
-        //         });
-        //     } else {
-        //         popNew('app-view-member-confirmPayInfo',{ money:priceFormat(totalFee) },async () => {
-        //             await orderPay(oids);
-        //             this.ok && this.ok();
-        //             popNewMessage('支付成功');
-        //             loading.callback(loading.widget);
-        //             popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGDELIVERED,allStaus:allOrderStatus.slice(0,4) });
+       
+        try {
+            // const cash = getStore('balance').cash;  // 余额
+            // console.log('cash ========',cash);
+            // if (totalFee > cash) {
+            payMoney(totalFee,'105',1,['pay_order',oids],() => {
+                popNewMessage('支付失败');
+                clearNoResponse();
+                closeLoading();
+                this.payFaile();
+            });
+            // } else {
+            //     popNew('app-view-member-confirmPayInfo',{ money:priceFormat(totalFee) },async () => {
+            //         await orderPay(oids);
+            //         this.ok && this.ok();
+            //         popNewMessage('支付成功');
+            //         loading.callback(loading.widget);
+            //         popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGDELIVERED,allStaus:allOrderStatus.slice(0,4) });
                     
-        //         },() => {   // 取消支付
-        //             this.payFaile();
-        //             loading.callback(loading.widget);
-        //         });
-        //     }
-        // } catch (res) {
-        //     loading.callback(loading.widget);
-        //     if (res.result === 2124) {
-        //         popNewMessage('库存不足');
-        //     } else if (res.result === 2127) {
-        //         popNewMessage('购买免税商品超出限制');
-        //     } else {
-        //         popNewMessage('支付失败');
-        //     }
-        //     console.log('错误 ',res);
-        // }
+            //     },() => {   // 取消支付
+            //         this.payFaile();
+            //         loading.callback(loading.widget);
+            //     });
+            // }
+        } catch (res) {
+            loading.callback(loading.widget);
+            if (res.result === 2124) {
+                popNewMessage('库存不足');
+            } else if (res.result === 2127) {
+                popNewMessage('购买免税商品超出限制');
+            } else {
+                popNewMessage('支付失败');
+            }
+            console.log('错误 ',res);
+        }
     }
 
     public paySuccess() {
