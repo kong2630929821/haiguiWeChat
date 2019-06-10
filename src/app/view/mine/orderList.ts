@@ -4,7 +4,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { cancelOrder, getOrders, payMoney, receiptOrder } from '../../net/pull';
 import { Order, OrderStatus, register } from '../../store/memstore';
 import { popNewMessage } from '../../utils/tools';
-import {  setGoodsId } from '../shoppingCart/confirmOrder';
+import {  setGoodsId, setNeedPayOrders } from '../shoppingCart/confirmOrder';
 
 // tslint:disable-next-line:no-reserved-keywords
 declare var module: any;
@@ -105,6 +105,7 @@ export const payOrderNow = (order:Order) => {
     const goodsid = order.orderGoods[0][0].id;
     try {
         setGoodsId(goodsid); // 存储即将付款的商品id
+        setNeedPayOrders(oids);
         payMoney(totalFee,'105',1,['pay_order',oids],() => {
             popNewMessage('支付失败');
         });
@@ -124,7 +125,9 @@ register('mall/orders',(orders:Map<OrderStatus,Order[]>) => {
 });
 
 // 支付成功
-register('flags/payOrder',async () => {
+register('flags/payOrder',(succeed:boolean) => {
+    console.log('flags/payOrder',succeed);
+    if (!succeed) return;
     const w:any = forelet.getWidget(WIDGET_NAME);
     w && w.paySuccess();
 });

@@ -1,8 +1,7 @@
 import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
-import { ReturnGoodsStatus } from '../../../net/pull';
-import { Order, OrderStatus, register } from '../../../store/memstore';
+import { Order, OrderStatus, register, ReturnGoodsStatus } from '../../../store/memstore';
 import { getUserTypeShow } from '../../../utils/logic';
 import { copyToClipboard, popNewMessage, priceFormat1, priceFormat2 } from '../../../utils/tools';
 
@@ -23,7 +22,7 @@ export const returnOrderStatus = [
     { name:'已退货',status:ReturnGoodsStatus.RETURNED,img:'return.png' }
 ];
 /**
- * 我的首页
+ * 我的首页 
  */
 export class Home extends Widget {
     public setProps(props:any) {

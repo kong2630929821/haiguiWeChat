@@ -70,7 +70,9 @@ export class OrderDetail extends Widget {
 }
 
 // 支付成功
-register('flags/payOrder',async () => {
+register('flags/payOrder',(succeed) => {
+    console.log('flags/payOrder',succeed);
+    if (!succeed) return;
     const w:any = forelet.getWidget(WIDGET_NAME);
     w && w.paySuccess();
 });
