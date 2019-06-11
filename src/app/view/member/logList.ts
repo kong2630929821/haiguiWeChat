@@ -43,7 +43,7 @@ export class LogList extends Widget {
                         return {
                             name: unicode2ReadStr(item[0]),
                             desc: `我的本月收益：${priceFormat(item[5])}`,
-                            tel: item[1]
+                            tel: item[1].replace(/(\d{3})\d{4}(\d{4})/,'$1****$2') 
                         };
                     });
                 } else {
@@ -60,7 +60,7 @@ export class LogList extends Widget {
                         return {
                             name: unicode2ReadStr(item[0]),
                             desc: `我的本月收益：${priceFormat(item[3])}`,
-                            tel: item[1]
+                            tel: item[1].replace(/(\d{3})\d{4}(\d{4})/,'$1****$2') 
                         };
                     });
                 } else {
