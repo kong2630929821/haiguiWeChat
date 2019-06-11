@@ -24,6 +24,16 @@ interface Props {
     ledShow:boolean; // LED灯
     timer:any;// 刷新列表定时器
 }
+const LOTTERY = {
+    GRADIENT_1:'0.01',
+    GRADIENT_2:'1.00',
+    GRADIENT_3:'5.00',
+    GRADIENT_4:'10.00',
+    GRADIENT_5:'20.00',
+    GRADIENT_6:'88.00',
+    GRADIENT_7:'888.00',
+    GRADIENT_8:'8888.00'
+};
 // tslint:disable-next-line:completed-docs
 export class Turntable extends Widget {
     public ok: () => void;
@@ -63,10 +73,18 @@ export class Turntable extends Widget {
      */
     public initTurntable() {
         // 奖品配置  
-        const prizeList = [1,2,3,4,5,6];
-        this.props.prizeList = [{ draw:'0.01' },{ draw:'1.00' },{ draw:'5.00' },{ draw:'10.00' },{ draw:'20.00' },{ draw:'8888.00' }];
+        this.props.prizeList = [
+            { draw:LOTTERY.GRADIENT_1 },
+            { draw:LOTTERY.GRADIENT_2 },
+            { draw:LOTTERY.GRADIENT_3 },
+            { draw:LOTTERY.GRADIENT_4 },
+            { draw:LOTTERY.GRADIENT_5 },
+            { draw:LOTTERY.GRADIENT_6 },
+            { draw:LOTTERY.GRADIENT_7 },
+            { draw:LOTTERY.GRADIENT_8 }
+        ];
 
-        for (let i = 0, length = prizeList.length; i < length; i++) {
+        for (let i = 0,length = this.props.prizeList.length;i < length; i++) {
             this.props.prizeList[i].deg = (-360 / length) * i;
         }
         console.log(this.props.prizeList);
