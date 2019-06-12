@@ -215,7 +215,7 @@ const getSku = (skus:SKU[],skuId:string) => {
 export const parseOrder = (infos:any) => {
     const orders = [];
     for (const info of infos) {
-        if (!info[14]) continue;     // 下单时间为0  订单退回
+        if (info[14] <= 0) continue;     // 下单时间为0  订单退回
         const orderGoods = [];
         for (const v of info[2]) {
             const goods = parseGoodsDetail(v[0]);
