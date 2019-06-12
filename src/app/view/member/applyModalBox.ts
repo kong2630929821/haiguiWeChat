@@ -1,3 +1,4 @@
+import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { bindPhone, bindUser, randomInviteCode, sendCode, verifyIDCard } from '../../net/pull';
 import { getStore, setStore, UserType } from '../../store/memstore';
@@ -119,6 +120,7 @@ export class ModalBoxInput extends Widget {
 
     // 切换礼包选择
     public changeSel(sel:string) {
+        popNew('app-view-member-giftAB',{ giftType:sel });
         this.props.selected = sel;
         this.paint();
     }
