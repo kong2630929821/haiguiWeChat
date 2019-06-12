@@ -2,8 +2,10 @@ import { popNew } from '../../../pi/ui/root';
 import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { mallImagPre } from '../../config';
-import { Groups } from '../../store/memstore';
+import { getStore, Groups, UserType } from '../../store/memstore';
 import { getImageThumbnailPath } from '../../utils/tools';
+import { localInviteCode } from '../../view/base/main';
+import { PowerFlag } from '../../view/member/powerConstant';
 
 interface Props {
     list:Groups[];   // 展示的分组列表1
@@ -30,5 +32,29 @@ export class GroupsOne extends Widget {
 
     public gotoTurntableClick() {
         popNew('app-view-member-turntable');
+    }
+    
+    public becomeHaiBao() {
+        const userType = getStore('user/userType');
+        if (userType === UserType.hWang) {
+            popNew('app-view-member-powerDetail',{ userType:UserType.hWang });
+        } else {
+            popNew('app-view-member-powerDetail',{ userType:UserType.hBao });
+        }
+    }
+
+    public becomeHaiWang() {
+        popNew('app-view-member-powerDetail',{ userType:UserType.hWang });
+    }
+
+    public shareGift() {
+        const userType = getStore('user/userType');
+        if (userType === UserType.normal || userType === UserType.other) {
+            popNew('app-components-popModel-popModel',{ title:'是否升级海宝' },() => {
+                popNew('app-view-member-powerDetail',{ userType:UserType.hBao });
+            });
+        } else {
+            popNew('app-view-member-giftPage',{ fg:PowerFlag.free, isCurVip:true, ableGain:localInviteCode && localInviteCode !== 'undefined'  });
+        }
     }
 }

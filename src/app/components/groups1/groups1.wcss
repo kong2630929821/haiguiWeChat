@@ -25,3 +25,12 @@
 .turntable-icon{
     background-image: url(../../res/image/turntable_icon.png);
 }
+.shareGift-icon{
+    background-image: url(../../res/image/shareGift_icon.png);
+}
+.becomeHaiBao-icon{
+    background-image: url(../../res/image/becomeHaiBao_icon.png);
+}
+.becomeHaiWang-icon{
+    background-image: url(../../res/image/becomeHaiWang_icon.png);
+}
