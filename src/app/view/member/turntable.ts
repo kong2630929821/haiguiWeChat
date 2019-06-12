@@ -71,15 +71,9 @@ export class Turntable extends Widget {
      */
     public initTurntable() {
         // 奖品配置  
-        this.props.prizeList = [
-            { draw:LOTTERY.GRADIENT_1 },
-            { draw:LOTTERY.GRADIENT_2 },
-            { draw:LOTTERY.GRADIENT_3 },
-            { draw:LOTTERY.GRADIENT_4 },
-            { draw:LOTTERY.GRADIENT_5 },
-            { draw:LOTTERY.GRADIENT_6 }
-        ];
-
+        for (const v in LOTTERY) {
+            this.props.prizeList.push({ draw:LOTTERY[v] });
+        }
         for (let i = 0,length = this.props.prizeList.length;i < length; i++) {
             this.props.prizeList[i].deg = (-360 / length) * i;
         }
