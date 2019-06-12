@@ -26,13 +26,11 @@ interface Props {
 }
 const LOTTERY = {
     GRADIENT_1:'0.01',
-    GRADIENT_2:'1.00',
-    GRADIENT_3:'5.00',
-    GRADIENT_4:'10.00',
-    GRADIENT_5:'20.00',
-    GRADIENT_6:'88.00',
-    GRADIENT_7:'888.00',
-    GRADIENT_8:'8888.00'
+    GRADIENT_2:'0.88',
+    GRADIENT_3:'8.80',
+    GRADIENT_4:'88.00',
+    GRADIENT_5:'888.00',
+    GRADIENT_6:'8888.00'
 };
 // tslint:disable-next-line:completed-docs
 export class Turntable extends Widget {
@@ -79,9 +77,7 @@ export class Turntable extends Widget {
             { draw:LOTTERY.GRADIENT_3 },
             { draw:LOTTERY.GRADIENT_4 },
             { draw:LOTTERY.GRADIENT_5 },
-            { draw:LOTTERY.GRADIENT_6 },
-            { draw:LOTTERY.GRADIENT_7 },
-            { draw:LOTTERY.GRADIENT_8 }
+            { draw:LOTTERY.GRADIENT_6 }
         ];
 
         for (let i = 0,length = this.props.prizeList.length;i < length; i++) {
