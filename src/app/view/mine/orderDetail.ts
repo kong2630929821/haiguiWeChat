@@ -35,7 +35,7 @@ export class OrderDetail extends Widget {
         const activeStatus = this.props.status;
         if (num === 1) {  // 确认按钮
             if (activeStatus === OrderStatus.PENDINGPAYMENT) {  // 去支付
-                payOrderNow(order,this.paySuccess.bind(this));  // 去付款
+                payOrderNow(order);  // 去付款
             } else if (activeStatus === OrderStatus.PENDINGRECEIPT) {  // 待收货  确认收货
                 popNew('app-components-popModel-popModel',{ title:'是否确认收货' },() => {
                     receiptOrder(order.id).then(() => {
@@ -69,7 +69,10 @@ export class OrderDetail extends Widget {
         
 }
 
-register('flags/mallRecharge',async () => {
+// 支付成功
+register('flags/payOrder',(succeed) => {
+    console.log('flags/payOrder',succeed);
+    if (!succeed) return;
     const w:any = forelet.getWidget(WIDGET_NAME);
     w && w.paySuccess();
 });

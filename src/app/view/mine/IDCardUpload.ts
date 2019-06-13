@@ -92,7 +92,6 @@ export class IDCardUpload extends Widget {
 
     // 实名认证
     public verify() {
-       
         if (this.props.front && this.props.back && this.props.name && this.props.card) {
             const loadding = popNewLoading('身份认证中');
             // 识别正面照

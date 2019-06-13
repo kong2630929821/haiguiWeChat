@@ -1,5 +1,4 @@
 import { HandlerMap } from '../../pi/util/event';
-import { ReturnGoodsStatus } from '../net/pull';
 
 /**
  * 判断是否是对象
@@ -260,6 +259,14 @@ export enum OrderStatus {
     RETURNSTART = 6,         // 申请退货
     RETURNING = 7,           // 退货中
     RETURNEND = 8             // 已退货
+}
+
+//  退货状态
+export enum ReturnGoodsStatus {  
+    CANRETURN = 0,   // 未退货
+    RETURNING = 1,   // 退货中
+    RETURNED = 2     // 已退货
+
 }
 
 // 运费信息

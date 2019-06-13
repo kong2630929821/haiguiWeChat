@@ -126,6 +126,7 @@ export class ConfirmOrder extends Widget {
         let ordersRes;
         try {
             ordersRes = await Promise.all(allOrderPromise);
+            loading.callback(loading.widget);
             getCart();    // 下单成功后刷新购物车
             console.log('ordersRes ====',ordersRes);
         } catch (res) {
@@ -141,45 +142,23 @@ export class ConfirmOrder extends Widget {
 
             return;
         }
+
+        const oids = [];
+        for (const res of ordersRes) {
+            const oid = res.orderInfo[0];
+            oids.push(oid);
+            console.log('oid ====',oid);
+        }
+        const totalFee = this.props.totalSale + this.props.totalFreight + this.props.totalTax;
         try {
-           
-            const oids = [];
-            for (const res of ordersRes) {
-                const oid = res.orderInfo[0];
-                oids.push(oid);
-                console.log('oid ====',oid);
-            }
-            const totalFee = this.props.totalSale + this.props.totalFreight + this.props.totalTax;
-            const cash = getStore('balance').cash;  // 余额
-            console.log('cash ========',cash);
-            if (totalFee > cash) {
-                payOids = oids;// 存储即将付款的订单id
-                payLoading = loading;
-                noResponse(this.payFaile.bind(this));
-                payMoney(totalFee - cash,'105',1,['pay_order',oids],() => {
-                    popNewMessage('支付失败');
-                    clearNoResponse();
-                    closeLoading();
-                    this.payFaile();
-                });
-            } else {
-                popNew('app-view-member-confirmPayInfo',{ money:priceFormat(totalFee) },async () => {
-                    await orderPay(oids);
-                    this.ok && this.ok();
-                    popNewMessage('支付成功');
-                    loading.callback(loading.widget);
-                    popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGDELIVERED,allStaus:allOrderStatus.slice(0,4) });
-                    
-                },() => {   // 取消支付
-                    this.payFaile();
-                    loading.callback(loading.widget);
-                });
-            }
+            setNeedPayOrders(oids);
+            payMoney(totalFee,'105',1,['pay_order',oids],() => {
+                console.log('payMoney --------------failed');
+                popNewMessage('支付失败');
+                this.payFaile();
+            });
         } catch (res) {
-            loading.callback(loading.widget);
-            if (res.result === 2124) {
-                popNewMessage('库存不足');
-            } else if (res.result === 2127) {
+            if (res.result === 2127) {
                 popNewMessage('购买免税商品超出限制');
             } else {
                 popNewMessage('支付失败');
@@ -190,60 +169,23 @@ export class ConfirmOrder extends Widget {
 
     public paySuccess() {
         this.ok && this.ok();
+        console.log('paySuccess OrderStatus.PENDINGDELIVERED');
         popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGDELIVERED,allStaus:allOrderStatus.slice(0,4) });
     }
 
     // 支付失败
     public payFaile() {
         setStore('flags/gotoMine',true);
+        console.log('payFaile OrderStatus.PENDINGPAYMENT');
         popNew('app-view-mine-orderList',{ activeStatus: OrderStatus.PENDINGPAYMENT,allStaus:allOrderStatus.slice(0,4) });
         this.ok && this.ok();
     }
 }
 
-export const setPayLoading = (loading:any) => {
-    payLoading = loading;
-};
-
-export const closeLoading = () => {
-    payLoading && payLoading.callback(payLoading.widget);
-    payLoading = undefined;
-};
-export const setPayOids = (oids:number[]) => {
-    payOids = oids;
-};
-
 export const setGoodsId = (goodsId:number) => {  
     if (goodsId === freeMaskGoodsId || goodsId === OffClassGoodsId) {
         turntable = true;
     }
-};
-
-// 15秒没有收到充值成功的消息  认为失败
-export const noResponse = (cb?:Function) => {
-    timer = setTimeout(() => {
-        closeLoading();
-        cb && cb();
-    },12 * 1000);
-};
-
-export const clearNoResponse = () => {
-    clearTimeout(timer);
-};
-let payLoading;
-let payOids;
-let timer;
-let turntable;
-// 支付
-export const orderPay = (orderIds:number[]) => {
-    if (!orderIds) return;
-    const allPayPromise = [];
-    for (const id of orderIds) {
-        console.log('oid ====',id);
-        allPayPromise.push(payOrder(id));
-    }
-
-    return Promise.all(allPayPromise);
 };
 
 // 拆分订单
@@ -331,24 +273,41 @@ const calcAllFees = (splitOrder:SplitOrder[]) => {
     };
 };
 
-register('flags/mallRecharge',async () => {
+let turntable;
+
+// 需要支付的订单id列表   用来判断多订单支付是否全部响应成功
+let needPayOrders:number[] = [];
+
+// set
+export const setNeedPayOrders = (orders:number[]) => {
+    needPayOrders = orders;
+};
+
+// get
+export const getNeedPayOrders = () => {
+    return needPayOrders;
+};
+
+// 删除已处理订单
+export const delOrder = (orderId:number) => {
+    return needPayOrders = needPayOrders.filter((orderid:number) => {
+        return orderid !== orderId;
+    });
+};
+// 购买成功
+register('flags/payOrder',(successed:boolean) => {
+    console.log('flags/payOrder',successed);
     const w:any = forelet.getWidget(WIDGET_NAME);
-    clearNoResponse();
-    try {
-        // await orderPay(payOids);
+    if (successed) {
         popNewMessage('支付成功');
         w && w.paySuccess();
         if (turntable) {
             popNew('app-view-member-turntable');  // 打开大转盘
             turntable = false;
         }
-        closeLoading();
-        payOids = undefined;
-    } catch (e) {
-        console.log('充值成功之后 支付失败',e);
-        popNewMessage('支付失败');
-        payLoading.callback(payLoading.widget);
-        payLoading = undefined;
-        payOids = undefined;
+    } else {   // 购买失败
+        console.log('购买失败');
+        w && w.payFaile();
     }
+    
 });

@@ -200,7 +200,7 @@ export const copyToClipboard = (copyText) => {
  * 电话号码格式检查
  */
 export const checkPhone = (phoneNumber:string) => { 
-    if (/^1[34578]\d{9}$/.test(phoneNumber)) { 
+    if (/^1[3456789]\d{9}$/.test(phoneNumber)) { 
         return true; 
     } 
 

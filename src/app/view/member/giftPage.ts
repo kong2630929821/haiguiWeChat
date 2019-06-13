@@ -4,7 +4,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { freeMaskGoodsId, OffClassGoodsId, saleClassGoodsId, vipClassGoodsId, vipMaskGoodsId } from '../../config';
 import { getAllGifts, getGoodsDetails, orderActiveGoods, payMoney, payOrder } from '../../net/pull';
 import { Address, getStore, register, UserType } from '../../store/memstore';
-import { copyToClipboard, popNewLoading, popNewMessage, priceFormat } from '../../utils/tools';
+import { copyToClipboard, popNewLoading, popNewMessage } from '../../utils/tools';
 import { setWxConfig, shareWithUrl } from '../../utils/wxAPI';
 import { localInviteCode } from '../base/main';
 import { PowerFlag } from './powerConstant';
@@ -35,10 +35,10 @@ export class GiftPage extends Widget {
         // 用户会员等级是否等于当前所查看的会员等级
         this.props.isCurVip = props.isCurVip || getStore('user/userType',-1) === props.userType; 
         if (props.userType === UserType.hWang) {
-            this.props.img = `10000_${PowerFlag[props.fg]}1.png`;
+            this.props.img = `10000_${PowerFlag[props.fg]}.png`;
 
         } else {
-            this.props.img = `399_${PowerFlag[props.fg]}1.png`;
+            this.props.img = `399_${PowerFlag[props.fg]}.png`;
         }        
         this.initData();
     }
@@ -106,7 +106,7 @@ export class GiftPage extends Widget {
 
     // 免费领取
     public freeReceive() {
-        if (localInviteCode === this.props.inviteCode) {
+        if (localInviteCode ===  getStore('user/inviteCode','')) {
             popNewMessage('不能领取自己分享的试用装');
 
             return;
@@ -128,7 +128,7 @@ export class GiftPage extends Widget {
 
     // 报名课程
     public applyClass() {
-        if (localInviteCode === this.props.inviteCode) {
+        if (localInviteCode === getStore('user/inviteCode','')) {
             popNewMessage('不能领取自己分享的线下课程');
 
             return;
@@ -142,7 +142,6 @@ export class GiftPage extends Widget {
                 } else {
                     this.confirmGoods(saleClassGoodsId,addr);
                 }
-           
             });
         }
     }
@@ -154,23 +153,24 @@ export class GiftPage extends Widget {
         getGoodsDetails(goods).then(res => {  
             // 下单商品
             orderActiveGoods([goods,1,res.labels[0][0]],addr.id).then(order => { 
-                const cash = getStore('balance/cash');
                 const price = order.orderInfo[3] + order.orderInfo[5]; // 商品总价+运费
                 const oid = order.orderInfo[0];
 
                 if (price > 0) {
+                    payMoney(price,'activity',1,['pay_order',[oid]]);
                     // 提示需要支付费用
-                    popNew('app-view-member-confirmPayInfo',{ money: priceFormat(price) },() => {
-                        if (cash < price) { 
-                            payMoney(price - cash,'activity',1,['pay_order',[oid]]);
-                        } else {
-                            payOrder(oid).then(() => {
-                                this.buySuccess();
-                            }).catch(err => {
-                                popNewMessage('领取失败');
-                            });
-                        }
-                    });
+                    // popNew('app-view-member-confirmPayInfo',{ money: priceFormat(price) },() => {
+                    //     const cash = getStore('balance/cash');
+                    //     if (cash < price) { 
+                    //         payMoney(price - cash,'activity',1,['pay_order',[oid]]);
+                    //     } else {
+                    //         payOrder(oid).then(() => {
+                    //             this.buySuccess();
+                    //         }).catch(err => {
+                    //             popNewMessage('领取失败');
+                    //         });
+                    //     }
+                    // });
                 } else {
                     payOrder(oid).then(() => {
                         this.buySuccess();

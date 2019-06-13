@@ -43,7 +43,7 @@ export class LogList extends Widget {
                         return {
                             name: unicode2ReadStr(item[0]),
                             desc: `我的本月收益：${priceFormat(item[5])}`,
-                            tel: item[1]
+                            tel: item[1].replace(/(\d{3})\d{4}(\d{4})/,'$1****$2') 
                         };
                     });
                 } else {
@@ -60,7 +60,7 @@ export class LogList extends Widget {
                         return {
                             name: unicode2ReadStr(item[0]),
                             desc: `我的本月收益：${priceFormat(item[3])}`,
-                            tel: item[1]
+                            tel: item[1].replace(/(\d{3})\d{4}(\d{4})/,'$1****$2') 
                         };
                     });
                 } else {
@@ -77,7 +77,7 @@ export class LogList extends Widget {
         if (this.props.fg === PageFg.baby) {
             list = [
                 { key: '海宝', value: unicode2ReadStr(item[0]) },
-                { key: '电话', value: item[1] },
+                { key: '电话', value: item[1].replace(/(\d{3})\d{4}(\d{4})/,'$1****$2') },
                 { key: 'ta的海宝数量', value: `${item[2]}个` },
                 { key: 'ta的本月收益', value: priceFormat(item[3]) },
                 { key: 'ta的总收益', value: priceFormat(item[4]) },
@@ -87,7 +87,7 @@ export class LogList extends Widget {
         } else {
             list = [
                 { key: '海王', value: unicode2ReadStr(item[0]) },
-                { key: '电话', value: item[1] },
+                { key: '电话', value: item[1].replace(/(\d{3})\d{4}(\d{4})/,'$1****$2') },
                 { key: '海宝数量', value: `${item[2]}个` },
                 { key: '我的本月收益', value: priceFormat(item[3]) },
                 { key: '我的总收益', value: priceFormat(item[4]) }
