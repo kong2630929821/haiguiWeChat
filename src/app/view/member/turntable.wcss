@@ -129,7 +129,7 @@
 }
 .rule{
     width:650px;
-    height:176px;
+    height:204px;
     background:rgba(255,248,225,1);
     border-radius:10px;
     border:1px solid rgba(151,151,151,1);
@@ -140,8 +140,8 @@
     justify-content: center;
 }
 .ruleContent{
-    width:408px;
-    height:66px;
+    width:468px;
+    height:111px;
     font-size:24px;
     margin: 32px auto 0;
     font-family:PingFangSC-Regular;

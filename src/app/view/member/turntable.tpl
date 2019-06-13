@@ -49,7 +49,11 @@
         </div>
         <div w-class="rule">
             <div w-class="drawsListTitle">规则说明</div>
-            <div w-class="ruleContent">首次领取线下课程可获得一次抽奖机会 首次领取试用装可获得一次抽奖机会</div>
+            <div w-class="ruleContent">
+                <p>首次领取【免费面膜】可获得一次抽奖机会</p>
+                <p>首次领取【线下课程】可获得一次抽奖机会</p>
+                <p>每次成功领取周礼包，可获得一次抽奖机会</p>
+            </div>
         </div>
     </div>
 
