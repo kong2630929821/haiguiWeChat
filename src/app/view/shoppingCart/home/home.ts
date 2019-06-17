@@ -142,7 +142,7 @@ export class ShoppingCart extends Widget {
         this.state.cartGoodsShow.forEach(v => {
             if (v.cartGood.selected) wantGoods.push(v.cartGood);
         });
-        popNew('app-view-shoppingCart-confirmOrder',{ orderGoods:wantGoods });
+        popNew('app-view-shoppingCart-confirmOrder',{ orderGoods:wantGoods,totalAmount:this.props.totalAmount });
     }
 
     // 计算商品总价
