@@ -5,6 +5,7 @@
     flex-direction: column;
     overflow-x: hidden;
     overflow-y: auto;
+    height: 100%;
 }
 .btn{
     height:50px;

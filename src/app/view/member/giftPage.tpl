@@ -22,7 +22,7 @@
     {{elseif it.fg == 4 && it.isCurVip}}
     <div style="display: flex;align-items: center;">
         {{if !it.ableGain}}
-        <div w-class="shareBtn" on-tap="share">分享给好友</div>
+        <div w-class="shareBtn1" on-tap="share">分享给好友</div>
         {{else}}
         <div w-class="shareBtn1" on-tap="applyClass">{{it.btn}}</div>
         {{end}}
