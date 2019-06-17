@@ -17,6 +17,7 @@ export const WIDGET_NAME = module.id.replace(/\//g, '-');
 interface Props {
     orderGoods:CartGoods[];
     buyNow:boolean;    // 立即购买
+    totalAmount:number;  // 商品总数量
 }
 /**
  * 确认订单

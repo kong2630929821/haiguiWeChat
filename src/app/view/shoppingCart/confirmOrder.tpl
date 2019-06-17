@@ -20,7 +20,7 @@
     </div>
     <div w-class="bottom">
         <div >
-            共4件 合计：
+            共{{it.totalAmount}}件 合计：
             <span style="font-size:32px;color:#8A4AF3">{{((it.totalSale + it.totalFreight + it.totalTax) / 100).toFixed(2)}}</span>
             <span w-class="pay" on-tap="orderClick">结算</span>
         </div>
