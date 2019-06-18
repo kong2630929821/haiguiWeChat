@@ -23,14 +23,14 @@
     margin-bottom: 10px;
 }
 .turntable-icon{
-    background-image: url(../../res/image/turntable_icon.png);
+    background-image: url(../../res/image/turntable_icon1.png);
 }
 .shareGift-icon{
-    background-image: url(../../res/image/shareGift_icon.png);
+    background-image: url(../../res/image/shareGift_icon1.png);
 }
 .becomeHaiBao-icon{
-    background-image: url(../../res/image/becomeHaiBao_icon.png);
+    background-image: url(../../res/image/becomeHaiBao_icon1.png);
 }
 .becomeHaiWang-icon{
-    background-image: url(../../res/image/becomeHaiWang_icon.png);
+    background-image: url(../../res/image/becomeHaiWang_icon1.png);
 }

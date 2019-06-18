@@ -27,7 +27,7 @@ export const payComplete = () => {
 
     // 升级海宝失败
     setMsgHandler('event_update_haibao_fail',(r) => {
-        if (r && r[0] === 4012) {
+        if (r && r.msg[0] === 4012) {
             popNewMessage('获取上级失败');
         } else {
             popNewMessage('升级海宝失败');
@@ -46,9 +46,9 @@ export const payComplete = () => {
     // 购买商品失败
     setMsgHandler('event_pay_order_fail',(r) => {
         console.log('event_pay_order_fail',r);
-        if (r && r[0] === 2132) {
+        if (r && r.msg[0] === 2132) {
             popNewMessage('该商品已领过');
-        } else if (r && r[0] === 2124) {
+        } else if (r && r.msg[0] === 2124) {
             popNewMessage('库存不足');
         } else {
             popNewMessage('支付失败');

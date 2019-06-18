@@ -27,7 +27,7 @@
             {{end}}
             <div w-class="row" ev-input-change="inviteCodeChange">
                 <widget w-tag="app-components-input-input">{placeHolder:"推荐人邀请码",style:"padding:10px;font-size:28px;",input:{{it.inviteCode}} }</widget>
-                <div w-class="btn" on-tap="getInvoteCode">推荐一个</div>
+                {{% <div w-class="btn" on-tap="getInvoteCode">推荐一个</div>}}
             </div>
         {{end}}
         <div w-class="row">
