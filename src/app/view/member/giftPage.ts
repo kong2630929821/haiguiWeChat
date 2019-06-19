@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { freeMaskGoodsId, OffClassGoodsId, saleClassGoodsId, vipClassGoodsId, vipMaskGoodsId } from '../../config';
+import { freeMaskGoodsId, OffClassGoodsId, saleClassGoodsId, saleHaiClassGoodsId, vipClassGoodsId, vipHaiClassGoodsId, vipHaiMaskGoodsId, vipMaskGoodsId } from '../../config';
 import { getAllGifts, getGoodsDetails, orderActiveGoods, payMoney, payOrder } from '../../net/pull';
 import { Address, getStore, register, UserType } from '../../store/memstore';
 import { copyToClipboard, popNewLoading, popNewMessage } from '../../utils/tools';
@@ -119,7 +119,12 @@ export class GiftPage extends Widget {
                 } else if (this.props.fg === PowerFlag.gift) {
                     this.confirmGoods(getStore('user/memberGifts/optionalGift',0), addr);
                 } else {
-                    this.confirmGoods(vipMaskGoodsId, addr);
+                    if (this.props.userType === UserType.hBao) {
+                        this.confirmGoods(vipMaskGoodsId, addr);
+                    } else if (this.props.userType === UserType.hWang) {
+                        this.confirmGoods(vipHaiMaskGoodsId, addr);
+                    }
+                    
                 }
             
             });
@@ -138,9 +143,18 @@ export class GiftPage extends Widget {
                 if (this.props.fg === PowerFlag.offClass) {
                     this.confirmGoods(OffClassGoodsId,addr);
                 } else if (this.props.fg === PowerFlag.vipClass) {
-                    this.confirmGoods(vipClassGoodsId,addr);
+                    if (this.props.userType === UserType.hBao) {
+                        this.confirmGoods(vipClassGoodsId,addr);
+                    } else if (this.props.userType === UserType.hWang) {
+                        this.confirmGoods(vipHaiClassGoodsId,addr);
+                    }
+                    
                 } else {
-                    this.confirmGoods(saleClassGoodsId,addr);
+                    if (this.props.userType === UserType.hBao) {
+                        this.confirmGoods(saleClassGoodsId,addr);
+                    } else if (this.props.userType === UserType.hWang) {
+                        this.confirmGoods(saleHaiClassGoodsId,addr);
+                    }
                 }
             });
         }
