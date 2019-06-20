@@ -136,6 +136,7 @@ export interface GoodsDetails {
 /******************************************************************/
     detail:GoodsSegmentationDetails[];  // 商品分段详细描述
     spec:GoodsSpec[];   // 商品规格
+    flag:number; // 上架标志
 }
 
 export type SKU  = [string,string,number,number]; // SKU SKU描述 价格影响 库存

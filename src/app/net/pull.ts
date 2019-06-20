@@ -981,3 +981,54 @@ export const getDrawsLog = () => {
         console.log(e);
     });
 };
+
+// 收藏商品
+export const collectShop = (id:number) => {
+    const msg = {
+        type:'add_liked_goods',
+        param:{
+            id
+        }
+    };
+
+    return requestAsync(msg).then(r => {
+
+        return r;
+    }).catch(e => {
+        console.log('收藏商品错误',e);
+    });
+};
+
+// 判断商品是否收藏
+export const isCollectShop = (id:number) => {
+    const msg = {
+        type:'check_liked_goods',
+        param:{
+            id
+        }
+    };
+
+    return requestAsync(msg).then(r => {
+
+        return r;
+    }).catch(e => {
+        console.log('check_liked_goods',e);
+    });
+};
+
+// 移除已经收藏的商品
+export const removeLiked = (id:number) => {
+    const msg = {
+        type:'remove_liked_goods',
+        param:{
+            id
+        }
+    };
+
+    return requestAsync(msg).then(r => {
+
+        return r;
+    }).catch(e => {
+        console.log('remove_liked_goods',e);
+    });
+};
