@@ -56,6 +56,7 @@
                 <img src="../../../res/image/{{it.allSelected ? 'redSelBox_active.png':'selectBox.png'}}" w-class="selectBox"/>
                 <span style="font-size:34px;">全选</span>
             </div>
+            <div w-class="pay {{it.canOrder ? 'active': '' }}" on-tap="collect">加入收藏</div>
             <div w-class="pay {{it.canOrder ? 'active': '' }}" on-tap="delCartGoods">删除</div>
         {{end}}
     </div>

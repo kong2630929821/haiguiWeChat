@@ -2,7 +2,7 @@ import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
 import { mallImagPre } from '../../../config';
-import { addCart, deductCart, getCart } from '../../../net/pull';
+import { addCart, collectShop, deductCart, getCart } from '../../../net/pull';
 import { CartGoods, register, setStore } from '../../../store/memstore';
 import { calcPrices, getImageThumbnailPath, popNewMessage, priceFormat } from '../../../utils/tools';
 
@@ -173,6 +173,19 @@ export class ShoppingCart extends Widget {
         const goods = this.state.cartGoodsShow[index].cartGood.goods;
         // skuId:goods.labels[0][0]
         popNew('app-view-mall-goodsDetail',{ goods });
+    }
+
+    // 加入收藏
+    public collect() {
+        const cartGoodsShow = this.state.cartGoodsShow;
+        cartGoodsShow.forEach(element => {
+            const id = element.cartGood.goods.id;
+            console.log(id);
+            // collectShop(id).then(r => {
+            //     console.log('collectShop',r);
+            //     popNewMessage('收藏成功');
+            // });
+        });
     }
 }
 const STATE = {
