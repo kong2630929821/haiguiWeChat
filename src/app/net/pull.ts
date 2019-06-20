@@ -1032,3 +1032,18 @@ export const removeLiked = (id:number) => {
         console.log('remove_liked_goods',e);
     });
 };
+
+// 查看收藏的商品列表
+export const getCollectList = () => {
+    const msg = {
+        type:'show_liked_goods',
+        param:{}
+    };
+
+    return requestAsync(msg).then(r => {
+
+        return r;
+    }).catch(e => {
+        console.log('show_liked_goods',e);
+    });
+};
