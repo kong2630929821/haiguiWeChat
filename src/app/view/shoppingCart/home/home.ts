@@ -178,14 +178,14 @@ export class ShoppingCart extends Widget {
     // 加入收藏
     public collect() {
         const cartGoodsShow = this.state.cartGoodsShow;
-        cartGoodsShow.forEach(element => {
+        cartGoodsShow.forEach(async element => {
             const id = element.cartGood.goods.id;
             console.log(id);
-            // collectShop(id).then(r => {
-            //     console.log('collectShop',r);
-            //     popNewMessage('收藏成功');
-            // });
+            await collectShop(id).then(r => {
+                console.log('collectShop',r);
+            });
         });
+        popNewMessage('收藏成功');
     }
 }
 const STATE = {
