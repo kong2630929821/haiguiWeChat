@@ -71,7 +71,8 @@ export const parseGoodsDetail = (info:any):GoodsDetails => {
         intro:info[15],		// 商品介绍
         
         detail:info[16] ? parseGoodsSegmentationDetails(info[16][1]) : [],  // 商品分段详细描述
-        spec:[]   // 商品规格   info[16][0]
+        spec:[]  , // 商品规格   info[16][0],
+        flag:info[17] // 商品是否下架
     };
     
 };

@@ -1,11 +1,17 @@
-<div class="new-page" w-class="new-page">
+<div class="new-page" w-class="collectBox">
     <div w-class="box">
-        <div w-class="like">
-            <img w-class="goodImg" src="../../res/image/10000_free.png" alt=""/>
-            <div w-class="goodInfo">
-                <div w-class="title">日本资生堂六角眉笔女初学者防水防汗持久不脱色不晕染2支装正品</div>
-                <span w-class="money">288.00</span>
+        {{for i,v of it.collectList}}
+            <div w-class="like" on-tap="goShopInfo(e,{{i}})">
+                <img w-class="goodImg" src="{{it.mallImagPre + it.getImageThumbnailPath(v.images)}}" alt=""/>
+                <div w-class="goodInfo">
+                    <div w-class="title">{{v.name}}</div>
+                    {{if v.flag}}
+                      <span w-class="money">{{it.priceFormat(v.origin)}}</span>
+                    {{else}}
+                      <div w-class="invalid">失效</div>
+                    {{end}}
+                </div>
             </div>
-        </div>
+        {{end}}
     </div>
 </div>

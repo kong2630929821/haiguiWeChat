@@ -1041,8 +1041,13 @@ export const getCollectList = () => {
     };
 
     return requestAsync(msg).then(r => {
+        const goods:GoodsDetails[] = [];
+        for (const v of r.goodsInfo) {
+            const good = parseGoodsDetail(v);
+            goods.push(good);
+        }
 
-        return r;
+        return goods;
     }).catch(e => {
         console.log('show_liked_goods',e);
     });
