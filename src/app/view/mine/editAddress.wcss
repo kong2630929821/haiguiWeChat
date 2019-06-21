@@ -46,3 +46,13 @@
     padding:20px;
     font-size:34px;
 }
+.img{
+    width: 46px;
+    height: 46px;
+    border: 20px solid transparent;
+    flex-shrink: 0;
+    margin-right: 109px;
+}
+.setDefault{
+    justify-content: space-between;
+}

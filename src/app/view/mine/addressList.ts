@@ -13,12 +13,13 @@ interface Props {
     list:any[]; // 地址列表
     isChoose:boolean;  // 是否选择地址
     selected:number; // 选中的下标
+    defaultAddrId:number;// 默认地址的ID
 }
 /**
  * 收货地址列表
  */
 export class AddressList extends Widget {
-    public ok:() => void;
+    public ok:(num:number) => void;
     public setProps(props:Props) {
         const addr = getLastAddress();
         this.props = {
@@ -27,36 +28,46 @@ export class AddressList extends Widget {
             selected:addr[1]
         };
         super.setProps(this.props);
+        this.props.defaultAddrId = JSON.parse(localStorage.getItem('addressIndex'));
     }
 
     // 点击左侧按钮
     public leftClick(num:number) {
         console.log(num);
         this.props.selected = num;
-        localStorage.setItem('addressIndex',num.toString());
+        if (this.props.defaultAddrId === '') {
+            localStorage.setItem('addressIndex',num.toString());
+        } 
         this.paint();
         setTimeout(() => {
-            this.ok && this.ok();
+            this.ok && this.ok(num);
         },50);
     }
 
     // 点击按钮
     public itemClick(num:number) {
         console.log(num);
-        popNew('app-view-mine-editAddress',{ ...this.props.list[num],onlyDel:true });
+        popNew('app-view-mine-editAddress',{ ...this.props.list[num],onlyDel:false,changeAddr:true,num },() => {
+            // const address = getStore('mall/addresses');
+            // localStorage.setItem('addressIndex',(address.length - 1).toString());
+            if (this.props.isChoose) {
+                this.ok && this.ok(num);
+            }
+        });
     }
 
     public addAddr() {
         popNew('app-view-mine-editAddress',undefined,() => {
             const address = getStore('mall/addresses');
-            localStorage.setItem('addressIndex',(address.length - 1).toString());
+            // localStorage.setItem('addressIndex',(address.length - 1).toString());
             if (this.props.isChoose) {
-                this.ok && this.ok();
+                this.ok && this.ok(address.length - 1);
             }
         });
     }
     public updateAddress(addresses:Address[]) {
         this.props.list = addresses;
+        this.props.defaultAddrId = JSON.parse(localStorage.getItem('addressIndex'));
         this.paint();
     }
 }

@@ -174,11 +174,8 @@ export const addAddress = (name:string,tel:string,area_id:number,address:string)
 
     return requestAsync(msg).then(res => {
         console.log('addAddress ======',res);
-        const addresses = parseAddress2(res.addressInfo);
-        console.log('addAddress ======',addresses);
-        setStore('mall/addresses',addresses);
-
-        return address;
+    
+        return res;
     });
 };
 
@@ -1050,5 +1047,27 @@ export const getCollectList = () => {
         return goods;
     }).catch(e => {
         console.log('show_liked_goods',e);
+    });
+};
+
+// 修改收货人信息
+export const updateAddress = (name:string,tel:string,area_id:number,address:string,no:number) => {
+    const msg = {
+        type:'update_address',
+        param:{
+            name,
+            tel,
+            area_id,
+            address,
+            no
+        }
+    };
+
+    return requestAsync(msg).then(r => {
+        console.log('changeAddress ======',r);
+
+        return r;
+    }).catch(e => {
+        console.log('update_address',e);
     });
 };

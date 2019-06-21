@@ -45,9 +45,9 @@ export class ConfirmOrder extends Widget {
     }
 
     public selectAddr() {
-        popNew('app-view-mine-addressList',{ isChoose:true },() => {
-            const addr = getLastAddress();
-            this.props.address = addr[2];
+        popNew('app-view-mine-addressList',{ isChoose:true },(num) => {
+            const address = getStore('mall/addresses');
+            this.props.address = address[num];
             const ret = plitOrder(this.props.orderGoodsShow,this.props.address);
             this.props.splitOrders = ret.splitOrders;
             this.props.totalFreight = ret.totalFreight;
