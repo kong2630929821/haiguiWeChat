@@ -2,7 +2,7 @@ import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { PROVINCE_LIST } from '../../components/areaSelect/provinceList';
 import { parseAddress2 } from '../../net/parse';
-import { addAddress, delAddress, updateAddress } from '../../net/pull';
+import { addAddress, delAddress, setDefaultAddr, updateAddress } from '../../net/pull';
 import { getStore, setStore } from '../../store/memstore';
 import { checkPhone, popNewLoading, popNewMessage } from '../../utils/tools';
 
@@ -113,11 +113,19 @@ export class EditAddress extends Widget {
             console.log(this.props.id);
             const close = popNewLoading('正在修改');
             const address = [this.props.province,this.props.address];
-            updateAddress(this.props.name,this.props.tel,this.props.area_id,`${JSON.stringify(address)}`,this.props.id).then((r) => {
+            const id = JSON.parse(localStorage.getItem('addressIndex'));
+            updateAddress(this.props.name,this.props.tel,this.props.area_id,`${JSON.stringify(address)}`,this.props.id).then(async (r) => {
+                let data = r.addressInfo;
                 if (this.props.defaultAddr) {
-                    localStorage.setItem('addressIndex',this.props.num.toString());
+                    localStorage.setItem('addressIndex','0');
+                    await setDefaultAddr(this.props.id).then(res => {
+                        console.log('1111111111111111111111111111',res);
+                        data = res.addressInfo;
+                    });
+                } else if (id === this.props.num) {
+                    localStorage.setItem('addressIndex','-1');
                 }
-                const addresses = parseAddress2(r.addressInfo);
+                const addresses = parseAddress2(data);
                 console.log('changeAddress ======',addresses);
                 setStore('mall/addresses',addresses);
                 this.ok && this.ok();
@@ -130,13 +138,17 @@ export class EditAddress extends Widget {
         } else {
             const close = popNewLoading('正在添加');
             const address = [this.props.province,this.props.address];
-            addAddress(this.props.name,this.props.tel,this.props.area_id,`${JSON.stringify(address)}`).then((r) => {
+            addAddress(this.props.name,this.props.tel,this.props.area_id,`${JSON.stringify(address)}`).then(async (r) => {
+                let data = r.addressInfo;
                 // 判断是否设置为默认地址
                 if (this.props.defaultAddr) {
-                    const addressData = getStore('mall/addresses');
-                    localStorage.setItem('addressIndex',addressData.length.toString());
+                    localStorage.setItem('addressIndex','0');
+                    await setDefaultAddr(data[data.length - 1][0]).then(res => {
+                        console.log('1111111111111111111111111111',res);
+                        data = res.addressInfo;
+                    });
                 }
-                const addresses = parseAddress2(r.addressInfo);
+                const addresses = parseAddress2(data);
                 console.log('addAddress ======',addresses);
                 setStore('mall/addresses',addresses);
                 this.ok && this.ok();

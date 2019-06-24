@@ -1043,7 +1043,7 @@ export const getCollectList = () => {
             const good = parseGoodsDetail(v);
             goods.push(good);
         }
-
+        
         return goods;
     }).catch(e => {
         console.log('show_liked_goods',e);
@@ -1070,4 +1070,16 @@ export const updateAddress = (name:string,tel:string,area_id:number,address:stri
     }).catch(e => {
         console.log('update_address',e);
     });
+};
+
+// 设置默认收货地址
+export const setDefaultAddr = (no:number) => {
+    const msg = {
+        type:'set_default_address',
+        param:{
+            no
+        }
+    };
+
+    return requestAsync(msg);
 };
