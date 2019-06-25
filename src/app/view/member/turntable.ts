@@ -25,7 +25,7 @@ interface Props {
     timer:any;// 刷新列表定时器
 }
 const LOTTERY = {
-    GRADIENT_1:'0.01',
+    GRADIENT_1:'0.08',
     GRADIENT_2:'0.88',
     GRADIENT_3:'8.80',
     GRADIENT_4:'88.00',
