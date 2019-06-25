@@ -51,13 +51,15 @@ export class BalanceLog extends Widget {
                             this.paint();
                         });
                     }
-
-                    return {
-                        name: getCashLogName(item[1]), 
-                        time: timestampFormat(item[4], 4),
-                        money: `${item[2] > 0 ? '+' :''}${priceFormat(item[2])}`,  // 正数带个+
-                        status:''
-                    };
+                    if (item[1] !== 5 || item[1] !== 7 || item[1] !== 2) {
+                        return {
+                            name: getCashLogName(item[1]), 
+                            time: timestampFormat(item[4], 4),
+                            money: `${item[2] > 0 ? '+' :''}${priceFormat(item[2])}`,  // 正数带个+
+                            status:''
+                        };
+                    }
+                    
                 });
                 this.props.list = list;
             } else {
