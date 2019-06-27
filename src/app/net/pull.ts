@@ -22,7 +22,7 @@ export const getGroups = (location:GroupsLocation) => {
         console.log('groups ========',groups);
         const groupsMap = getStore('mall/groups');
         groupsMap.set(location,groups);
-        setStore('mall/groups',groupsMap);
+        setStore('mall/groups',groupsMap);  
     });
 };
 
@@ -331,7 +331,7 @@ export const getOrders = (order_type:OrderStatus) => {
         const ordersMap = getStore('mall/orders');
         ordersMap.set(order_type,orders);
         setStore('mall/orders',ordersMap);
-
+        
         return orders;
     });
 };
@@ -894,9 +894,10 @@ export const getAllGifts = async () => {
         type:'mall/members@get_activity_goods_all',
         param:{}
     };
-
+    
     const data = await requestAsync(msg);
     const memberGifts = getStore('user/memberGifts');
+    
     for (const v of data.value) {
         if (v[0] === whiteGoodsId_399A) {
             memberGifts.gift = v[1];
@@ -930,7 +931,6 @@ export const getAllGifts = async () => {
             memberGifts.saleClass = v[1];
         }
     }
-    
     setStore('user/memberGifts',memberGifts);
 };
 

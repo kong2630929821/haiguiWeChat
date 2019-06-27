@@ -85,7 +85,7 @@ export class EditAddress extends Widget {
             return;
         } 
 
-        if (this.props.province.length === 0) {
+        if (this.props.province.length > 5) {
             popNewMessage('请选择地区');
             
             return;
