@@ -221,8 +221,8 @@ export const parseOrder = (infos:any) => {
             const goods = parseGoodsDetail(v[0]);
             const amount = v[1];
             const unit = v[2];
-            const sku = getSku(goods.labels,v[3][0]);
-            goods.labels = [sku];
+            v[3][0][1] = unicode2Str(v[3][0][1]);
+            goods.labels = v[3][0];
             orderGoods.push([goods,amount,unit]);
         }
         // info[1] 为uid  无用
@@ -245,7 +245,6 @@ export const parseOrder = (infos:any) => {
             finish_time:info[18],    // 完成时间，单位毫秒，已收货，但未完成，例如退货
             ship_id:info[19]         // 物流单号
         };
-
         orders.push(order);
     }
 
