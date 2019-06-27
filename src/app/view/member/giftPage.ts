@@ -184,7 +184,7 @@ export class GiftPage extends Widget {
                 if (err.result === 2124) {
                     popNewMessage('库存不足');
                 } else if (err.type === 2132) {
-                    popNewMessage('该商品已领过');
+                    popNewMessage('本周礼包你已领取，无法再次领取，订单将自动取消，请在现金-现金明细中查看退款金额！');
                 } else {
                     popNewMessage('领取失败');
                 }

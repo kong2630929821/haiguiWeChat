@@ -160,7 +160,7 @@ export class GoodsDetailHome extends Widget {
             };
             const cartGoods = [cartGood];
 
-            popNew('app-view-shoppingCart-confirmOrder',{ orderGoods:cartGoods,buyNow:true,totalAmount:1 });
+            popNew('app-view-shoppingCart-confirmOrder',{ orderGoods:cartGoods,buyNow:true,totalAmount:this.props.amount });
         } else {
             const goodId = this.props.goods.id;
             const num = calcCartGoodsNum(goodId,sku[0]);
