@@ -14,6 +14,9 @@ export const erlangLogicIp = sourceIp;
 // erlang逻辑服务器port
 export const erlangLogicPort = '2089';
 
+// http请求端口号
+export const httpPort = '8091';
+
 // websock连接url
 export const wsUrl = `ws://${erlangLogicIp}:${erlangLogicPort}`;
 
