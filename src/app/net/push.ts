@@ -47,7 +47,7 @@ export const payComplete = () => {
     setMsgHandler('event_pay_order_fail',(r) => {
         console.log('event_pay_order_fail',r);
         if (r && r.msg[0] === 2132) {
-            popNewMessage('本周礼包你已领取，无法再次领取，订单将自动取消，请在现金-现金明细中查看退款金额！');
+            popNewMessage('该礼包，您已领取，无法再次领取');
         } else if (r && r.msg[0] === 2124) {
             popNewMessage('库存不足');
         } else {
