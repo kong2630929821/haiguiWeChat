@@ -296,7 +296,8 @@ export const parseAfterSale = (infos:any,orders:Order[]) => {
 // 过滤固定商品的订单
 const filterOrderGoods = (order:Order,goodsid:number,skuId:string) => {
     const goods = order.orderGoods.filter((v) => {
-        return (v[0].id === goodsid && v[0].labels[0][0] === skuId);
+        // 订单中的商品详情SKU只有一个，与普通商品详情SKU不同
+        return (v[0].id === goodsid && v[0].labels[0] === skuId);
     });
     order.orderGoods = goods;
     

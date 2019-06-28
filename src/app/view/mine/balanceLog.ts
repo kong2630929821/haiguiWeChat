@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { getBalanceList, getWithdrawStatus } from '../../net/pull';
-import { getCashLogName, timestampFormat } from '../../utils/logic';
+import { CashLogType, getCashLogName, timestampFormat } from '../../utils/logic';
 import { priceFormat } from '../../utils/tools';
 interface Props {
     list: any[];   // 当月数据
@@ -45,13 +45,23 @@ export class BalanceLog extends Widget {
         getBalanceList(data[0], data[1], 1).then(r => {
             if (r.value && r.value.length > 0) {
                 const list = r.value.map((item,index) => {
-                    if (getCashLogName(item[1]) === '提现') {
+                    // 提现记录需要获取进度
+                    if (item[1] === CashLogType.withdraw) {
                         getWithdrawStatus(item[3]).then(res => {
                             this.props.list[index].status = Status[res.value[3]];
                             this.paint();
                         });
                     }
-                    if (item[1] !== 5 || item[1] !== 7 || item[1] !== 2) {
+
+                    // 充值购物记录隐藏
+                    if (item[1] === CashLogType.recharge || item[1] === CashLogType.shopping) {  
+                        return null;
+
+                    } else {
+                        if (item[1] === CashLogType.upHbao && item[2] < 0) { // 升级海宝付钱记录隐藏
+                            return null;  
+                        }
+
                         return {
                             name: getCashLogName(item[1]), 
                             time: timestampFormat(item[4], 4),
@@ -59,9 +69,10 @@ export class BalanceLog extends Widget {
                             status:''
                         };
                     }
-                    
+
                 });
-                this.props.list = list;
+
+                this.props.list = list.filter(r => !!r);
             } else {
                 this.props.list = [];
             }

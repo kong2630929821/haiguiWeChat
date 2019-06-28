@@ -1,5 +1,5 @@
 import { request } from '../../pi/net/ui/con_mgr';
-import { freeMaskGoodsId, maxCount, OffClassGoodsId, saleClassGoodsId, sourceIp, sourcePort, vipClassGoodsId, vipMaskGoodsId, whiteGoodsId_10000A, whiteGoodsId_10000B, whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
+import { freeMaskGoodsId, httpPort, maxCount, OffClassGoodsId, saleClassGoodsId, saleHaiClassGoodsId, sourceIp, sourcePort, vipClassGoodsId, vipHaiClassGoodsId, vipHaiMaskGoodsId, vipMaskGoodsId, whiteGoodsId_10000A, whiteGoodsId_10000B, whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
 import { getStore,GoodsDetails, GroupsLocation, OrderStatus, ReturnGoodsStatus, setStore } from '../store/memstore';
 import { openWXPay } from '../utils/logic';
 import { popNewMessage, str2Unicode } from '../utils/tools';
@@ -318,21 +318,33 @@ export const getSuppliers = (id:number) => {
 
 // 获取各种状态的订单
 export const getOrders = (order_type:OrderStatus) => {
-    const msg = {
-        type:'get_order',
-        param:{
-            order_type
-        }
-    };
+    // const msg = {
+    //     type:'get_order',
+    //     param:{
+    //         order_type
+    //     }
+    // };
 
-    return requestAsync(msg).then(res => {
-        const orders = parseOrder(res.user_orderInfo);
-        console.log('order ======',orders);
-        const ordersMap = getStore('mall/orders');
-        ordersMap.set(order_type,orders);
-        setStore('mall/orders',ordersMap);
+    // return requestAsync(msg).then(res => {
+    //     const orders = parseOrder(res.user_orderInfo);
+    //     console.log('order ======',orders);
+    //     const ordersMap = getStore('mall/orders');
+    //     ordersMap.set(order_type,orders);
+    //     setStore('mall/orders',ordersMap);
         
-        return orders;
+    //     return orders;
+    // });
+
+    return fetch(`http://${sourceIp}:${httpPort}/mall/get_order?uid=${getStore('user/uid')}&order_type=${order_type}`).then(res => {
+        res.json().then(r => {
+            const orders = parseOrder(r.user_orderInfo);
+            console.log('order ======',orders);
+            const ordersMap = getStore('mall/orders');
+            ordersMap.set(order_type,orders);
+            setStore('mall/orders',ordersMap);
+        
+            return orders;
+        });
     });
 };
 
@@ -929,6 +941,15 @@ export const getAllGifts = async () => {
 
         } else if (v[0] === saleClassGoodsId) {
             memberGifts.saleClass = v[1];
+            
+        } else if (v[0] === vipHaiMaskGoodsId) {
+            memberGifts.vipGift = v[1];
+
+        } else if (v[0] === vipHaiClassGoodsId) {
+            memberGifts.vipClass = v[1];
+            
+        } else if (v[0] === saleHaiClassGoodsId) {
+            memberGifts.saleClass = v[1];
         }
     }
     setStore('user/memberGifts',memberGifts);
@@ -975,4 +996,16 @@ export const getDrawsLog = () => {
     }).catch(e => {
         console.log(e);
     });
+};
+
+// 判断活动商品是否可以领取
+export const judgeActivityGoods = (id:number) => {
+    const msg = {
+        type:'check_activity_goods',
+        param:{
+            id
+        }
+    };
+
+    return requestAsync(msg);
 };
