@@ -195,6 +195,7 @@ const userLogin = (userStr:any) => {
             user.phoneNum = res.phone;
             if (res.level < UserType.other) {
                 user.fcode = res.fcode;  // 上级的邀请码
+                user.hwcode = res.hwcode;// 上级海王邀请码
             } 
             setStore('user',user);
            

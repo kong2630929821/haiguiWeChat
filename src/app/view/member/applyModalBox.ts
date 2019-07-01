@@ -56,7 +56,8 @@ export class ModalBoxInput extends Widget {
         this.props.phoneNum = user.phoneNum;
         this.props.changePhone = !user.phoneNum;  // 已经绑过则默认不修改手机号
         if (user.userType <= UserType.hBao) {// 成为会员后不允许修改父级邀请码
-            this.props.fcode = user.fcode;
+            this.props.fcode = user.hwcode;
+            console.log('用户信息！！！！',user,`this.props.fcode-------${this.props.fcode}`);
         }
         if (props.userType === UserType.hWang) {
             this.props.needSelGift = false;
