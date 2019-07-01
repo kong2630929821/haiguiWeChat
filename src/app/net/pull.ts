@@ -1,6 +1,7 @@
 import { request } from '../../pi/net/ui/con_mgr';
+import { popNew } from '../../pi/ui/root';
 import { freeMaskGoodsId, httpPort, maxCount, OffClassGoodsId, saleClassGoodsId, saleHaiClassGoodsId, sourceIp, sourcePort, vipClassGoodsId, vipHaiClassGoodsId, vipHaiMaskGoodsId, vipMaskGoodsId, whiteGoodsId_10000A, whiteGoodsId_10000B, whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
-import { getStore,GoodsDetails, GroupsLocation, OrderStatus, ReturnGoodsStatus, setStore } from '../store/memstore';
+import { getStore,GoodsDetails, GroupsLocation, OrderStatus, ReturnGoodsStatus, setStore, UserType } from '../store/memstore';
 import { openWXPay } from '../utils/logic';
 import { popNewMessage, str2Unicode } from '../utils/tools';
 import { requestAsync } from './login';
@@ -951,6 +952,14 @@ export const getAllGifts = async () => {
         } else if (v[0] === saleHaiClassGoodsId) {
             memberGifts.saleClass = v[1];
         }
+    }
+    // 针对新版本迁移时未选择礼包的用户，需要强制提示选择礼包
+    const userType = getStore('User/userType');
+    if (userType === UserType.hBao && memberGifts.optionalGift === 0) {
+        popNew('app-view-member-applyModalBox',{ needSelGift:true,title:'礼包领取',unaccalimed:true },(sel) => {
+            let optional = whiteGoodsId_399A;
+            if (sel === 'B') optional = whiteGoodsId_399B;
+        });
     }
     setStore('user/memberGifts',memberGifts);
 };
