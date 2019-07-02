@@ -106,7 +106,7 @@ export class GiftPage extends Widget {
 
     // 免费领取
     public freeReceive() {
-        if (localInviteCode ===  getStore('user/inviteCode','')) {
+        if (localInviteCode && localInviteCode ===  getStore('user/inviteCode','')) {
             popNewMessage('不能领取自己分享的试用装');
 
             return;
@@ -133,7 +133,7 @@ export class GiftPage extends Widget {
 
     // 报名课程
     public applyClass() {
-        if (localInviteCode === getStore('user/inviteCode','')) {
+        if (localInviteCode && localInviteCode === getStore('user/inviteCode','')) {
             popNewMessage('不能领取自己分享的线下课程');
 
             return;
