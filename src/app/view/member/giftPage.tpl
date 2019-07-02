@@ -21,7 +21,7 @@
             
             {{% ========================线下课程======================}}
             {{elseif it.fg == 4 && it.isCurVip}}
-            <div style="display: flex;align-items: center;">
+            <div>
                 {{if !it.ableGain}}
                 <div w-class="shareBtn1" on-tap="share">分享给好友</div>
                 {{else}}
@@ -48,4 +48,5 @@
             <div w-class="shareBtn1" on-tap="applyClass">{{it.btn}}</div>
             {{end}}
     </div>
+    <div style="display:inline-block;height:100%;vertical-align: middle;"></div>
 </div>
