@@ -1,6 +1,10 @@
 <div class="new-page" w-class="page">
     <div w-class="contain">
         <div w-class="title">{{it.title ? it.title : "填写申请信息"}}</div>
+        {{if it.unaccalimed}}
+        <div w-class="prompt">您还有会员礼包未领取</div>
+        {{else}}
+        
         {{if it.realName}}
         <div w-class="row" style="border-bottom:1px solid #888;">
             <div w-class="addr" style="color:#222;">{{it.realName}}</div>
@@ -41,6 +45,7 @@
                 <div w-class="btn" on-tap="getInvoteCode">推荐一个</div>
             {{end}}
         </div>
+        {{end}}
         {{end}}
 
         {{if it.needSelGift}}

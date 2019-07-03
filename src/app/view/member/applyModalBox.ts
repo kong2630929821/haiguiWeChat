@@ -19,6 +19,7 @@ interface Props {
     needSelGift:boolean; // 是否需要选择礼包
     changePhone:boolean; // 是否修改手机号
     userType:UserType;  // 用户会员等级
+    unaccalimed:boolean;// 开通未领取礼包
 }
 /**
  * 填信息输入框弹窗
@@ -37,7 +38,8 @@ export class ModalBoxInput extends Widget {
         selected:'A',
         needSelGift:true,
         changePhone:true,
-        userType:UserType.hBao
+        userType:UserType.hBao,
+        unaccalimed:false
     };
 
     public setProps(props:any) {
@@ -54,7 +56,8 @@ export class ModalBoxInput extends Widget {
         this.props.phoneNum = user.phoneNum;
         this.props.changePhone = !user.phoneNum;  // 已经绑过则默认不修改手机号
         if (user.userType <= UserType.hBao) {// 成为会员后不允许修改父级邀请码
-            this.props.fcode = user.fcode;
+            this.props.fcode = user.hwcode;
+            console.log('用户信息！！！！',user,`this.props.fcode-------${this.props.fcode}`);
         }
         if (props.userType === UserType.hWang) {
             this.props.needSelGift = false;
@@ -131,7 +134,15 @@ export class ModalBoxInput extends Widget {
     }
 
     // 确认
+    // tslint:disable-next-line:cyclomatic-complexity
     public async confirm() {
+        if (this.props.unaccalimed) {
+            console.log(`123`);
+            this.ok && this.ok(this.props.selected); 
+
+            return;
+        }
+
         if (!this.props.userName || !this.props.phoneNum || (!this.props.phoneCode && this.props.changePhone) || !this.props.inviteCode) {
             popNewMessage('请将内容填写完整');
         } else if (!judgeRealName(this.props.userName)) {
