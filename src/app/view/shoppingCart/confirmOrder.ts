@@ -145,12 +145,14 @@ export class ConfirmOrder extends Widget {
         }
 
         const oids = [];
+        let totalFee = 0;
         for (const res of ordersRes) {
             const oid = res.orderInfo[0];
             oids.push(oid);
+            totalFee +=  res.orderInfo[3] + res.orderInfo[4] + res.orderInfo[5] + res.orderInfo[6];   // 商品原支付金额  商品税费  商品运费  其它费用
             console.log('oid ====',oid);
         }
-        const totalFee = this.props.totalSale + this.props.totalFreight + this.props.totalTax;
+        // const totalFee = this.props.totalSale + this.props.totalFreight + this.props.totalTax;
         try {
             setNeedPayOrders(oids);
             payMoney(totalFee,'105',1,['pay_order',oids],() => {
