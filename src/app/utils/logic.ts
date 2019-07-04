@@ -136,8 +136,8 @@ export const getCashLogName = (ttype:number) => {
  * 升级海宝支付
  */
 export const payToUpHbao = (sel:string,cb?:any) => {
-    const fee = 39900; // 升级海宝的费用
-    // const fee = 1;     // 测试费用
+    // const fee = 39900; // 升级海宝的费用
+    const fee = 1;     // 测试费用
     let optional = whiteGoodsId_399A;
     if (sel === 'B') optional = whiteGoodsId_399B;
     payMoney(fee,'hBao',1,['mall/members@up_haibao',optional]);
