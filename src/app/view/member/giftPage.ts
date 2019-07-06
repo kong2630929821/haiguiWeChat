@@ -35,12 +35,19 @@ export class GiftPage extends Widget {
         // 用户会员等级是否等于当前所查看的会员等级
         this.props.isCurVip = props.isCurVip || getStore('user/userType',-1) === props.userType; 
         if (props.userType === UserType.hWang) {
-            this.props.img = `10000_${PowerFlag[props.fg]}.png`;
+            this.props.img = `10000_${PowerFlag[props.fg]}1.png`;
 
         } else {
-            this.props.img = `399_${PowerFlag[props.fg]}.png`;
+            this.props.img = `399_${PowerFlag[props.fg]}1.png`;
         }        
         this.initData();
+        getAllGifts().then(r => {
+            console.log('getAllGifts return ',r);
+            if (!r) {
+                popNewMessage('获取礼包数据失败，请退出重进');
+            }
+        });
+        
     }
 
     public initData() {

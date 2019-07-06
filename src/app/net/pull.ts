@@ -908,69 +908,71 @@ export const getAllGifts = async () => {
         type:'mall/members@get_activity_goods_all',
         param:{}
     };
+
+    try {
+        const data = await requestAsync(msg);
+        const memberGifts = getStore('user/memberGifts');
     
-    const data = await requestAsync(msg);
-    const memberGifts = getStore('user/memberGifts');
-    
-    for (const v of data.value) {
-        if (v[0] === whiteGoodsId_399A) {
-            memberGifts.gift = v[1];
-            memberGifts.optionalGift = whiteGoodsId_399A;
+        for (const v of data.value) {
+            if (v[0] === whiteGoodsId_399A) {
+                memberGifts.gift = v[1];
+                memberGifts.optionalGift = whiteGoodsId_399A;
 
-        } else if (v[0] === whiteGoodsId_399B) {
-            memberGifts.gift = v[1];
-            memberGifts.optionalGift = whiteGoodsId_399B;
+            } else if (v[0] === whiteGoodsId_399B) {
+                memberGifts.gift = v[1];
+                memberGifts.optionalGift = whiteGoodsId_399B;
 
-        } else if (v[0] === whiteGoodsId_10000A) {
-            memberGifts.gift = v[1];
-            memberGifts.optionalGift = whiteGoodsId_10000A;
+            } else if (v[0] === whiteGoodsId_10000A) {
+                memberGifts.gift = v[1];
+                memberGifts.optionalGift = whiteGoodsId_10000A;
 
-        } else if (v[0] === whiteGoodsId_10000B) {
-            memberGifts.gift = v[1];
-            memberGifts.optionalGift = whiteGoodsId_10000B;
+            } else if (v[0] === whiteGoodsId_10000B) {
+                memberGifts.gift = v[1];
+                memberGifts.optionalGift = whiteGoodsId_10000B;
 
-        } else if (v[0] === vipMaskGoodsId) {
-            memberGifts.vipGift = v[1];
+            } else if (v[0] === vipMaskGoodsId) {
+                memberGifts.vipGift = v[1];
 
-        } else if (v[0] === freeMaskGoodsId) {
-            memberGifts.free = v[1];
+            } else if (v[0] === freeMaskGoodsId) {
+                memberGifts.free = v[1];
             
-        } else if (v[0] === OffClassGoodsId) {
-            memberGifts.offClass = v[1];
+            } else if (v[0] === OffClassGoodsId) {
+                memberGifts.offClass = v[1];
 
-        } else if (v[0] === vipClassGoodsId) {
-            memberGifts.vipClass = v[1];
+            } else if (v[0] === vipClassGoodsId) {
+                memberGifts.vipClass = v[1];
 
-        } else if (v[0] === saleClassGoodsId) {
-            memberGifts.saleClass = v[1];
+            } else if (v[0] === saleClassGoodsId) {
+                memberGifts.saleClass = v[1];
             
-        } else if (v[0] === vipHaiMaskGoodsId) {
-            memberGifts.vipGift = v[1];
+            } else if (v[0] === vipHaiMaskGoodsId) {
+                memberGifts.vipGift = v[1];
 
-        } else if (v[0] === vipHaiClassGoodsId) {
-            memberGifts.vipClass = v[1];
+            } else if (v[0] === vipHaiClassGoodsId) {
+                memberGifts.vipClass = v[1];
             
-        } else if (v[0] === saleHaiClassGoodsId) {
-            memberGifts.saleClass = v[1];
+            } else if (v[0] === saleHaiClassGoodsId) {
+                memberGifts.saleClass = v[1];
+            }
         }
-    }
+    
     // 针对新版本迁移时未选择礼包的用户，需要强制提示选择礼包
-    const userType = getStore('user/userType');
-    if (userType === UserType.hBao && memberGifts.optionalGift === 0) {
-        popNew('app-view-member-applyModalBox',{ needSelGift:true,title:'礼包领取',unaccalimed:true },(sel) => {
-            let optional = whiteGoodsId_399A;
-            if (sel === 'B') optional = whiteGoodsId_399B;
-            popNew('app-view-member-fillAddrModalBox',{ selectAddr:true },(addr) => {
+        const userType = getStore('user/userType');
+        if (userType === UserType.hBao && memberGifts.optionalGift === 0) {
+            popNew('app-view-member-applyModalBox',{ needSelGift:true,title:'礼包领取',unaccalimed:true },(sel) => {
+                let optional = whiteGoodsId_399A;
+                if (sel === 'B') optional = whiteGoodsId_399B;
+                popNew('app-view-member-fillAddrModalBox',{ selectAddr:true },(addr) => {
             // 获取商品详情
-                const loadding = popNewLoading('请稍候');
-                getGoodsDetails(optional).then(res => {  
+                    const loadding = popNewLoading('请稍候');
+                    getGoodsDetails(optional).then(res => {  
             // 下单商品
-                    orderActiveGoods([optional,1,res.labels[0][0]],addr.id).then(order => { 
-                        const price = order.orderInfo[3] + order.orderInfo[5]; // 商品总价+运费
-                        const oid = order.orderInfo[0];
+                        orderActiveGoods([optional,1,res.labels[0][0]],addr.id).then(order => { 
+                            const price = order.orderInfo[3] + order.orderInfo[5]; // 商品总价+运费
+                            const oid = order.orderInfo[0];
 
-                        if (price > 0) {
-                            payMoney(price,'activity',1,['pay_order',[oid]]);
+                            if (price > 0) {
+                                payMoney(price,'activity',1,['pay_order',[oid]]);
                     // 提示需要支付费用
                     // popNew('app-view-member-confirmPayInfo',{ money: priceFormat(price) },() => {
                     //     const cash = getStore('balance/cash');
@@ -984,35 +986,41 @@ export const getAllGifts = async () => {
                     //         });
                     //     }
                     // });
-                        } else {
-                            payOrder(oid).then(() => {
+                            } else {
+                                payOrder(oid).then(() => {
                         // 支付成功后会有推送, register 中会提示
                         // this.buySuccess();  
-                            }).catch(err => {
-                                popNewMessage('领取失败');
-                            });
-                        }
-                        loadding && loadding.callback(loadding.widget);
+                                }).catch(err => {
+                                    popNewMessage('领取失败');
+                                });
+                            }
+                            loadding && loadding.callback(loadding.widget);
 
-                    }).catch(err => {
-                        if (err.result === 2124) {
-                            popNewMessage('库存不足');
-                        } else if (err.type === 2132) {
-                            popNewMessage('该礼包，您已领取，无法再次领取');
-                        } else {
-                            popNewMessage('领取失败');
-                        }
-                        loadding && loadding.callback(loadding.widget);
-                    });
+                        }).catch(err => {
+                            if (err.result === 2124) {
+                                popNewMessage('库存不足');
+                            } else if (err.type === 2132) {
+                                popNewMessage('该礼包，您已领取，无法再次领取');
+                            } else {
+                                popNewMessage('领取失败');
+                            }
+                            loadding && loadding.callback(loadding.widget);
+                        });
             
-                }).catch(err => {
-                    loadding && loadding.callback(loadding.widget);
-                    popNewMessage('获取商品信息失败');
+                    }).catch(err => {
+                        loadding && loadding.callback(loadding.widget);
+                        popNewMessage('获取商品信息失败');
+                    });
                 });
             });
-        });
+        }
+        setStore('user/memberGifts',memberGifts);
+
+        return true;
+    } catch (err) {
+        
+        return false;
     }
-    setStore('user/memberGifts',memberGifts);
 };
 
 // 获取抽奖次数
