@@ -1,7 +1,9 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { PROVINCE_LIST } from '../../components/areaSelect/provinceList';
-import { addAddress, delAddress } from '../../net/pull';
+import { parseAddress2 } from '../../net/parse';
+import { addAddress, delAddress, setDefaultAddr, updateAddress } from '../../net/pull';
+import { getStore, setStore } from '../../store/memstore';
 import { checkPhone, popNewLoading, popNewMessage } from '../../utils/tools';
 
 /**
@@ -15,7 +17,8 @@ export class EditAddress extends Widget {
         province:[],
         address:'',
         areaSelect:[],
-        area_id:0
+        area_id:0,
+        defaultAddr:false
     };
 
     public setProps(props:any,oldProps:any) {
@@ -34,6 +37,13 @@ export class EditAddress extends Widget {
             address
         };
         super.setProps(this.props);
+        const id = JSON.parse(localStorage.getItem('addressIndex'));
+        // 判断是否是默认收货地址
+        if (id === this.props.num) {
+            this.props.defaultAddr = true;
+        } else {
+            this.props.defaultAddr = false;
+        }
     }
      // 选择省 市 区
     public selectArea() {
@@ -73,6 +83,7 @@ export class EditAddress extends Widget {
     }
     // 添加地址
     public saveAddress() {
+        // 添加地址
         if (!this.props.name) {
             popNewMessage('请输入收货人姓名');
 
@@ -85,7 +96,7 @@ export class EditAddress extends Widget {
             return;
         } 
 
-        if (this.props.province.length === 0) {
+        if (this.props.province.length === 0 || this.props.province[1] === '' || this.props.province[2] === '') {
             popNewMessage('请选择地区');
             
             return;
@@ -96,17 +107,58 @@ export class EditAddress extends Widget {
             
             return;
         }
-        const close = popNewLoading('正在添加');
-        
-        const address = [this.props.province,this.props.address];
-        addAddress(this.props.name,this.props.tel,this.props.area_id,`${JSON.stringify(address)}`).then(() => {
-            this.ok && this.ok();
-            popNewMessage('保存成功');
-            close.callback(close.widget);
-        }).catch(() => {
-            popNewMessage('保存失败');
-            close.callback(close.widget);
-        });
+        // 判断是修改地址还是添加  true为修改 flase为添加
+        if (this.props.changeAddr) {
+           // 修改地址
+            console.log(this.props.id);
+            const close = popNewLoading('正在修改');
+            const address = [this.props.province,this.props.address];
+            const id = JSON.parse(localStorage.getItem('addressIndex'));
+            updateAddress(this.props.name,this.props.tel,this.props.area_id,`${JSON.stringify(address)}`,this.props.id).then(async (r) => {
+                let data = r.addressInfo;
+                if (this.props.defaultAddr) {
+                    localStorage.setItem('addressIndex','0');
+                    await setDefaultAddr(this.props.id).then(res => {
+                        console.log('1111111111111111111111111111',res);
+                        data = res.addressInfo;
+                    });
+                } else if (id === this.props.num) {
+                    localStorage.setItem('addressIndex','-1');
+                }
+                const addresses = parseAddress2(data);
+                console.log('changeAddress ======',addresses);
+                setStore('mall/addresses',addresses);
+                this.ok && this.ok();
+                popNewMessage('修改成功');
+                close.callback(close.widget);
+            }).catch(() => {
+                popNewMessage('修改失败');
+                close.callback(close.widget);
+            });
+        } else {
+            const close = popNewLoading('正在添加');
+            const address = [this.props.province,this.props.address];
+            addAddress(this.props.name,this.props.tel,this.props.area_id,`${JSON.stringify(address)}`).then(async (r) => {
+                let data = r.addressInfo;
+                // 判断是否设置为默认地址
+                if (this.props.defaultAddr) {
+                    localStorage.setItem('addressIndex','0');
+                    await setDefaultAddr(data[data.length - 1][0]).then(res => {
+                        console.log('1111111111111111111111111111',res);
+                        data = res.addressInfo;
+                    });
+                }
+                const addresses = parseAddress2(data);
+                console.log('addAddress ======',addresses);
+                setStore('mall/addresses',addresses);
+                this.ok && this.ok();
+                popNewMessage('保存成功');
+                close.callback(close.widget);
+            }).catch(() => {
+                popNewMessage('保存失败');
+                close.callback(close.widget);
+            });
+        }
     }
 
     public delAddress() {
@@ -114,5 +166,15 @@ export class EditAddress extends Widget {
             this.ok && this.ok();
             popNewMessage('删除成功');
         });
+    }
+
+    // 设置为默认地址
+    public leftImg() {
+        if (this.props.defaultAddr) {
+            this.props.defaultAddr = false;
+        } else {
+            this.props.defaultAddr = true;
+        }
+        this.paint();
     }
 }

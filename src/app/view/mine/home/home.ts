@@ -70,6 +70,11 @@ export class Home extends Widget {
         copyToClipboard(this.state.inviteCode);
         popNewMessage('复制成功');
     }
+
+    // 去我的收藏
+    public goCollect() {
+        popNew('app-view-mine-favorites',{});
+    }
 }
 const State = {
     balance:[

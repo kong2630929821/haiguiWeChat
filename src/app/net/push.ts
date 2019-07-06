@@ -47,7 +47,7 @@ export const payComplete = () => {
     setMsgHandler('event_pay_order_fail',(r) => {
         console.log('event_pay_order_fail',r);
         if (r && r.msg[0] === 2132) {
-            popNewMessage('该商品已领过');
+            popNewMessage('该礼包，您已领取，无法再次领取');
         } else if (r && r.msg[0] === 2124) {
             popNewMessage('库存不足');
         } else {

@@ -5,7 +5,13 @@
     <div w-class="{{it.left?'':'left'}} {{it.right?'':'right'}}" style="flex: 1 0 0;">
         <div w-class="row text">
             <div>收货人：{{it.address.name}}</div>
-            <div>{{it.address.tel}}</div>
+            <div>
+                {{it.address.tel}}
+                {{if it.defaultFlag}}
+                    <div w-class="flag">默认</div>
+                {{end}}
+            </div>
+            
         </div>
         <div w-class="address">收货地址：{{it.addressShow}}</div>
     </div>

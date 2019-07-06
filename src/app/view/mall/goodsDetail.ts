@@ -2,7 +2,7 @@ import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { mallImagPre } from '../../config';
-import { addCart, getAreas, getGoodsDetails } from '../../net/pull';
+import { addCart, collectShop, getAreas, getGoodsDetails, isCollectShop, removeLiked } from '../../net/pull';
 import { Area, CartGoods, getStore, GoodsDetails, ImageType, register, setStore } from '../../store/memstore';
 import { calcFreightDesc, calcPrices, getImageMainPath, getImagePath, popNewMessage, priceFormat } from '../../utils/tools';
 
@@ -14,6 +14,7 @@ export const WIDGET_NAME = module.id.replace(/\//g, '-');
 interface Props {
     goods:GoodsDetails;     // 商品详情
     skuId?:string;
+    isLiked:number;// 是否收藏
 }
 /**
  * 商品详情
@@ -65,7 +66,8 @@ export class GoodsDetailHome extends Widget {
             skuIndex,
             buyNow:false,
             areaIcon:'',     // 国旗图标
-            area:''          // 国家
+            area:'',          // 国家
+            isLiked:0 // 是否收藏  1收藏 0没有收藏
 
         };
         super.setProps(this.props);
@@ -86,6 +88,12 @@ export class GoodsDetailHome extends Widget {
         getAreas(props.goods.area).then((area:Area) => {
             this.props.area = area.name;
             this.props.areaIcon = getImagePath(area.images,ImageType.ICON)[0];
+            this.paint();
+        });
+        // 判断该商品是否收藏
+        isCollectShop(this.props.goods.id).then(r => {
+            console.log('isCollectShop',r);
+            this.props.isLiked = r.is_liked;
             this.paint();
         });
     }
@@ -160,7 +168,7 @@ export class GoodsDetailHome extends Widget {
             };
             const cartGoods = [cartGood];
 
-            popNew('app-view-shoppingCart-confirmOrder',{ orderGoods:cartGoods,buyNow:true });
+            popNew('app-view-shoppingCart-confirmOrder',{ orderGoods:cartGoods,buyNow:true,totalAmount:this.props.amount });
         } else {
             const goodId = this.props.goods.id;
             const num = calcCartGoodsNum(goodId,sku[0]);
@@ -192,6 +200,30 @@ export class GoodsDetailHome extends Widget {
         }
         this.props.cartGoodsLen = len;
         this.paint();
+    }
+    // 收藏
+    public gotoCollect() {
+        console.log('收藏');
+        console.log(this.props.goods);
+        if (this.props.isLiked) {
+            // 取消收藏
+            removeLiked(this.props.goods.id).then(r => {
+                console.log('removeLiked',r);
+                this.props.isLiked = 0;
+                popNewMessage('取消收藏');
+                this.paint();
+            });
+        } else {
+            // 收藏
+            collectShop(this.props.goods.id).then(r => {
+                // this.props.goods = r;
+                // this.paint();
+                console.log(r);
+                this.props.isLiked = 1;
+                popNewMessage('收藏成功');
+                this.paint();
+            });
+        }
     }
 }
 

@@ -96,7 +96,7 @@ export const getUserTypeShow = (user?:UserType) => {
 };
 
 // 现金来源类型
-enum CashLogType {
+export enum CashLogType {
     upHwang = 1,  // 其他人升级海王获得收益
     upHbao,    // 其他人升级海宝获得收益
     reShop,   // 购物返利
@@ -121,7 +121,7 @@ const CashLogName = {
     reCash:'提现退款',
     other:'其他',
     turntable:'大转盘',
-    shopReturn:'购物退款'
+    shopReturn:'退款'
 };
 
 /**

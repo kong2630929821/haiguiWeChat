@@ -6,6 +6,7 @@ interface Props {
     left:string; // 左侧图片
     right:string;  // 右侧图片
     address:Address;
+    defaultFlag:boolean;// 默认标识
 }
 /**
  * 地址
@@ -14,7 +15,7 @@ export class AddressItem extends Widget {
     public setProps(props:Props,oldProps:Props) {
         const addressShow = addressFormat(props.address.address);
         this.props = {
-            right:'arrowRight.png',
+            right:'edit.png',
             ...props,
             addressShow
         };
@@ -35,7 +36,8 @@ export class AddressItem extends Widget {
 
     // 点击左侧图片
     public leftImg(e:any) {
-        console.log('hhhhhhhhhhhhhhh');
+        console.log('hhhhhhhhhhhhhhh',e);
         notify(e.node,'ev-leftClick',null);
+        
     }
 }

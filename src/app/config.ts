@@ -14,6 +14,9 @@ export const erlangLogicIp = sourceIp;
 // erlang逻辑服务器port
 export const erlangLogicPort = '2089';
 
+// http请求端口号
+export const httpPort = '8091';
+
 // websock连接url
 export const wsUrl = `ws://${erlangLogicIp}:${erlangLogicPort}`;
 
@@ -43,13 +46,13 @@ export const whiteGoodsId_10000A = 10020005;
 // 1万美白礼包B
 export const whiteGoodsId_10000B = 10020006;
 
-// 尊享面膜礼包
+// 海宝尊享面膜礼包
 export const vipMaskGoodsId = 10020007;
 
-// 5980线下精品课程
+// 海宝5980线下精品课程
 export const vipClassGoodsId = 10020008;
 
-// 29800线下销售课程
+// 海宝29800线下销售课程
 export const saleClassGoodsId = 10020009;
 
 // 分页请求条数
@@ -57,3 +60,12 @@ export const maxCount = 20;
 
 // 猜你喜欢最大条数
 export const likedGoodsMaxLen = 60;
+
+// 海王尊享面膜礼包
+export const vipHaiMaskGoodsId = 10020017;
+
+// 海宝5980线下精品课程
+export const vipHaiClassGoodsId = 10020018;
+
+// 海宝29800线下销售课程
+export const saleHaiClassGoodsId = 10020019;
