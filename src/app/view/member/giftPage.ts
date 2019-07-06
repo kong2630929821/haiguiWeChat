@@ -187,7 +187,8 @@ export class GiftPage extends Widget {
                     // });
                 } else {
                     payOrder(oid).then(() => {
-                        this.buySuccess();
+                        // 支付成功后会有推送, register 中会提示
+                        // this.buySuccess();  
                     }).catch(err => {
                         popNewMessage('领取失败');
                     });
@@ -198,7 +199,7 @@ export class GiftPage extends Widget {
                 if (err.result === 2124) {
                     popNewMessage('库存不足');
                 } else if (err.type === 2132) {
-                    popNewMessage('该商品已领过');
+                    popNewMessage('该礼包，您已领取，无法再次领取');
                 } else {
                     popNewMessage('领取失败');
                 }

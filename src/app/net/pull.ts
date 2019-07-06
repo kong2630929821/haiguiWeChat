@@ -1,5 +1,5 @@
 import { request } from '../../pi/net/ui/con_mgr';
-import { freeMaskGoodsId, maxCount, OffClassGoodsId, saleClassGoodsId, saleHaiClassGoodsId, sourceIp, sourcePort, vipClassGoodsId, vipHaiClassGoodsId, vipHaiMaskGoodsId, vipMaskGoodsId, whiteGoodsId_10000A, whiteGoodsId_10000B, whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
+import { freeMaskGoodsId, httpPort, maxCount, OffClassGoodsId, saleClassGoodsId, saleHaiClassGoodsId, sourceIp, sourcePort, vipClassGoodsId, vipHaiClassGoodsId, vipHaiMaskGoodsId, vipMaskGoodsId, whiteGoodsId_10000A, whiteGoodsId_10000B, whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
 import { getStore,GoodsDetails, GroupsLocation, OrderStatus, ReturnGoodsStatus, setStore } from '../store/memstore';
 import { openWXPay } from '../utils/logic';
 import { popNewMessage, str2Unicode } from '../utils/tools';
@@ -22,7 +22,7 @@ export const getGroups = (location:GroupsLocation) => {
         console.log('groups ========',groups);
         const groupsMap = getStore('mall/groups');
         groupsMap.set(location,groups);
-        setStore('mall/groups',groupsMap);
+        setStore('mall/groups',groupsMap);  
     });
 };
 
@@ -315,21 +315,33 @@ export const getSuppliers = (id:number) => {
 
 // 获取各种状态的订单
 export const getOrders = (order_type:OrderStatus) => {
-    const msg = {
-        type:'get_order',
-        param:{
-            order_type
-        }
-    };
+    // const msg = {
+    //     type:'get_order',
+    //     param:{
+    //         order_type
+    //     }
+    // };
 
-    return requestAsync(msg).then(res => {
-        const orders = parseOrder(res.user_orderInfo);
-        console.log('order ======',orders);
-        const ordersMap = getStore('mall/orders');
-        ordersMap.set(order_type,orders);
-        setStore('mall/orders',ordersMap);
+    // return requestAsync(msg).then(res => {
+    //     const orders = parseOrder(res.user_orderInfo);
+    //     console.log('order ======',orders);
+    //     const ordersMap = getStore('mall/orders');
+    //     ordersMap.set(order_type,orders);
+    //     setStore('mall/orders',ordersMap);
+        
+    //     return orders;
+    // });
 
-        return orders;
+    return fetch(`http://${sourceIp}:${httpPort}/mall/get_order?uid=${getStore('user/uid')}&order_type=${order_type}`).then(res => {
+        res.json().then(r => {
+            const orders = parseOrder(r.user_orderInfo);
+            console.log('order ======',orders);
+            const ordersMap = getStore('mall/orders');
+            ordersMap.set(order_type,orders);
+            setStore('mall/orders',ordersMap);
+        
+            return orders;
+        });
     });
 };
 
@@ -891,9 +903,10 @@ export const getAllGifts = async () => {
         type:'mall/members@get_activity_goods_all',
         param:{}
     };
-
+    
     const data = await requestAsync(msg);
     const memberGifts = getStore('user/memberGifts');
+    
     for (const v of data.value) {
         if (v[0] === whiteGoodsId_399A) {
             memberGifts.gift = v[1];
@@ -924,15 +937,17 @@ export const getAllGifts = async () => {
             memberGifts.vipClass = v[1];
         } else if (v[0] === saleClassGoodsId) {
             memberGifts.saleClass = v[1];
+            
         } else if (v[0] === vipHaiMaskGoodsId) {
             memberGifts.vipGift = v[1];
+
         } else if (v[0] === vipHaiClassGoodsId) {
             memberGifts.vipClass = v[1];
+            
         } else if (v[0] === saleHaiClassGoodsId) {
             memberGifts.saleClass = v[1];
         }
     }
-    
     setStore('user/memberGifts',memberGifts);
 };
 
@@ -979,10 +994,10 @@ export const getDrawsLog = () => {
     });
 };
 
-// 收藏商品
-export const collectShop = (id:number) => {
+// 判断活动商品是否可以领取
+export const judgeActivityGoods = (id:number) => {
     const msg = {
-        type:'add_liked_goods',
+        type:'check_activity_goods',
         param:{
             id
         }
@@ -1082,4 +1097,21 @@ export const setDefaultAddr = (no:number) => {
     };
 
     return requestAsync(msg);
+};
+
+// 收藏商品
+export const collectShop = (id:number) => {
+    const msg = {
+        type:'add_liked_goods',
+        param:{
+            id
+        }
+    };
+
+    return requestAsync(msg).then(r => {
+
+        return r;
+    }).catch(e => {
+        console.log('收藏商品错误',e);
+    });
 };

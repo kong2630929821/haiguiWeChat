@@ -218,14 +218,22 @@ export const parseOrder = (infos:any) => {
     for (const info of infos) {
         if (info[14] <= 0) continue;     // 下单时间为0  订单退回
         const orderGoods = [];
+        let fg = true;  // SKU是否是正确的标记
         for (const v of info[2]) {
             const goods = parseGoodsDetail(v[0]);
             const amount = v[1];
             const unit = v[2];
-            const sku = getSku(goods.labels,v[3][0]);
-            goods.labels = [sku];
+            if (!v[3] || !v[3][0]) { // SKU出错，直接跳过该订单
+                fg = false;
+                break;
+            }
+            v[3][0][1] = unicode2Str(v[3][0][1]);
+            goods.labels = [v[3][0]];
             orderGoods.push([goods,amount,unit]);
         }
+        if (!fg) {  // SKU出错，直接跳过该订单
+            continue;
+        }     
         // info[1] 为uid  无用
         const order:Order = {
             id:info[0],		       // 订单id
@@ -246,7 +254,6 @@ export const parseOrder = (infos:any) => {
             finish_time:info[18],    // 完成时间，单位毫秒，已收货，但未完成，例如退货
             ship_id:info[19]         // 物流单号
         };
-
         orders.push(order);
     }
 

@@ -16,10 +16,11 @@ export class MyCash extends Widget {
     public create() {
         super.create();
         this.state = priceFormat(getStore('balance/cash',0));
-        checkWithdraw().then(r => {
-            this.props.ableWithdraw = this.state > 0;
-            this.paint();
-        });
+        // 开启关闭提现
+        // checkWithdraw().then(r => {
+        //     this.props.ableWithdraw = this.state > 0;
+        //     this.paint();
+        // });
     }
 
     // 现金明细

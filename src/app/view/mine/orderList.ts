@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { cancelOrder, getOrders, payMoney, receiptOrder } from '../../net/pull';
+import { cancelOrder, getOrders, judgeActivityGoods, payMoney, receiptOrder } from '../../net/pull';
 import { Order, OrderStatus, register } from '../../store/memstore';
 import { popNewMessage } from '../../utils/tools';
 import {  setGoodsId, setNeedPayOrders } from '../shoppingCart/confirmOrder';
@@ -104,11 +104,30 @@ export const payOrderNow = (order:Order) => {
     const totalFee = order.origin + order.tax + order.freight;
     const goodsid = order.orderGoods[0][0].id;
     try {
-        setGoodsId(goodsid); // 存储即将付款的商品id
-        setNeedPayOrders(oids);
-        payMoney(totalFee,'105',1,['pay_order',oids],() => {
-            popNewMessage('支付失败');
-        });
+        if (String(goodsid).slice(0,4) === '1002') {  // 判断特殊商品的前缀
+            judgeActivityGoods(goodsid).then(r => {
+                if (r.value === 'true') {
+                    setGoodsId(goodsid); // 存储即将付款的商品id
+                    setNeedPayOrders(oids);
+                    payMoney(totalFee,'105',1,['pay_order',oids],() => {
+                        popNewMessage('支付失败');
+                    });
+                } else {
+                    popNewMessage('该礼包，您已领取，无法再次领取');
+
+                    // 活动商品已领取后删除订单
+                    cancelOrder(order.id).then(() => {
+                        getOrders(OrderStatus.PENDINGPAYMENT);
+                    });
+                }
+            });
+        } else {
+            setNeedPayOrders(oids);
+            payMoney(totalFee,'105',1,['pay_order',oids],() => {
+                popNewMessage('支付失败');
+            });
+        }       
+       
     } catch (e) {
         console.log('payOrderNow err',e);
         popNewMessage('支付失败');
