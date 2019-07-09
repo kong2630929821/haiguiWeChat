@@ -15,6 +15,7 @@ export interface Props {
  */
 export class OrderItem extends Widget {
     public timer:number;
+
     public setProps(props:any) {
         clearTimeout(this.timer);
         let orderIdShow = `订单号:${props.order.id}`;

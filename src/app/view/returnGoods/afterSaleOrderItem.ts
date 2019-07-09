@@ -9,10 +9,11 @@ export interface Props {
     status:ReturnGoodsStatus;        // 订单状态
 }
 /**
- * 订单
+ * 退货订单
  */
 export class OrderItem extends Widget {
     public timer:number;
+    
     public setProps(props:any) {
         this.props = {
             ...props,

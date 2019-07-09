@@ -14,7 +14,7 @@ interface Props {
     activeStatus:ReturnGoodsStatus;    // 当前查询的订单状态
 }
 /**
- * 订单列表
+ * 退货订单列表
  */
 export class AfterSaleOrderList extends Widget {
     public create() {

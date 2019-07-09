@@ -17,6 +17,8 @@
         </div>
     </div>
     {{end}}
+    
+    {{if it.status < 4}}
     <div w-class="row1">
         <div w-class="total">
             合计<span style="font-size:32px;color:#8A4AF3">￥ {{it.priceFormat(it.order.origin + it.order.tax + it.order.freight)}}</span>
@@ -33,4 +35,6 @@
             {{end}}
         </div>
     </div>
+    {{end}}
+
 </div>

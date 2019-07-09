@@ -40,8 +40,8 @@
         {{else}}
         <div w-class="row" ev-input-change="inviteCodeChange">
             <widget w-tag="app-components-input-input">{placeHolder:"推荐人邀请码",style:"padding:10px;font-size:28px;",input:{{it.inviteCode}} }</widget>
-            {{:flag=0}}
-            {{if flag==1}}
+            {{:flag=true}}
+            {{if flag}}
                 <div w-class="btn" on-tap="getInvoteCode">推荐一个</div>
             {{end}}
         </div>

@@ -42,7 +42,8 @@ export class Home extends Widget {
         let allStaus;
         if (status === OrderStatus.RETURNSTART) {
             allStaus = returnOrderStatus;
-            popNew('app-view-mine-afterSaleOrderList',{ activeStatus: ReturnGoodsStatus.CANRETURN,allStaus });
+            // popNew('app-view-returnGoods-afterSaleOrderList',{ activeStatus: ReturnGoodsStatus.CANRETURN,allStaus });
+            popNew('app-view-returnGoods-applyReturnGoods');
         } else {
             allStaus = this.props.allStaus.slice(0,4);
             popNew('app-view-mine-orderList',{ activeStatus: status,allStaus });
