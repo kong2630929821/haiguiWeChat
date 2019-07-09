@@ -37,7 +37,7 @@ export class Withdraw extends Widget {
 
     // 确认提现
     public confirm() {
-        if (this.props.inputMoney > 0 && this.props.inputMoney <= Number(this.props.balance) && this.props.inputMoney % 10 === 0) {
+        if (this.props.inputMoney > 0 && this.props.inputMoney <= Number(this.props.balance) && this.props.inputMoney % 10 === 0 && this.props.inputMoney <= 5000) {
             const loadding = popNewLoading('申请提交中');
             applyWithdraw(this.props.inputMoney * 100).then(r => {
                 loadding && loadding.callback(loadding.widget);
