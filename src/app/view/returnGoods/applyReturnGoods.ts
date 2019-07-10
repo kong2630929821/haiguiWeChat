@@ -1,16 +1,25 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { serverFilePath } from '../../config';
+import { returnGoods } from '../../net/pull';
+import { Order } from '../../store/memstore';
 import { popNewMessage } from '../../utils/tools';
 import { takeImage, upImage } from '../../utils/wxAPI';
 
+interface Props {
+    order:Order;
+    reason:string;   // 退货原因
+    imgs:string[];
+    describle:string;  // 退款描述
+}
 /**
  * 申请退货填写理由
  */
 export class ApplyReturnGoods extends Widget {
-    public props:any = {
+    public ok:() => void;
+    public props:Props = {
         order:{
-            id:'08098907987987',
+            id:12545125,
             orderGoods:[
                 [
                     {
@@ -28,9 +37,18 @@ export class ApplyReturnGoods extends Widget {
                 ]
             ]
         },
-        status:4,
-        imgs:['../../res/image/IDcard1.png']
+        imgs:[],
+        reason:'',
+        describle:''
     };
+
+    public setProps(props:any) {
+        this.props = {
+            ...this.props,
+            ...props
+        };
+        super.setProps(this.props);
+    }
 
     // 选择图片
     public chooseImg() {
@@ -56,11 +74,30 @@ export class ApplyReturnGoods extends Widget {
 
     // 选择退货理由
     public selectReason() {
-        popNew('app-components-selectList-reasonSelectList',{ selected:-1,list:['原因一','原因二','原因三'] });
+        popNew('app-components-selectList-reasonSelectList',{ selected:-1,list:['原因一','原因二','原因三'] },(r => {
+            this.props.reason = r.value;
+            this.paint();
+        }));
+    }
+
+    public descChange(e:any) {
+        this.props.describle = e.value;
+        this.paint();
     }
 
     // 确认提交退货申请
     public confirm() {
-        // TODO 退货申请
+        if (!this.props.reason) {
+            popNewMessage('请选择退货原因');
+
+            return;
+        }
+        const res = `${this.props.reason}: ${this.props.describle}`;
+        returnGoods(this.props.order.id, res, this.props.imgs).then(() => {
+            popNewMessage('申请退货成功');
+            this.ok && this.ok();
+        }).catch(() => {
+            popNewMessage('申请退货失败');
+        });
     }
 }

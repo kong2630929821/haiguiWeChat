@@ -379,12 +379,13 @@ export const receiptOrder = (oid:number) => {
 /**
  * 退货
  */
-export const returnGoods = (aid:number,reason:string) => {
+export const returnGoods = (aid:number,reason:string,image:string[]) => {
     const msg = {
         type:'return_goods',
         param:{
             aid,
-            reason
+            reason,
+            image
         }
     };
 

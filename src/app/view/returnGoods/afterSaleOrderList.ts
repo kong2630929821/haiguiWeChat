@@ -1,8 +1,8 @@
+import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { getReturnGoods, returnGoods } from '../../net/pull';
+import { getReturnGoods } from '../../net/pull';
 import { AfterSale, register, ReturnGoodsStatus } from '../../store/memstore';
-import { popNewMessage } from '../../utils/tools';
 
 // tslint:disable-next-line:no-reserved-keywords
 declare var module: any;
@@ -44,18 +44,13 @@ export class AfterSaleOrderList extends Widget {
         const activeStatus = this.props.activeStatus;
         console.log('order=====',afterOrder);
         console.log('activeStatus=====',activeStatus);
-        if (btn === 1) {  // 确定按钮  
+        if (btn === 1) {  // 右侧按钮
             if (activeStatus === ReturnGoodsStatus.CANRETURN) { // 申请退货
-                returnGoods(afterOrder.id,'退货').then(() => {
+                popNew('app-view-returnGoods-applyReturnGoods',{ order:afterOrder.order },() => {
                     getReturnGoods(ReturnGoodsStatus.CANRETURN);
-                }).catch(() => {
-                    popNewMessage('出错啦');
                 });
             }
-        } else {  // 取消按钮
-            
-        }
-
+        } 
         console.log(e.btn, index);
     }
 

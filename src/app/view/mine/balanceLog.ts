@@ -2,7 +2,7 @@ import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { getBalanceList, getWithdrawStatus } from '../../net/pull';
 import { CashLogType, getCashLogName, timestampFormat } from '../../utils/logic';
-import { priceFormat } from '../../utils/tools';
+import { priceFormat, unicode2Str } from '../../utils/tools';
 interface Props {
     list: any[];   // 当月数据
     select:{
@@ -48,7 +48,11 @@ export class BalanceLog extends Widget {
                     // 提现记录需要获取进度
                     if (item[1] === CashLogType.withdraw) {
                         getWithdrawStatus(item[3]).then(res => {
-                            this.props.list[index].status = Status[res.value[3]];
+                            if (res.value[3] === 3) {  // 拒绝提现显示理由
+                                this.props.list[index].status = unicode2Str(res.value[6]);
+                            } else {
+                                this.props.list[index].status = Status[res.value[3]];
+                            }
                             this.paint();
                         });
                     }

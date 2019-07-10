@@ -22,7 +22,6 @@
     margin-bottom: 20px;
 }
 .time{
-    height:37px;
     font-size:26px;
     color:rgba(136,136,136,1);
     line-height:37px;

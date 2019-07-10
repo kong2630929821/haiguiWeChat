@@ -4,7 +4,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { mallImagPre } from '../../config';
 import { getGoodsInfo } from '../../net/pull';
 import { getStore, GoodsDetails, Groups, GroupsLocation } from '../../store/memstore';
-import { getImageMainPath, popNewMessage, throttle } from '../../utils/tools';
+import { getImageMainPath } from '../../utils/tools';
 
 export const forelet = new Forelet();
 
@@ -23,7 +23,7 @@ export enum StyleMod {     // 样式
  */
 export class GoodsList extends Widget {
     public props:any;
-    public setProps(props:Props,oldProps:Props) {
+    public setProps(props:Props) {
         this.props = {
             ...props,
             allStyleMod:StyleMod,

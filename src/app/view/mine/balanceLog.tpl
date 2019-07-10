@@ -14,7 +14,7 @@
                     <div w-class="desc">{{v.money}}</div>
                 </div>
                 <div w-class="itemTop">
-                    <div w-class="time">{{v.time}}</div>
+                    <div w-class="time" style="margin-right: 15px;flex-shrink: 0">{{v.time}}</div>
                     {{if v.status}}
                     <div w-class="time">{{v.status}}</div>
                     {{end}}

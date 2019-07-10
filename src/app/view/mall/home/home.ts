@@ -2,7 +2,7 @@ import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
 import { likedGoodsMaxLen, mallImagPre, maxCount } from '../../../config';
-import { guessYouLike } from '../../../net/pull';
+import { getGoodsDetails, guessYouLike } from '../../../net/pull';
 import { GoodsDetails, Groups, GroupsLocation, register, setStore } from '../../../store/memstore';
 import { getImageThumbnailPath } from '../../../utils/tools';
 import { StyleMod } from '../goodsList';
@@ -46,7 +46,13 @@ export class MallHome extends Widget {
     // 固定位置分组点击
     public groupsLocationClick(e:any,location:GroupsLocation) {
         const group = this.state.groups.get(location)[0];
-        this.groupsClick({ group });
+        if (location > GroupsLocation.THIRTEEN) {  // 13以后是四个单链专区位置
+            getGoodsDetails(group.childs[0]).then(r => {
+                popNew('app-view-mall-goodsDetail',{ goods: r });
+            });
+        } else {
+            this.groupsClick({ group });
+        }
     }
 
     public gotoGoodsList(group:Groups) {

@@ -31,6 +31,7 @@
             <div w-class="groups2-item {{v.id === it.selectedLevel2Groups.id ? 'groups2-item-active' : ''}}" on-tap="selectLevel2Groups(e,{{i}})" class="{{v.id === it.selectedLevel2Groups.id ? 'groups2-item-active' : ''}}">{{v.name}}</div>
             {{end}}
         </div>
+        <div w-class="sortBtn">价格排序<img src="../../res/image/arrowDown.png"/></div>
         <div w-class="goods-list" on-scroll="getMoreList" id="good-list">
             <div id="good-list-items" w-class="goods-list-items">
                 {{for i,v of it.goodsList}}

@@ -47,7 +47,11 @@ export class AreaSelect extends Widget {
 
         } else {
             list = COUNTRY_LIST[this.props.selected[1].id];
-            list = list || [];
+            list = list || [{
+                city: this.props.selected[1].name, 
+                name: this.props.selected[1].name.substring(0,this.props.selected[1].name.length - 1), 
+                id: this.props.selected[1].id
+            }];
             this.props.activeStr = this.props.selected[2].name;
         }
         this.props.showList = list;
