@@ -39,16 +39,22 @@ export class AreaSelect extends Widget {
             this.props.selected.push({ name:'请选择城市' });
             this.props.activeStr = '请选择城市';
             
-        } else if (this.props.activeNum === 1) {
-            list = COUNTRY_LIST[this.props.selected[1].id];
-            list = list || [];
-            this.props.selected.push({ name:'请选择区/县' });
-            this.props.activeStr = '请选择区/县';
-
         } else {
             list = COUNTRY_LIST[this.props.selected[1].id];
-            list = list || [];
-            this.props.activeStr = this.props.selected[2].name;
+            list = list || [{
+                city: this.props.selected[1].name, 
+                name: this.props.selected[1].name.substring(0,this.props.selected[1].name.length - 1), 
+                id: this.props.selected[1].id
+            }];
+
+            if (this.props.activeNum === 1) {
+                this.props.selected.push({ name:'请选择区/县' });
+                this.props.activeStr = '请选择区/县';
+            } else {
+                
+                this.props.activeStr = this.props.selected[2].name;
+            }
+            
         }
         this.props.showList = list;
     }
@@ -75,7 +81,13 @@ export class AreaSelect extends Widget {
             this.props.showList = CITY_LIST[this.props.selected[0].id];
             this.props.activeStr = this.props.selected[1].name;
         } else {  // 点击县
-            this.props.showList = COUNTRY_LIST[this.props.selected[1].id];
+            let list = COUNTRY_LIST[this.props.selected[1].id];
+            list = list || [{
+                city: this.props.selected[1].name, 
+                name: this.props.selected[1].name.substring(0,this.props.selected[1].name.length - 1), 
+                id: this.props.selected[1].id
+            }];
+            this.props.showList = list;
             this.props.activeStr = this.props.selected[2].name;
         }
         this.paint();
