@@ -15,6 +15,7 @@ export class OrderItem extends Widget {
     public timer:number;
     
     public setProps(props:any) {
+        statusShows[ReturnGoodsStatus.RETURNED].text2 = `退货失败: ${props.afterSaleOrder.refuseReason}`;
         this.props = {
             ...props,
             statusShow:statusShows[props.status],

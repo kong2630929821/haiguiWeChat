@@ -20,18 +20,16 @@ export const parseAllGroups = (location:GroupsLocation,groupsInfo:any) => {
 export const parseGroups = (location:GroupsLocation,info:any) => {
     const itype = info[2] === 'true' ? true : false;
     const childsOrigin = info[6];
-    const childs = [];  
+    let childs = [];  
     let ret:Groups;
     if (itype) {  // 子组  
         for (const v of childsOrigin) {
             childs.push(parseGroups(location,v));
         }
-    } 
-    // else { // 页组
-    //     for (const v of childsOrigin) {
-    //         childs.push(parseGoodsDetail(v));
-    //     }
-    // }
+    } else { // 页组
+        childs = info[6];
+    }
+    
     ret = {
         id:info[0],   // 分组id
         name:unicode2Str(info[1]),   // 分组名
@@ -72,7 +70,9 @@ export const parseGoodsDetail = (info:any):GoodsDetails => {
         
         detail:info[16] ? parseGoodsSegmentationDetails(info[16][1]) : [],  // 商品分段详细描述
         spec:[]  , // 商品规格   info[16][0],
-        flag:info[17] // 商品是否下架
+        flag:info[17], // 商品是否下架
+        onSaleTime:info[18],  // 上架时间
+        saleCount:info[19]  // 销量
     };
     
 };
@@ -294,7 +294,8 @@ export const parseAfterSale = (infos:any,orders:Order[]) => {
             reason:info[8],	      // 原因，根据status，则为退货失败原因，无，退货原因
             request_time:info[9],  // 请求售后时间
             reply_time:info[10],    // 回应售后时间
-            finish_time:info[11]   // 完成售后时间
+            finish_time:info[11],   // 完成售后时间
+            refuseReason:info[12]   // 退货被拒绝原因
         };
         afterSaleOrders.push(afterSaleOrder);
     }

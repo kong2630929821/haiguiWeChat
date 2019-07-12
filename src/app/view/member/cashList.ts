@@ -1,6 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { getEarningList } from '../../net/pull';
+import { getStore } from '../../store/memstore';
 import { getCashLogName, timestampFormat } from '../../utils/logic';
 import { priceFormat } from '../../utils/tools';
 import { PageFg } from './home/home';
@@ -14,6 +15,7 @@ interface Props {
     };  // 选中的年月
     orgList: any[];
     fg: string; // 进入此页面标记
+    waitAmount:number;    // 待返利总数（现金）
 }
 /**
  * 所有列表页面
@@ -31,7 +33,8 @@ export class LogList extends Widget {
             value: [new Date().getFullYear(), new Date().getMonth() + 1]
         },
         orgList: [],
-        fg: PageFg.cash
+        fg: PageFg.cash,
+        waitAmount:0
     };
 
     public setProps(props: any) {
@@ -42,6 +45,7 @@ export class LogList extends Widget {
         super.setProps(this.props);
         if (props.fg === PageFg.cash) {
             this.getData(1);
+            this.props.waitAmount = getStore('earning/wait_profit',0); 
         } else {
             this.getData(2);
         }

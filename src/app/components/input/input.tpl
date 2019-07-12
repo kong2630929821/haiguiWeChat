@@ -15,6 +15,6 @@
         on-compositionend="compositionend"
     />
     {{if it1.showClear}}
-    <img w-class="clearBtn" src="../../res/images/clear.png" on-tap="clearClickListener"/>
+    <img w-class="clearBtn" src="../../res/image/close.png" on-tap="clearClickListener"/>
     {{end}}
 </div>

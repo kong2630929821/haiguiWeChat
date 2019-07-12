@@ -137,6 +137,8 @@ export interface GoodsDetails {
     detail:GoodsSegmentationDetails[];  // 商品分段详细描述
     spec:GoodsSpec[];   // 商品规格
     flag:number; // 上架标志
+    onSaleTime:number;   // 上架时间
+    saleCount:number;   // 销量
 }
 
 export type SKU  = [string,string,number,number]; // SKU SKU描述 价格影响 库存
@@ -191,6 +193,7 @@ export interface AfterSale {
     request_time:number;  // 请求售后时间
     reply_time:number;    // 回应售后时间
     finish_time:number;   // 完成售后时间
+    refuseReason:string;  // 退货被拒绝原因
 }
 
 // 收件人地址
@@ -297,6 +300,7 @@ interface EarningTotal {
     cash:number;  // 现金总收益
     partner:number;  // 伙伴数量
     shell:number; // 海贝总收益
+    wait_profit:number;  // 待返利收益
 }
 
 // 用户类型
@@ -393,7 +397,8 @@ const store:Store = {
         baby:0,
         cash:0,
         partner:0,
-        shell:0
+        shell:0,
+        wait_profit:0
     },
     user:{
         isLogin:false,

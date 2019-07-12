@@ -1,6 +1,6 @@
 <div class="new-page" w-class="new-page">
-    {{: let styleClass = it.styleMod === it.allStyleMod.ONE ? "style-mod-1" : "style-mod-2" }}
-    {{if it.styleMod === it.allStyleMod.ONE}}
+    {{: let styleClass = it.styleMod === 1 ? "style-mod-1" : "style-mod-2" }}
+    {{if it.styleMod === 1}}
     <div w-class="top-container style-mod-1" class="bg-img" style="background-image: url({{it.mallImagPre + it.getImageMainPath(it.selectedLevel1Groups.images)[0]}})"></div>
     {{else}}
     <div w-class="top-container style-mod-2">
@@ -12,7 +12,7 @@
     {{end}}
     
     <div w-class="bottom-container">
-        {{if it.styleMod === it.allStyleMod.TWO && it.level1GroupsExpanded}}
+        {{if it.styleMod === 2 && it.level1GroupsExpanded}}
         <div w-class="drop-down">
             <div w-class="groups1">
                 <div w-class="groups1-scroll">
@@ -26,12 +26,16 @@
             <div w-class="drop-down-mask" on-tap="closeClick"></div>
         </div>
         {{end}}
-        <div w-class="groups2" class="groups2">
-            {{for i,v of it.selectedLevel1Groups.childs}}
-            <div w-class="groups2-item {{v.id === it.selectedLevel2Groups.id ? 'groups2-item-active' : ''}}" on-tap="selectLevel2Groups(e,{{i}})" class="{{v.id === it.selectedLevel2Groups.id ? 'groups2-item-active' : ''}}">{{v.name}}</div>
-            {{end}}
+        <div style="display:flex" ev-selected="changeSortRule">
+            <div w-class="groups2" class="groups2">
+                {{for i,v of it.selectedLevel1Groups.childs}}
+                <div w-class="groups2-item {{v.id === it.selectedLevel2Groups.id ? 'groups2-item-active' : ''}}" on-tap="selectLevel2Groups(e,{{i}})" class="{{v.id === it.selectedLevel2Groups.id ? 'groups2-item-active' : ''}}">{{v.name}}</div>
+                {{end}}
+            </div>
+
+            <widget w-tag="app-components-simpleFilter-simpleFilter">{options:["销量排序","价格排序"],active:{{it.sortRule}}}</widget>
         </div>
-        <div w-class="sortBtn">价格排序<img src="../../res/image/arrowDown.png"/></div>
+
         <div w-class="goods-list" on-scroll="getMoreList" id="good-list">
             <div id="good-list-items" w-class="goods-list-items">
                 {{for i,v of it.goodsList}}

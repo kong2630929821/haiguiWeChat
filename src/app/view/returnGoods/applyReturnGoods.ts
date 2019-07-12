@@ -7,10 +7,11 @@ import { popNewMessage } from '../../utils/tools';
 import { takeImage, upImage } from '../../utils/wxAPI';
 
 interface Props {
-    order:Order;
+    order:Order;  // 订单详情
     reason:string;   // 退货原因
-    imgs:string[];
+    imgs:string[];  // 凭证图片
     describle:string;  // 退款描述
+    returnId:number;   // 售后单号id
 }
 /**
  * 申请退货填写理由
@@ -18,28 +19,11 @@ interface Props {
 export class ApplyReturnGoods extends Widget {
     public ok:() => void;
     public props:Props = {
-        order:{
-            id:12545125,
-            orderGoods:[
-                [
-                    {
-                        name:'hhhhhhhhhhh',   // 商品名称
-                        labels:[['123242','hhhhhhhh',0,1]],	 // SKU SKU描述 价格影响 库存
-                        images:[{
-                            path:'',  // 图片url
-                            type:0,  // 图片的类型，例如图标、小图、大图等
-                            style:0
-                        }],
-                        freight:0,
-                        tax:0,
-                        origin:0 
-                    },1,1
-                ]
-            ]
-        },
         imgs:[],
         reason:'',
-        describle:''
+        describle:'',
+        returnId:0,
+        order:{}
     };
 
     public setProps(props:any) {
@@ -93,7 +77,7 @@ export class ApplyReturnGoods extends Widget {
             return;
         }
         const res = `${this.props.reason}: ${this.props.describle}`;
-        returnGoods(this.props.order.id, res, this.props.imgs).then(() => {
+        returnGoods(this.props.returnId, res, this.props.imgs).then(() => {
             popNewMessage('申请退货成功');
             this.ok && this.ok();
         }).catch(() => {

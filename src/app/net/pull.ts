@@ -31,26 +31,40 @@ export const getGroups = (location:GroupsLocation) => {
  * 分页获取商品信息
  */
 export const getGoodsInfo = (group_id:number,goods_id:number) => {
-    const msg = {
-        type:'get_goods_info',
-        param:{
-            group_id,
-            goods_id,
-            count:maxCount
-        }
-    };
+    // const msg = {
+    //     type:'get_goods_info',
+    //     param:{
+    //         group_id,
+    //         goods_id,
+    //         count:maxCount
+    //     }
+    // };
 
-    return requestAsync(msg).then(res => {
-        const goods:GoodsDetails[] = [];
-        for (const v of res.goodsInfo) {
-            const good = parseGoodsDetail(v);
-            goods.push(good);
-        }
-        console.log('get_goods_info ========',res);
-        console.log('get_goods_info ========',goods);
+    // return requestAsync(msg).then(res => {
+    //     const goods:GoodsDetails[] = [];
+    //     for (const v of res.goodsInfo) {
+    //         const good = parseGoodsDetail(v);
+    //         goods.push(good);
+    //     }
+    //     console.log('get_goods_info ========',res);
+    //     console.log('get_goods_info ========',goods);
 
-        return goods;
+    //     return goods;
+    // });
+
+    return fetch(`http://${sourceIp}:${httpPort}/goods/get_goods_info?uid=${getStore('user/uid',0)}&group_id=${group_id}&count=10000`).then(r => {
+        return r.json().then(res => {
+            const goods:GoodsDetails[] = [];
+            for (const v of res.goodsInfo) {
+                const good = parseGoodsDetail(v);
+                goods.push(good);
+            }
+            console.log('get_goods_info ========res:',res,'========goods:',goods);
+
+            return goods;
+        });
     });
+
 };
 
 // 获取商品详细信息
@@ -462,7 +476,8 @@ export const getEarningTotal = async () => {
         baby: res.hbaoCount,
         cash: res.cash,
         partner: res.partnerCount,
-        shell: res.hbei
+        shell: res.hbei,
+        wait_profit: res.wait_profit
     };
     setStore('earning',earning);
 };
@@ -1171,4 +1186,11 @@ export const collectShop = (id:number) => {
     }).catch(e => {
         console.log('收藏商品错误',e);
     });
+};
+
+/**
+ * 搜索商品
+ */
+export const searchGoodsByName = (name:string) => {
+    return fetch(`http://${sourceIp}:${httpPort}/goods/find_goods_name?uid=${getStore('user/uid')}&q=${name}`).then(r => r.json());
 };

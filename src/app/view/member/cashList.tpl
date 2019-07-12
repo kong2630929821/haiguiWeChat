@@ -2,6 +2,9 @@
     {{if it.title}}
         <div w-class="title">
             <div w-class="amount">{{it.amount}}</div>
+            {{if it.fg=="cash"}}
+            <div style="font-size:24px;color:#fff;">待收益总额：{{it.waitAmount}}</div>
+            {{end}}
             <div w-class="total">{{it.title}}</div>
             <div w-class="selectBox" on-tap="selectMon">
                 <span style="margin-right:20px;">{{it.select.value.join(".")}}</span>

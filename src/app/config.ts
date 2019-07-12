@@ -20,6 +20,7 @@ export const httpPort = '8091';
 // websock连接url
 export const wsUrl = `ws://${erlangLogicIp}:${erlangLogicPort}`;
 
+// 商城图片路径
 // export const mallImagPre = `http://${window.localStorage.severIp ? window.localStorage.severIp :sourceIp}/dst/imgs/`;
 export const mallImagPre = `http://cshop.baomtx.com/dst/imgs/`;
 

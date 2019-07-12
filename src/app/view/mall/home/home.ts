@@ -23,7 +23,7 @@ export class MallHome extends Widget {
         this.state = STATE;
     }
 
-    public setProps(props:Props,oldProps:Props) {
+    public setProps(props:Props) {
         this.props = {
             ...props,
             GroupsLocation,
@@ -83,6 +83,11 @@ export class MallHome extends Widget {
     // 商品详情
     public goodsItemClick(e:any,index:number) {
         popNew('app-view-mall-goodsDetail',{ goods:this.state.likedGoods[index] });
+    }
+
+    // 去搜索商品
+    public goSearch() {
+        popNew('app-view-mall-searchGoods');
     }
 }
 

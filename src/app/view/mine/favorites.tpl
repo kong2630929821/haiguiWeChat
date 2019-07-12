@@ -1,4 +1,10 @@
 <div class="new-page" w-class="collectBox">
+    {{if it.collectList.length==0}}
+    <div w-class="empty">
+        <img src="../../res/image/favoriteEmpty.png" w-class="emptyImg"/>
+        <div w-class="emptyText">没有中意的商品，快去收藏一个</div>
+    </div>
+    {{else}}
     <div w-class="box">
         {{for i,v of it.collectList}}
             <div w-class="like" on-tap="goShopInfo(e,{{i}})">
@@ -14,4 +20,5 @@
             </div>
         {{end}}
     </div>
+    {{end}}
 </div>
