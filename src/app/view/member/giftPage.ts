@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { freeMaskGoodsId, OffClassGoodsId, saleClassGoodsId, saleHaiClassGoodsId, vipClassGoodsId, vipHaiClassGoodsId, vipHaiMaskGoodsId, vipMaskGoodsId } from '../../config';
+import { baoSaleClassGoodsId, baoVipClassGoodsId, baoVipMaskGoodsId, freeMaskGoodsId, OffClassGoodsId, wangSaleClassGoodsId, wangVipClassGoodsId, wangVipMaskGoodsId } from '../../config';
 import { getAllGifts, getGoodsDetails, orderActiveGoods, payMoney, payOrder } from '../../net/pull';
 import { Address, getStore, register, UserType } from '../../store/memstore';
 import { copyToClipboard, popNewLoading, popNewMessage } from '../../utils/tools';
@@ -121,15 +121,15 @@ export class GiftPage extends Widget {
         if (this.props.isAble) {
             popNew('app-view-member-fillAddrModalBox',{ selectAddr:true },(addr) => {
                 if (this.props.fg === PowerFlag.free) {
-                    this.confirmGoods(freeMaskGoodsId, addr);
+                    confirmActivityGoods(freeMaskGoodsId, addr);
 
                 } else if (this.props.fg === PowerFlag.gift) {
-                    this.confirmGoods(getStore('user/memberGifts/optionalGift',0), addr);
+                    confirmActivityGoods(getStore('user/memberGifts/optionalGift',0), addr);
                 } else {
                     if (this.props.userType === UserType.hBao) {
-                        this.confirmGoods(vipMaskGoodsId, addr);
+                        confirmActivityGoods(baoVipMaskGoodsId, addr);
                     } else if (this.props.userType === UserType.hWang) {
-                        this.confirmGoods(vipHaiMaskGoodsId, addr);
+                        confirmActivityGoods(wangVipMaskGoodsId, addr);
                     }
                     
                 }
@@ -148,75 +148,23 @@ export class GiftPage extends Widget {
         if (this.props.isAble) {
             popNew('app-view-member-fillAddrModalBox',{ selectAddr:true },(addr) => {
                 if (this.props.fg === PowerFlag.offClass) {
-                    this.confirmGoods(OffClassGoodsId,addr);
+                    confirmActivityGoods(OffClassGoodsId,addr);
                 } else if (this.props.fg === PowerFlag.vipClass) {
                     if (this.props.userType === UserType.hBao) {
-                        this.confirmGoods(vipClassGoodsId,addr);
+                        confirmActivityGoods(baoVipClassGoodsId,addr);
                     } else if (this.props.userType === UserType.hWang) {
-                        this.confirmGoods(vipHaiClassGoodsId,addr);
+                        confirmActivityGoods(wangVipClassGoodsId,addr);
                     }
                     
                 } else {
                     if (this.props.userType === UserType.hBao) {
-                        this.confirmGoods(saleClassGoodsId,addr);
+                        confirmActivityGoods(baoSaleClassGoodsId,addr);
                     } else if (this.props.userType === UserType.hWang) {
-                        this.confirmGoods(saleHaiClassGoodsId,addr);
+                        confirmActivityGoods(wangSaleClassGoodsId,addr);
                     }
                 }
             });
         }
-    }
-
-    // 购买商品
-    public confirmGoods(goods:number,addr:Address) {
-        const loadding = popNewLoading('请稍候');
-        // 获取商品详情
-        getGoodsDetails(goods).then(res => {  
-            // 下单商品
-            orderActiveGoods([goods,1,res.labels[0][0]],addr.id).then(order => { 
-                const price = order.orderInfo[3] + order.orderInfo[5]; // 商品总价+运费
-                const oid = order.orderInfo[0];
-
-                if (price > 0) {
-                    payMoney(price,'activity',1,['pay_order',[oid]]);
-                    // 提示需要支付费用
-                    // popNew('app-view-member-confirmPayInfo',{ money: priceFormat(price) },() => {
-                    //     const cash = getStore('balance/cash');
-                    //     if (cash < price) { 
-                    //         payMoney(price - cash,'activity',1,['pay_order',[oid]]);
-                    //     } else {
-                    //         payOrder(oid).then(() => {
-                    //             this.buySuccess();
-                    //         }).catch(err => {
-                    //             popNewMessage('领取失败');
-                    //         });
-                    //     }
-                    // });
-                } else {
-                    payOrder(oid).then(() => {
-                        // 支付成功后会有推送, register 中会提示
-                        // this.buySuccess();  
-                    }).catch(err => {
-                        popNewMessage('领取失败');
-                    });
-                }
-                loadding && loadding.callback(loadding.widget);
-
-            }).catch(err => {
-                if (err.result === 2124) {
-                    popNewMessage('库存不足');
-                } else if (err.type === 2132) {
-                    popNewMessage('该礼包，您已领取，无法再次领取');
-                } else {
-                    popNewMessage('领取失败');
-                }
-                loadding && loadding.callback(loadding.widget);
-            });
-            
-        }).catch(err => {
-            loadding && loadding.callback(loadding.widget);
-            popNewMessage('获取商品信息失败');
-        });
     }
 
     // 购买商品成功
@@ -270,3 +218,54 @@ register('flags/activityGoods',() => {
     const w:any = forelet.getWidget(WIDGET_NAME);
     w && w.buySuccess();
 });
+
+// 购买活动商品
+export const confirmActivityGoods = (goods:number,addr:Address) => {
+    const loadding = popNewLoading('请稍候');
+    // 获取商品详情
+    getGoodsDetails(goods).then(res => {  
+        // 下单商品
+        orderActiveGoods([goods,1,res.labels[0][0]],addr.id).then(order => { 
+            const price = order.orderInfo[3] + order.orderInfo[5]; // 商品总价+运费
+            const oid = order.orderInfo[0];
+
+            if (price > 0) {
+                payMoney(price,'activity',1,['pay_order',[oid]]);
+                // 提示需要支付费用
+                // popNew('app-view-member-confirmPayInfo',{ money: priceFormat(price) },() => {
+                //     const cash = getStore('balance/cash');
+                //     if (cash < price) { 
+                //         payMoney(price - cash,'activity',1,['pay_order',[oid]]);
+                //     } else {
+                //         payOrder(oid).then(() => {
+                //             this.buySuccess();
+                //         }).catch(err => {
+                //             popNewMessage('领取失败');
+                //         });
+                //     }
+                // });
+            } else {
+                payOrder(oid).then(() => {
+                    // 支付成功后会有推送, register 中会提示
+                }).catch(err => {
+                    popNewMessage('领取失败');
+                });
+            }
+            loadding && loadding.callback(loadding.widget);
+
+        }).catch(err => {
+            if (err.result === 2124) {
+                popNewMessage('库存不足');
+            } else if (err.type === 2132) {
+                popNewMessage('该礼包，您已领取，无法再次领取');
+            } else {
+                popNewMessage('领取失败');
+            }
+            loadding && loadding.callback(loadding.widget);
+        });
+        
+    }).catch(err => {
+        loadding && loadding.callback(loadding.widget);
+        popNewMessage('获取商品信息失败');
+    });
+};

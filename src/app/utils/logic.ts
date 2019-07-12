@@ -1,5 +1,5 @@
 import { whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
-import { payMoney, upgradeHWang } from '../net/pull';
+import { payMoney, upgradeHBao, upgradeHWang } from '../net/pull';
 import { getStore, UserType } from '../store/memstore';
 import { popNewMessage } from './tools';
 /**
@@ -142,6 +142,16 @@ export const payToUpHbao = (sel:string,cb?:any) => {
     // const fee = 1;     // 测试费用
     let optional = whiteGoodsId_399A;
     if (sel === 'B') optional = whiteGoodsId_399B;
+
+    const fg = true;   // TODO 测试用余额支付（正式服应该用微信支付）
+    if (fg) {
+        // 用余额支付 (自测使用)
+        upgradeHBao(sel).then(r => {
+            // 升级海宝成功
+        });
+        
+        return;
+    } 
     payMoney(fee,'hBao',1,['mall/members@up_haibao',optional]);
 };
 

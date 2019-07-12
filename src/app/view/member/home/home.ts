@@ -6,6 +6,7 @@ import { getAllGifts, getEarningTotal, getInviteCode } from '../../../net/pull';
 import { register, setStore, UserType } from '../../../store/memstore';
 import { applyToUpHwang, getUserTypeShow, payToUpHbao } from '../../../utils/logic';
 import { copyToClipboard, popNewMessage, priceFormat } from '../../../utils/tools';
+import { confirmActivityGoods } from '../giftPage';
 import { hBaoPower, hWangPower } from '../powerConstant';
 
 export const PageFg = {
@@ -109,10 +110,15 @@ register('user',r => {
     forelet.paint(State);
 });
 register('flags/upgradeHbao',() => {
-    popNewMessage('升级海宝成功');
+    popNewMessage('升级海宝成功，输入地址立即领取礼包');
     setStore('user/userType', UserType.hBao);
     getInviteCode().then(res => {
         setStore('user/inviteCode',res.code);
     });
-    getAllGifts();  // 重新获取所有礼包
+
+    getAllGifts().then(gift => {  // 获取所有礼包
+        popNew('app-view-member-fillAddrModalBox',{ selectAddr:true },(addr) => {
+            confirmActivityGoods(gift.optionalGift, addr);  // 领取美白礼包
+        });
+    });  
 });

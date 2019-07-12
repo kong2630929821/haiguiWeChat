@@ -49,13 +49,13 @@ export const whiteGoodsId_10000A = 10020005;
 export const whiteGoodsId_10000B = 10020006;
 
 // 海宝尊享面膜礼包
-export const vipMaskGoodsId = 10020007;
+export const baoVipMaskGoodsId = 10020007;
 
 // 海宝5980线下精品课程
-export const vipClassGoodsId = 10020008;
+export const baoVipClassGoodsId = 10020008;
 
 // 海宝29800线下销售课程
-export const saleClassGoodsId = 10020009;
+export const baoSaleClassGoodsId = 10020009;
 
 // 分页请求条数
 export const maxCount = 20;
@@ -64,10 +64,10 @@ export const maxCount = 20;
 export const likedGoodsMaxLen = 60;
 
 // 海王尊享面膜礼包
-export const vipHaiMaskGoodsId = 10020017;
+export const wangVipMaskGoodsId = 10020017;
 
-// 海宝5980线下精品课程
-export const vipHaiClassGoodsId = 10020018;
+// 海王5980线下精品课程
+export const wangVipClassGoodsId = 10020018;
 
-// 海宝29800线下销售课程
-export const saleHaiClassGoodsId = 10020019;
+// 海王29800线下销售课程
+export const wangSaleClassGoodsId = 10020019;

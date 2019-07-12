@@ -1,9 +1,10 @@
 import { request } from '../../pi/net/ui/con_mgr';
 import { popNew } from '../../pi/ui/root';
-import { freeMaskGoodsId, httpPort, maxCount, OffClassGoodsId, saleClassGoodsId, saleHaiClassGoodsId, sourceIp, sourcePort, vipClassGoodsId, vipHaiClassGoodsId, vipHaiMaskGoodsId, vipMaskGoodsId, whiteGoodsId_10000A, whiteGoodsId_10000B, whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
+import { baoSaleClassGoodsId, baoVipClassGoodsId, baoVipMaskGoodsId, freeMaskGoodsId, httpPort, maxCount, OffClassGoodsId, sourceIp, sourcePort, wangSaleClassGoodsId, wangVipClassGoodsId, wangVipMaskGoodsId, whiteGoodsId_10000A, whiteGoodsId_10000B, whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
 import { getStore,GoodsDetails, GroupsLocation, OrderStatus, ReturnGoodsStatus, setStore, UserType } from '../store/memstore';
 import { openWXPay } from '../utils/logic';
 import { popNewLoading, popNewMessage, str2Unicode } from '../utils/tools';
+import { confirmActivityGoods } from '../view/member/giftPage';
 import { requestAsync } from './login';
 import { parseAddress, parseAddress2, parseAfterSale, parseAllGroups, parseArea, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
 
@@ -943,7 +944,7 @@ export const getAllGifts = async () => {
                 memberGifts.gift = v[1];
                 memberGifts.optionalGift = whiteGoodsId_10000B;
 
-            } else if (v[0] === vipMaskGoodsId) {
+            } else if (v[0] === baoVipMaskGoodsId) {
                 memberGifts.vipGift = v[1];
 
             } else if (v[0] === freeMaskGoodsId) {
@@ -952,70 +953,37 @@ export const getAllGifts = async () => {
             } else if (v[0] === OffClassGoodsId) {
                 memberGifts.offClass = v[1];
 
-            } else if (v[0] === vipClassGoodsId) {
+            } else if (v[0] === baoVipClassGoodsId) {
                 memberGifts.vipClass = v[1];
 
-            } else if (v[0] === saleClassGoodsId) {
+            } else if (v[0] === baoSaleClassGoodsId) {
                 memberGifts.saleClass = v[1];
             
-            } else if (v[0] === vipHaiMaskGoodsId) {
+            } else if (v[0] === wangVipMaskGoodsId) {
                 memberGifts.vipGift = v[1];
 
-            } else if (v[0] === vipHaiClassGoodsId) {
+            } else if (v[0] === wangVipClassGoodsId) {
                 memberGifts.vipClass = v[1];
             
-            } else if (v[0] === saleHaiClassGoodsId) {
+            } else if (v[0] === wangSaleClassGoodsId) {
                 memberGifts.saleClass = v[1];
             }
         }
     
-    // 针对新版本迁移时未选择礼包的用户，需要强制提示选择礼包
+        // 针对新版本迁移时未选择礼包的用户，需要强制提示选择礼包
         const userType = getStore('user/userType');
         if (userType === UserType.hBao && memberGifts.optionalGift === 0) {
             popNew('app-view-member-applyModalBox',{ needSelGift:true,title:'礼包领取',unaccalimed:true },(sel) => {
                 let optional = whiteGoodsId_399A;
                 if (sel === 'B') optional = whiteGoodsId_399B;
                 popNew('app-view-member-fillAddrModalBox',{ selectAddr:true },(addr) => {
-                    // 获取商品详情
-                    const loadding = popNewLoading('请稍候');
-                    getGoodsDetails(optional).then(res => {  
-                        // 下单商品
-                        orderActiveGoods([optional,1,res.labels[0][0]],addr.id).then(order => { 
-                            const price = order.orderInfo[3] + order.orderInfo[5]; // 商品总价+运费
-                            const oid = order.orderInfo[0];
-
-                            if (price > 0) {
-                                payMoney(price,'activity',1,['pay_order',[oid]]);
-                            } else {
-                                payOrder(oid).then(() => {
-                                    // 支付成功后会有推送, register 中会提示
-                                }).catch(err => {
-                                    popNewMessage('领取失败');
-                                });
-                            }
-                            loadding && loadding.callback(loadding.widget);
-
-                        }).catch(err => {
-                            if (err.result === 2124) {
-                                popNewMessage('库存不足');
-                            } else if (err.type === 2132) {
-                                popNewMessage('该礼包，您已领取，无法再次领取');
-                            } else {
-                                popNewMessage('领取失败');
-                            }
-                            loadding && loadding.callback(loadding.widget);
-                        });
-            
-                    }).catch(err => {
-                        loadding && loadding.callback(loadding.widget);
-                        popNewMessage('获取商品信息失败');
-                    });
+                    confirmActivityGoods(optional,addr);
                 });
             });
         }
         setStore('user/memberGifts',memberGifts);
 
-        return true;
+        return memberGifts;
     } catch (err) {
         
         return false;
