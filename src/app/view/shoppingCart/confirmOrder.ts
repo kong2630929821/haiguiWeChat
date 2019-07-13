@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { freeMaskGoodsId, mallImagPre, OffClassGoodsId } from '../../config';
+import { freeMaskGoodsId, mallImagPre, OffClassGoodsId, onlyWXPay } from '../../config';
 import { getCart, order, orderNow, payMoney, payOrder } from '../../net/pull';
 import { Address, CartGoods, getStore, OrderStatus, register, setStore } from '../../store/memstore';
 import { getLastAddress } from '../../utils/logic';
@@ -154,23 +154,32 @@ export class ConfirmOrder extends Widget {
         }
         // const totalFee = this.props.totalSale + this.props.totalFreight + this.props.totalTax;
         try {
-            const fg = true;   // TODO 测试用余额支付（正式服应该用微信支付）
-            if (fg) {
-                // 用余额支付 (自测使用)
-                payOrder(oids[0]).then(r => {
-                    popNewMessage('支付成功');
-                    this.paySuccess();
+            if (onlyWXPay) {
+                // 微信支付（正式服）
+                setNeedPayOrders(oids);
+                payMoney(totalFee,'105',1,['pay_order',oids],() => {
+                    console.log('payMoney --------------failed');
+                    popNewMessage('支付失败');
+                    this.payFaile();
                 });
                 
-                return;
-            } 
-            // 微信支付（正式服）
-            setNeedPayOrders(oids);
-            payMoney(totalFee,'105',1,['pay_order',oids],() => {
-                console.log('payMoney --------------failed');
-                popNewMessage('支付失败');
-                this.payFaile();
-            });
+            } else {
+                // 用余额支付 (自测使用)
+                const cash = getStore('balance/cash',0);
+                if (cash > totalFee) {
+                    payOrder(oids[0]).then(r => {
+                        popNewMessage('支付成功');
+                        this.paySuccess();
+                    });
+                } else {
+                    setNeedPayOrders(oids);
+                    payMoney(totalFee - cash,'105',1,['pay_order',oids],() => {
+                        console.log('payMoney --------------failed');
+                        popNewMessage('支付失败');
+                        this.payFaile();
+                    });
+                }
+            }
             
         } catch (res) {
             if (res.result === 2127) {

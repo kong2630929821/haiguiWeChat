@@ -28,7 +28,6 @@ export class Home extends Widget {
     public setProps(props:any) {
         super.setProps(props);
         getEarningTotal();  // 获取收益统计
-        getAllGifts();  // 重新获取所有礼包
     }
 
     // 权益

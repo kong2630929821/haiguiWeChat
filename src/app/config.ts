@@ -71,3 +71,6 @@ export const wangVipClassGoodsId = 10020018;
 
 // 海王29800线下销售课程
 export const wangSaleClassGoodsId = 10020019;
+
+// 只能微信支付 (测试可设为false 可用余额支付，余额不足用微信支付)
+export const onlyWXPay = false;

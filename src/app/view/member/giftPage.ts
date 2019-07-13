@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { baoSaleClassGoodsId, baoVipClassGoodsId, baoVipMaskGoodsId, freeMaskGoodsId, OffClassGoodsId, wangSaleClassGoodsId, wangVipClassGoodsId, wangVipMaskGoodsId } from '../../config';
+import { baoSaleClassGoodsId, baoVipClassGoodsId, baoVipMaskGoodsId, freeMaskGoodsId, OffClassGoodsId, onlyWXPay, wangSaleClassGoodsId, wangVipClassGoodsId, wangVipMaskGoodsId } from '../../config';
 import { getAllGifts, getGoodsDetails, orderActiveGoods, payMoney, payOrder } from '../../net/pull';
 import { Address, getStore, register, UserType } from '../../store/memstore';
 import { copyToClipboard, popNewLoading, popNewMessage } from '../../utils/tools';
@@ -39,11 +39,13 @@ export class GiftPage extends Widget {
 
         } else {
             this.props.img = `399_${PowerFlag[props.fg]}1.png`;
-        }        
-        this.initData();
+        }       
+        this.initData(); 
         getAllGifts().then(r => {
             console.log('getAllGifts return ',r);
-            if (!r) {
+            if (r) {
+                this.initData();
+            } else {
                 popNewMessage('获取礼包数据失败，请退出重进');
             }
         });
@@ -172,9 +174,9 @@ export class GiftPage extends Widget {
         if (this.props.fg === PowerFlag.free || this.props.fg === PowerFlag.offClass) {
             popNew('app-view-member-turntable');  // 打开大转盘
         } 
-        popNewMessage('领取成功');
+        // popNewMessage('领取成功');   // 购买商品成功会提示
         this.props.isAble = false;
-        this.props.btn = '领取成功';
+        this.props.btn = '您已领取';
         this.paint();
         getAllGifts();  // 重新获取所有礼包
         
@@ -230,7 +232,20 @@ export const confirmActivityGoods = (goods:number,addr:Address) => {
             const oid = order.orderInfo[0];
 
             if (price > 0) {
-                payMoney(price,'activity',1,['pay_order',[oid]]);
+                if (onlyWXPay) {
+                    // 微信支付（正式服）
+                    payMoney(price,'activity',1,['pay_order',[oid]]);
+                } else {
+                    // 用余额支付 (自测使用)
+                    const cash = getStore('balance/cash',0);
+                    if (cash > price) {
+                        payOrder(oid).catch(r => {
+                            popNewMessage('领取失败');
+                        });
+                    } else {
+                        payMoney(price - cash,'activity',1,['pay_order',[oid]]);
+                    }
+                }
                 // 提示需要支付费用
                 // popNew('app-view-member-confirmPayInfo',{ money: priceFormat(price) },() => {
                 //     const cash = getStore('balance/cash');

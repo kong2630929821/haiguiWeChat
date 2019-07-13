@@ -1,4 +1,4 @@
-import { whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
+import { onlyWXPay, whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
 import { payMoney, upgradeHBao, upgradeHWang } from '../net/pull';
 import { getStore, UserType } from '../store/memstore';
 import { popNewMessage } from './tools';
@@ -143,16 +143,19 @@ export const payToUpHbao = (sel:string,cb?:any) => {
     let optional = whiteGoodsId_399A;
     if (sel === 'B') optional = whiteGoodsId_399B;
 
-    const fg = true;   // TODO 测试用余额支付（正式服应该用微信支付）
-    if (fg) {
+    if (onlyWXPay) {
+        // 微信支付（正式服）
+        payMoney(fee,'hBao',1,['mall/members@up_haibao',optional]);
+       
+    } else {
         // 用余额支付 (自测使用)
-        upgradeHBao(sel).then(r => {
-            // 升级海宝成功
-        });
-        
-        return;
-    } 
-    payMoney(fee,'hBao',1,['mall/members@up_haibao',optional]);
+        const cash = getStore('balance/cash',0);
+        if (cash > fee) {
+            upgradeHBao(sel);
+        } else {
+            payMoney(fee - cash,'hBao',1,['mall/members@up_haibao',optional]);
+        }
+    }
 };
 
 /**
