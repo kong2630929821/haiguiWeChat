@@ -50,8 +50,8 @@
 
         {{if it.needSelGift}}
         <div w-class="row" style="justify-content: space-between;">
-            <div w-class="selbtn {{it.selected=='A'?'active':''}}" on-tap="changeSel('A')">选择A礼包</div>
-            <div w-class="selbtn {{it.selected=='B'?'active':''}}" on-tap="changeSel('B')">选择B礼包</div>
+            <div w-class="selbtn {{it.selected=='A'?'active':''}}" on-tap="changeSel('A')">焕颜亮肤礼包</div>
+            <div w-class="selbtn {{it.selected=='B'?'active':''}}" on-tap="changeSel('B')">商户联盟礼包</div>
         </div>
         {{end}}
 

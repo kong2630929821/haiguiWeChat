@@ -1,6 +1,6 @@
 <div class="new-page" w-class="page" >
     <div w-class="giftBox">
-        <img src="../../res/image/{{it.img}}"/>
+        <img src="../../res/image/{{it.img}}" style="max-width:100%;"/>
         {{% ========================基础礼包======================}}
         {{if it.fg == 1 && it.isCurVip}}
         <div w-class="shareBtn1" on-tap="freeReceive">{{it.btn}}</div>

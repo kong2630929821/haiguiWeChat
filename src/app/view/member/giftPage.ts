@@ -39,6 +39,9 @@ export class GiftPage extends Widget {
 
         } else {
             this.props.img = `399_${PowerFlag[props.fg]}1.png`;
+            if (props.fg === PowerFlag.gift) {
+                this.props.img = `399_${PowerFlag[props.fg]}.png`;
+            }
         }        
         this.initData();
         getAllGifts().then(r => {
