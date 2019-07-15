@@ -96,19 +96,21 @@ export class ModalBoxInput extends Widget {
             popNewMessage('手机号格式错误');
         } else {
             sendCode(this.props.phoneNum).then(r => {
-                this.props.nowCount = 60;
                 popNewMessage('验证码已发送');
-                this.paint();
-                const countdown = setInterval(() => {
-                    this.props.nowCount--;
-                    if (this.props.nowCount === 0) {
-                        clearInterval(countdown);
-                    }
-                    this.paint();
-                },1000);
             }).catch(err => {
                 popNewMessage('获取验证码失败');
             });
+
+            // 60秒只能点一次，无论返回成功与否
+            this.props.nowCount = 60;
+            this.paint();
+            const countdown = setInterval(() => {
+                this.props.nowCount--;
+                if (this.props.nowCount === 0) {
+                    clearInterval(countdown);
+                }
+                this.paint();
+            },1000);
         }
     }
 
