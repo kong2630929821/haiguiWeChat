@@ -111,7 +111,7 @@ export class ConfirmOrder extends Widget {
         const loading = popNewLoading('提交订单');
         if (this.props.buyNow) {    // 立即购买
             const cartGood = this.props.orderGoods[0];
-            const promise = orderNow([cartGood.goods.id,cartGood.amount,cartGood.goods.labels[0][0]],this.props.address.id);
+            const promise = orderNow([cartGood.goods.id,cartGood.amount,cartGood.goods.labels[cartGood.skuIndex][0]],this.props.address.id);
             allOrderPromise.push(promise);
         } else {
             for (const splitOrder of this.props.splitOrders) {

@@ -118,18 +118,6 @@ export class GoodsDetailHome extends Widget {
         this.paint();
     }
 
-    // 选择规则
-    public chooseSpecClick1(buyNow:boolean) {
-        this.props.buyNow = buyNow;
-        const skus = this.props.goods.labels;
-        // if (skus.length === 1) {
-        //     this.sureClick({ buyNow });
-        // } else {
-        this.props.chooseSpec = true;
-        this.paint();
-        // }
-    }
-
     // 选择规则关闭
     public specCloseClick(res:any) {
         if (res.amount >= 1 && res.skuIndex >= 0) {
@@ -156,7 +144,8 @@ export class GoodsDetailHome extends Widget {
                 index:-1,
                 goods:this.props.goods,
                 amount:this.props.amount,
-                selected:true
+                selected:true,
+                skuIndex:this.props.skuIndex
             };
             const cartGoods = [cartGood];
 
