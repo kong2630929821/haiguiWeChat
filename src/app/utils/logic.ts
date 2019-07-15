@@ -1,5 +1,5 @@
 import { onlyWXPay, whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
-import { payMoney, upgradeHBao, upgradeHWang } from '../net/pull';
+import { payMoney, queryOrder, upgradeHBao, upgradeHWang } from '../net/pull';
 import { getStore, UserType } from '../store/memstore';
 import { popNewMessage } from './tools';
 /**
@@ -61,16 +61,20 @@ export const timestampFormat = (timestamp: number,timeType?: number) => {
 /**
  * 打开微信支付
  */
-export const openWXPay = (param:any,failed?:Function) => {
+export const openWXPay = (param:any,oid:string,failed?:Function) => {
     const onBridgeReady = () => {
         console.log('WeixinJSBridge has ready');
+
         WeixinJSBridge.invoke('getBrandWCPayRequest', JSON.parse(param), (res) => {
-            // alert(JSON.stringify(res));
-            if (res.err_msg !== 'get_brand_wcpay_request:ok') {
+            if (res.err_msg === 'get_brand_wcpay_request:ok') {
                 // 使用以上方式判断前端返回,微信团队郑重提示：
                 // res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+
+                queryOrder(oid);   // 查询订单是否支付成功
+
+            } else {
                 failed && failed();
-            } 
+            }
         });
     };
 

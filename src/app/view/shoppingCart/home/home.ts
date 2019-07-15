@@ -206,12 +206,12 @@ export const calcCartGoodsShow = (cartGoods:CartGoods[]) => {
     for (const cartGood of cartGoods) {
         const goods = cartGood.goods;
         const cartGoodShow:any = {};
-        const labelShow = goods.labels[0][1];
+        const labelShow = goods.labels[cartGood.skuIndex][1];
         const priceRet = calcPrices(cartGood.goods);
         cartGoodShow.cartGood = cartGood;          // 购物车原始信息
         cartGoodShow.labelShow = labelShow;   // 显示标签
         cartGoodShow.priceRet = priceRet;           // 价格相关信息
-        cartGoodShow.finalSale = priceRet.sale + goods.labels[0][2];                  // 最终的商品售价  包括标签的不同影响的价格
+        cartGoodShow.finalSale = priceRet.sale + goods.labels[cartGood.skuIndex][2];                  // 最终的商品售价  包括标签的不同影响的价格
         cartGoodsShow.push(cartGoodShow);
     }
 

@@ -159,6 +159,7 @@ export interface CartGoods {
     goods:GoodsDetails;   // 商品详细信息
     amount:number;        // 购买数量
     selected:boolean;     // 是否勾选  默认false
+    skuIndex:number;      // 选择的规格下标
 }
 
 // 订单详情

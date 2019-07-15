@@ -744,7 +744,7 @@ export const payMoney = (money:number,ttype:string,count:number= 1,ext?:any,fail
             console.log(`错误信息为${resp.type}`);
             popNewMessage(`支付失败${resp.type}`);
         } else {
-            openWXPay(resp.ok,failed);
+            openWXPay(resp.ok,resp.oid,failed);
         }
     });
 };
@@ -1161,4 +1161,18 @@ export const collectShop = (id:number) => {
  */
 export const searchGoodsByName = (name:string) => {
     return fetch(`http://${sourceIp}:${httpPort}/goods/find_goods_name?uid=${getStore('user/uid')}&q=${name}`).then(r => r.json());
+};
+
+/**
+ * 查询微信支付订单是否成功
+ */
+export const queryOrder = (oid:string) => {
+    const msg = {
+        type:'mall/pay@order_query',
+        param:{
+            oid
+        }
+    };
+
+    return requestAsync(msg);
 };

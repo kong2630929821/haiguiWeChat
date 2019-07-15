@@ -81,8 +81,8 @@
             </div>
         </div>
         <div w-class="right">
-            <div w-class="fix-item fix-item-2" style="background-color:#DF4AF3;" on-tap="chooseSpecClick1({{false}})">加入购物车</div>
-            <div w-class="fix-item fix-item-2" style="background-color:#8A4AF3;" on-tap="chooseSpecClick1({{true}})">立即购买</div>
+            <div w-class="fix-item fix-item-2" style="background-color:#DF4AF3;" on-tap="chooseSpecClick({{false}})">加入购物车</div>
+            <div w-class="fix-item fix-item-2" style="background-color:#8A4AF3;" on-tap="chooseSpecClick({{true}})">立即购买</div>
         </div>
     </div>
     {{if it.chooseSpec}}
