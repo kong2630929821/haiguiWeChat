@@ -123,7 +123,7 @@ export class ShoppingCart extends Widget {
     public addGoodsNum(index:number) {
         const cartGood = this.state.cartGoodsShow[index].cartGood;
         const goods = cartGood.goods;
-        const sku = goods.labels[0];
+        const sku = goods.labels[cartGood.skuIndex];
         if (cartGood.amount  + 1 > sku[3]) {
             popNewMessage('库存不足');
 
@@ -171,7 +171,6 @@ export class ShoppingCart extends Widget {
     // 商品详情
     public goodsClick(e:any,index:number) {
         const goods = this.state.cartGoodsShow[index].cartGood.goods;
-        // skuId:goods.labels[0][0]
         popNew('app-view-mall-goodsDetail',{ goods });
     }
 
