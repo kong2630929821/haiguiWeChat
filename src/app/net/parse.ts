@@ -136,7 +136,8 @@ export const parseCart = (infos:any) => {
             index:info[0],        // 索引
             goods:goodsDetail,   // 商品详细信息
             amount:info[2],        // 购买数量
-            selected:false     // 是否勾选  默认false  getCartGoodsSelected(info[0])
+            selected:false,     // 是否勾选  默认false  getCartGoodsSelected(info[0])
+            skuIndex:0
         };
         carts.push(cart);
     }
