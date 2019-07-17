@@ -16,15 +16,10 @@ export class MyCash extends Widget {
     public create() {
         super.create();
         this.state = priceFormat(getStore('balance/cash',0));
-        // 查看提现是否开启 1开启 0关闭
-        getWithdrawalStatus().then(res => {
-            if (res.state === 1) {
-                // 开启提现
-                checkWithdraw().then(r => {
-                    this.props.ableWithdraw = this.state > 0;
-                    this.paint();
-                });
-            }
+        // 开启提现
+        checkWithdraw().then(r => {
+            this.props.ableWithdraw = this.state > 0;
+            this.paint();
         });
         
     }
@@ -36,9 +31,17 @@ export class MyCash extends Widget {
 
     // 提现
     public withdraw() {
-        if (this.props.ableWithdraw) {
-            popNew('app-view-mine-withdraw');
-        }
+         // 查看提现是否开启 1开启 0关闭
+        getWithdrawalStatus().then(res => {
+            console.log('是否可以提现',res);
+            if (res.state === 1) {
+                // 开启提现
+                if (this.props.ableWithdraw) {
+                    popNew('app-view-mine-withdraw');
+                }
+            }
+        });
+        
     }
 }
 register('balance',r => {
