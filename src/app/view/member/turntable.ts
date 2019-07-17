@@ -6,9 +6,9 @@ import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { getRealNode } from '../../../pi/widget/painter';
 import { Widget } from '../../../pi/widget/widget';
-import { getDraws, getDrawsLog, getNumberOfDraws } from '../../net/pull';
+import { getBigTurnrableConfig, getDraws, getDrawsLog, getNumberOfDraws } from '../../net/pull';
 import { register } from '../../store/memstore';
-import { popNewMessage } from '../../utils/tools';
+import { popNewMessage, priceFormat } from '../../utils/tools';
 
 // ================================ 导出
 // tslint:disable-next-line:no-reserved-keywords
@@ -24,14 +24,6 @@ interface Props {
     ledShow:boolean; // LED灯
     timer:any;// 刷新列表定时器
 }
-const LOTTERY = {
-    GRADIENT_1:'0.08',
-    GRADIENT_2:'0.88',
-    GRADIENT_3:'8.80',
-    GRADIENT_4:'88.00',
-    GRADIENT_5:'888.00',
-    GRADIENT_6:'8888.00'
-};
 // tslint:disable-next-line:completed-docs
 export class Turntable extends Widget {
     public ok: () => void;
@@ -71,13 +63,15 @@ export class Turntable extends Widget {
      */
     public initTurntable() {
         // 奖品配置  
-        for (const v in LOTTERY) {
-            this.props.prizeList.push({ draw:LOTTERY[v] });
-        }
-        for (let i = 0,length = this.props.prizeList.length;i < length; i++) {
-            this.props.prizeList[i].deg = (-360 / length) * i;
-        }
-        console.log(this.props.prizeList);
+        getBigTurnrableConfig().then(r => {
+            r.config_out.forEach(v => {
+                this.props.prizeList.push({ draw:priceFormat(v[0]) });
+            });
+            for (let i = 0,length = this.props.prizeList.length;i < length; i++) {
+                this.props.prizeList[i].deg = (-360 / length) * i;
+            }
+            this.paint();
+        });
     }
     // 定时定时刷新中奖列表
     public timedRefresh() {

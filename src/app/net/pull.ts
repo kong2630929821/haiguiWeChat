@@ -1162,3 +1162,23 @@ export const collectShop = (id:number) => {
 export const searchGoodsByName = (name:string) => {
     return fetch(`http://${sourceIp}:${httpPort}/goods/find_goods_name?uid=${getStore('user/uid')}&q=${name}`).then(r => r.json());
 };
+
+// 获取大转盘梯度
+export const getBigTurnrableConfig = () => {
+    const msg = {
+        type:'mall/members@get_lottery_out_config',
+        param:{}
+    };
+
+    return requestAsync(msg);
+};
+
+// 查看提现是否开启
+export const getWithdrawalStatus = () => {
+    const msg = {
+        type:'mall/members@get_withdraw_switch',
+        param:{}
+    };
+
+    return requestAsync(msg);
+};
