@@ -87,4 +87,10 @@ export const payComplete = () => {
         setStore('flags/returnChange',r.type);
         console.log('退货状态变动========event_return_change',r);
     });
+
+    // 提现开关变化
+    setMsgHandler('event_withdraw_switch_change',r => {
+        setStore('flags/withdrawal',r.state);
+        console.log('提现状态变动========event_withdraw_switch_change',r);
+    });
 };
