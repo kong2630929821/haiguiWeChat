@@ -1,5 +1,5 @@
 <div class="new-page" w-class="page">
-    <div ev-btn-click="btnClick" style="background:#fff;">
+    <div style="background:#fff;">
         <widget w-tag="app-view-mine-orderItem">{order:{{it.order}},status:4 }</widget>
     </div>
 

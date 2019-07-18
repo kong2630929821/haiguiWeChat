@@ -1,8 +1,9 @@
 import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { getReturnGoods } from '../../net/pull';
+import { fillReturnGoodsId, getReturnGoods } from '../../net/pull';
 import { AfterSale, register, ReturnGoodsStatus } from '../../store/memstore';
+import { popNewMessage } from '../../utils/tools';
 
 // tslint:disable-next-line:no-reserved-keywords
 declare var module: any;
@@ -49,6 +50,15 @@ export class AfterSaleOrderList extends Widget {
                 popNew('app-view-returnGoods-applyReturnGoods',{ order:afterOrder.order,returnId:afterOrder.id },() => {
                     getReturnGoods(ReturnGoodsStatus.CANRETURN);
                 });
+            } else if (activeStatus === ReturnGoodsStatus.RETURNING && !afterOrder.shipId) {  // 填写退货运单号
+                popNew('app-components-modalBox-modalBoxInput',{ title:'填写退货单号',placeHolder:'运单号' },(r) => {
+                    fillReturnGoodsId(afterOrder.id, r).then(r => {
+                        popNewMessage('填入退货运单号成功');
+                        getReturnGoods(ReturnGoodsStatus.RETURNING);
+                    });
+                });
+            } else if (activeStatus === ReturnGoodsStatus.RETURNING && afterOrder.shipId) {  // 查看退货物流
+                popNew('app-view-mine-freight',{ order: afterOrder.order });
             }
         } 
         console.log(e.btn, index);

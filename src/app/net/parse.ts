@@ -1,5 +1,5 @@
 import { Address, AfterSale, Area, CartGoods, Freight, GoodsDetails, GoodsSegmentationDetails, Groups, GroupsLocation, MallImages, Order, SKU } from '../store/memstore';
-import { getCartGoodsSelected, unicode2Str } from '../utils/tools';
+import { unicode2Str } from '../utils/tools';
 
 /**
  * 数据处理
@@ -296,7 +296,8 @@ export const parseAfterSale = (infos: any, orders: Order[]) => {
             request_time: info[9],  // 请求售后时间
             reply_time: info[10],    // 回应售后时间
             finish_time: info[11],   // 完成售后时间
-            refuseReason: info[12]   // 退货被拒绝原因
+            shipId:info[12],         // 退货运单号
+            refuseReason: info[13]   // 退货被拒绝原因
         };
         afterSaleOrders.push(afterSaleOrder);
     }

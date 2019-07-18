@@ -3,6 +3,7 @@ import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { getStore, register, UserType } from '../../store/memstore';
 import { applyToUpHwang, getUserTypeShow, payToUpHbao } from '../../utils/logic';
+import { confirmActivityGoods } from './giftPage';
 import * as Constant from './powerConstant';
 interface Props {
     list:string[];  // 权益详情介绍
@@ -53,14 +54,14 @@ export class PowerDetail extends Widget {
     public upgradeUser() {
         if (!this.state) {  // 没有邀请码，不是当前等级的会员可以开通
             popNew('app-view-member-privacypolicy',null,() => {
-                popNew('app-view-member-applyModalBox',{ userType:this.props.userType },(sel) => {
+                popNew('app-view-member-applyModalBox',{ needAddress:true,userType:this.props.userType },(data) => {
                     if (this.props.userType === UserType.hWang) {
-                        applyToUpHwang(sel);
+                        applyToUpHwang(data.sel);
                     } else {
-                        payToUpHbao(sel,() => {
-                            this.ok && this.ok();
-                        });
-                        
+                        confirmActivityGoods(data.sel,data.addr);
+                        // payToUpHbao(data.sel,() => {
+                        //     this.ok && this.ok();
+                        // });
                     }
                 });
             });

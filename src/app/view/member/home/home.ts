@@ -64,12 +64,12 @@ export class Home extends Widget {
     // 升级会员等级
     public upgradeUser(user:string) {
         popNew('app-view-member-privacypolicy',null,() => {
-            popNew('app-view-member-applyModalBox',{ userType:UserType[user] },(sel) => {
+            popNew('app-view-member-applyModalBox',{ needAddress:true,userType:UserType[user] },(data) => {
                 if (user === 'hWang') {
-                    applyToUpHwang(sel);
+                    applyToUpHwang(data.sel);
                 } else {
-                    payToUpHbao(sel);
-                    
+                    // payToUpHbao(sel);
+                    confirmActivityGoods(data.sel,data.addr);
                 }
             });
         });

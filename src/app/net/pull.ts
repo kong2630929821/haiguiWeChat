@@ -1,10 +1,8 @@
 import { request } from '../../pi/net/ui/con_mgr';
-import { popNew } from '../../pi/ui/root';
-import { baoSaleClassGoodsId, baoVipClassGoodsId, baoVipMaskGoodsId, freeMaskGoodsId, httpPort, maxCount, OffClassGoodsId, sourceIp, sourcePort, wangSaleClassGoodsId, wangVipClassGoodsId, wangVipMaskGoodsId, whiteGoodsId_10000A, whiteGoodsId_10000B, whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
-import { getStore,GoodsDetails, GroupsLocation, OrderStatus, ReturnGoodsStatus, setStore, UserType } from '../store/memstore';
+import { baoSaleClassGoodsId, baoVipClassGoodsId, baoVipMaskGoodsId, freeMaskGoodsId, httpPort, OffClassGoodsId, sourceIp, sourcePort, wangSaleClassGoodsId, wangVipClassGoodsId, wangVipMaskGoodsId, whiteGoodsId_10000A, whiteGoodsId_10000B, whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
+import { getStore,GoodsDetails, GroupsLocation, OrderStatus, ReturnGoodsStatus, setStore } from '../store/memstore';
 import { openWXPay } from '../utils/logic';
-import { popNewLoading, popNewMessage, str2Unicode } from '../utils/tools';
-import { confirmActivityGoods } from '../view/member/giftPage';
+import { popNewMessage, str2Unicode } from '../utils/tools';
 import { requestAsync } from './login';
 import { parseAddress, parseAddress2, parseAfterSale, parseAllGroups, parseArea, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
 
@@ -236,11 +234,15 @@ export const getAddress = () => {
 
 /**
  * 获取运费信息
+ * @param supplier 供应商ID
+ * @param goods_type 商品类型 0 普通商品 1保税商品 2 海外直购
  */
-export const getFreight = () => {
+export const getFreight = (supplier:number,goods_type:number) => {
     const msg = {
         type:'get_freight',
         param:{
+            supplier,
+            goods_type
         }
     };
 
@@ -971,16 +973,12 @@ export const getAllGifts = async () => {
         }
     
         // 针对新版本迁移时未选择礼包的用户，需要强制提示选择礼包
-        const userType = getStore('user/userType');
-        if (userType === UserType.hBao && memberGifts.optionalGift === 0) {
-            popNew('app-view-member-applyModalBox',{ needSelGift:true,title:'礼包领取',unaccalimed:true },(sel) => {
-                let optional = whiteGoodsId_399A;
-                if (sel === 'B') optional = whiteGoodsId_399B;
-                popNew('app-view-member-fillAddrModalBox',{ selectAddr:true },(addr) => {
-                    confirmActivityGoods(optional,addr);
-                });
-            });
-        }
+        // const userType = getStore('user/userType');
+        // if (userType === UserType.hBao && memberGifts.optionalGift === 0) {
+        //     popNew('app-view-member-applyModalBox',{ needAddress:true,title:'礼包领取',unaccalimed:true },(data) => {
+        //         confirmActivityGoods(data.sel,data.addr);
+        //     });
+        // }
         setStore('user/memberGifts',memberGifts);
 
         return memberGifts;
@@ -1171,6 +1169,23 @@ export const queryOrder = (oid:string) => {
         type:'mall/pay@order_query',
         param:{
             oid
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
+ * 填入退货单号
+ * @param aid 退货订单ID
+ * @param ship_id 运单ID
+ */
+export const fillReturnGoodsId = (aid:number,ship_id:number) => {
+    const msg = {
+        type:'import_return_shipId',
+        param:{
+            aid,
+            ship_id
         }
     };
 

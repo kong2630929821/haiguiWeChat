@@ -16,6 +16,7 @@ export class OrderItem extends Widget {
     
     public setProps(props:any) {
         statusShows[ReturnGoodsStatus.RETURNED].text2 = `退货失败: ${props.afterSaleOrder.refuseReason}`;
+        statusShows[ReturnGoodsStatus.RETURNING].btn2 = props.afterSaleOrder.shipId ? '查看物流' :'填运单号';
         this.props = {
             ...props,
             statusShow:statusShows[props.status],
@@ -47,8 +48,7 @@ const statusShows:any = {
     },
     [ReturnGoodsStatus.RETURNING]:{
         btn1:'',
-        btn2:'',
-        text:'退货进行中'
+        btn2:'填运单号'
     },
     [ReturnGoodsStatus.RETURNED]:{
         btn1:'',

@@ -186,7 +186,7 @@ export interface Order {
 // 售后详情
 export interface AfterSale {
     id:number;		      // 售后订单id
-    order:Order; // 售后商品订单详情
+    order:Order;          // 售后商品订单详情
     tax:number;           // 商品总税费，单位分
     weight:number;        // 商品总重量，单位克
     status:number;		  // 售后状态，-1退货失败，0无售后，1退货
@@ -194,6 +194,7 @@ export interface AfterSale {
     request_time:number;  // 请求售后时间
     reply_time:number;    // 回应售后时间
     finish_time:number;   // 完成售后时间
+    shipId:number;        // 退货运单号
     refuseReason:string;  // 退货被拒绝原因
 }
 

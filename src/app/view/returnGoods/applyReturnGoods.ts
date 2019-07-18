@@ -23,7 +23,7 @@ export class ApplyReturnGoods extends Widget {
         reason:'',
         describle:'',
         returnId:0,
-        order:{}
+        order:null
     };
 
     public setProps(props:any) {

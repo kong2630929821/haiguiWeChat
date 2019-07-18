@@ -21,8 +21,7 @@
             {{if it.statusShow.btn1}}
             <div w-class="btn" on-tap="btnClick(e,0)">{{it.statusShow.btn1}}</div>
             {{end}}
-            {{: showText = it.status === it.ReturnGoodsStatus.CANRETURN ? it.afterSaleOrder.request_time > 0 : !!it.statusShow.text}}
-            {{if !showText}}
+            {{if it.statusShow.btn2}}
             <div w-class="btn btn1" on-tap="btnClick(e,1)">{{it.statusShow.btn2}}</div>
             {{else}}
             {{:text = it.status === it.ReturnGoodsStatus.RETURNED ? (it.afterSaleOrder.status === 1 ? it.statusShow.text1 : it.statusShow.text2) : it.statusShow.text}}
