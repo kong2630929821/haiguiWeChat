@@ -2,8 +2,8 @@ import { request } from '../../pi/net/ui/con_mgr';
 import { popNew } from '../../pi/ui/root';
 import { baoSaleClassGoodsId, baoVipClassGoodsId, baoVipMaskGoodsId, freeMaskGoodsId, httpPort, maxCount, OffClassGoodsId, sourceIp, sourcePort, wangSaleClassGoodsId, wangVipClassGoodsId, wangVipMaskGoodsId, whiteGoodsId_10000A, whiteGoodsId_10000B, whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
 import { getStore,GoodsDetails, GroupsLocation, OrderStatus, ReturnGoodsStatus, setStore, UserType } from '../store/memstore';
-import { openWXPay } from '../utils/logic';
-import { popNewLoading, popNewMessage, str2Unicode } from '../utils/tools';
+import { getCashLogName, openWXPay } from '../utils/logic';
+import { popNewLoading, popNewMessage, priceFormat, str2Unicode, timestampFormat, unicode2Str } from '../utils/tools';
 import { confirmActivityGoods } from '../view/member/giftPage';
 import { requestAsync } from './login';
 import { parseAddress, parseAddress2, parseAfterSale, parseAllGroups, parseArea, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
@@ -473,12 +473,25 @@ export const getEarningTotal = async () => {
     };
 
     const res = await requestAsync(msg);
+    const data = [];
+    res.wait_profit_detail.length && res.wait_profit_detail.forEach(v => {
+        if (v[3]) {
+            data.push(
+                {
+                    name:unicode2Str(v[1][1]),
+                    time: timestampFormat(v[2]),
+                    money: `￥${priceFormat(v[3])}`
+                }
+                );
+        }
+    });
     const earning = {
         baby: res.hbaoCount,
-        cash: res.cash,
+        cash: priceFormat(res.cash),
         partner: res.partnerCount,
         shell: res.hbei,
-        wait_profit: res.wait_profit
+        wait_profit: priceFormat(res.wait_profit),
+        rebate:data
     };
     setStore('earning',earning);
 };

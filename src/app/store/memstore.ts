@@ -301,6 +301,7 @@ interface EarningTotal {
     partner:number;  // 伙伴数量
     shell:number; // 海贝总收益
     wait_profit:number;  // 待返利收益
+    rebate:any;// 待返利明细
 }
 
 // 用户类型

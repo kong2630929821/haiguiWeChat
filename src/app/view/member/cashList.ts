@@ -15,7 +15,10 @@ interface Props {
     };  // 选中的年月
     orgList: any[];
     fg: string; // 进入此页面标记
-    waitAmount:number;    // 待返利总数（现金）
+    selected:number;// 0总收益  1待收益
+    showTitle:string;
+    showDataList:any;// 展示的数据
+    rebate:any;// 带收益列表
 }
 /**
  * 所有列表页面
@@ -34,7 +37,10 @@ export class LogList extends Widget {
         },
         orgList: [],
         fg: PageFg.cash,
-        waitAmount:0
+        selected:0,
+        showTitle:'现金总收益',
+        showDataList:[],
+        rebate:[]
     };
 
     public setProps(props: any) {
@@ -43,9 +49,10 @@ export class LogList extends Widget {
             ...props
         };
         super.setProps(this.props);
+        this.props.showTitle = props.title;
         if (props.fg === PageFg.cash) {
             this.getData(1);
-            this.props.waitAmount = getStore('earning/wait_profit',0); 
+            this.props.rebate = getStore('earning/rebate'); 
         } else {
             this.getData(2);
         }
@@ -86,5 +93,20 @@ export class LogList extends Widget {
                 this.getData(2);
             }
         });
+    }
+
+    // 切换选择
+    public selectGroups(num:number) {
+        this.props.selected = num;
+        if (num) {
+            this.props.showTitle = '待收益总额';
+            this.props.showDataList = this.props.rebate;
+            this.props.amount = getStore('earning/wait_profit',0); 
+        } else {
+            this.props.showTitle = '现金总收益';
+            this.props.showDataList = this.props.list;
+            this.props.amount = getStore('earning/cash',0); 
+        }
+        this.paint();
     }
 }

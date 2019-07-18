@@ -1,6 +1,6 @@
 <div class="new-page" w-class="page">
     <div w-class="content">
-        <div w-class="money">￥{{it1}}</div>
+        <div w-class="money">￥{{it1.price}}</div>
         <div w-class="text">我的现金</div>
         <div w-class="btn {{it1.ableWithdraw?'active':''}}" on-tap="withdraw">提现</div>
     </div>
