@@ -126,7 +126,7 @@ export interface GoodsDetails {
     rebate:number;    // 返利（仅限海王）
     origin:number;   // 	商品原价，单位分
     vip_origin:number;  // 会员商品原价，单位分
-    has_tax:boolean;    // 是否为保税商品
+    goodsType:number;    // 商品类型 0 普通商品 1 保税商品 2 海外直购
     tax:number;		// 商品税费，单位分
     discount:number;	// 商品折后价，单位分，即原价 + 税费 - 折扣
     labels:SKU[];	 // SKU SKU描述 价格影响 库存

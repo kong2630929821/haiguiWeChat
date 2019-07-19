@@ -81,7 +81,7 @@ const calcAllFees = (order:Order) => {
     let hasFreight = false;
     for (const v of order.orderGoods) {
         const goods = v[0];
-        if (goods.has_tax) {
+        if (goods.goodsType > 0) {  // TODO
             totalTax += goods.tax * v[1];
         } else {
             hasFreight = true;

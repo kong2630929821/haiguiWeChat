@@ -1,6 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
+import { whiteGoodsId_399A, whiteGoodsId_399B } from '../../config';
 import { getStore, register, UserType } from '../../store/memstore';
 import { applyToUpHwang, getUserTypeShow, payToUpHbao } from '../../utils/logic';
 import { confirmActivityGoods } from './giftPage';
@@ -58,7 +59,9 @@ export class PowerDetail extends Widget {
                     if (this.props.userType === UserType.hWang) {
                         applyToUpHwang(data.sel);
                     } else {
-                        confirmActivityGoods(data.sel,data.addr);
+                        let optional = whiteGoodsId_399A;
+                        if (data.sel === 'B') optional = whiteGoodsId_399B;
+                        confirmActivityGoods(optional, data.addr);
                         // payToUpHbao(data.sel,() => {
                         //     this.ok && this.ok();
                         // });

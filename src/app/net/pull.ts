@@ -972,11 +972,13 @@ export const getAllGifts = async () => {
             }
         }
     
-        // 针对新版本迁移时未选择礼包的用户，需要强制提示选择礼包
+        // 针对新版本迁移时未选择礼包的用户;，需要强制提示选择礼包;
         // const userType = getStore('user/userType');
         // if (userType === UserType.hBao && memberGifts.optionalGift === 0) {
         //     popNew('app-view-member-applyModalBox',{ needAddress:true,title:'礼包领取',unaccalimed:true },(data) => {
-        //         confirmActivityGoods(data.sel,data.addr);
+        //         let optional = whiteGoodsId_399A;
+        //         if (data.sel === 'B') optional = whiteGoodsId_399B;
+        //         confirmActivityGoods(optional, data.addr);
         //     });
         // }
         setStore('user/memberGifts',memberGifts);

@@ -61,7 +61,7 @@ export const parseGoodsDetail = (info: any): GoodsDetails => {
         rebate: info[6],    // 返利（仅限海王）
         origin: info[7],   // 	商品原价，单位分
         vip_origin: info[8],  // 会员商品原价，单位分
-        has_tax: info[9] ? true : false,    // 是否为保税商品
+        goodsType: info[9],    // 商品类型 0 普通商品 1 保税商品 2 海外直购
         tax: info[10],	// 商品税费，单位分
         discount: info[11],	// 商品折后价，单位分，即原价 + 税费 - 折扣
         labels: skus,	 // SKU SKU描述 价格影响 库存

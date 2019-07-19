@@ -83,7 +83,7 @@ export class GoodsDetailHome extends Widget {
                     }
                 }
             }
-            // getFreight(goods.supplier,goods.);
+            getFreight(goods.supplier,goods.goodsType);
             
             this.paint();
         });

@@ -94,14 +94,13 @@ export class ConfirmOrder extends Widget {
                 break;
             }
         }
-        // TODO 
-        // if (hasTax && !getStore('user/IDCard')) {
-        //     popNew('app-components-popModel-popModel',{ title:'海外购商品必须实名' },() => {
-        //         popNew('app-view-mine-IDCardUpload');
-        //     });
+        if (hasTax && !getStore('user/IDCard')) {
+            popNew('app-components-popModel-popModel',{ title:'海外购商品必须实名' },() => {
+                popNew('app-view-mine-IDCardUpload');
+            });
 
-        //     return;
-        // } 
+            return;
+        } 
            
         this.order();
         
@@ -227,7 +226,7 @@ const plitOrder = (orderGoods:CartGoodsShow[],address:Address) => {
         const supplierId = v.cartGood.goods.supplier;
         let oneSupplier = suppliers.get(supplierId);
         if (!oneSupplier) oneSupplier = [];
-        if (v.cartGood.goods.has_tax) {     // 保税商品只有税费没有运费
+        if (v.cartGood.goods.goodsType > 0) {  // 商品类型 0 普通商品 1 保税商品 2 海外直购 TODO
             const taxGoods = oneSupplier[0] || [];
             taxGoods.push(v);
             oneSupplier[0] = taxGoods;
