@@ -149,7 +149,7 @@ export class ShoppingCart extends Widget {
     public calcTotalFee() {
         const cartGoodsShow = this.state.cartGoodsShow;
         let totalSale = 0;
-        let isIncludeShipping = true;    // 是否包含运费 保税商品都无需运费
+        let isIncludeShipping = false;    // 是否包含运费 
         let canOrder = false;           // 是否可以下单
         let totalAmount = 0;          // 购买商品的总数量
         for (const v of cartGoodsShow) {
@@ -158,8 +158,8 @@ export class ShoppingCart extends Widget {
                 totalAmount += v.cartGood.amount;
                 canOrder = true;
             }
-            
-            if (!v.cartGood.goods.has_tax) isIncludeShipping = false;
+            // 保税商品无需运费
+            if (v.cartGood.goods.goodsType === 1) isIncludeShipping = true;
         }
 
         this.props.totalSale = totalSale;

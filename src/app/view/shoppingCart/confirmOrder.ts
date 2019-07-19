@@ -89,7 +89,7 @@ export class ConfirmOrder extends Widget {
         let hasTax = false;  // 是否有保税商品
         for (let i = 0;i < cartGood.length;i++) {
             const goods = cartGood[i].goods;
-            if (goods.has_tax) {
+            if (goods.goodsType) {
                 hasTax = true;
                 break;
             }
@@ -221,52 +221,75 @@ export interface SplitOrder {
 }
 // 拆分订单
 const plitOrder = (orderGoods:CartGoodsShow[],address:Address) => {
-    const suppliers = new Map();    // 购买同一供应商的所有商品 保税商品和普通商品分离
+    const suppliers = new Map();    // 购买同一供应商的所有商品 保税商品/普通商品/海外直购分离
     for (const v of orderGoods) {
         const supplierId = v.cartGood.goods.supplier;
         let oneSupplier = suppliers.get(supplierId);
         if (!oneSupplier) oneSupplier = [];
-        if (v.cartGood.goods.goodsType > 0) {  // 商品类型 0 普通商品 1 保税商品 2 海外直购 TODO
+        // 商品类型 0 普通商品 1 保税商品 2 海外直购
+        if (v.cartGood.goods.goodsType === 0) { // 普通商品
+            const normalGoods = oneSupplier[1] || [];
+            normalGoods.push(v);
+            oneSupplier[0] = normalGoods;
+        } else if (v.cartGood.goods.goodsType === 1) { // 保税商品
             const taxGoods = oneSupplier[0] || [];
             taxGoods.push(v);
-            oneSupplier[0] = taxGoods;
-        } else {
-            const noTaxGoods = oneSupplier[1] || [];
-            noTaxGoods.push(v);
-            oneSupplier[1] = noTaxGoods;
+            oneSupplier[1] = taxGoods;
+        } else {  // 海外直购
+            const overseaGoods = oneSupplier[2] || [];
+            overseaGoods.push(v);
+            oneSupplier[2] = overseaGoods;
         }
         suppliers.set(supplierId,oneSupplier);
     }
 
     const splitOrders:SplitOrder[] = [];
     for (const [k,v] of suppliers) {
-        if (v[0]) {
-            let totalTax = 0;
-            let totalTaxSale = 0;
-            for (const cartGoodShow of v[0]) {   // 保税商品
-                totalTax += cartGoodShow.cartGood.goods.tax * cartGoodShow.cartGood.amount;
-                totalTaxSale += cartGoodShow.finalSale * cartGoodShow.cartGood.amount;
-            }
-            const splitOrder1:SplitOrder = {     // 保税商品运费0
-                order:v[0],
-                saleFee:totalTaxSale,
-                taxFee:totalTax,
-                freightFee:0
-            };
-            splitOrders.push(splitOrder1);
-        }
-        if (v[1]) {
+       
+        if (v[0]) {// 普通商品
             let totalNoTaxSale = 0;
-            for (const cartGoodShow of v[1]) {   // 普通商品
+            for (const cartGoodShow of v[0]) {   // 普通商品
                 totalNoTaxSale += cartGoodShow.finalSale * cartGoodShow.cartGood.amount;
             }
-            const splitOrder2:SplitOrder = {     // 普通商品税费0
-                order:v[1],
+            const splitOrder:SplitOrder = {     // 普通商品税费0
+                order:v[0],
                 saleFee:totalNoTaxSale,
                 taxFee:0,
                 freightFee:calcFreight(address && address.area_id)
             };
-            splitOrders.push(splitOrder2);
+            splitOrders.push(splitOrder);
+        }
+
+        if (v[1]) { // 保税商品
+            let totalTax = 0;
+            let totalTaxSale = 0;
+            for (const cartGoodShow of v[1]) {   // 保税商品
+                totalTax += cartGoodShow.cartGood.goods.tax * cartGoodShow.cartGood.amount;
+                totalTaxSale += cartGoodShow.finalSale * cartGoodShow.cartGood.amount;
+            }
+            const splitOrder:SplitOrder = {     // 保税商品运费0
+                order:v[1],
+                saleFee:totalTaxSale,
+                taxFee:totalTax,
+                freightFee:0
+            };
+            splitOrders.push(splitOrder);
+        }
+
+        if (v[2]) {  // 海外直购
+            let totalTax = 0;
+            let totalTaxSale = 0;
+            for (const cartGoodShow of v[0]) {   // 海外直购
+                totalTax += cartGoodShow.cartGood.goods.tax * cartGoodShow.cartGood.amount;
+                totalTaxSale += cartGoodShow.finalSale * cartGoodShow.cartGood.amount;
+            }
+            const splitOrder:SplitOrder = {     // 海外直购运费税费都有
+                order:v[0],
+                saleFee:totalTaxSale,
+                taxFee:totalTax,
+                freightFee:calcFreight(address && address.area_id)
+            };
+            splitOrders.push(splitOrder);
         }
         
     }

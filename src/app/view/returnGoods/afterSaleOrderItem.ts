@@ -44,11 +44,11 @@ const statusShows:any = {
     [ReturnGoodsStatus.CANRETURN]:{
         btn1:'',
         btn2:'申请售后',
-        text:'客服稍后将与您联系'
+        text:'客服稍后会处理'
     },
     [ReturnGoodsStatus.RETURNING]:{
         btn1:'',
-        btn2:'填运单号'
+        btn2:'填货运单号'
     },
     [ReturnGoodsStatus.RETURNED]:{
         btn1:'',

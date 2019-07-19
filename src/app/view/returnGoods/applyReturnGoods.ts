@@ -57,12 +57,12 @@ export class ApplyReturnGoods extends Widget {
     }
 
     // 选择退货理由
-    public selectReason() {
-        popNew('app-components-selectList-reasonSelectList',{ selected:-1,list:['原因一','原因二','原因三'] },(r => {
-            this.props.reason = r.value;
-            this.paint();
-        }));
-    }
+    // public selectReason() {
+    //     popNew('app-components-selectList-reasonSelectList',{ selected:-1,list:['原因一','原因二','原因三'] },(r => {
+    //         this.props.reason = r.value;
+    //         this.paint();
+    //     }));
+    // }
 
     public descChange(e:any) {
         this.props.describle = e.value;
@@ -71,13 +71,13 @@ export class ApplyReturnGoods extends Widget {
 
     // 确认提交退货申请
     public confirm() {
-        if (!this.props.reason) {
-            popNewMessage('请选择退货原因');
+        if (!this.props.describle) {
+            popNewMessage('请输入退货原因');
 
             return;
         }
-        const res = `${this.props.reason}: ${this.props.describle}`;
-        returnGoods(this.props.returnId, res, this.props.imgs).then(() => {
+        // const res = `${this.props.reason}: ${this.props.describle}`;
+        returnGoods(this.props.returnId, this.props.describle, this.props.imgs).then(() => {
             popNewMessage('申请退货成功');
             this.ok && this.ok();
         }).catch(() => {

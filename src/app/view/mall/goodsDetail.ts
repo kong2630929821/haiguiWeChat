@@ -20,7 +20,7 @@ interface Props {
  * 商品详情
  */
 export class GoodsDetailHome extends Widget {
-    public setProps(props:Props,oldProps:Props) {
+    public setProps(props:Props) {
         const obj = calcFreightDesc(getStore('mall/freights'));
         const goodsItemDescs = {
             freight:{ 
@@ -44,8 +44,8 @@ export class GoodsDetailHome extends Widget {
             }
         };
         const ret = calcPrices(props.goods);
-        const skus = props.goods.labels;
-        const skuIndex = -1;
+        // const skus = props.goods.labels;
+        // const skuIndex = -1;
         // if (skus.length === 1) skuIndex = 0;  // 单规格商品选中规格
         const cartGoods = getStore('mall/cartGoods');
         let len = 0;
@@ -63,7 +63,7 @@ export class GoodsDetailHome extends Widget {
             descProps:undefined,   
             chooseSpec:false,
             amount:1,              // 选择数量
-            skuIndex,
+            skuIndex:-1,
             buyNow:false,
             areaIcon:'',     // 国旗图标
             area:'',          // 国家

@@ -3,13 +3,8 @@
         <widget w-tag="app-view-mine-orderItem">{order:{{it.order}},status:4 }</widget>
     </div>
 
-    <div w-class="item">
-        <span w-class="itemName">退货原因</span>
-        <div on-tap="selectReason" w-class="select">{{it.reason?it.reason:"请选择"}}<img src="../../res/image/arrowRight.png"/></div>
-    </div>
-
     <div w-class="item" ev-input-change="descChange">
-        <span w-class="itemName">退货备注</span>
+        <span w-class="itemName">退货原因</span>
         <widget w-tag="app-components-input-textarea">{placeHolder:"请输入",style:"font-size:28px;height:auto;max-height:200px;" }</widget>
     </div>
 
