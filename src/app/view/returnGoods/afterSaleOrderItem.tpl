@@ -23,9 +23,9 @@
             {{end}}
 
             {{%==============提交退货申请后显示文字不显示按钮===================}}
-            {{:text = it.status === it.ReturnGoodsStatus.CANRETURN && it.afterSaleOrder.request_time > 0 ? it.statusShow.text :""}}
-
-            {{if !text}}
+            {{: showText = it.status === it.ReturnGoodsStatus.CANRETURN ? it.afterSaleOrder.request_time > 0 : !!it.statusShow.text}}
+            
+            {{if !showText}}
                 <div w-class="btn btn1" on-tap="btnClick(e,1)">{{it.statusShow.btn2}}</div>
             {{else}}
                 {{:text = it.status === it.ReturnGoodsStatus.RETURNED ? (it.afterSaleOrder.status === 1 ? it.statusShow.text1 : it.statusShow.text2) : it.statusShow.text}}

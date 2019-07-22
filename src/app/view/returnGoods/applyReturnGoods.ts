@@ -42,6 +42,7 @@ export class ApplyReturnGoods extends Widget {
             upImage(r, res => {
                 popNewMessage('图片上传成功');
                 console.log('图片上传成功',res);
+                this.props.imgs.pop();
                 this.props.imgs.push(serverFilePath + res);
                 this.paint();
             });
