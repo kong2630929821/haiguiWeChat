@@ -126,7 +126,7 @@ export interface GoodsDetails {
     rebate:number;    // 返利（仅限海王）
     origin:number;   // 	商品原价，单位分
     vip_origin:number;  // 会员商品原价，单位分
-    has_tax:boolean;    // 是否为保税商品
+    goodsType:number;    // 商品类型 0 普通商品 1 保税商品 2 海外直购
     tax:number;		// 商品税费，单位分
     discount:number;	// 商品折后价，单位分，即原价 + 税费 - 折扣
     labels:SKU[];	 // SKU SKU描述 价格影响 库存
@@ -159,6 +159,7 @@ export interface CartGoods {
     goods:GoodsDetails;   // 商品详细信息
     amount:number;        // 购买数量
     selected:boolean;     // 是否勾选  默认false
+    skuIndex:number;      // 选择的规格下标
 }
 
 // 订单详情
@@ -185,7 +186,7 @@ export interface Order {
 // 售后详情
 export interface AfterSale {
     id:number;		      // 售后订单id
-    order:Order; // 售后商品订单详情
+    order:Order;          // 售后商品订单详情
     tax:number;           // 商品总税费，单位分
     weight:number;        // 商品总重量，单位克
     status:number;		  // 售后状态，-1退货失败，0无售后，1退货
@@ -193,6 +194,7 @@ export interface AfterSale {
     request_time:number;  // 请求售后时间
     reply_time:number;    // 回应售后时间
     finish_time:number;   // 完成售后时间
+    shipId:number;        // 退货运单号
     refuseReason:string;  // 退货被拒绝原因
 }
 

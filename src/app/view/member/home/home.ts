@@ -2,6 +2,7 @@
 import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
+import { whiteGoodsId_399A, whiteGoodsId_399B } from '../../../config';
 import { getAllGifts, getEarningTotal, getInviteCode } from '../../../net/pull';
 import { register, setStore, UserType } from '../../../store/memstore';
 import { applyToUpHwang, getUserTypeShow, payToUpHbao } from '../../../utils/logic';
@@ -64,12 +65,14 @@ export class Home extends Widget {
     // 升级会员等级
     public upgradeUser(user:string) {
         popNew('app-view-member-privacypolicy',null,() => {
-            popNew('app-view-member-applyModalBox',{ userType:UserType[user] },(sel) => {
+            popNew('app-view-member-applyModalBox',{ needAddress:true,userType:UserType[user] },(data) => {
                 if (user === 'hWang') {
-                    applyToUpHwang(sel);
+                    applyToUpHwang(data.sel);
                 } else {
-                    payToUpHbao(sel);
-                    
+                    // payToUpHbao(sel);
+                    let optional = whiteGoodsId_399A;
+                    if (data.sel === 'B') optional = whiteGoodsId_399B;
+                    confirmActivityGoods(optional, data.addr);
                 }
             });
         });
@@ -114,10 +117,5 @@ register('flags/upgradeHbao',() => {
     getInviteCode().then(res => {
         setStore('user/inviteCode',res.code);
     });
-
-    getAllGifts().then(gift => {  // 获取所有礼包
-        popNew('app-view-member-fillAddrModalBox',{ selectAddr:true },(addr) => {
-            confirmActivityGoods(gift.optionalGift, addr);  // 领取美白礼包
-        });
-    });  
+    getAllGifts();   // 获取所有礼包
 });

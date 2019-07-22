@@ -123,7 +123,7 @@ export class ShoppingCart extends Widget {
     public addGoodsNum(index:number) {
         const cartGood = this.state.cartGoodsShow[index].cartGood;
         const goods = cartGood.goods;
-        const sku = goods.labels[0];
+        const sku = goods.labels[cartGood.skuIndex];
         if (cartGood.amount  + 1 > sku[3]) {
             popNewMessage('库存不足');
 
@@ -149,7 +149,7 @@ export class ShoppingCart extends Widget {
     public calcTotalFee() {
         const cartGoodsShow = this.state.cartGoodsShow;
         let totalSale = 0;
-        let isIncludeShipping = true;    // 是否包含运费 保税商品都无需运费
+        let isIncludeShipping = false;    // 是否包含运费 
         let canOrder = false;           // 是否可以下单
         let totalAmount = 0;          // 购买商品的总数量
         for (const v of cartGoodsShow) {
@@ -158,8 +158,8 @@ export class ShoppingCart extends Widget {
                 totalAmount += v.cartGood.amount;
                 canOrder = true;
             }
-            
-            if (!v.cartGood.goods.has_tax) isIncludeShipping = false;
+            // 保税商品无需运费
+            if (v.cartGood.goods.goodsType === 1) isIncludeShipping = true;
         }
 
         this.props.totalSale = totalSale;
@@ -171,7 +171,6 @@ export class ShoppingCart extends Widget {
     // 商品详情
     public goodsClick(e:any,index:number) {
         const goods = this.state.cartGoodsShow[index].cartGood.goods;
-        // skuId:goods.labels[0][0]
         popNew('app-view-mall-goodsDetail',{ goods });
     }
 
@@ -206,12 +205,12 @@ export const calcCartGoodsShow = (cartGoods:CartGoods[]) => {
     for (const cartGood of cartGoods) {
         const goods = cartGood.goods;
         const cartGoodShow:any = {};
-        const labelShow = goods.labels[0][1];
+        const labelShow = goods.labels[cartGood.skuIndex][1];
         const priceRet = calcPrices(cartGood.goods);
         cartGoodShow.cartGood = cartGood;          // 购物车原始信息
         cartGoodShow.labelShow = labelShow;   // 显示标签
         cartGoodShow.priceRet = priceRet;           // 价格相关信息
-        cartGoodShow.finalSale = priceRet.sale + goods.labels[0][2];                  // 最终的商品售价  包括标签的不同影响的价格
+        cartGoodShow.finalSale = priceRet.sale + goods.labels[cartGood.skuIndex][2];                  // 最终的商品售价  包括标签的不同影响的价格
         cartGoodsShow.push(cartGoodShow);
     }
 

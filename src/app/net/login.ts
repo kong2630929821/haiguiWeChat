@@ -161,7 +161,7 @@ const userLogin = (userStr:any) => {
         }
         getCart();    // 购物车
         getAddress();  // 地址列表
-        getFreight();   // 运费列表
+        // getFreight();   // 运费列表
         guessYouLike(maxCount);
         
         // 获取订单

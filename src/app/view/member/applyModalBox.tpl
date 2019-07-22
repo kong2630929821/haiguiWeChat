@@ -47,6 +47,13 @@
         </div>
         {{end}}
         {{end}}
+        
+        {{if it.needAddress}}
+        <div w-class="row">
+            <div w-class="addr">{{it.address ? it.addressFormat(it.address.address):"详细地址"}}</div>
+            <div w-class="btn" on-tap="selAddr">选择地址</div>
+        </div>
+        {{end}}
 
         {{if it.needSelGift}}
         <div w-class="row" style="justify-content: space-between;">
