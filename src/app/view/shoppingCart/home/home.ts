@@ -2,9 +2,10 @@ import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
 import { mallImagPre } from '../../../config';
-import { addCart, collectShop, deductCart, getCart, isCollectShop } from '../../../net/pull';
+import { addCart, collectShop, deductCart, getCart, getCollectList, isCollectShop } from '../../../net/pull';
 import { CartGoods, register, setStore } from '../../../store/memstore';
 import { calcPrices, getImageThumbnailPath, popNewMessage, priceFormat } from '../../../utils/tools';
+import { getCollect } from '../../../utils/logic';
 
 export const forelet = new Forelet();
 
@@ -185,6 +186,8 @@ export class ShoppingCart extends Widget {
                     if (!r.is_liked) {
                         collectShop(id).then(r => {
                             popNewMessage('收藏成功');
+                            // 获取所有收藏
+                            getCollect();
                         });
                     }
                 });

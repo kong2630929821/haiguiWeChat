@@ -7,10 +7,10 @@ import { popNew } from '../../pi/ui/root';
 import { getCookie } from '../../pi/util/html';
 import { maxCount, wsUrl } from '../config';
 import { getStore, GroupsLocation, OrderStatus, setStore, UserType } from '../store/memstore';
-import { judgeRealName } from '../utils/logic';
+import { getCollect, judgeRealName } from '../utils/logic';
 import { unicode2ReadStr, unicode2Str } from '../utils/tools';
 import { registerWXAPI } from '../utils/wxAPI';
-import { getAddress, getAllGifts, getBalance, getCart, getEarningTotal, getFreight, getGroups, getInviteCode, getOrders, getUserInfo, getWithdrawalStatus, guessYouLike, setUserName } from './pull';
+import { getAddress, getAllGifts, getBalance, getCart, getCollectList, getEarningTotal, getFreight, getGroups, getInviteCode, getOrders, getUserInfo, getWithdrawalStatus, guessYouLike, setUserName } from './pull';
 import { payComplete } from './push';
 
 document.addEventListener('visibilitychange', () => {
@@ -220,6 +220,9 @@ const userLogin = (userStr:any) => {
             console.log('首次登录查看是否开启提现',r);
             setStore('flags/withdrawal',r.state);
         });
+
+        // 获取所有收藏
+        getCollect();
         
     });
 };
