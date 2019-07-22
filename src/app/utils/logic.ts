@@ -1,6 +1,6 @@
 import { onlyWXPay, whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
-import { payMoney, queryOrder, upgradeHBao, upgradeHWang } from '../net/pull';
-import { getStore, UserType } from '../store/memstore';
+import { getCollectList, payMoney, queryOrder, upgradeHBao, upgradeHWang } from '../net/pull';
+import { getStore, setStore, UserType } from '../store/memstore';
 import { popNewMessage } from './tools';
 /**
  * 本地方法
@@ -196,4 +196,12 @@ export const getLastAddress = () => {
  */
 export const judgeRealName = (name:string) => {
     return /^[\u4e00-\u9fa5a-zA-Z]+$/.test(name);
+};
+
+// 获取所有收藏
+export const getCollect = () => {
+    getCollectList().then(r => {
+        console.log('获取所有收藏',r);
+        setStore('flags/collects',r);
+    });
 };

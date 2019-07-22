@@ -2,8 +2,9 @@ import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { mallImagPre } from '../../config';
-import { addCart, collectShop, getAreas, getFreight, getGoodsDetails, isCollectShop, removeLiked } from '../../net/pull';
+import { addCart, collectShop, getAreas, getCollectList, getFreight, getGoodsDetails, isCollectShop, removeLiked } from '../../net/pull';
 import { Area, CartGoods, getStore, GoodsDetails, ImageType, register, setStore } from '../../store/memstore';
+import { getCollect } from '../../utils/logic';
 import { calcFreightDesc, calcPrices, getImageMainPath, getImagePath, popNewMessage, priceFormat } from '../../utils/tools';
 
 // tslint:disable-next-line:no-reserved-keywords
@@ -202,6 +203,8 @@ export class GoodsDetailHome extends Widget {
                 console.log('removeLiked',r);
                 this.props.isLiked = 0;
                 popNewMessage('取消收藏');
+                // 获取所有收藏
+                getCollect();
                 this.paint();
             });
         } else {
@@ -212,6 +215,8 @@ export class GoodsDetailHome extends Widget {
                 console.log(r);
                 this.props.isLiked = 1;
                 popNewMessage('收藏成功');
+                // 获取所有收藏
+                getCollect();
                 this.paint();
             });
         }

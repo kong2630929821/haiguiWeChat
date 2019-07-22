@@ -401,7 +401,8 @@ const store:Store = {
         cash:0,
         partner:0,
         shell:0,
-        wait_profit:0
+        wait_profit:0,
+        rebate:[]
     },
     user:{
         isLogin:false,
