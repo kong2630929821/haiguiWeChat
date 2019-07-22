@@ -1,8 +1,8 @@
 import { request } from '../../pi/net/ui/con_mgr';
 import { baoSaleClassGoodsId, baoVipClassGoodsId, baoVipMaskGoodsId, freeMaskGoodsId, httpPort, OffClassGoodsId, sourceIp, sourcePort, wangSaleClassGoodsId, wangVipClassGoodsId, wangVipMaskGoodsId, whiteGoodsId_10000A, whiteGoodsId_10000B, whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
 import { getStore,GoodsDetails, GroupsLocation, OrderStatus, ReturnGoodsStatus, setStore } from '../store/memstore';
-import { openWXPay } from '../utils/logic';
-import { popNewMessage, str2Unicode } from '../utils/tools';
+import {  openWXPay } from '../utils/logic';
+import {  popNewMessage, priceFormat, str2Unicode, timestampFormat, unicode2Str } from '../utils/tools';
 import { requestAsync } from './login';
 import { parseAddress, parseAddress2, parseAfterSale, parseAllGroups, parseArea, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
 
@@ -475,12 +475,25 @@ export const getEarningTotal = async () => {
     };
 
     const res = await requestAsync(msg);
+    const data = [];
+    res.wait_profit_detail.length && res.wait_profit_detail.forEach(v => {
+        if (v[3]) {
+            data.push(
+                {
+                    name:unicode2Str(v[1][1]),
+                    time: timestampFormat(v[2]),
+                    money: `￥${priceFormat(v[3])}`
+                }
+                );
+        }
+    });
     const earning = {
         baby: res.hbaoCount,
-        cash: res.cash,
+        cash: priceFormat(res.cash),
         partner: res.partnerCount,
         shell: res.hbei,
-        wait_profit: res.wait_profit
+        wait_profit: priceFormat(res.wait_profit),
+        rebate:data
     };
     setStore('earning',earning);
 };
@@ -1189,6 +1202,26 @@ export const fillReturnGoodsId = (aid:number,ship_id:number) => {
             aid,
             ship_id
         }
+    };
+
+    return requestAsync(msg);
+};
+
+// 获取大转盘梯度
+export const getBigTurnrableConfig = () => {
+    const msg = {
+        type:'mall/members@get_lottery_out_config',
+        param:{}
+    };
+
+    return requestAsync(msg);
+};
+
+// 查看提现是否开启
+export const getWithdrawalStatus = () => {
+    const msg = {
+        type:'mall/members@get_withdraw_switch',
+        param:{}
     };
 
     return requestAsync(msg);

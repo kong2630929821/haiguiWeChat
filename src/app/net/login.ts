@@ -10,7 +10,7 @@ import { getStore, GroupsLocation, OrderStatus, setStore, UserType } from '../st
 import { judgeRealName } from '../utils/logic';
 import { unicode2ReadStr, unicode2Str } from '../utils/tools';
 import { registerWXAPI } from '../utils/wxAPI';
-import { getAddress, getAllGifts, getBalance, getCart, getEarningTotal, getFreight, getGroups, getInviteCode, getOrders, getUserInfo, guessYouLike, setUserName } from './pull';
+import { getAddress, getAllGifts, getBalance, getCart, getEarningTotal, getFreight, getGroups, getInviteCode, getOrders, getUserInfo, getWithdrawalStatus, guessYouLike, setUserName } from './pull';
 import { payComplete } from './push';
 
 document.addEventListener('visibilitychange', () => {
@@ -214,6 +214,13 @@ const userLogin = (userStr:any) => {
 
         // 获取所有可领的礼包
         getAllGifts();
+
+        // 查看提现是否开启
+        getWithdrawalStatus().then(r => {
+            console.log('首次登录查看是否开启提现',r);
+            setStore('flags/withdrawal',r.state);
+        });
+        
     });
 };
 
