@@ -32,8 +32,15 @@
                 <div w-class="groups2-item {{v.id === it.selectedLevel2Groups.id ? 'groups2-item-active' : ''}}" on-tap="selectLevel2Groups(e,{{i}})" class="{{v.id === it.selectedLevel2Groups.id ? 'groups2-item-active' : ''}}">{{v.name}}</div>
                 {{end}}
             </div>
+        </div>
 
-            <widget w-tag="app-components-simpleFilter-simpleFilter">{options:["销量排序","价格排序"],active:{{it.sortRule}}}</widget>
+        <div w-class="sort_btns" >
+            <div w-class="sort_btn" style="color:{{it.sortRule[0]==0?'red':'#8B8B8B'}}" on-tap="changeSortRule(0)">
+                销量<span w-class="icon" style="border-top-color:{{it.sortRule[0]==0?'red':'#8B8B8B'}};transform:rotate({{it.sortRule[0]==0&&it.sortRule[1]?'0deg':'180deg'}});"></span>
+            </div>
+            <div w-class="sort_btn" style="color:{{it.sortRule[0]==1?'red':'#8B8B8B'}}" on-tap="changeSortRule(1)">
+                价格<span w-class="icon" style="border-top-color:{{it.sortRule[0]==1?'red':'#8B8B8B'}};transform:rotate({{it.sortRule[0]==1&&it.sortRule[1]?'0deg':'180deg'}});"></span>
+            </div>
         </div>
 
         <div w-class="goods-list" on-scroll="getMoreList" id="good-list">

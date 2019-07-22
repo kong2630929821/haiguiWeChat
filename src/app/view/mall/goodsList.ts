@@ -19,7 +19,7 @@ interface Props {
     goodsList:GoodsDetails[];   // 商品列表
     refresh:boolean;   // 是否正在刷新
     active:number;    // 当前选则的排序规则
-    sortRule:number;   // 排序规则 0 价格  1 销量
+    sortRule:[number,boolean];   // 排序规则 0 价格  1 销量 [规则，从大到小]
 }
 
 export enum StyleMod {     // 样式
@@ -41,7 +41,7 @@ export class GoodsList extends Widget {
         goodsList:[],
         refresh:false,  
         active:0,
-        sortRule:0       // 排序规则 0 价格  1 销量
+        sortRule:[0,true]       // 排序规则 价格从大到小
     };
     public setProps(props:any) {
         this.props = {
@@ -52,7 +52,7 @@ export class GoodsList extends Widget {
         console.log('GoodsList ====',this.props);
         getGoodsInfo(props.selectedLevel2Groups.id,0).then((goods:GoodsDetails[]) => {
             this.props.goodsList = goods;
-            this.changeSortRule({ value:this.props.active });
+            this.changeSortRule(0);
             this.paint();
         });
     }
@@ -132,15 +132,17 @@ export class GoodsList extends Widget {
     // }
     
     // 改变排序规则
-    public changeSortRule(e:any) {
-        this.props.sortRule = e.value;
-        if (e.value === 0) {
-            this.props.goodsList.sort(sortCmd1);
+    public changeSortRule(ind:number) {
+        this.props.sortRule[1] = !this.props.sortRule[1];
+        if (ind === 0) {
+            this.props.goodsList.sort(this.props.sortRule[1] ? sortCmd1 :sortCmd2);
         } else {
-            this.props.goodsList.sort(sortCmd2);
+            this.props.goodsList.sort(this.props.sortRule[1] ? sortCmd3 :sortCmd4);
         }
+        this.props.sortRule[0] = ind;
+
         this.paint();
-        console.log('!!!!!!!!!!!!!!!!!!changeSortRule',e.value,this.props.goodsList);
+        console.log('!!!!!!!!!!!!!!!!!!changeSortRule',ind,this.props.goodsList);
     }
 }
 
@@ -149,7 +151,17 @@ export const sortCmd1 = (v1:GoodsDetails,v2:GoodsDetails) => {
     return v2.saleCount - v1.saleCount;
 };
 
-// 价格从大到小排序
+// 销量从小到大排序
 export const sortCmd2 = (v1:GoodsDetails,v2:GoodsDetails) => {
+    return v1.saleCount - v2.saleCount;
+};
+
+// 价格从大到小排序
+export const sortCmd3 = (v1:GoodsDetails,v2:GoodsDetails) => {
     return v2.discount - v1.discount;
+};
+
+// 价格从小到大排序
+export const sortCmd4 = (v1:GoodsDetails,v2:GoodsDetails) => {
+    return v1.discount - v2.discount;
 };

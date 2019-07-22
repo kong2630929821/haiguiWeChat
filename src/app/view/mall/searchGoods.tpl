@@ -11,6 +11,15 @@
         <div w-class="emptyText">没有想买的商品，快搜索一个</div>
     </div>
     {{else}}
+    <div w-class="sort_btns" >
+        <div w-class="sort_btn" style="color:{{it.sortRule[0]==0?'red':'#8B8B8B'}}" on-tap="changeSortRule(0)">
+            销量<span w-class="icon" style="border-top-color:{{it.sortRule[0]==0?'red':'#8B8B8B'}};transform:rotate({{it.sortRule[0]==0&&it.sortRule[1]?'0deg':'180deg'}});"></span>
+        </div>
+        <div w-class="sort_btn" style="color:{{it.sortRule[0]==1?'red':'#8B8B8B'}}" on-tap="changeSortRule(1)">
+            价格<span w-class="icon" style="border-top-color:{{it.sortRule[0]==1?'red':'#8B8B8B'}};transform:rotate({{it.sortRule[0]==1&&it.sortRule[1]?'0deg':'180deg'}});"></span>
+        </div>
+    </div>
+    
     <div w-class="goods-list-items">
         {{for i,v of it.goodsList}}
         <div w-class="goods-item" style="{{i % 2 === 0 ? 'padding-right:5px;' : 'padding-left:5px;'}}" ev-item-click="goodsItemClick({{i}})">
