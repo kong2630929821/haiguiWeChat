@@ -8,7 +8,8 @@ export const forelet = new Forelet();
 
 const STATE = {
     price:priceFormat(getStore('balance/cash',0)),
-    ableWithdraw:false
+    ableWithdraw:false,
+    flags:false
 };
 /**
  * 我的现金
@@ -20,9 +21,10 @@ export class MyCash extends Widget {
         this.state = STATE;
         // 开启提现
         checkWithdraw().then(r => {
-            this.state.ableWithdraw = this.state.price > 0;
+            this.state.ableWithdraw = Number(this.state.price) > 0 && this.state.flags;
             this.paint();
         });  
+        
     }
 
     // 现金明细
@@ -33,7 +35,7 @@ export class MyCash extends Widget {
     // 提现
     public withdraw() {
         // 开启提现
-        if (this.props.ableWithdraw) {
+        if (this.state.ableWithdraw) {
             popNew('app-view-mine-withdraw');
         }
     }
@@ -44,6 +46,11 @@ register('balance',r => {
 });
 
 register('flags/withdrawal',r => {
-    STATE.ableWithdraw = r.withdrawal;
+    if (r) {
+        STATE.flags = true;
+    } else {
+        STATE.flags = false;
+    }
+    STATE.ableWithdraw = Number(STATE.price) > 0 && STATE.flags;
     forelet.paint(STATE);
 });
