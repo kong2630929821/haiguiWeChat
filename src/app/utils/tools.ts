@@ -2,6 +2,7 @@
  * 常用工具
  */
 import { popNew } from '../../pi/ui/root';
+import { getFreight } from '../net/pull';
 import { Address, Freight, getStore, GoodsDetails, ImageType, MallImages, SKU, UserType } from '../store/memstore';
 
 // 弹出提示框
@@ -76,8 +77,9 @@ export const calcPrices = (goods:GoodsDetails) => {
 };
 
 // 计算运费
-export const calcFreight = (area_id:number) => {
-    const freights = getStore('mall/freights');
+export const calcFreight = async (area_id:number,supId:number,gType:number) => {
+    // const freights = getStore('mall/freights');
+    const freights = await getFreight(supId,gType);
     for (let i = 0;i < freights.length;i ++) {
         if (freights[i].index === area_id) return freights[i].price;
     }

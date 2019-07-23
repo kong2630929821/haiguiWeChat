@@ -38,9 +38,7 @@
             <div style="margin-left:30px;background-color:rgba(255,255,255,1);"><div w-class="tax-box"><div w-class="tax-label">海外购</div></div></div>
             {{end}}
             <div w-class="goods-items">
-                {{%================保税商品不需要税费，其他和海外直购一样==================}}
-                {{:let freight = it.goods.goodsType == 1 ? "0.00" : it.goodsItemDescs.freight.itemContent}}
-                <div w-class="items-father1" on-tap="clickDescs(e,'freight')"><app-components-goodsDetailsItem-goodsDetailsItem>{title:"运费",content:{{freight}} }</app-components-goodsDetailsItem-goodsDetailsItem></div>
+                <div w-class="items-father1" on-tap="clickDescs(e,'freight')"><app-components-goodsDetailsItem-goodsDetailsItem>{title:"运费",content:{{it.goodsItemDescs.freight.itemContent}} }</app-components-goodsDetailsItem-goodsDetailsItem></div>
                 {{if it.goods.goodsType}}
                 <div w-class="items-father1" on-tap="clickDescs(e,'tax')"><app-components-goodsDetailsItem-goodsDetailsItem>{title:"税费",content:"预计{{it.priceFormat(it.goods.tax)}}元"}</app-components-goodsDetailsItem-goodsDetailsItem></div>
                 {{end}}

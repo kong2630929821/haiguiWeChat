@@ -247,7 +247,7 @@ export const getFreight = (supplier:number,goods_type:number) => {
     };
 
     return requestAsync(msg).then(res => {
-        const freights = parseFreight(res.addressInfo);
+        const freights = parseFreight(res.freight_info);
         console.log('getFreight ======',freights);
         setStore('mall/freights',freights);
         

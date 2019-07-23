@@ -29,8 +29,6 @@ export class ConfirmOrder extends Widget {
         const orderGoodsShow = calcCartGoodsShow(props.orderGoods);
         const addr = getLastAddress();
         const address = addr[2];
-        const ret = plitOrder(orderGoodsShow,address);
-        console.log('plitOrder =',ret);
         
         this.props = {
             ...props,
@@ -38,9 +36,20 @@ export class ConfirmOrder extends Widget {
             orderGoodsShow,
             address,
             mallImagPre,
-            ...ret
+            splitOrders:[],
+            totalSale:0,
+            totalTax:0,
+            totalFreight:0
         };
         super.setProps(this.props,oldProps);
+        plitOrder(orderGoodsShow,address).then(ret => {
+            this.props = {
+                ...this.props,
+                ...ret
+            };
+            this.paint();
+            console.log('plitOrder =',ret);
+        });
         console.log('ConfirmOrder ======',this.props);
     }
 
@@ -48,12 +57,16 @@ export class ConfirmOrder extends Widget {
         popNew('app-view-mine-addressList',{ isChoose:true },(num) => {
             const address = getStore('mall/addresses');
             this.props.address = address[num];
-            const ret = plitOrder(this.props.orderGoodsShow,this.props.address);
-            this.props.splitOrders = ret.splitOrders;
-            this.props.totalFreight = ret.totalFreight;
-            this.props.totalSale = ret.totalSale;
-            this.props.totalTax = ret.totalTax;
             this.paint();
+
+            plitOrder(this.props.orderGoodsShow,this.props.address).then(ret => {
+                this.props.splitOrders = ret.splitOrders;
+                this.props.totalFreight = ret.totalFreight;
+                this.props.totalSale = ret.totalSale;
+                this.props.totalTax = ret.totalTax;
+                this.paint();
+            });
+            
         });
     }
 
@@ -62,12 +75,13 @@ export class ConfirmOrder extends Widget {
         popNew('app-view-mine-editAddress',undefined,() => {
             const addr = getLastAddress();
             this.props.address = addr[2];
-            const ret = plitOrder(this.props.orderGoodsShow,this.props.address);
-            this.props.splitOrders = ret.splitOrders;
-            this.props.totalFreight = ret.totalFreight;
-            this.props.totalSale = ret.totalSale;
-            this.props.totalTax = ret.totalTax;
-
+            plitOrder(this.props.orderGoodsShow,this.props.address).then(ret => {
+                this.props.splitOrders = ret.splitOrders;
+                this.props.totalFreight = ret.totalFreight;
+                this.props.totalSale = ret.totalSale;
+                this.props.totalTax = ret.totalTax;
+                this.paint();
+            });
             this.paint();
         });
     }
@@ -86,10 +100,10 @@ export class ConfirmOrder extends Widget {
             return;
         } 
         const cartGood = this.props.orderGoods; 
-        let hasTax = false;  // 是否有保税商品
+        let hasTax = false;  // 是否有海外购商品，需要实名
         for (let i = 0;i < cartGood.length;i++) {
             const goods = cartGood[i].goods;
-            if (goods.goodsType) {
+            if (goods.goodsType > 0) {
                 hasTax = true;
                 break;
             }
@@ -220,7 +234,7 @@ export interface SplitOrder {
     freightFee:number;         // 所有商品总运费
 }
 // 拆分订单
-const plitOrder = (orderGoods:CartGoodsShow[],address:Address) => {
+const plitOrder = async (orderGoods:CartGoodsShow[],address:Address) => {
     const suppliers = new Map();    // 购买同一供应商的所有商品 保税商品/普通商品/海外直购分离
     for (const v of orderGoods) {
         const supplierId = v.cartGood.goods.supplier;
@@ -251,11 +265,12 @@ const plitOrder = (orderGoods:CartGoodsShow[],address:Address) => {
             for (const cartGoodShow of v[0]) {   // 普通商品
                 totalNoTaxSale += cartGoodShow.finalSale * cartGoodShow.cartGood.amount;
             }
+            const freightFee = await calcFreight(address && address.area_id, k, 0);
             const splitOrder:SplitOrder = {     // 普通商品税费0
                 order:v[0],
                 saleFee:totalNoTaxSale,
                 taxFee:0,
-                freightFee:calcFreight(address && address.area_id)
+                freightFee
             };
             splitOrders.push(splitOrder);
         }
@@ -267,11 +282,12 @@ const plitOrder = (orderGoods:CartGoodsShow[],address:Address) => {
                 totalTax += cartGoodShow.cartGood.goods.tax * cartGoodShow.cartGood.amount;
                 totalTaxSale += cartGoodShow.finalSale * cartGoodShow.cartGood.amount;
             }
+            const freightFee = await calcFreight(address && address.area_id, k, 1);
             const splitOrder:SplitOrder = {     // 保税商品运费0
                 order:v[1],
                 saleFee:totalTaxSale,
                 taxFee:totalTax,
-                freightFee:0
+                freightFee
             };
             splitOrders.push(splitOrder);
         }
@@ -279,15 +295,16 @@ const plitOrder = (orderGoods:CartGoodsShow[],address:Address) => {
         if (v[2]) {  // 海外直购
             let totalTax = 0;
             let totalTaxSale = 0;
-            for (const cartGoodShow of v[0]) {   // 海外直购
+            for (const cartGoodShow of v[2]) {   // 海外直购
                 totalTax += cartGoodShow.cartGood.goods.tax * cartGoodShow.cartGood.amount;
                 totalTaxSale += cartGoodShow.finalSale * cartGoodShow.cartGood.amount;
             }
+            const freightFee = await calcFreight(address && address.area_id, k, 2);
             const splitOrder:SplitOrder = {     // 海外直购运费税费都有
-                order:v[0],
+                order:v[2],
                 saleFee:totalTaxSale,
                 taxFee:totalTax,
-                freightFee:calcFreight(address && address.area_id)
+                freightFee
             };
             splitOrders.push(splitOrder);
         }

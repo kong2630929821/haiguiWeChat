@@ -112,7 +112,8 @@ export enum CashLogType {
     other,       // 其他
     turntable,    // 大转盘
     shopReturn,     // 购物退款
-    manage        // 管理端调整
+    manage,        // 管理端调整
+    hBaoGoods      // 399商品返利
 }
 // 现金来源名称
 const CashLogName = {
@@ -127,7 +128,8 @@ const CashLogName = {
     other:'其他',
     turntable:'大转盘',
     shopReturn:'退款',
-    manage:'客服调整'
+    manage:'客服调整',
+    hBaoGoods:'399商品返利'
 };
 
 /**

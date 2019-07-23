@@ -35,8 +35,8 @@
             <img src="{{it.defaultAddr?'../../res/image/selectBox_active.png':'../../res/image/selectBox.png'}}" w-class="img" on-tap="leftImg"/>
         </div>
     {{end}}
-    <div w-class="btn-box">
-    <div w-class="btn" style="margin-top:400px;" on-tap="saveAddress">保存并使用</div>
-    <div w-class="btn btn1" on-tap="delAddress">删除收货地址</div>
+    <div w-class="">
+        <div w-class="btn" style="margin-top:400px;" on-tap="saveAddress">保存并使用</div>
+        <div w-class="btn btn1" on-tap="delAddress">删除收货地址</div>
     </div>
 </div>

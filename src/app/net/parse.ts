@@ -195,9 +195,9 @@ export const parseFreight = (infos: any) => {
     for (const info of infos) {
         const freight: Freight = {
             index: info[0],
-            province: unicode2Str(info[1][0]),   // 省份
-            price_type: info[1][1],    // 价格类型
-            price: info[1][2]         // 价格
+            province: unicode2Str(info[1]),   // 省份
+            price_type: info[2],    // 价格类型
+            price: info[3]         // 价格
         };
         freights.push(freight);
     }

@@ -39,7 +39,7 @@ export enum PowerFlag {
 }
 // 海宝权益
 export const hBaoPower = [
-    { name: '领取礼包', img: 'power_mask.png', tpl: 'app-view-member-giftPage', fg: PowerFlag.gift },
+    // { name: '领取礼包', img: 'power_mask.png', tpl: 'app-view-member-giftPage', fg: PowerFlag.gift },
     { name: '面膜套装', img: 'power_gift.png', tpl: 'app-view-member-giftPage', fg: PowerFlag.vipGift },
     { name: '免费试用装', img: 'power_test.png', tpl: 'app-view-member-giftPage', fg: PowerFlag.free },
     { name: '新零售课程推广资格', img: 'power_book.png', tpl: 'app-view-member-giftPage', fg: PowerFlag.offClass },

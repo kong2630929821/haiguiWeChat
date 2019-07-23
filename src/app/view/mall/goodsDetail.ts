@@ -26,9 +26,9 @@ export class GoodsDetailHome extends Widget {
         const goodsItemDescs = {
             freight:{ 
                 title:'运费说明',
-                itemContent:obj.freightInterval,
+                itemContent:obj.freightInterval || '0.00',
                 descs:[
-                    { title:'运费说明',content:obj.freightDesc }
+                    { title:'运费说明',content:obj.freightDesc || '' }
                 ] 
             },
             tax:{ 
@@ -84,7 +84,14 @@ export class GoodsDetailHome extends Widget {
                     }
                 }
             }
-            getFreight(goods.supplier,goods.goodsType);
+            getFreight(goods.supplier,goods.goodsType).then(r => {
+                const obj = calcFreightDesc(r);
+                this.props.goodsItemDescs.freight.itemContent = obj.freightInterval || '0.00';
+                this.props.goodsItemDescs.freight.descs = [
+                    { title:'运费说明',content:obj.freightDesc || '' }
+                ]; 
+                this.paint();
+            });
             
             this.paint();
         });

@@ -46,7 +46,12 @@ export class Withdraw extends Widget {
                 
             }).catch(r => {
                 loadding && loadding.callback(loadding.widget);
-                popNewMessage('申请提交失败');
+
+                if (r.type === 6002) {
+                    popNewMessage('今日提现已超过上限');
+                } else {
+                    popNewMessage('申请提交失败');
+                }
             });
         } else {
             popNewMessage('请输入合适的金额');
