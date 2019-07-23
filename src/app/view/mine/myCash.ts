@@ -46,11 +46,7 @@ register('balance',r => {
 });
 
 register('flags/withdrawal',r => {
-    if (r) {
-        STATE.flags = true;
-    } else {
-        STATE.flags = false;
-    }
+    STATE.flags = !!r;
     STATE.ableWithdraw = Number(STATE.price) > 0 && STATE.flags;
     forelet.paint(STATE);
 });
