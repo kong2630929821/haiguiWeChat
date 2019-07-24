@@ -150,6 +150,8 @@ export class ConfirmOrder extends Widget {
                 popNewMessage('库存不足');
             } else if (res.result === 2127) {
                 popNewMessage('购买免税商品超出限制');
+            } else if (res.type === 2139) {
+                popNewMessage('商品已下架');
             } else {
                 popNewMessage('下单失败');
             }

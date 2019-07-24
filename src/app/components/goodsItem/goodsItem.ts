@@ -2,7 +2,7 @@ import { notify } from '../../../pi/widget/event';
 import { Widget } from '../../../pi/widget/widget';
 import { mallImagPre } from '../../config';
 import { GoodsDetails } from '../../store/memstore';
-import { calcPrices, getImageThumbnailPath } from '../../utils/tools';
+import { calcPrices, getImageThumbnailPath, priceFormat } from '../../utils/tools';
 
 interface Props {
     goods:GoodsDetails;    // 商品信息
@@ -18,7 +18,8 @@ export class GoodsItem extends Widget {
             ...props,
             ...ret,
             getImageThumbnailPath,
-            mallImagPre
+            mallImagPre,
+            priceFormat
         };
         super.setProps(this.props,oldProps);
         // console.log('GoodsItem ----------------',this.props);

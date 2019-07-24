@@ -113,18 +113,20 @@ export class EditAddress extends Widget {
             console.log(this.props.id);
             const close = popNewLoading('正在修改');
             const address = [this.props.province,this.props.address];
-            const id = JSON.parse(localStorage.getItem('addressIndex'));
+            // const id = JSON.parse(localStorage.getItem('addressIndex'));
             updateAddress(this.props.name,this.props.tel,this.props.area_id,`${JSON.stringify(address)}`,this.props.id).then(async (r) => {
                 let data = r.addressInfo;
                 if (this.props.defaultAddr) {
-                    localStorage.setItem('addressIndex','0');
                     await setDefaultAddr(this.props.id).then(res => {
                         console.log('1111111111111111111111111111',res);
                         data = res.addressInfo;
                     });
-                } else if (id === this.props.num) {
-                    localStorage.setItem('addressIndex','-1');
-                }
+                } 
+                localStorage.setItem('addressIndex','0');
+
+                // else if (id === this.props.num) {
+                //     localStorage.setItem('addressIndex','-1');
+                // }
                 const addresses = parseAddress2(data);
                 console.log('changeAddress ======',addresses);
                 setStore('mall/addresses',addresses);
@@ -142,12 +144,12 @@ export class EditAddress extends Widget {
                 let data = r.addressInfo;
                 // 判断是否设置为默认地址
                 if (this.props.defaultAddr) {
-                    localStorage.setItem('addressIndex','0');
                     await setDefaultAddr(data[data.length - 1][0]).then(res => {
                         console.log('1111111111111111111111111111',res);
                         data = res.addressInfo;
                     });
                 }
+                localStorage.setItem('addressIndex','0');
                 const addresses = parseAddress2(data);
                 console.log('addAddress ======',addresses);
                 setStore('mall/addresses',addresses);

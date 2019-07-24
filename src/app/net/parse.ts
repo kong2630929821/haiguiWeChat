@@ -58,7 +58,7 @@ export const parseGoodsDetail = (info: any): GoodsDetails => {
         area: info[3],	 // 地区id
         supplier: info[4], // 供应商id
         pay_type: info[5],	// 	支付类型，1现金，2积分，3表示同时支持现金和积分
-        rebate: info[6],    // 返利（仅限海王）
+        rebate: info[6][0],    // 返利（仅限海王）
         origin: info[7],   // 	商品原价，单位分
         vip_origin: info[8],  // 会员商品原价，单位分
         goodsType: info[9],    // 商品类型 0 普通商品 1 保税商品 2 海外直购
@@ -72,7 +72,8 @@ export const parseGoodsDetail = (info: any): GoodsDetails => {
         spec: [], // 商品规格   info[16][0],
         flag: info[17], // 商品是否下架
         onSaleTime: info[18],  // 上架时间
-        saleCount: info[19]  // 销量
+        saleCount: info[19],  // 销量
+        isActGoods: !!info[20]  // 是否是活动商品
     };
 
 };

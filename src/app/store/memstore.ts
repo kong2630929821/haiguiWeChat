@@ -139,6 +139,7 @@ export interface GoodsDetails {
     flag:number; // 上架标志
     onSaleTime:number;   // 上架时间
     saleCount:number;   // 销量
+    isActGoods:boolean;   // 是否是活动商品
 }
 
 export type SKU  = [string,string,number,number]; // SKU SKU描述 价格影响 库存

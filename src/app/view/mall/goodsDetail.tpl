@@ -24,7 +24,7 @@
                     </div>
                     {{if it.discount || it.rebate}}
                     <div w-class="good-labels">
-                        {{if it.discount}}
+                        {{if it.discount < 10}}
                         <div w-class="good-discount good-label">{{it.discount}}折</div>
                         {{end}}
                         {{if it.rebate}}
@@ -39,13 +39,14 @@
             {{end}}
             <div w-class="goods-items">
                 <div w-class="items-father1" on-tap="clickDescs(e,'freight')"><app-components-goodsDetailsItem-goodsDetailsItem>{title:"运费",content:{{it.goodsItemDescs.freight.itemContent}} }</app-components-goodsDetailsItem-goodsDetailsItem></div>
-                {{if it.goods.goodsType}}
-                <div w-class="items-father1" on-tap="clickDescs(e,'tax')"><app-components-goodsDetailsItem-goodsDetailsItem>{title:"税费",content:"预计{{it.priceFormat(it.goods.tax)}}元"}</app-components-goodsDetailsItem-goodsDetailsItem></div>
+                
+                {{if it.goods.goodsType > 0}}
+                    <div w-class="items-father1" on-tap="clickDescs(e,'tax')"><app-components-goodsDetailsItem-goodsDetailsItem>{title:"税费",content:"预计{{it.priceFormat(it.goods.tax)}}元"}</app-components-goodsDetailsItem-goodsDetailsItem></div>
+                    <div w-class="items-father2" on-tap="clickDescs(e,'verified')"><app-components-goodsDetailsItem-goodsDetailsItem>{title:"实名",content:"该商品需实名认证",style:"padding-left:30px;"}</app-components-goodsDetailsItem-goodsDetailsItem></div>
+                {{elseif !it.goods.isActGoods}}
+                    <div w-class="items-father2" on-tap="clickDescs(e,'service')"><app-components-goodsDetailsItem-goodsDetailsItem>{title:"服务",content:"7天内售后无忧",style:"padding-left:30px;"}</app-components-goodsDetailsItem-goodsDetailsItem></div>
                 {{end}}
-                <div w-class="items-father2" on-tap="clickDescs(e,'service')"><app-components-goodsDetailsItem-goodsDetailsItem>{title:"服务",content:"7天内售后无忧",style:"padding-left:30px;"}</app-components-goodsDetailsItem-goodsDetailsItem></div>
-                {{if it.goods.goodsType}}
-                <div w-class="items-father2" on-tap="clickDescs(e,'verified')"><app-components-goodsDetailsItem-goodsDetailsItem>{title:"实名",content:"该商品需实名认证",style:"padding-left:30px;"}</app-components-goodsDetailsItem-goodsDetailsItem></div>
-                {{end}}
+
             </div>
             <div w-class="items-father3" on-tap="chooseSpecClick({{false}})"><app-components-goodsDetailsItem-goodsDetailsItem>{title:"选择",content:"规格",style:"padding-left:30px;"}</app-components-goodsDetailsItem-goodsDetailsItem></div>
         </div>
