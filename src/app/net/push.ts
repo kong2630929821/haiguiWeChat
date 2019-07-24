@@ -63,11 +63,11 @@ export const payComplete = () => {
     // 余额变化
     setMsgHandler('alter_balance_ok',r => {
         if (r.type === 1) { // 现金
-            setStore('balance/cash',r.balance);
+            setStore('balance/cash',r.balance[0]);
         } else if (r.type === 2) {  // 海贝
-            setStore('balance/shell',r.balance);
+            setStore('balance/shell',r.balance[0]);
         } else {  // 积分
-            setStore('balance/integral',r.balance);
+            setStore('balance/integral',r.balance[0]);
         }
         console.log('金额变化推送========alter_balance_ok',r);
     });
@@ -75,9 +75,9 @@ export const payComplete = () => {
     // 收益变化
     setMsgHandler('alter_earnings_ok',r => {
         if (r.type === 1) { // 现金收益
-            setStore('earning/cash',r.balance);
+            setStore('earning/cash',r.balance[0]);
         } else if (r.type === 2) {  // 海贝收益
-            setStore('earning/shell',r.balance);
+            setStore('earning/shell',r.balance[0]);
         } 
         console.log('收益变化推送========alter_earnings_ok',r);
     });

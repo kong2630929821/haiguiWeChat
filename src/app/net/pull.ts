@@ -489,10 +489,10 @@ export const getEarningTotal = async () => {
     });
     const earning = {
         baby: res.hbaoCount,
-        cash: priceFormat(res.cash),
+        cash: priceFormat(res.cash[0]),
         partner: res.partnerCount,
-        shell: res.hbei,
-        wait_profit: priceFormat(res.wait_profit),
+        shell: res.hbei[0],
+        wait_profit: priceFormat(res.wait_profit[0]),
         rebate:data
     };
     setStore('earning',earning);
@@ -591,9 +591,9 @@ export const getBalance = async () => {
 
     const res = await requestAsync(msg);
     const balance = {
-        cash: res.money,   // 现金，单位为分
-        shell:res.haibei,
-        integral:res.integral
+        cash: res.money[0],   // 现金，单位为分
+        shell: res.haibei[0],
+        integral: res.integral[0]
     };
     setStore('balance',balance);
 };
