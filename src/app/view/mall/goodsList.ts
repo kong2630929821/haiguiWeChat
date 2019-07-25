@@ -18,8 +18,9 @@ interface Props {
     mallImagPre:string;    // 商城图片前路径
     goodsList:GoodsDetails[];   // 商品列表
     refresh:boolean;   // 是否正在刷新
-    active:number;    // 当前选则的排序规则
-    sortRule:[number,boolean];   // 排序规则 0 价格  1 销量 [规则，从大到小]
+    active:number;     // 当前选则的排序规则
+    sortType:number;   // 排序规则 0 价格  1 销量
+    sortRule:[boolean,boolean];   // 排序规则 从大到小
 }
 
 export enum StyleMod {     // 样式
@@ -41,7 +42,8 @@ export class GoodsList extends Widget {
         goodsList:[],
         refresh:false,  
         active:0,
-        sortRule:[0,true]       // 排序规则 价格从大到小
+        sortType:0,       // 排序规则 价格
+        sortRule:[true,false]     // 排序规则 从大到小
     };
     public setProps(props:any) {
         this.props = {
@@ -52,7 +54,7 @@ export class GoodsList extends Widget {
         console.log('GoodsList ====',this.props);
         getGoodsInfo(props.selectedLevel2Groups.id,0).then((goods:GoodsDetails[]) => {
             this.props.goodsList = goods;
-            this.changeSortRule(0);
+            this.changeSortRule(this.props.sortType, this.props.sortRule[this.props.sortType]);
             this.paint();
         });
     }
@@ -131,16 +133,21 @@ export class GoodsList extends Widget {
         // this.paint();
     // }
     
-    // 改变排序规则
-    public changeSortRule(ind:number) {
-        this.props.sortRule[1] = !this.props.sortRule[1];
-        if (ind === 0) {
-            this.props.goodsList.sort(this.props.sortRule[1] ? sortCmd1 :sortCmd2);
-        } else {
-            this.props.goodsList.sort(this.props.sortRule[1] ? sortCmd3 :sortCmd4);
-        }
-        this.props.sortRule[0] = ind;
+    /**
+     * 改变排序规则 
+     * @param ind type
+     * @param fg 明确要使用的排序规则
+     */
+    public changeSortRule(ind:number,fg?:boolean) {
+        this.props.sortType = ind;
+        const rule = fg !== undefined ? fg :!this.props.sortRule[ind];
 
+        if (ind === 0) {
+            this.props.goodsList.sort(rule ? sortCmd1 :sortCmd2);
+        } else {
+            this.props.goodsList.sort(rule ? sortCmd3 :sortCmd4);
+        }
+        this.props.sortRule[ind] = rule;
         this.paint();
         console.log('!!!!!!!!!!!!!!!!!!changeSortRule',ind,this.props.goodsList);
     }

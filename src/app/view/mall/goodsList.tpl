@@ -35,11 +35,11 @@
         </div>
 
         <div w-class="sort_btns" >
-            <div w-class="sort_btn" style="color:{{it.sortRule[0]==0?'red':'#8B8B8B'}}" on-tap="changeSortRule(0)">
-                销量<span w-class="icon" style="border-top-color:{{it.sortRule[0]==0?'red':'#8B8B8B'}};transform:rotate({{it.sortRule[0]==0&&it.sortRule[1]?'0deg':'180deg'}});"></span>
+            <div w-class="sort_btn" style="color:{{it.sortType==0?'red':'#8B8B8B'}}" on-tap="changeSortRule(0)">
+                销量<span w-class="icon" style="border-top-color:{{it.sortType==0?'red':'#8B8B8B'}};transform:rotate({{it.sortRule[0]?'0deg':'180deg'}});"></span>
             </div>
-            <div w-class="sort_btn" style="color:{{it.sortRule[0]==1?'red':'#8B8B8B'}}" on-tap="changeSortRule(1)">
-                价格<span w-class="icon" style="border-top-color:{{it.sortRule[0]==1?'red':'#8B8B8B'}};transform:rotate({{it.sortRule[0]==1&&it.sortRule[1]?'0deg':'180deg'}});"></span>
+            <div w-class="sort_btn" style="color:{{it.sortType==1?'red':'#8B8B8B'}}" on-tap="changeSortRule(1)">
+                价格<span w-class="icon" style="border-top-color:{{it.sortType==1?'red':'#8B8B8B'}};transform:rotate({{it.sortRule[1]?'0deg':'180deg'}});"></span>
             </div>
         </div>
 

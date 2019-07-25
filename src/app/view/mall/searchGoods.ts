@@ -8,7 +8,8 @@ import { sortCmd1, sortCmd2, sortCmd3, sortCmd4 } from './goodsList';
 interface Props {
     goodsList:GoodsDetails[];  // 商品列表
     message:string;  // 输入的内容
-    sortRule:[number,boolean];   // 排序规则 0 价格  1 销量 [规则，从大到小]
+    sortType:number;   // 排序规则 0 价格  1 销量
+    sortRule:[boolean,boolean];   // 排序规则 从大到小
 }
 /**
  * 搜索商品
@@ -17,7 +18,8 @@ export class SearchGoods extends Widget {
     public props:Props = {
         goodsList:[],
         message:'',
-        sortRule:[0,true]
+        sortType:0,       // 排序规则 价格
+        sortRule:[true,false]     // 排序规则 从大到小
     };
 
     // 输入
@@ -50,16 +52,21 @@ export class SearchGoods extends Widget {
         popNew('app-view-mall-goodsDetail',{ goods:this.props.goodsList[index] });
     }
 
-     // 改变排序规则
-    public changeSortRule(ind:number) {
-        this.props.sortRule[1] = !this.props.sortRule[1];
-        if (ind === 0) {
-            this.props.goodsList.sort(this.props.sortRule[1] ? sortCmd1 :sortCmd2);
-        } else {
-            this.props.goodsList.sort(this.props.sortRule[1] ? sortCmd3 :sortCmd4);
-        }
-        this.props.sortRule[0] = ind;
+    /**
+     * 改变排序规则 
+     * @param ind type
+     * @param fg 明确要使用的排序规则
+     */
+    public changeSortRule(ind:number,fg?:boolean) {
+        this.props.sortType = ind;
+        const rule = fg !== undefined ? fg :!this.props.sortRule[ind];
 
+        if (ind === 0) {
+            this.props.goodsList.sort(rule ? sortCmd1 :sortCmd2);
+        } else {
+            this.props.goodsList.sort(rule ? sortCmd3 :sortCmd4);
+        }
+        this.props.sortRule[ind] = rule;
         this.paint();
         console.log('!!!!!!!!!!!!!!!!!!changeSortRule',ind,this.props.goodsList);
     }
