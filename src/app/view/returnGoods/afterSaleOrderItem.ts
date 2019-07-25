@@ -44,7 +44,7 @@ const statusShows:any = {
     [ReturnGoodsStatus.CANRETURN]:{
         btn1:'',
         btn2:'申请售后',
-        text:'客服稍后会处理'
+        text:'审核中'
     },
     [ReturnGoodsStatus.RETURNING]:{
         btn1:'',
