@@ -1,4 +1,5 @@
 import { Widget } from '../../../pi/widget/widget';
+import { popNewMessage } from '../../utils/tools';
 interface Props {
     title:string;
     sureText:string;
@@ -40,6 +41,12 @@ export class ModalBox extends Widget {
 
     // 点击确认按钮
     public okBtnClick() {
+        const reg = /^[0-9a-zA-Z]+$/;
+        if (!reg.test(this.props.message)) {
+            popNewMessage('请输入字母或数字');
+
+            return;
+        }
         this.ok && this.ok(this.props.message);
     }
 

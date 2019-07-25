@@ -3,7 +3,7 @@ import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { baoSaleClassGoodsId, baoVipClassGoodsId, baoVipMaskGoodsId, freeMaskGoodsId, OffClassGoodsId, onlyWXPay, wangSaleClassGoodsId, wangVipClassGoodsId, wangVipMaskGoodsId } from '../../config';
 import { getAllGifts, getGoodsDetails, orderActiveGoods, payMoney, payOrder } from '../../net/pull';
-import { Address, getStore, register, UserType } from '../../store/memstore';
+import { Address, getStore, register, unregister, UserType } from '../../store/memstore';
 import { copyToClipboard, popNewLoading, popNewMessage } from '../../utils/tools';
 import { setWxConfig, shareWithUrl } from '../../utils/wxAPI';
 import { localInviteCode } from '../base/main';
@@ -126,15 +126,15 @@ export class GiftPage extends Widget {
         if (this.props.isAble) {
             popNew('app-view-member-fillAddrModalBox',{ selectAddr:true },(addr) => {
                 if (this.props.fg === PowerFlag.free) {
-                    confirmActivityGoods(freeMaskGoodsId, addr);
+                    this.buyGoods(freeMaskGoodsId, addr);
 
                 } else if (this.props.fg === PowerFlag.gift) {
-                    confirmActivityGoods(getStore('user/memberGifts/optionalGift',0), addr);
+                    this.buyGoods(getStore('user/memberGifts/optionalGift',0), addr);
                 } else {
                     if (this.props.userType === UserType.hBao) {
-                        confirmActivityGoods(baoVipMaskGoodsId, addr);
+                        this.buyGoods(baoVipMaskGoodsId, addr);
                     } else if (this.props.userType === UserType.hWang) {
-                        confirmActivityGoods(wangVipMaskGoodsId, addr);
+                        this.buyGoods(wangVipMaskGoodsId, addr);
                     }
                     
                 }
@@ -153,19 +153,19 @@ export class GiftPage extends Widget {
         if (this.props.isAble) {
             popNew('app-view-member-fillAddrModalBox',{ selectAddr:true },(addr) => {
                 if (this.props.fg === PowerFlag.offClass) {
-                    confirmActivityGoods(OffClassGoodsId,addr);
+                    this.buyGoods(OffClassGoodsId,addr);
                 } else if (this.props.fg === PowerFlag.vipClass) {
                     if (this.props.userType === UserType.hBao) {
-                        confirmActivityGoods(baoVipClassGoodsId,addr);
+                        this.buyGoods(baoVipClassGoodsId,addr);
                     } else if (this.props.userType === UserType.hWang) {
-                        confirmActivityGoods(wangVipClassGoodsId,addr);
+                        this.buyGoods(wangVipClassGoodsId,addr);
                     }
                     
                 } else {
                     if (this.props.userType === UserType.hBao) {
-                        confirmActivityGoods(baoSaleClassGoodsId,addr);
+                        this.buyGoods(baoSaleClassGoodsId,addr);
                     } else if (this.props.userType === UserType.hWang) {
-                        confirmActivityGoods(wangSaleClassGoodsId,addr);
+                        this.buyGoods(wangSaleClassGoodsId,addr);
                     }
                 }
             });
@@ -212,6 +212,22 @@ export class GiftPage extends Widget {
             shareWithUrl('升级海王','好友邀请你来成为海王，享受海王专属福利',`${location.origin + location.pathname}?page=upHwang&inviteCode=${this.props.inviteCode}`,'');
         }
         popNew('app-components-bigImage-bigImage',{ img:'../../res/image/shareBg.png' });
+    }
+
+    public buyGoods(goods:number,addr:Address) {
+        register('flags/payOrder',() => {
+            this.buySuccess();
+        });
+        confirmActivityGoods(goods,addr);
+    }
+
+    public destroy() {
+        super.destroy();
+        unregister('flags/payOrder',() => {
+            this.buySuccess();
+        });
+
+        return true;
     }
 }
 
