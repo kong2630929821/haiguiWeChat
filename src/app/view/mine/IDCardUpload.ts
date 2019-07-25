@@ -1,8 +1,10 @@
 import { popNew } from '../../../pi/ui/root';
+import { userAgent } from '../../../pi/util/html';
 import { Widget } from '../../../pi/widget/widget';
 import { serverFilePath } from '../../config';
-import { identifyIDCard, verifyIDCard } from '../../net/pull';
+import { identifyIDCard, uploadFileApp, verifyIDCard } from '../../net/pull';
 import { setStore } from '../../store/memstore';
+import { selectImage } from '../../utils/native';
 import { popNewLoading, popNewMessage } from '../../utils/tools';
 import { setWxConfig, takeImage, upImage } from '../../utils/wxAPI';
 interface Props {
@@ -52,30 +54,66 @@ export class IDCardUpload extends Widget {
 
     // 选择图片
     public chooseImg(num:number) {
-        takeImage(1,(r) => {
-            console.log(r);
-            if (num === 1) {
-                this.props.img1 = r;
-                upImage(r, res => {
-                    popNewMessage('图片上传成功');
-                    console.log('图片上传成功',res);
-                    this.props.img1 = serverFilePath + res;
-                    this.props.front = res;
-                    this.paint();
+        const flag = window.localStorage.appInFlag;
+        if (flag) {   // app进入，唤起手机相机
+            const imagePicker = selectImage((width, height, url) => {
+                console.log('selectImage url = ',url);
+    
+                // 预览图片
+                imagePicker.getContent({
+                    quality:70,
+                    success(buffer:ArrayBuffer) {
+                        if (num === 1) {
+                            this.props.img1 = url;
+                        } else {
+                            this.props.img2 = url;
+                        }
+                        this.paint();
+    
+                        // 上传图片
+                        uploadFileApp(buffer).then((res) => {
+                            popNewMessage('图片上传成功');
+                            console.log('图片上传成功',res);
+                            if (num === 1) {
+                                this.props.img1 = serverFilePath + res;
+                                this.props.front = res;
+                            } else {
+                                this.props.img2 = serverFilePath + res;
+                                this.props.back = res;
+                            }
+                            this.paint();
+                        });
+                    }
                 });
+    
+            });
 
-            } else {
-                this.props.img2 = r;
-                upImage(r, res => {
-                    popNewMessage('图片上传成功');
-                    console.log('图片上传成功',res);
-                    this.props.img2 = serverFilePath + res;
-                    this.props.back = res;
-                    this.paint();
-                });
-            }
-            this.paint();
-        });
+        } else {     // 公众号进入，用微信相机
+            takeImage(1,(r) => {
+                console.log(r);
+                if (num === 1) {
+                    this.props.img1 = r;
+                    upImage(r, res => {
+                        popNewMessage('图片上传成功');
+                        console.log('图片上传成功',res);
+                        this.props.img1 = serverFilePath + res;
+                        this.props.front = res;
+                        this.paint();
+                    });
+
+                } else {
+                    this.props.img2 = r;
+                    upImage(r, res => {
+                        popNewMessage('图片上传成功');
+                        console.log('图片上传成功',res);
+                        this.props.img2 = serverFilePath + res;
+                        this.props.back = res;
+                        this.paint();
+                    });
+                }
+                this.paint();
+            });
+        }
     }
 
     // 删除图片

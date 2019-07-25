@@ -11,6 +11,7 @@
         on-input="change"
         on-blur="onBlur"
         on-focus="onFocus"
+        on-keydown="keydown"
         on-compositionstart="compositionstart"
         on-compositionend="compositionend"
     />

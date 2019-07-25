@@ -2,7 +2,7 @@ import { request } from '../../pi/net/ui/con_mgr';
 import { baoSaleClassGoodsId, baoVipClassGoodsId, baoVipMaskGoodsId, freeMaskGoodsId, httpPort, OffClassGoodsId, sourceIp, sourcePort, wangSaleClassGoodsId, wangVipClassGoodsId, wangVipMaskGoodsId, whiteGoodsId_10000A, whiteGoodsId_10000B, whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
 import { getStore,GoodsDetails, GroupsLocation, OrderStatus, ReturnGoodsStatus, setStore } from '../store/memstore';
 import {  openWXPay } from '../utils/logic';
-import {  popNewMessage, priceFormat, str2Unicode, timestampFormat, unicode2Str } from '../utils/tools';
+import {  arrayBuffer2File, popNewMessage, priceFormat, str2Unicode, timestampFormat, unicode2Str } from '../utils/tools';
 import { requestAsync } from './login';
 import { parseAddress, parseAddress2, parseAfterSale, parseAllGroups, parseArea, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
 
@@ -823,11 +823,27 @@ export const verifyIDCard = (name:string,id:string,front:string,back:string,vali
 };
 
 /**
- * 上传文件
+ * 上传文件 微信上传
  */
 export const uploadFile = (id:string) => {
 
     return fetch(`http://${sourceIp}:${sourcePort}/service/upload/wx_file?serverId=${id}`).then(res => res.json());
+};
+
+/**
+ * 上传文件 APP上传 TODO
+ */
+export const uploadFileApp = (buffer:ArrayBuffer) => {
+    
+    const formdata = new FormData();
+    formdata.append('upload',arrayBuffer2File(buffer));
+    formdata.append('path','phone');
+    
+    return fetch(`http://${sourceIp}:${sourcePort}/upload_goods_img`, {
+        body: formdata, 
+        method: 'POST', 
+        mode: 'cors' 
+    }).then(res => res.json());
 };
 
 /**

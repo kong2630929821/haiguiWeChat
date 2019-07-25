@@ -1,8 +1,9 @@
 import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { serverFilePath } from '../../config';
-import { returnGoods } from '../../net/pull';
+import { returnGoods, uploadFile, uploadFileApp } from '../../net/pull';
 import { Order } from '../../store/memstore';
+import { selectImage } from '../../utils/native';
 import { popNewMessage } from '../../utils/tools';
 import { takeImage, upImage } from '../../utils/wxAPI';
 
@@ -12,6 +13,7 @@ interface Props {
     imgs:string[];  // 凭证图片
     describle:string;  // 退款描述
     returnId:number;   // 售后单号id
+    isUpload:boolean;   // 是否正在上传图片
 }
 /**
  * 申请退货填写理由
@@ -23,7 +25,8 @@ export class ApplyReturnGoods extends Widget {
         reason:'',
         describle:'',
         returnId:0,
-        order:null
+        order:null,
+        isUpload:false
     };
 
     public setProps(props:any) {
@@ -36,19 +39,50 @@ export class ApplyReturnGoods extends Widget {
 
     // 选择图片
     public chooseImg() {
-        takeImage(1,(r) => {
-            console.log(r);
-            this.props.imgs.push(r);
-            upImage(r, res => {
-                popNewMessage('图片上传成功');
-                console.log('图片上传成功',res);
-                this.props.imgs.pop();
-                this.props.imgs.push(serverFilePath + res);
-                this.paint();
+        if (this.props.isUpload) {
+            popNewMessage('正在上传，请稍等');
+        }
+
+        const flag = window.localStorage.appInFlag;
+        if (flag) {    // app进入，唤起手机相机
+            const imagePicker = selectImage((width, height, url) => {
+                console.log('selectImage url = ',url);
+
+            // 预览图片
+                imagePicker.getContent({
+                    quality:70,
+                    success(buffer:ArrayBuffer) {
+                        this.props.imgs.push(url);
+                        this.paint();
+
+                        // 上传图片
+                        uploadFileApp(buffer).then((res) => {
+                            popNewMessage('图片上传成功');
+                            console.log('图片上传成功',res);
+                            this.props.imgs.pop();
+                            this.props.imgs.push(serverFilePath + res);
+                            this.paint();
+                        });
+                    }
+                });
+
             });
 
-            this.paint();
-        });
+        } else {    // 公众号进入，用微信相机
+            takeImage(1,(r) => {
+                console.log(r);
+                this.props.imgs.push(r);
+                upImage(r, res => {
+                    popNewMessage('图片上传成功');
+                    console.log('图片上传成功',res);
+                    this.props.imgs.pop();
+                    this.props.imgs.push(serverFilePath + res);
+                    this.paint();
+                });
+
+                this.paint();
+            });
+        }
     }
 
     // 删除图片
@@ -77,7 +111,12 @@ export class ApplyReturnGoods extends Widget {
 
             return;
         }
-        // const res = `${this.props.reason}: ${this.props.describle}`;
+        if (this.props.isUpload) {
+            popNewMessage('图片正在上传中，请稍等');
+           
+            return;
+        }
+
         returnGoods(this.props.returnId, this.props.describle, this.props.imgs).then(() => {
             popNewMessage('申请退货成功');
             this.ok && this.ok();

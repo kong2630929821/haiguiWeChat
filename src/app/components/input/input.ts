@@ -155,6 +155,14 @@ export class Input extends Widget {
         notify(event.node,'ev-input-focus',{});
         this.paint();
     }
+
+    /**
+     * 按键按下
+     */
+    public keydown(event:any) {
+        const value = event.key;
+        notify(event.node,'ev-input-keydown',{ value });
+    }
    
     // 清空文本框
     public clearClickListener(event:any) {

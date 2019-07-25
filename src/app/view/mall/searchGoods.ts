@@ -70,4 +70,10 @@ export class SearchGoods extends Widget {
         this.paint();
         console.log('!!!!!!!!!!!!!!!!!!changeSortRule',ind,this.props.goodsList);
     }
+
+    public keydown(e:any) {
+        if (e.value === 'Enter') {
+            this.search();
+        }
+    }
 }

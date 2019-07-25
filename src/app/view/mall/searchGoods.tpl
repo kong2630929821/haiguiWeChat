@@ -1,5 +1,5 @@
 <div class="new-page" w-class="page" ev-back-click="goBack">
-    <div w-class="input" ev-input-change="messChange">
+    <div w-class="input" ev-input-change="messChange" ev-input-keydown="keydown">
         <widget w-tag="app-components-input-input">{placeHolder:"搜索",style:"border-radius:34px;background:#F9F9F9;font-size:28px;padding-left:65px",clearable:true}</widget>
         <img w-class="searchIcon" src="../../res/image/search-gray.png" />
         <div w-class="btn" on-tap="search">搜索</div>

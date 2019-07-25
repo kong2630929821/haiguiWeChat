@@ -187,18 +187,24 @@ export class GiftPage extends Widget {
 
     // 分享给好友
     public share(pop:boolean = true) {
-        setWxConfig();
-        if (this.props.fg === PowerFlag.free) {
-            shareWithUrl('免费领面膜','好友送了你一份面膜，快来领取吧',`${location.origin + location.pathname}?page=free&inviteCode=${this.props.inviteCode}`,'');
+        const flag = window.localStorage.appInFlag;
+        if (flag) {  // app进入
+            popNew('app-components-share-share');
 
-        } else if (this.props.fg === PowerFlag.offClass) {
-            shareWithUrl('免费领课程','好友送了你一个线下课程，快来领取吧',`${location.origin + location.pathname}?page=offClass&inviteCode=${this.props.inviteCode}`,'');
+        } else {   // 公众号进入
+            setWxConfig();
+            if (this.props.fg === PowerFlag.free) {
+                shareWithUrl('免费领面膜','好友送了你一份面膜，快来领取吧',`${location.origin + location.pathname}?page=free&inviteCode=${this.props.inviteCode}`,'');
 
-        } else {
-            shareWithUrl('海龟壹号','更多精彩，就等你来',`${location.origin + location.pathname}`,'');
-        }
-        if (pop) {
-            popNew('app-components-bigImage-bigImage',{ img:'../../res/image/shareBg.png' });
+            } else if (this.props.fg === PowerFlag.offClass) {
+                shareWithUrl('免费领课程','好友送了你一个线下课程，快来领取吧',`${location.origin + location.pathname}?page=offClass&inviteCode=${this.props.inviteCode}`,'');
+
+            } else {
+                shareWithUrl('海龟壹号','更多精彩，就等你来',`${location.origin + location.pathname}`,'');
+            }
+            if (pop) {
+                popNew('app-components-bigImage-bigImage',{ img:'../../res/image/shareBg.png' });
+            }
         }
     }
 
