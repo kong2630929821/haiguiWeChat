@@ -1,7 +1,6 @@
-import { popNew } from '../../../pi/ui/root';
 import { Widget } from '../../../pi/widget/widget';
 import { serverFilePath } from '../../config';
-import { returnGoods, uploadFile, uploadFileApp } from '../../net/pull';
+import { returnGoods, uploadFileApp } from '../../net/pull';
 import { Order } from '../../store/memstore';
 import { selectImage } from '../../utils/native';
 import { popNewMessage } from '../../utils/tools';
@@ -43,7 +42,7 @@ export class ApplyReturnGoods extends Widget {
             popNewMessage('正在上传，请稍等');
         }
 
-        const flag = window.localStorage.appInFlag;
+        const flag = location.protocol === 'file:';
         if (flag) {    // app进入，唤起手机相机
             const imagePicker = selectImage((width, height, url) => {
                 console.log('selectImage url = ',url);

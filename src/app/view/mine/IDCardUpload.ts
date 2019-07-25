@@ -1,5 +1,4 @@
 import { popNew } from '../../../pi/ui/root';
-import { userAgent } from '../../../pi/util/html';
 import { Widget } from '../../../pi/widget/widget';
 import { serverFilePath } from '../../config';
 import { identifyIDCard, uploadFileApp, verifyIDCard } from '../../net/pull';
@@ -54,7 +53,8 @@ export class IDCardUpload extends Widget {
 
     // 选择图片
     public chooseImg(num:number) {
-        const flag = window.localStorage.appInFlag;
+        const flag = location.protocol === 'file:';
+        
         if (flag) {   // app进入，唤起手机相机
             const imagePicker = selectImage((width, height, url) => {
                 console.log('selectImage url = ',url);
