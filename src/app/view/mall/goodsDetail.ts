@@ -3,7 +3,7 @@ import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { mallImagPre } from '../../config';
 import { addCart, collectShop, getAreas, getCollectList, getFreight, getGoodsDetails, isCollectShop, removeLiked } from '../../net/pull';
-import { Area, CartGoods, getStore, GoodsDetails, ImageType, register, setStore } from '../../store/memstore';
+import { Area, CartGoods, deepCopy, getStore, GoodsDetails, ImageType, register, setStore } from '../../store/memstore';
 import { getCollect } from '../../utils/logic';
 import { calcFreightDesc, calcPrices, getImageMainPath, getImagePath, popNewMessage, priceFormat } from '../../utils/tools';
 
@@ -156,7 +156,7 @@ export class GoodsDetailHome extends Widget {
         }
         if (res.buyNow) {
             console.log('立即购买');
-            const goods = JSON.parse(JSON.stringify(this.props.goods));
+            const goods = deepCopy(this.props.goods);
             goods.labels = [sku];
             const cartGood:CartGoods = {
                 index:-1,

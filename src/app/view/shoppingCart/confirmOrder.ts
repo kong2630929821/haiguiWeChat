@@ -244,11 +244,11 @@ const plitOrder = async (orderGoods:CartGoodsShow[],address:Address) => {
         if (!oneSupplier) oneSupplier = [];
         // 商品类型 0 普通商品 1 保税商品 2 海外直购
         if (v.cartGood.goods.goodsType === 0) { // 普通商品
-            const normalGoods = oneSupplier[1] || [];
+            const normalGoods = oneSupplier[0] || [];
             normalGoods.push(v);
             oneSupplier[0] = normalGoods;
         } else if (v.cartGood.goods.goodsType === 1) { // 保税商品
-            const taxGoods = oneSupplier[0] || [];
+            const taxGoods = oneSupplier[1] || [];
             taxGoods.push(v);
             oneSupplier[1] = taxGoods;
         } else {  // 海外直购

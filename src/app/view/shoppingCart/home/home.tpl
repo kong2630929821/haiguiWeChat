@@ -48,7 +48,7 @@
             </div>
             <div w-class="column totalMoney">
                 <div>合计：<span style="font-size:32px;color:#8A4AF3">{{(it.totalSale/100).toFixed(2)}}</span></div>
-                <div style="color:#888;{{it.canOrder ? '' : 'visibility: hidden;'}}">{{it.isIncludeShipping ? "含运费" : "不含运费"}}</div>
+                <div style="color:#888;{{it.canOrder ? '' : 'visibility: hidden;'}}">不含运费</div>
             </div>
             <div w-class="pay {{it.canOrder ? 'active':''}}" on-tap="pay">结算({{it.totalAmount}})</div>
         {{else}}

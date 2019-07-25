@@ -4,8 +4,8 @@ import { Widget } from '../../../../pi/widget/widget';
 import { mallImagPre } from '../../../config';
 import { addCart, collectShop, deductCart, getCart, getCollectList, isCollectShop } from '../../../net/pull';
 import { CartGoods, register, setStore } from '../../../store/memstore';
-import { calcPrices, getImageThumbnailPath, popNewMessage, priceFormat } from '../../../utils/tools';
 import { getCollect } from '../../../utils/logic';
+import { calcPrices, getImageThumbnailPath, popNewMessage, priceFormat } from '../../../utils/tools';
 
 export const forelet = new Forelet();
 
@@ -150,21 +150,21 @@ export class ShoppingCart extends Widget {
     public calcTotalFee() {
         const cartGoodsShow = this.state.cartGoodsShow;
         let totalSale = 0;
-        let isIncludeShipping = false;    // 是否包含运费 
         let canOrder = false;           // 是否可以下单
         let totalAmount = 0;          // 购买商品的总数量
+       
+        // const isIncludeShipping = false;    // 是否包含运费 
         for (const v of cartGoodsShow) {
             if (v.cartGood.selected) {
                 totalSale += v.finalSale * v.cartGood.amount;
                 totalAmount += v.cartGood.amount;
                 canOrder = true;
             }
-            // 保税商品无需运费
-            if (v.cartGood.goods.goodsType === 1) isIncludeShipping = true;
+            // // 保税商品无需运费
+            // if (v.cartGood.goods.goodsType === 1) isIncludeShipping = true;
         }
-
+        // this.props.isIncludeShipping = isIncludeShipping;
         this.props.totalSale = totalSale;
-        this.props.isIncludeShipping = isIncludeShipping;
         this.props.canOrder = canOrder;
         this.props.totalAmount = totalAmount;
     }
