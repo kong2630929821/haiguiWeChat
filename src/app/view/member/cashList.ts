@@ -104,9 +104,16 @@ export class LogList extends Widget {
             this.props.showDataList = this.props.rebate;
             this.props.amount = getStore('earning/wait_profit',0); 
         } else {
-            this.props.showTitle = '现金总收益';
-            this.props.showDataList = this.props.list;
-            this.props.amount = getStore('earning/cash',0); 
+            if (this.props.fg === PageFg.cash) {
+                this.props.showTitle = '现金总收益';
+                this.props.showDataList = this.props.list;
+                this.props.amount = getStore('earning/cash',0); 
+            } else {
+                this.props.showTitle = '海贝总收益';
+                this.props.showDataList = this.props.list;
+                this.props.amount = getStore('earning/shell',0); 
+            }
+            
         }
         this.paint();
     }
