@@ -92,13 +92,7 @@ export class ConfirmOrder extends Widget {
 
             return;
         }
-        if (!getStore('user/fcode')) {
-            popNew('app-view-member-applyModalBox',{ needSelGift:false,title:'请填写个人信息' },() => {
-                this.orderClick();
-            });
 
-            return;
-        } 
         const cartGood = this.props.orderGoods; 
         let hasTax = false;  // 是否有海外购商品，需要实名
         for (let i = 0;i < cartGood.length;i++) {
@@ -115,9 +109,16 @@ export class ConfirmOrder extends Widget {
 
             return;
         } 
-           
-        this.order();
         
+        if (!getStore('user/fcode')) {
+            const fg = this.props.orderGoods[0].goods.isActGoods;  // 是否是399商品，是则不需要邀请码
+            popNew('app-view-member-applyModalBox',{ needSelGift:false,title:'请填写个人信息',needInviteCode: !fg },() => {
+                this.order();
+            });
+
+            return;
+        }
+        this.order();
     }
 
     public async order() {
