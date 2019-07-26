@@ -7,7 +7,7 @@ import { priceFormat } from '../../utils/tools';
 export const forelet = new Forelet();
 
 const STATE = {
-    price:priceFormat(getStore('balance/cash',0)),
+    price:'',
     ableWithdraw:false,
     flags:false
 };
@@ -18,6 +18,7 @@ export class MyCash extends Widget {
    
     public create() {
         super.create();
+        STATE.price = priceFormat(getStore('balance/cash',0));
         this.state = STATE;
         // 开启提现
         checkWithdraw().then(r => {

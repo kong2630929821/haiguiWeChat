@@ -382,6 +382,7 @@ interface Store {
     user:User;                        // 用户信息
     balance:Balance;                  // 用户余额
     flags:any;                        // 全局标志位
+    withdrawalSetting:any;// 提现配置
 }
 // 全局内存数据库
 const store:Store = {
@@ -432,5 +433,9 @@ const store:Store = {
         shell:0,
         integral:0
     },
-    flags:{}
+    flags:{},
+    withdrawalSetting:{
+        singleLimit:0,
+        tariff:0
+    }
 };

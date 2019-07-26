@@ -106,13 +106,13 @@ const getFixLocationGroup = (groups:Map<GroupsLocation, Groups[]>,location:Group
 };
 
 // 分组信息监听
-register('mall/groups',(groups:Map<GroupsLocation, Groups[]>) => {   
-    STATE.groups = groups;
+register('mall/groups',(groups:Map<GroupsLocation, Groups[]>) => {  
+    STATE.groups = groups || new Map<GroupsLocation, Groups[]>();
     forelet.paint(STATE);
 });
 
 // 分组信息监听
-register('mall/likedGoods',(likedGoods:GoodsDetails[]) => {   
-    STATE.likedGoods = likedGoods;
+register('mall/likedGoods',(likedGoods:GoodsDetails[]) => { 
+    STATE.likedGoods = likedGoods || [];
     forelet.paint(STATE);
 });

@@ -10,7 +10,7 @@ import { getStore, GroupsLocation, OrderStatus, setStore, UserType } from '../st
 import { getCollect, judgeRealName } from '../utils/logic';
 import { unicode2ReadStr, unicode2Str } from '../utils/tools';
 import { registerWXAPI } from '../utils/wxAPI';
-import { getAddress, getAllGifts, getBalance, getCart, getCollectList, getEarningTotal, getFreight, getGroups, getInviteCode, getOrders, getUserInfo, getWithdrawalStatus, guessYouLike, setUserName } from './pull';
+import { getAddress, getAllGifts, getBalance, getCart, getCollectList, getEarningTotal, getFreight, getGroups, getInviteCode, getOrders, getUserInfo, getWithdrawalStatus, guessYouLike, setUserName, withdrawSetting } from './pull';
 import { payComplete } from './push';
 
 document.addEventListener('visibilitychange', () => {
@@ -223,6 +223,15 @@ const userLogin = (userStr:any) => {
 
         // 获取所有收藏
         getCollect();
+
+        // 获取提现配置
+        withdrawSetting().then(r => {
+            const data = {
+                singleLimit:r.withdraw_config[0],
+                tariff:r.withdraw_config[1]
+            };
+            setStore('withdrawalSetting',data);
+        });
         
     });
 };

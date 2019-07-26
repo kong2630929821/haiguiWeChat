@@ -479,7 +479,7 @@ export const getEarningTotal = async () => {
         if (v[3]) {
             data.push(
                 {
-                    name:unicode2Str(v[1][1]),
+                    name:unicode2Str(v[1][0]),
                     time: timestampFormat(v[2]),
                     money: `￥${priceFormat(v[3])}`
                 }
@@ -1236,6 +1236,16 @@ export const getBigTurnrableConfig = () => {
 export const getWithdrawalStatus = () => {
     const msg = {
         type:'mall/members@get_withdraw_switch',
+        param:{}
+    };
+
+    return requestAsync(msg);
+};
+
+// 获取提现配置
+export const withdrawSetting = () => {
+    const msg = {
+        type:'mall/withdraw@get_withdraw_config',
         param:{}
     };
 
