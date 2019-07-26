@@ -182,18 +182,18 @@ export class ShoppingCart extends Widget {
             if (v.cartGood.selected) {
                 const id = v.cartGood.goods.id;
                 // 判断是否收藏
-                isCollectShop(id).then(r => {
+                isCollectShop(id).then(async r => {
                     if (!r.is_liked) {
-                        collectShop(id).then(r => {
-                            popNewMessage('收藏成功');
+                        await collectShop(id).then(r => {
                             // 获取所有收藏
                             getCollect();
                         });
                     }
                 });
-                
             }    
         }); 
+        popNewMessage('收藏成功');
+        this.delCartGoods();  
     }
 }
 const STATE = {
