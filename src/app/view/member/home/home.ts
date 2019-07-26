@@ -99,7 +99,7 @@ const State = {
 };
 register('earning',r => {
     State.earning[0].amount = r.baby;
-    State.earning[1].amount = priceFormat(r.cash);
+    State.earning[1].amount = r.cash;
     State.earning[2].amount = r.partner;
     State.earning[3].amount = r.shell;
     forelet.paint(State);

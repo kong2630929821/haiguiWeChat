@@ -78,6 +78,7 @@ export class LogList extends Widget {
             } else {
                 this.props.list = [];
             }
+            this.selectGroups(0);
             this.paint();
         });
     }
