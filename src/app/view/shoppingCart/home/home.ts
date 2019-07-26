@@ -227,6 +227,7 @@ export const calcCartGoodsShow = (cartGoods:CartGoods[]) => {
 };
 
 register('mall/cartGoods',(cartGoods:CartGoods[]) => {
+
     STATE.cartGoodsShow = calcCartGoodsShow(cartGoods);
     console.log('cartGoods STATE====',STATE);
     forelet.paint(STATE);

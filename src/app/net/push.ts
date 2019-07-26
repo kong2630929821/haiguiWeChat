@@ -93,4 +93,15 @@ export const payComplete = () => {
         setStore('flags/withdrawal',r.state);
         console.log('提现状态变动========event_withdraw_switch_change',r);
     });
+
+    // 提现配置变化
+    setMsgHandler('event_withdraw_config_change',r => {
+        debugger;
+        const data = {
+            singleLimit:r.config[0],
+            tariff:r.config[1]
+        };
+        setStore('withdrawalSetting',data);
+        console.log('提现配置========event_withdraw_config_change',r);
+    });
 };

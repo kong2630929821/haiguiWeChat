@@ -50,8 +50,8 @@ const STATE = {
     activeIndex:0                                 // 选择的一级分组id
 };
 // 分组信息监听
-register('mall/groups',(groups:Map<GroupsLocation, Groups[]>) => {   
+register('mall/groups',(groups:Map<GroupsLocation, Groups[]>) => { 
     const thisGroups = groups.get(GroupsLocation.CLASSIFICATION);
-    STATE.groups = thisGroups;
+    STATE.groups = thisGroups || [];
     forelet.paint(STATE);
 });

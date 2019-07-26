@@ -1,14 +1,19 @@
+import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { applyWithdraw } from '../../net/pull';
-import { getStore } from '../../store/memstore';
+import { getStore, register } from '../../store/memstore';
 import { popNewLoading, popNewMessage, priceFormat } from '../../utils/tools';
+export const forelet = new Forelet();
 interface Props {
     balance:string;  // 余额
-    tax:number;    // 税费
-    tariff:number;  // 税率 6%
+    tax:string;    // 税费
     inputMoney:number;  // 输入金额
     notice:boolean;  // 显示提示
 }
+let STATE = {
+    singleLimit:'0',// 提现单笔上限
+    tariff:0// 税率
+};
 /**
  * 提现
  */
@@ -16,20 +21,25 @@ export class Withdraw extends Widget {
     public ok :() => void;
     public props:Props = {
         balance:priceFormat(getStore('balance/cash',0)),
-        tax:0,    // 税费
-        tariff:0.06,  // 税率 6%
+        tax:'',    // 税费
         inputMoney:0,
         notice:false
     };
-
+    
+    public create() {
+        super.create();
+        STATE.singleLimit = priceFormat(getStore('withdrawalSetting/singleLimit',0));
+        STATE.tariff = getStore('withdrawalSetting/tariff',0);
+        this.state = STATE;
+    }
     // 输入提现金额
     public moneyChange(e:any) {
         this.props.inputMoney = Number(e.value);
         if (this.props.inputMoney <= Number(this.props.balance)) {
-            this.props.tax = this.props.inputMoney * this.props.tariff;
+            this.props.tax = (this.props.inputMoney * this.state.tariff).toFixed(2);
             this.props.notice = false;
         } else {
-            this.props.tax = 0;
+            this.props.tax = '';
             this.props.notice = true;
         }
         this.paint();
@@ -37,7 +47,7 @@ export class Withdraw extends Widget {
 
     // 确认提现
     public confirm() {
-        if (this.props.inputMoney > 0 && this.props.inputMoney <= Number(this.props.balance) && this.props.inputMoney % 10 === 0 && this.props.inputMoney <= 5000) {
+        if (this.props.inputMoney > 0 && this.props.inputMoney <= Number(this.props.balance) && this.props.inputMoney % 10 === 0 && this.props.inputMoney <= Number(this.state.singleLimit)) {
             const loadding = popNewLoading('申请提交中');
             applyWithdraw(this.props.inputMoney * 100).then(r => {
                 loadding && loadding.callback(loadding.widget);
@@ -58,3 +68,7 @@ export class Withdraw extends Widget {
         }
     }
 }
+register('withdrawalSetting',r => {
+    STATE = r;
+    forelet.paint(STATE);
+});
