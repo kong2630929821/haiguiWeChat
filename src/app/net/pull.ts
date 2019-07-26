@@ -58,7 +58,6 @@ export const getGoodsInfo = (group_id:number,goods_id:number) => {
                 const good = parseGoodsDetail(v);
                 goods.push(good);
             }
-            console.log('get_goods_info ========res:',res,'========goods:',goods);
 
             return goods;
         });

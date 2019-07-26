@@ -55,7 +55,6 @@ export class GoodsList extends Widget {
         getGoodsInfo(props.selectedLevel2Groups.id,0).then((goods:GoodsDetails[]) => {
             this.props.goodsList = goods;
             this.changeSortRule(this.props.sortType, this.props.sortRule[this.props.sortType]);
-            this.paint();
         });
     }
 
@@ -87,7 +86,7 @@ export class GoodsList extends Widget {
         this.props.goodsList = [];
         getGoodsInfo(this.props.selectedLevel2Groups.id,0).then((goods:GoodsDetails[]) => {
             this.props.goodsList = goods;
-            this.paint();
+            this.changeSortRule(this.props.sortType, this.props.sortRule[this.props.sortType]);
         });
         this.paint();
     }
@@ -98,7 +97,7 @@ export class GoodsList extends Widget {
         this.props.goodsList = [];
         getGoodsInfo(this.props.selectedLevel2Groups.id,0).then((goods:GoodsDetails[]) => {
             this.props.goodsList = goods;
-            this.paint();
+            this.changeSortRule(this.props.sortType, this.props.sortRule[this.props.sortType]);            
         });
         this.paint();
     }
@@ -149,26 +148,26 @@ export class GoodsList extends Widget {
         }
         this.props.sortRule[ind] = rule;
         this.paint();
-        console.log('!!!!!!!!!!!!!!!!!!changeSortRule',ind,this.props.goodsList);
+        console.log('!!!!!!!!!!!!!!!!!!changeSortRule', this.props.goodsList);
     }
 }
 
 // 销量从大到小排序
 export const sortCmd1 = (v1:GoodsDetails,v2:GoodsDetails) => {
-    return v2.saleCount - v1.saleCount;
+    return v2.saleCount - v1.saleCount || v1.id - v2.id;
 };
 
 // 销量从小到大排序
 export const sortCmd2 = (v1:GoodsDetails,v2:GoodsDetails) => {
-    return v1.saleCount - v2.saleCount;
+    return v1.saleCount - v2.saleCount || v1.id - v2.id;
 };
 
 // 价格从大到小排序
 export const sortCmd3 = (v1:GoodsDetails,v2:GoodsDetails) => {
-    return v2.discount - v1.discount;
+    return v2.discount - v1.discount || v1.id - v2.id;
 };
 
 // 价格从小到大排序
 export const sortCmd4 = (v1:GoodsDetails,v2:GoodsDetails) => {
-    return v1.discount - v2.discount;
+    return v1.discount - v2.discount || v1.id - v2.id;
 };

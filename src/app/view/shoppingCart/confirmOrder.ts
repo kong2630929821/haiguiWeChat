@@ -116,7 +116,9 @@ export class ConfirmOrder extends Widget {
                 this.order();
             });
 
+            return;
         }
+        this.order();
     }
 
     public async order() {
