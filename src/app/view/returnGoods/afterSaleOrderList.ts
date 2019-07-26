@@ -52,11 +52,16 @@ export class AfterSaleOrderList extends Widget {
                 });
             } else if (activeStatus === ReturnGoodsStatus.RETURNING && !afterOrder.shipId) {  // 填写退货运单号
                 popNew('app-components-modalBox-modalBoxInput',{ title:'填写退货单号',placeHolder:'运单号' },(r) => {
-                    fillReturnGoodsId(afterOrder.id, r).then(r => {
-                        popNewMessage('填入退货运单号成功');
-                        getReturnGoods(ReturnGoodsStatus.RETURNING);
-                    });
+                    if (r.trim()) {
+                        fillReturnGoodsId(afterOrder.id, r).then(r => {
+                            popNewMessage('填入退货运单号成功');
+                            getReturnGoods(ReturnGoodsStatus.RETURNING);
+                        });
+                    } else {
+                        popNewMessage('请输入运单号');
+                    }
                 });
+
             } else if (activeStatus === ReturnGoodsStatus.RETURNING && afterOrder.shipId) {  // 查看退货物流
                 popNew('app-view-mine-freight',{ order: afterOrder.order });
             }

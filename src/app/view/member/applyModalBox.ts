@@ -22,6 +22,7 @@ interface Props {
     unaccalimed:boolean;// 开通未领取礼包
     address:any;  // 地址
     needAddress:boolean;  // 是否需要选择地址
+    needInviteCode:boolean;  // 是否需要邀请码
 }
 /**
  * 填信息输入框弹窗
@@ -43,7 +44,8 @@ export class ModalBoxInput extends Widget {
         userType:UserType.hBao,
         unaccalimed:false,
         address:'',
-        needAddress:false
+        needAddress:false,
+        needInviteCode:true
     };
 
     public setProps(props:any) {
@@ -161,7 +163,7 @@ export class ModalBoxInput extends Widget {
             return;
         }
 
-        if (!this.props.userName || !this.props.phoneNum || (!this.props.phoneCode && this.props.changePhone) || !this.props.inviteCode || !this.props.address) {
+        if (!this.props.userName || !this.props.phoneNum || (!this.props.phoneCode && this.props.changePhone) || (this.props.needInviteCode && !this.props.inviteCode) || !this.props.address) {
             popNewMessage('请将内容填写完整');
         } else if (!judgeRealName(this.props.userName)) {
             popNewMessage('请输入真实姓名');
@@ -198,7 +200,7 @@ export class ModalBoxInput extends Widget {
             }
 
             try {   // 绑定邀请码 非会员用户
-                if (!this.props.fcode) {
+                if (this.props.needInviteCode && !this.props.fcode) {
                     const t = this.props.userType === UserType.hWang ? 1 :3;
                     const code = await bindUser(this.props.inviteCode,t);
                     if (code) setStore('user/fcode',this.props.inviteCode);
