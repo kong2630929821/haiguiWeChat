@@ -5,7 +5,7 @@
 
     <div w-class="item" ev-input-change="descChange">
         <span w-class="itemName">退货原因</span>
-        <widget w-tag="app-components-input-textarea">{placeHolder:"请输入",style:"font-size:28px;height:auto;max-height:200px;" }</widget>
+        <widget w-tag="app-components-input-textarea">{placeHolder:"请输入",style:"font-size:28px;height:auto;max-height:200px;",maxLength:55 }</widget>
     </div>
 
     <div w-class="item">
