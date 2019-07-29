@@ -96,7 +96,6 @@ export const payComplete = () => {
 
     // 提现配置变化
     setMsgHandler('event_withdraw_config_change',r => {
-        debugger;
         const data = {
             singleLimit:r.config[0],
             tariff:r.config[1]
