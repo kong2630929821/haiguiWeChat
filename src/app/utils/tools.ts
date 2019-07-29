@@ -63,11 +63,11 @@ export const calcPrices = (goods:GoodsDetails) => {
         rebate:0              // 返利
     };
     if (vipLevel === UserType.hBao) { // 海宝
-        ret.discount = goods.discount !== goods.origin ? calcDiscount(goods.discount,goods.origin) : calcDiscount(goods.vip_origin,goods.origin);
-        ret.sale = goods.discount !== goods.origin ? goods.discount : (goods.vip_origin ? goods.vip_origin : goods.origin);
+        ret.sale = goods.discount !== goods.origin ? (goods.discount>goods.vip_origin?goods.vip_origin:goods.discount) : (goods.vip_origin ? goods.vip_origin : goods.origin);
+        ret.discount = goods.discount !== goods.origin ? calcDiscount(ret.sale,goods.origin) : calcDiscount(ret.sale,goods.origin);
     } else if (vipLevel === UserType.hWang) { // 海王
-        ret.discount = goods.discount !== goods.origin ? calcDiscount(goods.discount,goods.origin) : calcDiscount(goods.vip_origin,goods.origin);
-        ret.sale = goods.discount !== goods.origin ? goods.discount : (goods.vip_origin ? goods.vip_origin : goods.origin);
+        ret.sale = goods.discount !== goods.origin ? (goods.discount>goods.vip_origin?goods.vip_origin:goods.discount) : (goods.vip_origin ? goods.vip_origin : goods.origin);
+        ret.discount = goods.discount !== goods.origin ? calcDiscount(ret.sale,goods.origin) : calcDiscount(ret.sale,goods.origin);
         ret.rebate = goods.rebate;
     } else {   // 非vip
 
