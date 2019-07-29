@@ -1,4 +1,6 @@
 import { Widget } from '../../../pi/widget/widget';
+import { getWX_auth } from '../../net/pull';
+import { getWXCode } from '../../utils/native';
 
 declare var WeixinJSBridge;
 /**
@@ -10,6 +12,14 @@ export class AuthModel extends Widget {
     }
 
     public okClick() {
+        const flag = window.sessionStorage.appInflag;
+        if (flag) {
+            getWXCode(code => {
+                getWX_auth(code);
+            });
+
+            return;
+        }
         const oldHref = location.href;
         const search = location.search;
         let newHref = '';

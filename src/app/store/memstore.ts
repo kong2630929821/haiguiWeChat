@@ -351,6 +351,7 @@ interface User {
     label:string;        // 标签 省，市代理
     IDCard:string;       // 身份证号码 表示实名认证成功
     memberGifts:MemberGifts;   // 会员领取礼记录
+    hwcode:string;       // 上级海王邀请码
 }
 
 // 用户余额
@@ -416,6 +417,7 @@ const store:Store = {
         phoneNum:'',
         avatar:'',
         fcode:'',     // 上级的邀请码
+        hwcode:'',    // 上级海王邀请码
         label:'',      // 标签 省，市代理
         IDCard:'',
         memberGifts:{

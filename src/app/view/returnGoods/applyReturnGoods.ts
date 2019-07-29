@@ -42,7 +42,7 @@ export class ApplyReturnGoods extends Widget {
             popNewMessage('正在上传，请稍等');
         }
 
-        const flag = location.protocol === 'file:';
+        const flag = window.sessionStorage.appInflag;
         if (flag) {    // app进入，唤起手机相机
             const imagePicker = selectImage((width, height, url) => {
                 console.log('selectImage url = ',url);

@@ -5,22 +5,22 @@
             <div w-class="prompt">您还有会员礼包未领取</div>
         {{else}}
         
-            {{if it.realName}}
+            {{if it1.realName}}
             <div w-class="row" style="border-bottom:1px solid #888;">
-                <div w-class="addr" style="color:#222;">{{it.realName}}</div>
+                <div w-class="addr" style="color:#222;">{{it1.realName}}</div>
                 <div style="font-size:24px;color:#B2B2B2">*不可修改</div>
             </div>
             {{else}}
             <div w-class="row" ev-input-change="nameChange">
-                <widget w-tag="app-components-input-input">{placeHolder:"输入你的姓名",style:"padding:10px;font-size:28px;",input:{{it.userName}} }</widget>
+                <widget w-tag="app-components-input-input">{placeHolder:"输入你的姓名",style:"padding:10px;font-size:28px;",input:{{it1.userName}} }</widget>
             </div>
             {{end}}
             <div w-class="row" ev-input-change="phoneChange">
-                <widget w-tag="app-components-input-input">{placeHolder:"输入你的手机",style:"padding:10px;font-size:28px;",itype:"integer",maxLength:11,input:{{it.phoneNum}} }</widget>
+                <widget w-tag="app-components-input-input">{placeHolder:"输入你的手机",style:"padding:10px;font-size:28px;",itype:"integer",maxLength:11,input:{{it1.phoneNum}} }</widget>
             </div>
 
             {{% ===================修改手机号显示验证码===================}}
-            {{if it.changePhone}}
+            {{if it1.changePhone}}
             <div w-class="row" ev-input-change="phoneCodeChange">
                 <widget w-tag="app-components-input-input">{placeHolder:"输入验证码",style:"padding:10px;font-size:28px;",maxLength:4}</widget>
                 {{if it.nowCount}}
@@ -33,14 +33,14 @@
 
             {{% ===================绑定过邀请码不可修改===================}}
             {{if it.needInviteCode}}
-                {{if it.fcode}}
+                {{if it1.fcode}}
                 <div w-class="row" style="border-bottom:1px solid #888;">
-                    <div w-class="addr" style="color:#222;">{{it.fcode}}</div>
+                    <div w-class="addr" style="color:#222;">{{it1.fcode}}</div>
                     <div style="font-size:24px;color:#B2B2B2">*不可修改</div>
                 </div>
                 {{else}}
                 <div w-class="row" ev-input-change="inviteCodeChange">
-                    <widget w-tag="app-components-input-input">{placeHolder:"推荐人邀请码",style:"padding:10px;font-size:28px;",input:{{it.inviteCode}} }</widget>
+                    <widget w-tag="app-components-input-input">{placeHolder:"推荐人邀请码",style:"padding:10px;font-size:28px;",input:{{it1.inviteCode}} }</widget>
                     
                     {{%<!-- <div w-class="btn" on-tap="getInvoteCode">推荐一个</div> -->}}
                 </div>

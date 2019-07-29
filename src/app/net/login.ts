@@ -7,10 +7,10 @@ import { popNew } from '../../pi/ui/root';
 import { getCookie } from '../../pi/util/html';
 import { maxCount, wsUrl } from '../config';
 import { getStore, GroupsLocation, OrderStatus, setStore, UserType } from '../store/memstore';
-import { getCollect, judgeRealName } from '../utils/logic';
+import { getCollect } from '../utils/logic';
 import { unicode2ReadStr, unicode2Str } from '../utils/tools';
 import { registerWXAPI } from '../utils/wxAPI';
-import { getAddress, getAllGifts, getBalance, getCart, getCollectList, getEarningTotal, getFreight, getGroups, getInviteCode, getOrders, getUserInfo, getWithdrawalStatus, guessYouLike, setUserName, withdrawSetting } from './pull';
+import { getAddress, getAllGifts, getBalance, getCart, getEarningTotal, getGroups, getInviteCode, getOrders, getUserInfo, getWithdrawalStatus, guessYouLike, setUserName, withdrawSetting } from './pull';
 import { payComplete } from './push';
 
 document.addEventListener('visibilitychange', () => {
@@ -184,24 +184,13 @@ const userLogin = (userStr:any) => {
         // 获取用户信息
         getUserInfo().then(res => {
             const user = getStore('user');
-            console.log(unicode2ReadStr(res.wx_name), userStr.nickname);
             if (unicode2ReadStr(res.wx_name) !== userStr.nickname) {
-                setUserName(userStr.nickname);
+                // 更新名字为用户当前的微信名
+                setUserName(userStr.nickname);  
+                user.userName = unicode2Str(userStr.nickname);
+                setStore('user',user);
             }
 
-            user.label = UserLabel[res.label];
-            user.avatar = userStr.headimgurl;
-            user.userName = unicode2Str(userStr.nickname);
-            // 正常中文名字则保留
-            user.realName = judgeRealName(unicode2Str(res.name[0])) ? unicode2Str(res.name[0]) :'';
-            user.IDCard = res.name[1];  // 身份证ID
-            user.phoneNum = res.phone;
-            if (res.level < UserType.other) {
-                user.fcode = res.fcode;  // 上级的邀请码
-                user.hwcode = res.hwcode;// 上级海王邀请码
-            } 
-            setStore('user',user);
-           
         });
 
         // 监听支付成功推送
@@ -235,5 +224,3 @@ const userLogin = (userStr:any) => {
         
     });
 };
-
-const UserLabel = ['','市代理','省代理'];

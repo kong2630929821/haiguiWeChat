@@ -306,3 +306,15 @@ export const filterEomoji = (str:string) => {
 
     return str;
 };
+
+/**
+ * arrayBuffer转file格式
+ */
+export const arrayBuffer2File = (buffer:ArrayBuffer) => {
+    const u8Arr = new Uint8Array(buffer);
+    const blob = new Blob([u8Arr], { type: 'image/jpeg' });
+    const newFile = new File([blob], 'avatar.jpeg', { type: blob.type });
+    console.log('arrayBuffer2File = ',newFile);
+
+    return newFile;
+};

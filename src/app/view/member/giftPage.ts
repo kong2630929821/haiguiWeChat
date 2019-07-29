@@ -187,7 +187,7 @@ export class GiftPage extends Widget {
 
     // 分享给好友
     public share(pop:boolean = true) {
-        const flag = location.protocol === 'file:';
+        const flag = window.sessionStorage.appInflag;
 
         if (flag) {  // app进入
             popNew('app-components-share-share');

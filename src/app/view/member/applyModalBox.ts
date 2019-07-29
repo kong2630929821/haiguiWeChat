@@ -1,4 +1,6 @@
 import { popNew } from '../../../pi/ui/root';
+import { register } from '../../../pi/util/res_mgr';
+import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { bindPhone, bindUser, randomInviteCode, sendCode, verifyIDCard } from '../../net/pull';
 import { getStore, setStore, UserType } from '../../store/memstore';
@@ -8,39 +10,37 @@ import { localInviteCode } from '../base/main';
 
 interface Props {
     title?:string;   // 标题
-    realName:string;  // 用户名
-    userName:string;  // 用户名
-    phoneNum:string;  // 手机号
     nowCount:number;  // 倒计时
-    phoneCode:string;  // 手机验证码
-    inviteCode:string;  // 邀请码
-    fcode:string;  // 已绑过的邀请码 只有海宝升级海王时不能修改
     selected:string; // 选择的礼包
     needSelGift:boolean; // 是否需要选择礼包
-    changePhone:boolean; // 是否修改手机号
     userType:UserType;  // 用户会员等级
     unaccalimed:boolean;// 开通未领取礼包
     address:any;  // 地址
     needAddress:boolean;  // 是否需要选择地址
     needInviteCode:boolean;  // 是否需要邀请码
 }
+interface State {
+    realName:string;  // 用户名
+    userName:string;  // 用户名
+    phoneNum:string;  // 手机号
+    phoneCode:string;  // 手机验证码
+    inviteCode:string;  // 邀请码
+    fcode:string;  // 已绑过的邀请码 只有海宝升级海王时不能修改
+    changePhone:boolean; // 是否修改手机号
+}
+export const forelet = new Forelet();
+
 /**
  * 填信息输入框弹窗
  */
 export class ModalBoxInput extends Widget {
     public ok:(data:any) => void;  // 地址信息
     public cancel:() => void;
+    public state:State;
     public props:Props = {
-        realName:'',
-        userName:'',
-        phoneNum:'',
         nowCount:0,
-        phoneCode:'',
-        inviteCode:'',
-        fcode:'',
         selected:'A',
         needSelGift:true,
-        changePhone:true,
         userType:UserType.hBao,
         unaccalimed:false,
         address:'',
@@ -54,58 +54,57 @@ export class ModalBoxInput extends Widget {
             ...props,
             addressFormat
         };
-        
         super.setProps(this.props);
-
         this.props.address = getLastAddress()[2];
+        if (this.props.userType === UserType.hWang) {
+            this.props.needSelGift = false;   // 升级海王不需要选则礼包
+        }
         const user = getStore('user');
         if (user.IDCard) {// 有身份证号，表示实名认证成功，不允许再修改名字
-            this.props.realName = user.realName;
+            STATE.realName = user.realName;
         }
-        this.props.userName = user.realName;
-        this.props.phoneNum = user.phoneNum;
-        this.props.changePhone = !user.phoneNum;  // 已经绑过则默认不修改手机号
-        if (user.userType <= UserType.hBao) {// 成为会员后不允许修改父级邀请码
-            this.props.fcode = user.hwcode;
-            console.log('用户信息！！！！',user,`this.props.fcode-------${this.props.fcode}`);
+        STATE.userName = user.realName;
+        STATE.phoneNum = user.phoneNum;
+        STATE.changePhone = !user.phoneNum;  // 已经绑过则默认不修改手机号
+        if (user.userType <= UserType.hBao) {   // 成为会员后不允许修改父级邀请码
+            STATE.fcode = user.hwcode;
+            console.log('用户信息！！！！',user,`this.props.fcode-------${STATE.fcode}`);
         }
-        if (props.userType === UserType.hWang) {
-            this.props.needSelGift = false;
-        }
-        this.props.inviteCode = localInviteCode || user.fcode;  // 分享人的邀请码
+        STATE.inviteCode = localInviteCode || user.fcode;  // 分享人的邀请码
+        this.state = STATE;
     }
 
     // 输入用户名
     public nameChange(e:any) {
-        this.props.userName = e.value;
+        this.state.userName = e.value;
         this.paint();
     }
 
     // 输入手机号
     public phoneChange(e:any) {
-        this.props.phoneNum = e.value;
-        this.props.changePhone = e.value !== getStore('user/phoneNum');
+        this.state.phoneNum = e.value;
+        this.state.changePhone = e.value !== getStore('user/phoneNum');
         this.paint();
     }
 
     // 输入手机验证码
     public phoneCodeChange(e:any) {
-        this.props.phoneCode = e.value;
+        this.state.phoneCode = e.value;
         this.paint();
     }
 
     // 输入邀请码
     public inviteCodeChange(e:any) {
-        this.props.inviteCode = e.value;
+        this.state.inviteCode = e.value;
         this.paint();
     }
 
     // 获取手机验证码
     public getPhoneCode() {
-        if (!checkPhone(this.props.phoneNum)) {
+        if (!checkPhone(this.state.phoneNum)) {
             popNewMessage('手机号格式错误');
         } else {
-            sendCode(this.props.phoneNum).then(r => {
+            sendCode(this.state.phoneNum).then(r => {
                 popNewMessage('验证码已发送');
             }).catch(err => {
                 popNewMessage('获取验证码失败');
@@ -128,7 +127,7 @@ export class ModalBoxInput extends Widget {
     public getInvoteCode() {
         const t = this.props.userType === UserType.hWang ? 1 :3;
         randomInviteCode(t).then(r => {  // 升级海王只能获取海王邀请码
-            this.props.inviteCode = r.code;
+            this.state.inviteCode = r.code;
             this.paint();
         });
     }
@@ -163,18 +162,18 @@ export class ModalBoxInput extends Widget {
             return;
         }
 
-        if (!this.props.userName || !this.props.phoneNum || (!this.props.phoneCode && this.props.changePhone) || (this.props.needInviteCode && !this.props.inviteCode) || !this.props.address) {
+        if (!this.state.userName || !this.state.phoneNum || (!this.state.phoneCode && this.state.changePhone) || (this.props.needInviteCode && !this.state.inviteCode) || !this.props.address) {
             popNewMessage('请将内容填写完整');
-        } else if (!judgeRealName(this.props.userName)) {
+        } else if (!judgeRealName(this.state.userName)) {
             popNewMessage('请输入真实姓名');
             
         } else {
             const loadding = popNewLoading('请稍后');
 
             try {  // 验证手机号 修改过需要重新验证
-                if (this.props.changePhone) {
-                    const phoneRes = await bindPhone(this.props.phoneNum,this.props.phoneCode);
-                    if (phoneRes) setStore('user/phoneNum',this.props.phoneNum);
+                if (this.state.changePhone) {
+                    const phoneRes = await bindPhone(this.state.phoneNum,this.state.phoneCode);
+                    if (phoneRes) setStore('user/phoneNum',this.state.phoneNum);
                 } 
             } catch (err) {
                 loadding.callback(loadding.widget);
@@ -188,9 +187,9 @@ export class ModalBoxInput extends Widget {
             }
 
             try {   // 设置用户名 实名认证过不允许再修改
-                if (!this.props.realName) {
-                    const nameRes = await verifyIDCard(this.props.userName,'','','','');
-                    if (nameRes) setStore('user/realName',this.props.userName);
+                if (!this.state.realName) {
+                    const nameRes = await verifyIDCard(this.state.userName,'','','','');
+                    if (nameRes) setStore('user/realName',this.state.userName);
                 }  
             } catch (err) {
                 loadding.callback(loadding.widget);
@@ -200,10 +199,10 @@ export class ModalBoxInput extends Widget {
             }
 
             try {   // 绑定邀请码 非会员用户
-                if (this.props.needInviteCode && !this.props.fcode) {
+                if (this.props.needInviteCode && !this.state.fcode) {
                     const t = this.props.userType === UserType.hWang ? 1 :3;
-                    const code = await bindUser(this.props.inviteCode,t);
-                    if (code) setStore('user/fcode',this.props.inviteCode);
+                    const code = await bindUser(this.state.inviteCode,t);
+                    if (code) setStore('user/fcode',this.state.inviteCode);
                 }
 
             } catch (err) {
@@ -222,3 +221,29 @@ export class ModalBoxInput extends Widget {
     }
 
 }
+
+const STATE = {
+    realName:'',
+    userName:'',
+    phoneNum:'',
+    phoneCode:'',
+    inviteCode:'',
+    fcode:'',
+    changePhone:true
+};
+register('user',user => {
+    if (user) {
+        if (user.IDCard) {// 有身份证号，表示实名认证成功，不允许再修改名字
+            STATE.realName = user.realName;
+        }
+        STATE.userName = user.realName;
+        STATE.phoneNum = user.phoneNum;
+        STATE.changePhone = !user.phoneNum;  // 已经绑过则默认不修改手机号
+        if (user.userType <= UserType.hBao) {   // 成为会员后不允许修改父级邀请码
+            STATE.fcode = user.hwcode;
+            console.log('用户信息！！！！',user,`this.props.fcode-------${STATE.fcode}`);
+        }
+        STATE.inviteCode = localInviteCode || user.fcode;  // 分享人的邀请码
+        forelet.paint(STATE);
+    }
+});

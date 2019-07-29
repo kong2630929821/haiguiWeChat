@@ -102,6 +102,7 @@ export class ConfirmOrder extends Widget {
                 break;
             }
         }
+
         if (hasTax && !getStore('user/IDCard')) {
             popNew('app-components-popModel-popModel',{ title:'海外购商品必须实名' },() => {
                 popNew('app-view-mine-IDCardUpload');
@@ -109,7 +110,7 @@ export class ConfirmOrder extends Widget {
 
             return;
         } 
-        
+
         if (!getStore('user/fcode')) {
             const fg = this.props.orderGoods[0].goods.isActGoods;  // 是否是399商品，是则不需要邀请码
             popNew('app-view-member-applyModalBox',{ needSelGift:false,title:'请填写个人信息',needInviteCode: !fg },() => {
@@ -184,10 +185,12 @@ export class ConfirmOrder extends Widget {
                 // 用余额支付 (自测使用)
                 const cash = getStore('balance/cash',0);
                 if (cash > totalFee) {
-                    payOrder(oids[0]).then(r => {
-                        popNewMessage('支付成功');
-                        this.paySuccess();
-                    });
+                    for (const res of ordersRes) {
+                        const oid = res.orderInfo[0];
+                        payOrder(oid);
+                        console.log('oid ====',oid);
+                    }
+                    
                 } else {
                     setNeedPayOrders(oids);
                     payMoney(totalFee - cash,'105',1,['pay_order',oids],() => {

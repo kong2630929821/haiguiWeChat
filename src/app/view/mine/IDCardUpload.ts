@@ -53,7 +53,7 @@ export class IDCardUpload extends Widget {
 
     // 选择图片
     public chooseImg(num:number) {
-        const flag = location.protocol === 'file:';
+        const flag = window.sessionStorage.appInflag;
         
         if (flag) {   // app进入，唤起手机相机
             const imagePicker = selectImage((width, height, url) => {
@@ -153,10 +153,11 @@ export class IDCardUpload extends Widget {
                     // 上传身份信息
                     verifyIDCard(this.props.name,this.props.card,this.props.front,this.props.back,this.props.validDate).then(() => {
                         loadding && loadding.callback(loadding.widget);
-                        this.ok && this.ok();
                         popNewMessage('实名认证成功');
                         setStore('user/realName',this.props.name,false);
                         setStore('user/IDCard',this.props.card);
+                        this.ok && this.ok();
+                        
                     }).catch(() => {
                         popNewMessage('实名认证失败，请认真核对信息');
                         loadding && loadding.callback(loadding.widget);
