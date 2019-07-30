@@ -21,6 +21,10 @@ export class Favorites extends Widget {
         this.state  = getStore('flags/collects',[]);
     }
 
+    public create() {
+        super.create();
+        getCollect();
+    }
     // 去商品详情
     public goShopInfo(e:any,index:number) {
         const goods = this.state[index];
