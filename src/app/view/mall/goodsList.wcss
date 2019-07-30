@@ -8,6 +8,7 @@
 }
 .style-mod-1{
     height: 350px;
+    max-height: 550px;
 }
 .style-mod-2{
     height: 100px;

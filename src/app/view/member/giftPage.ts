@@ -254,10 +254,6 @@ register('flags/wxReady',() => {
     const w:any = forelet.getWidget(WIDGET_NAME);
     w && w.share(false);
 });
-register('flags/activityGoods',() => {
-    const w:any = forelet.getWidget(WIDGET_NAME);
-    w && w.buySuccess();
-});
 
 // 购买活动商品
 export const confirmActivityGoods = (goods:number,addr:Address) => {
@@ -277,7 +273,9 @@ export const confirmActivityGoods = (goods:number,addr:Address) => {
                     // 用余额支付 (自测使用)
                     const cash = getStore('balance/cash',0);
                     if (cash > price) {
-                        payOrder(oid).catch(r => {
+                        payOrder(oid).then(() => {
+                            // 支付成功后会有推送, register 中会提示
+                        }).catch(r => {
                             popNewMessage('领取失败');
                         });
                     } else {
