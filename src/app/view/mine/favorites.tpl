@@ -14,7 +14,7 @@
                     {{if v.flag}}
                       <span w-class="money">{{it.priceFormat(v.origin)}}</span>
                     {{else}}
-                      <div w-class="invalid">失效</div>
+                      <div w-class="invalid">已售罄</div>
                     {{end}}
                 </div>
                 <div w-class="fix-item fix-item-1" on-tap="cancelCollect({{i}})">
