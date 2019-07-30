@@ -3,7 +3,7 @@
  */
 import { setMsgHandler } from '../../pi/net/ui/con_mgr';
 import { setStore } from '../store/memstore';
-import { popNewMessage } from '../utils/tools';
+import { popNewMessage, priceFormat } from '../utils/tools';
 import { delOrder, getNeedPayOrders } from '../view/shoppingCart/confirmOrder';
 
 /**
@@ -75,7 +75,7 @@ export const payComplete = () => {
     // 收益变化
     setMsgHandler('alter_earnings_ok',r => {
         if (r.type === 1) { // 现金收益
-            setStore('earning/cash',r.balance[0]);
+            setStore('earning/cash',priceFormat(r.balance[0]));
         } else if (r.type === 2) {  // 海贝收益
             setStore('earning/shell',r.balance[0]);
         } 
