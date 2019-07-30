@@ -493,7 +493,7 @@ export const getEarningTotal = async () => {
         partner: res.partnerCount,
         shell: res.hbei[0],
         wait_profit: priceFormat(res.wait_profit[0]),
-        rebate:data
+        rebate:data.reverse()
     };
     setStore('earning',earning);
 };
