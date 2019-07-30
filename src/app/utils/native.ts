@@ -32,7 +32,7 @@ export const selectImage = (ok?,cancel?) => {
     });
     let close;
     setTimeout(() => {
-        close = popNewLoading({ zh_Hans:'导入中...',zh_Hant:'導入中...',en:'' });
+        close = popNewLoading('导入中');
     },100);
     
     return imagePicker;
