@@ -480,7 +480,7 @@ export const getEarningTotal = async () => {
         if (v[3]) {
             data.push(
                 {
-                    name:unicode2Str(v[1][0]),
+                    name:`${unicode2Str(v[1][0])} (购物返利)`,
                     time: timestampFormat(v[2]),
                     money: `￥${priceFormat(v[3])}`
                 }

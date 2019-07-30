@@ -41,6 +41,11 @@ export class ModalBox extends Widget {
 
     // 点击确认按钮
     public okBtnClick() {
+        if (!this.props.message) {
+            popNewMessage('请输入运单号');
+
+            return;
+        }
         const reg = /^[0-9a-zA-Z]+$/;
         if (!reg.test(this.props.message)) {
             popNewMessage('请输入字母或数字');
