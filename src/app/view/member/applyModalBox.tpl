@@ -41,7 +41,6 @@
                 {{else}}
                 <div w-class="row" ev-input-change="inviteCodeChange">
                     <widget w-tag="app-components-input-input">{placeHolder:"推荐人邀请码",style:"padding:10px;font-size:28px;",input:{{it1.inviteCode}} }</widget>
-                    
                     {{%<!-- <div w-class="btn" on-tap="getInvoteCode">推荐一个</div> -->}}
                 </div>
                 {{end}}
@@ -58,9 +57,11 @@
         {{end}}
 
         {{if it.needSelGift}}
-        <div w-class="row" style="justify-content: space-between;">
+        <div w-class="row" style="justify-content: center;">
             <div w-class="selbtn {{it.selected=='A'?'active':''}}" on-tap="changeSel('A')">焕颜亮肤礼包</div>
+            {{if 0==1}}
             <div w-class="selbtn {{it.selected=='B'?'active':''}}" on-tap="changeSel('B')">商户联盟礼包</div>
+            {{end}}
         </div>
         {{end}}
 
