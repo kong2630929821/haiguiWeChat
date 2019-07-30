@@ -1,5 +1,5 @@
 import { Widget } from '../../../pi/widget/widget';
-import { getWX_auth } from '../../net/pull';
+import { sourceIp, sourcePort } from '../../config';
 import { getWXCode } from '../../utils/native';
 
 declare var WeixinJSBridge;
@@ -15,7 +15,7 @@ export class AuthModel extends Widget {
         const flag = window.sessionStorage.appInflag;
         if (flag) {
             getWXCode(code => {
-                getWX_auth(code);
+                window.location.href = `http://${sourceIp}:${sourcePort}/pt/wx/app/oauth2?code=${code}&state=_${encodeURIComponent(window.location.href)}`;
             });
 
             return;

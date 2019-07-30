@@ -170,7 +170,6 @@ export class ConfirmOrder extends Widget {
             totalFee +=  res.orderInfo[3] + res.orderInfo[4] + res.orderInfo[5] + res.orderInfo[6];   // 商品原支付金额  商品税费  商品运费  其它费用
             console.log('oid ====',oid);
         }
-        // const totalFee = this.props.totalSale + this.props.totalFreight + this.props.totalTax;
         try {
             if (onlyWXPay) {
                 // 微信支付（正式服）

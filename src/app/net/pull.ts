@@ -868,7 +868,7 @@ export const uploadFileApp = (buffer:ArrayBuffer) => {
     formdata.append('upload',arrayBuffer2File(buffer));
     formdata.append('path','phone');
     
-    return fetch(`http://${sourceIp}:${sourcePort}/upload_goods_img`, {
+    return fetch(`http://${sourceIp}:${sourcePort}/service/upload`, {
         body: formdata, 
         method: 'POST', 
         mode: 'cors' 
@@ -1280,13 +1280,4 @@ export const withdrawSetting = () => {
     };
 
     return requestAsync(msg);
-};
-
-/**
- * APP获取微信授权
- * @param code code
- */
-export const getWX_auth = (code:string) => {
-    
-    return fetch(`http://${sourceIp}:${sourcePort}/pt/wx/app/oauth2?code=${code}&state=_${encodeURIComponent(window.location.href)}`);
 };

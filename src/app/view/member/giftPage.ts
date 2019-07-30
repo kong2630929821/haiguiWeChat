@@ -1,3 +1,4 @@
+import { ShareType } from '../../../pi/browser/shareToPlatforms';
 import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
@@ -188,21 +189,32 @@ export class GiftPage extends Widget {
     // 分享给好友
     public share(pop:boolean = true) {
         const flag = window.sessionStorage.appInflag;
+        let url = `${location.origin + location.pathname}`;
+        let title = '海龟壹号';
+        let content = '更多精彩，就等你来';
+        
+        if (this.props.fg === PowerFlag.free) {
+            url = `${location.origin + location.pathname}?page=free&inviteCode=${this.props.inviteCode}`;
+            title = '免费领面膜';
+            content = '好友送了你一份面膜，快来领取吧';
+
+        } else if (this.props.fg === PowerFlag.offClass) {
+            url = `${location.origin + location.pathname}?page=offClass&inviteCode=${this.props.inviteCode}`;
+            title = '免费领课程';
+            content = '好友送了你一个线下课程，快来领取吧';
+        } 
 
         if (flag) {  // app进入
-            popNew('app-components-share-share');
+            popNew('app-components-share-share',{ 
+                shareType: ShareType.TYPE_LINK,
+                url,
+                title,
+                content
+            });
 
         } else {   // 公众号进入
             setWxConfig();
-            if (this.props.fg === PowerFlag.free) {
-                shareWithUrl('免费领面膜','好友送了你一份面膜，快来领取吧',`${location.origin + location.pathname}?page=free&inviteCode=${this.props.inviteCode}`,'');
-
-            } else if (this.props.fg === PowerFlag.offClass) {
-                shareWithUrl('免费领课程','好友送了你一个线下课程，快来领取吧',`${location.origin + location.pathname}?page=offClass&inviteCode=${this.props.inviteCode}`,'');
-
-            } else {
-                shareWithUrl('海龟壹号','更多精彩，就等你来',`${location.origin + location.pathname}`,'');
-            }
+            shareWithUrl(title,content,url,'');
             if (pop) {
                 popNew('app-components-bigImage-bigImage',{ img:'../../res/image/shareBg.png' });
             }

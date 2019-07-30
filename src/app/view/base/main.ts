@@ -4,7 +4,9 @@
  * @author henk<speoth@163.com>
  */
 
-import { backCall1, backList, popNew } from '../../../pi/ui/root';
+import { addActivityBackPressed } from '../../../pi/browser/app_comon_event';
+import { ExitApp } from '../../../pi/browser/exitApp';
+import { backCall1, backList, lastBack, popNew } from '../../../pi/ui/root';
 import { userAgent } from '../../../pi/util/html';
 import { addWidget } from '../../../pi/widget/util';
 import { setStore, UserType } from '../../store/memstore';
@@ -44,7 +46,9 @@ export const run = (cb): void =>  {
     }, 100);
 
     backCall();
+    addAppEvent();
 };
+
 declare var wx;
 const backCall = () => {
     // 当前URL
@@ -59,7 +63,7 @@ const backCall = () => {
     }
     try {
         const win = top.window; // 取顶层窗口
-    // 注册系统返回事件
+        // 注册系统返回事件
         win.onpopstate = () => {
             if (agent.os.name !== 'ios') {  // iOS返回本不会刷新不需要设置状态
                 win.history.pushState({}, '', `${CUR_URL}${search}from=0`);
@@ -105,4 +109,33 @@ const backCall = () => {
     // tslint:disable-next-line:no-empty
     } catch (e) {
     }
+};
+
+/**
+ * 注册app event
+ */
+const addAppEvent = () => {
+    let startTime = 0;
+    // 注册appBackPressed返回键
+    addActivityBackPressed(() => {
+        let doubleClick = false;
+        const now = new Date().getTime();
+        if (now - startTime <= 300) {
+            doubleClick = true;
+        }
+        startTime = now;
+        console.log('addActivityBackPressed callback called');
+        if (backList.length === 1) {
+            if (!doubleClick) return;
+            const exitApp = new ExitApp();
+            exitApp.init();
+            exitApp.ToHome({});
+        } else {
+            const widget = lastBack();
+            const entranceName = 'app-view-base-entrance';
+            const entranceName1 = 'app-view-base-entrance1';
+            if (widget.name === entranceName || widget.name === entranceName1) return;
+            backCall1();
+        }
+    });
 };

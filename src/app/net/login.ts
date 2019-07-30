@@ -28,7 +28,7 @@ document.addEventListener('visibilitychange', () => {
  * 公众号环境下由后端通过微信授权后把用户信息挂到了localStorage.WXUSERINFO上,前端直接获取即可
  * 如果是浏览器环境，直接模拟一个WXUSERINFO
  */
-const getWxUserInfo = () => {
+export const getWxUserInfo = () => {
     const wxuserinfo = localStorage.WXUSERINFO;
     if (!wxuserinfo) {
         return;
@@ -188,9 +188,9 @@ const userLogin = (userStr:any) => {
                 // 更新名字为用户当前的微信名
                 setUserName(userStr.nickname);  
                 user.userName = unicode2Str(userStr.nickname);
-                setStore('user',user);
             }
-
+            user.avatar = userStr.headimgurl;
+            setStore('user',user);
         });
 
         // 监听支付成功推送

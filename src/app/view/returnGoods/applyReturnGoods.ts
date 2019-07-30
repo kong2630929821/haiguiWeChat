@@ -110,6 +110,11 @@ export class ApplyReturnGoods extends Widget {
 
             return;
         }
+        if (this.props.imgs.length === 0) {
+            popNewMessage('请至少上传一张图片');
+
+            return;
+        }
         if (this.props.isUpload) {
             popNewMessage('图片正在上传中，请稍等');
            
