@@ -3,7 +3,7 @@ import { baoSaleClassGoodsId, baoVipClassGoodsId, baoVipMaskGoodsId, freeMaskGoo
 import { getStore,GoodsDetails, GroupsLocation, OrderStatus, ReturnGoodsStatus, setStore, UserType } from '../store/memstore';
 import {  judgeRealName, openWXPay } from '../utils/logic';
 import { payByWx } from '../utils/native';
-import { arrayBuffer2File, popNewMessage, priceFormat, str2Unicode, timestampFormat, unicode2ReadStr, unicode2Str } from '../utils/tools';
+import { arrayBuffer2File, getUserType, popNewMessage, priceFormat, str2Unicode, timestampFormat, unicode2ReadStr, unicode2Str } from '../utils/tools';
 import { requestAsync } from './login';
 import { parseAddress, parseAddress2, parseAfterSale, parseAllGroups, parseArea, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
 
@@ -723,7 +723,6 @@ export const bindUser = (code:string,t:number) => {
     return requestAsync(msg);
 };
 
-const UserLabel = ['','市代理','省代理'];   // 用户标签
 /**
  * 获取用户信息
  */
@@ -735,7 +734,7 @@ export const getUserInfo = () => {
 
     return requestAsync(msg).then(res => {
         const user = getStore('user');
-        user.label = UserLabel[res.label];
+        user.label = getUserType(res.level,res.label);
         user.avatar = res.avatar;
         user.userName = unicode2ReadStr(res.wx_name);
         // 正常中文名字则保留
@@ -775,6 +774,7 @@ export const payMoney = (money:number,ttype:string,count:number= 1,ext?:any,fail
         if (resp.type) {
             console.log(`错误信息为${resp.type}`);
             popNewMessage(`支付失败${resp.type}`);
+            failed && failed();
         } else {
             const flag = window.sessionStorage.appInflag;
             if (flag) {

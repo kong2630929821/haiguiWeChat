@@ -317,6 +317,6 @@ export const confirmActivityGoods = (goods:number,addr:Address) => {
         
     }).catch(err => {
         loadding && loadding.callback(loadding.widget);
-        popNewMessage('获取商品信息失败');
+        popNewMessage('您当前无权限领取，请联系客服');
     });
 };

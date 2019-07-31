@@ -18,6 +18,7 @@ interface Props {
     address:any;  // 地址
     needAddress:boolean;  // 是否需要选择地址
     needInviteCode:boolean;  // 是否需要邀请码
+    isShopping399:boolean;// 是否是399商品
 }
 interface State {
     realName:string;  // 用户名
@@ -45,7 +46,8 @@ export class ModalBoxInput extends Widget {
         unaccalimed:false,
         address:'',
         needAddress:false,
-        needInviteCode:true
+        needInviteCode:true,
+        isShopping399:false
     };
 
     public setProps(props:any) {
@@ -59,6 +61,7 @@ export class ModalBoxInput extends Widget {
         if (this.props.userType === UserType.hWang) {
             this.props.needSelGift = false;   // 升级海王不需要选则礼包
         }
+
         const user = getStore('user');
         if (user.IDCard) {// 有身份证号，表示实名认证成功，不允许再修改名字
             STATE.realName = user.realName;
@@ -70,7 +73,7 @@ export class ModalBoxInput extends Widget {
             STATE.fcode = user.hwcode;
             console.log('用户信息！！！！',user,`this.props.fcode-------${STATE.fcode}`);
         }
-        STATE.inviteCode = localInviteCode || user.fcode;  // 分享人的邀请码
+        STATE.inviteCode = this.props.isShopping399 ? '' :(localInviteCode || user.fcode);  // 分享人的邀请码
         this.state = STATE;
     }
 
@@ -161,8 +164,7 @@ export class ModalBoxInput extends Widget {
 
             return;
         }
-
-        if (!this.state.userName || !this.state.phoneNum || (!this.state.phoneCode && this.state.changePhone) || (this.props.needInviteCode && !this.state.inviteCode) || !this.props.address) {
+        if (!this.state.userName || !this.state.phoneNum || (!this.state.phoneCode && this.state.changePhone) || (this.props.needInviteCode && !this.state.inviteCode) || (this.props.needAddress && !this.props.address)) {
             popNewMessage('请将内容填写完整');
         } else if (!judgeRealName(this.state.userName)) {
             popNewMessage('请输入真实姓名');

@@ -100,7 +100,7 @@ export class LogList extends Widget {
     public selectGroups(num:number) {
         this.props.selected = num;
         if (num) {
-            this.props.showTitle = '待收益总额';
+            this.props.showTitle = '待收益总额（10分钟内刷新一次）';
             this.props.showDataList = this.props.rebate;
             this.props.amount = getStore('earning/wait_profit',0); 
         } else {

@@ -63,10 +63,10 @@ export const calcPrices = (goods:GoodsDetails) => {
         rebate:0              // 返利
     };
     if (vipLevel === UserType.hBao) { // 海宝
-        ret.sale = goods.discount !== goods.origin ? (goods.discount>goods.vip_origin?goods.vip_origin:goods.discount) : (goods.vip_origin ? goods.vip_origin : goods.origin);
+        ret.sale = goods.discount !== goods.origin ? (goods.discount > goods.vip_origin ? goods.vip_origin :goods.discount) : (goods.vip_origin ? goods.vip_origin : goods.origin);
         ret.discount = goods.discount !== goods.origin ? calcDiscount(ret.sale,goods.origin) : calcDiscount(ret.sale,goods.origin);
     } else if (vipLevel === UserType.hWang) { // 海王
-        ret.sale = goods.discount !== goods.origin ? (goods.discount>goods.vip_origin?goods.vip_origin:goods.discount) : (goods.vip_origin ? goods.vip_origin : goods.origin);
+        ret.sale = goods.discount !== goods.origin ? (goods.discount > goods.vip_origin ? goods.vip_origin :goods.discount) : (goods.vip_origin ? goods.vip_origin : goods.origin);
         ret.discount = goods.discount !== goods.origin ? calcDiscount(ret.sale,goods.origin) : calcDiscount(ret.sale,goods.origin);
         ret.rebate = goods.rebate;
     } else {   // 非vip
@@ -317,4 +317,27 @@ export const arrayBuffer2File = (buffer:ArrayBuffer) => {
     console.log('arrayBuffer2File = ',newFile);
 
     return newFile;
+};
+
+enum UserType {
+    hWang= 1,  // 海王
+    hBao= 2,   // 海宝
+    baiKe= 3,  // 白客
+    city= 11,   // 市代理
+    province= 12,  // 省代理
+    hWangTest= 13,  // 海王体验
+    hBaoTest= 23   // 海宝体验
+}
+const UserTypeShow = {
+    hWang:'海王会员',
+    hBao:'海宝会员',
+    baiKe:'',
+    city:'市代理',
+    province:'省代理',
+    hWangTest:'海王（体验）',
+    hBaoTest:'海宝（体验）'
+};
+// 获取用户身份
+export const getUserType = (level:number,label:number) => {
+    return UserTypeShow[UserType[Number(`${level === 4 ? 3 :level}${label > 0 ? label :''}`)]];
 };

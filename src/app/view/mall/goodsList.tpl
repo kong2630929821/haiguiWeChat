@@ -1,7 +1,6 @@
-<div class="new-page" w-class="new-page">
-    {{: let styleClass = it.styleMod === 1 ? "style-mod-1" : "style-mod-2" }}
+<div class="new-page" w-class="{{it.styleMod === 1?'new-page':'new-page1'}}">
     {{if it.styleMod === 1}}
-    <div w-class="top-container style-mod-1" class="bg-img" style="background-image: url({{it.mallImagPre + it.getImageMainPath(it.selectedLevel1Groups.images)[0]}})"></div>
+    <img src="{{it.mallImagPre + it.getImageMainPath(it.selectedLevel1Groups.images)[0]}}" alt="" style="width:100%;min-height:350px;"/>
     {{else}}
     <div w-class="top-container style-mod-2">
         <div w-class="group1-select" on-tap="level1GroupsExpandedClick">
@@ -43,7 +42,7 @@
             </div>
         </div>
 
-        <div w-class="goods-list" on-scroll="getMoreList" id="good-list">
+        <div w-class="{{it.styleMod === 1?'goods-list':'goods-list-1'}}" on-scroll="getMoreList" id="good-list">
             <div id="good-list-items" w-class="goods-list-items">
                 {{for i,v of it.goodsList}}
                 <div w-class="goods-item" style="{{i % 2 === 0 ? 'padding-right:5px;' : 'padding-left:5px;'}}" ev-item-click="goodsItemClick(e,{{i}})">
