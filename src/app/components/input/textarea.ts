@@ -9,6 +9,7 @@ interface Props {
     placeHolder?:string;
     style?:string;
     maxLength?:number;
+    surplus?:number;
 }
 interface State {
     currentValue:string;
@@ -39,6 +40,7 @@ export class Textarea extends Widget {
     public setProps(props: Props, oldProps: Props) {
         super.setProps(props,oldProps);
         this.state.currentValue = props.input ? props.input :'';
+        this.props.surplus = this.props.maxLength - (props.input ? props.input.length :0);
     }
     /**
      * 绘制方法
@@ -90,6 +92,7 @@ export class Textarea extends Widget {
         // 最大长度限制
         if (this.props.maxLength) {
             currentValue = String(currentValue).slice(0,this.props.maxLength);
+            this.props.surplus = this.props.maxLength - currentValue.length;
         }
 
         this.state.focused = true;

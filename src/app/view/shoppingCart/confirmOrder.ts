@@ -110,7 +110,11 @@ export class ConfirmOrder extends Widget {
 
             return;
         } 
+        if (hasTax && getStore('user/realName') !== this.props.address.name) {
+            popNewMessage('海外购商品收货人名字必须与实名一致');
 
+            return;
+        } 
         if (!getStore('user/fcode')) {
             const fg = this.props.orderGoods[0].goods.isActGoods;  // 是否是399商品，是则不需要邀请码
             popNew('app-view-member-applyModalBox',{ needSelGift:false,title:'请填写个人信息',needInviteCode: !fg },() => {
