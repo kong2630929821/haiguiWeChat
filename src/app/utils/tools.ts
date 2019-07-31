@@ -329,8 +329,8 @@ enum UserType {
     hBaoTest= 23   // 海宝体验
 }
 const UserTypeShow = {
-    hWang:'海王',
-    hBao:'海宝',
+    hWang:'海王会员',
+    hBao:'海宝会员',
     baiKe:'',
     city:'市代理',
     province:'省代理',

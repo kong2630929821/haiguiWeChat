@@ -90,6 +90,7 @@ export const openWXPay = (param:any,oid:string,failed?:Function) => {
  * 获取会员等级名称
  */
 export const getUserTypeShow = (user?:UserType) => {
+    
     const curUser = getStore('user/userType',0);
     if (!user) user = curUser;
     if (curUser === UserType.hWang) return getStore('user/label','海王会员');

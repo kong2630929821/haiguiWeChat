@@ -161,7 +161,7 @@ export class ModalBoxInput extends Widget {
 
             return;
         }
-        if (!this.state.userName || !this.state.phoneNum || (!this.state.phoneCode && this.state.changePhone) || (this.props.needInviteCode && !this.state.inviteCode) || (this.props.userType !== UserType.hWang && !this.props.needAddress)) {
+        if (!this.state.userName || !this.state.phoneNum || (!this.state.phoneCode && this.state.changePhone) || (this.props.needInviteCode && !this.state.inviteCode) || (this.props.needAddress && !this.props.address)) {
             popNewMessage('请将内容填写完整');
         } else if (!judgeRealName(this.state.userName)) {
             popNewMessage('请输入真实姓名');
