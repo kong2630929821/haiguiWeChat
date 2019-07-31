@@ -48,11 +48,12 @@ export class ApplyReturnGoods extends Widget {
             const imagePicker = selectImage((width, height, url) => {
                 console.log('selectImage url = ',url);
 
-            // 预览图片
+                // 预览图片
                 imagePicker.getContent({
                     quality:70,
                     success(buffer:ArrayBuffer) {
                         this.props.imgs.push(url);
+                        this.props.isUpload = true;
                         this.paint();
 
                         // 上传图片
@@ -72,6 +73,9 @@ export class ApplyReturnGoods extends Widget {
             takeImage(1,(r) => {
                 console.log(r);
                 this.props.imgs.push(r);
+                this.props.isUpload = true;
+                this.paint();
+
                 upImage(r, res => {
                     popNewMessage('图片上传成功');
                     console.log('图片上传成功',res);
@@ -79,8 +83,6 @@ export class ApplyReturnGoods extends Widget {
                     this.props.imgs.push(serverFilePath + res);
                     this.paint();
                 });
-
-                this.paint();
             });
         }
     }

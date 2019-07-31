@@ -195,7 +195,7 @@ export interface AfterSale {
     request_time:number;  // 请求售后时间
     reply_time:number;    // 回应售后时间
     finish_time:number;   // 完成售后时间
-    shipId:number;        // 退货运单号
+    shipId:string;        // 退货运单号
     refuseReason:string;  // 退货被拒绝原因
 }
 
