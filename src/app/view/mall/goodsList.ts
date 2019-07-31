@@ -94,7 +94,7 @@ export class GoodsList extends Widget {
     // 选择二级分组
     public selectLevel2Groups(e:any,index:number) {
         this.props.selectedLevel2Groups = this.props.selectedLevel1Groups.childs[index];
-        this.props.goodsList = [];
+        // this.props.goodsList = [];
         getGoodsInfo(this.props.selectedLevel2Groups.id,0).then((goods:GoodsDetails[]) => {
             this.props.goodsList = goods;
             this.changeSortRule(this.props.sortType, this.props.sortRule[this.props.sortType]);            

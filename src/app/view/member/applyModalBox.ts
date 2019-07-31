@@ -144,8 +144,9 @@ export class ModalBoxInput extends Widget {
 
     // 选择地址
     public selAddr() {
-        popNew('app-view-mine-addressList',{ isChoose:true },() => {
-            this.props.address = getLastAddress()[2];
+        popNew('app-view-mine-addressList',{ isChoose:true },(num) => {
+            const address = getStore('mall/addresses');
+            this.props.address = address[num];
             this.paint();
         });
     }

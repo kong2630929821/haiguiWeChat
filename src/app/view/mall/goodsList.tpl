@@ -1,4 +1,4 @@
-<div class="new-page" w-class="{{it.styleMod === 1?'new-page':'new-page1'}}">
+<div class="new-page" w-class="{{it.styleMod === 1?'new-page':'new-page1'}}" id="goodsList">
     {{if it.styleMod === 1}}
     <img src="{{it.mallImagPre + it.getImageMainPath(it.selectedLevel1Groups.images)[0]}}" alt="" style="width:100%;min-height:350px;"/>
     {{else}}

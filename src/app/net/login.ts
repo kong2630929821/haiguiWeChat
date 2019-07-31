@@ -45,11 +45,11 @@ export const requestAsync = (msg: any):Promise<any> => {
         request(msg, (resp: any) => {
             if (resp.type) {
                 console.log(`错误信息为${resp}`);
-                alert(`接口${JSON.stringify(msg)},错误信息为${JSON.stringify(resp)}`);
+                // alert(`接口${JSON.stringify(msg)},错误信息为${JSON.stringify(resp)}`);
                 reject(resp);
             } else if (resp.result !== 1) {
                 console.log(`错误信息为${resp}`);
-                alert(`接口${JSON.stringify(msg)},错误信息为${JSON.stringify(resp)}`);
+                // alert(`接口${JSON.stringify(msg)},错误信息为${JSON.stringify(resp)}`);
                 reject(resp);
             } else {
                 resolve(resp);

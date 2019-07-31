@@ -3,7 +3,7 @@ import { Widget } from '../../../pi/widget/widget';
 import { applyWithdraw } from '../../net/pull';
 import { getStore, register } from '../../store/memstore';
 import { popNewLoading, popNewMessage, priceFormat } from '../../utils/tools';
-export const forelet = new Forelet();
+
 interface Props {
     balance:string;  // 余额
     tax:string;    // 税费
@@ -14,6 +14,7 @@ let STATE = {
     singleLimit:'0',// 提现单笔上限
     tariff:0// 税率
 };
+export const forelet = new Forelet();
 /**
  * 提现
  */
