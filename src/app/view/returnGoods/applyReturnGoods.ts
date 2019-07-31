@@ -62,6 +62,7 @@ export class ApplyReturnGoods extends Widget {
                             console.log('图片上传成功',res);
                             this.props.imgs.pop();
                             this.props.imgs.push(serverFilePath + res);
+                            this.props.isUpload = false;
                             this.paint();
                         });
                     }
@@ -81,6 +82,7 @@ export class ApplyReturnGoods extends Widget {
                     console.log('图片上传成功',res);
                     this.props.imgs.pop();
                     this.props.imgs.push(serverFilePath + res);
+                    this.props.isUpload = false;
                     this.paint();
                 });
             });

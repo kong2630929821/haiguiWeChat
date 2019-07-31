@@ -63,7 +63,8 @@ export class AfterSaleOrderList extends Widget {
                 });
 
             } else if (activeStatus === ReturnGoodsStatus.RETURNING && afterOrder.shipId) {  // 查看退货物流
-                popNew('app-view-mine-freight',{ order: afterOrder.order });
+                // popNew('app-view-mine-freight',{ order: afterOrder.order });
+                popNew('app-view-mine-freight',{ order: { ship_id:afterOrder.shipId } });
             }
         } 
         console.log(e.btn, index);
