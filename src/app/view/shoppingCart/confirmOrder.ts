@@ -182,6 +182,9 @@ export class ConfirmOrder extends Widget {
                 payMoney(totalFee,'105',1,['pay_order',oids],() => {
                     console.log('payMoney --------------failed');
                     popNewMessage('支付失败');
+                    oids.forEach(r => {
+                        delOrder(r);
+                    });
                     this.payFaile();
                 });
                 
@@ -200,6 +203,9 @@ export class ConfirmOrder extends Widget {
                     payMoney(totalFee - cash,'105',1,['pay_order',oids],() => {
                         console.log('payMoney --------------failed');
                         popNewMessage('支付失败');
+                        oids.forEach(r => {
+                            delOrder(r);
+                        });
                         this.payFaile();
                     });
                 }

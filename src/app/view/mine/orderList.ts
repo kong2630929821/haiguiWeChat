@@ -104,7 +104,7 @@ export const payOrderNow = (order:Order) => {
     const totalFee = order.origin + order.tax + order.freight;
     const goodsid = order.orderGoods[0][0].id;
     try {
-        if (String(goodsid).slice(0,4) === '1002') {  // 判断特殊商品的前缀
+        if (order.orderGoods[0][0].isActGoods) {  // 判断特殊商品
             judgeActivityGoods(goodsid).then(r => {
                 if (r.value === 'true') {
                     setGoodsId(goodsid); // 存储即将付款的商品id

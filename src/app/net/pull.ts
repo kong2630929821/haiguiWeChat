@@ -774,6 +774,7 @@ export const payMoney = (money:number,ttype:string,count:number= 1,ext?:any,fail
         if (resp.type) {
             console.log(`错误信息为${resp.type}`);
             popNewMessage(`支付失败${resp.type}`);
+            failed && failed();
         } else {
             const flag = window.sessionStorage.appInflag;
             if (flag) {
