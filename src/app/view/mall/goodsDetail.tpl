@@ -62,13 +62,13 @@
     <div w-class="fix-bottom">
         <div w-class="left">
             <div w-class="fix-item fix-item-1" on-tap="gotoMallHome">
-                <div style="position: relative;">
+                <div style="position: relative;text-align: center;">
                     <img src="../../res/image/mall.png"/>
                     <div>首页</div>
                 </div>
             </div>
             <div w-class="fix-item fix-item-1" on-tap="gotoShoppinigCart">
-                <div style="position: relative;">
+                <div style="position: relative;text-align: center;">
                     <img src="../../res/image/shoppingCart.png"/>
                     <div>购物车</div>
                     {{if  it.cartGoodsLen > 0}}
@@ -78,7 +78,7 @@
                 </div>
             </div>
             <div w-class="fix-item fix-item-1" on-tap="gotoCollect">
-                <div style="position: relative;">
+                <div style="position: relative;text-align: center;">
                     <img src="{{it.isLiked==1?'../../res/image/yishoucang.png':'../../res/image/shoucang.png'}}"/>
                     <div>{{it.isLiked==1?'已收藏':'收藏'}}</div>
                 </div>

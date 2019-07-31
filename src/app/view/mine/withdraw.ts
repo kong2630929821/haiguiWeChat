@@ -69,6 +69,9 @@ export class Withdraw extends Widget {
     }
 }
 register('withdrawalSetting',r => {
-    STATE = r;
+    STATE = {
+        singleLimit:priceFormat(r.singleLimit),// 提现单笔上限
+        tariff:r.tariff// 税率
+    };
     forelet.paint(STATE);
 });
