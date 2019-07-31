@@ -189,7 +189,7 @@ export const getLastAddress = () => {
     const list = getStore('mall/addresses');
     let selected = localStorage.getItem('addressIndex') ? Number(localStorage.getItem('addressIndex')) :0;
     if (selected >= list.length) selected = 0;
-
+    
     return [list, selected, list[selected]];
 };
 
