@@ -1,7 +1,7 @@
 <div class="new-page" w-class="new-page">
     {{: let styleClass = it.styleMod === 1 ? "style-mod-1" : "style-mod-2" }}
     {{if it.styleMod === 1}}
-    <div w-class="top-container style-mod-1" class="bg-img" style="background-image: url({{it.mallImagPre + it.getImageMainPath(it.selectedLevel1Groups.images)[0]}})"></div>
+    <img src="{{it.mallImagPre + it.getImageMainPath(it.selectedLevel1Groups.images)[0]}}" alt="" style="width:100%;min-height:350px;max-height:550px;"/>
     {{else}}
     <div w-class="top-container style-mod-2">
         <div w-class="group1-select" on-tap="level1GroupsExpandedClick">
