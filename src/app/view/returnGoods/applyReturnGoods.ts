@@ -4,7 +4,7 @@ import { returnGoods, uploadFileApp } from '../../net/pull';
 import { Order } from '../../store/memstore';
 import { selectImage } from '../../utils/native';
 import { popNewMessage } from '../../utils/tools';
-import { takeImage, upImage } from '../../utils/wxAPI';
+import { setWxConfig, takeImage, upImage } from '../../utils/wxAPI';
 
 interface Props {
     order:Order;  // 订单详情
@@ -34,6 +34,7 @@ export class ApplyReturnGoods extends Widget {
             ...props
         };
         super.setProps(this.props);
+        setWxConfig();
     }
 
     // 选择图片
