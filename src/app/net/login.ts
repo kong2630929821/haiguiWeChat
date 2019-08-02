@@ -8,7 +8,7 @@ import { getCookie } from '../../pi/util/html';
 import { maxCount, wsUrl } from '../config';
 import { getStore, GroupsLocation, OrderStatus, setStore, UserType } from '../store/memstore';
 import { getAllMessage10, getCollect } from '../utils/logic';
-import { unicode2ReadStr, unicode2Str } from '../utils/tools';
+import { popNewMessage, unicode2ReadStr, unicode2Str } from '../utils/tools';
 import { registerWXAPI } from '../utils/wxAPI';
 import { getAddress, getAllGifts, getBalance, getCart, getEarningTotal, getGroups, getInviteCode, getOrders, getUserInfo, getWithdrawalStatus, guessYouLike, setUserName, withdrawSetting } from './pull';
 import { payComplete } from './push';
@@ -44,13 +44,16 @@ export const requestAsync = (msg: any):Promise<any> => {
     return new Promise((resolve, reject) => {
         request(msg, (resp: any) => {
             if (resp.type) {
-                console.log(`错误信息为${resp}`);
                 // alert(`接口${JSON.stringify(msg)},错误信息为${JSON.stringify(resp)}`);
                 reject(resp);
+
+            } else if (resp.error === -69) {
+                popNewMessage('请求超时');
+                reject(resp);
+
             } else if (resp.result !== 1) {
-                console.log(`错误信息为${resp}`);
-                // alert(`接口${JSON.stringify(msg)},错误信息为${JSON.stringify(resp)}`);
                 reject(resp);
+                
             } else {
                 resolve(resp);
             }
