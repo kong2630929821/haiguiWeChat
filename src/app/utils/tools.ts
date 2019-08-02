@@ -352,7 +352,7 @@ export const deelMessage = (r:any) => {
         const arr = [];
         v[1][2].forEach(t => {
             arr.push(
-                { key:`${unicode2Str(t[0])}：`,value:unicode2Str(t[1]) }
+                { key:`${unicode2Str(t[0])}`,value:unicode2Str(t[1]) }
             );
         });
         data.push({
