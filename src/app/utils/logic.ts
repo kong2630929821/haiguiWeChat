@@ -212,8 +212,14 @@ export const getCollect = () => {
 // 获取所有消息
 export const getAllMessage10 = () => {
     getAllMessage('',4).then(r => {
-        const status = r.length ? r[0].id :0;
-        localStorage.setItem('messageStatus',JSON.stringify(status));
-        setStore('message',r);
+        const id = JSON.parse(localStorage.getItem('messageStatus'));
+      
+        const status = r.length && id ? r[0].id :0;
+        if (id !== r[0].id || status === 0) {
+            setStore('flags/message',true);
+        }
+        
+        // localStorage.setItem('messageStatus',JSON.stringify(status));
+        // setStore('message',r);
     });
 };
