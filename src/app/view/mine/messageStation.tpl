@@ -1,8 +1,8 @@
 <div class="new-page" w-class="collectBox">
     {{if it1.length==0}}
     <div w-class="empty">
-        <img src="../../res/image/favoriteEmpty.png" w-class="emptyImg"/>
-        <div w-class="emptyText">没有中意的商品，快去收藏一个</div>
+        <img src="../../res/image/emptyMessage.png" w-class="emptyImg"/>
+        <div w-class="emptyText">暂无任何消息</div>
     </div>
     {{else}}
     <div w-class="box" on-scroll="getMoreList" id="message-list">
