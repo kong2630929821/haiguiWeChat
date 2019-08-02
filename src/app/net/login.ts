@@ -7,10 +7,10 @@ import { popNew } from '../../pi/ui/root';
 import { getCookie } from '../../pi/util/html';
 import { maxCount, wsUrl } from '../config';
 import { getStore, GroupsLocation, OrderStatus, setStore, UserType } from '../store/memstore';
-import { getCollect } from '../utils/logic';
+import { getAllMessage10, getCollect } from '../utils/logic';
 import { unicode2ReadStr, unicode2Str } from '../utils/tools';
 import { registerWXAPI } from '../utils/wxAPI';
-import { getAddress, getAllGifts, getBalance, getCart, getEarningTotal, getGroups, getInviteCode, getOrders, getUserInfo, getWithdrawalStatus, guessYouLike, setUserName, withdrawSetting } from './pull';
+import { getAddress, getAllGifts, getBalance, getCart, getCollectList, getEarningTotal, getFreight, getGroups, getInviteCode, getOrders, getUserInfo, getWithdrawalStatus, guessYouLike, setUserName, withdrawSetting } from './pull';
 import { payComplete } from './push';
 
 document.addEventListener('visibilitychange', () => {
@@ -222,5 +222,9 @@ const userLogin = (userStr:any) => {
             setStore('withdrawalSetting',data);
         });
         
+        // 获取所有消息
+        getAllMessage10();
     });
 };
+
+const UserLabel = ['','市代理','省代理'];

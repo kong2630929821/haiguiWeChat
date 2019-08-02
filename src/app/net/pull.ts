@@ -3,7 +3,7 @@ import { baoSaleClassGoodsId, baoVipClassGoodsId, baoVipMaskGoodsId, freeMaskGoo
 import { getStore,GoodsDetails, GroupsLocation, OrderStatus, ReturnGoodsStatus, setStore, UserType } from '../store/memstore';
 import {  judgeRealName, openWXPay } from '../utils/logic';
 import { payByWx } from '../utils/native';
-import { arrayBuffer2File, getUserType, popNewMessage, priceFormat, str2Unicode, timestampFormat, unicode2ReadStr, unicode2Str } from '../utils/tools';
+import { arrayBuffer2File, getUserType, popNewMessage, priceFormat, str2Unicode, timestampFormat, unicode2ReadStr, unicode2Str, deelMessage } from '../utils/tools';
 import { requestAsync } from './login';
 import { parseAddress, parseAddress2, parseAfterSale, parseAllGroups, parseArea, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
 
@@ -778,7 +778,6 @@ export const payMoney = (money:number,ttype:string,count:number= 1,ext?:any,fail
         if (resp.type) {
             console.log(`错误信息为${resp.type}`);
             popNewMessage(`支付失败${resp.type}`);
-            failed && failed();
         } else {
             if (flag) {
                 payByWx(resp.ok,(r:any) => {
@@ -1283,4 +1282,19 @@ export const withdrawSetting = () => {
     };
 
     return requestAsync(msg);
+};
+
+// 获取站内消息记录
+export const getAllMessage = (start:any,count:number) => {
+    const msg = {
+        type:'mall/msg@get_inner_msg',
+        param:{
+            start,
+            count
+        }
+    };
+
+    return requestAsync(msg).then(r => {
+        return deelMessage(r.msg_list);
+    });
 };

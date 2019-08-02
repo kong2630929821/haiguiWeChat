@@ -131,3 +131,12 @@
     border: 10px solid transparent;
     border-left: none;
 }
+.messageBox{
+    display: flex;
+    flex: 1 0 0;
+    justify-content: center;
+}
+.messageImg{
+    width: 54px;
+    height: 54px;
+}

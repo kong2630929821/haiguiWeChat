@@ -384,6 +384,7 @@ interface Store {
     balance:Balance;                  // 用户余额
     flags:any;                        // 全局标志位
     withdrawalSetting:any;// 提现配置
+    message:any;// 消息列表
 }
 // 全局内存数据库
 const store:Store = {
@@ -439,5 +440,6 @@ const store:Store = {
     withdrawalSetting:{
         singleLimit:0,
         tariff:0
-    }
+    },
+    message:[]
 };
