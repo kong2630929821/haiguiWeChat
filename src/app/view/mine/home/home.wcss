@@ -14,8 +14,9 @@
     display: flex;
     flex-direction: column;
     margin-left: 25px;
-    flex: 1 0 0;
+    flex: 1;
     color: #fff;
+    position: relative;
 }
 .userType{
     padding: 0 10px;
@@ -132,9 +133,12 @@
     border-left: none;
 }
 .messageBox{
+    position: absolute;
+    top: 50%;
+    right: 65px;
     display: flex;
-    flex: 1 0 0;
     justify-content: center;
+    transform: translateY(-38%);
 }
 .messageImg{
     width: 54px;

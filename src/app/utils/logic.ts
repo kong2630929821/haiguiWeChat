@@ -222,6 +222,9 @@ export const getAllMessage10 = () => {
         } else {
             // 首次获取
             localStorage.setItem('messageStatus',JSON.stringify(0));
+            if (r.length) {
+                setStore('flags/message',true);
+            }
         }
         setStore('message',r);
     });
