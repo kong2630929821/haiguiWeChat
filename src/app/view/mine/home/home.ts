@@ -81,6 +81,7 @@ export class Home extends Widget {
     public gotoMessage() {
         popNew('app-view-mine-messageStation',{});
         setStore('flags/message',false);
+        localStorage.setItem('messageStatus',JSON.stringify(getStore('message')[0].id));
     }
 }
 const State = {
