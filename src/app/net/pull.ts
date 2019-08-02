@@ -1,10 +1,9 @@
 import { request } from '../../pi/net/ui/con_mgr';
-import { start } from '../../pi/widget/slowdown';
 import { baoSaleClassGoodsId, baoVipClassGoodsId, baoVipMaskGoodsId, freeMaskGoodsId, httpPort, OffClassGoodsId, sourceIp, sourcePort, wangSaleClassGoodsId, wangVipClassGoodsId, wangVipMaskGoodsId, whiteGoodsId_10000A, whiteGoodsId_10000B, whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
 import { getStore,GoodsDetails, GroupsLocation, OrderStatus, ReturnGoodsStatus, setStore, UserType } from '../store/memstore';
 import {  judgeRealName, openWXPay } from '../utils/logic';
 import { payByWx } from '../utils/native';
-import { arrayBuffer2File, deelMessage, getUserType, popNewMessage, priceFormat, str2Unicode, timestampFormat, unicode2ReadStr, unicode2Str } from '../utils/tools';
+import { arrayBuffer2File, getUserType, popNewMessage, priceFormat, str2Unicode, timestampFormat, unicode2ReadStr, unicode2Str, deelMessage } from '../utils/tools';
 import { requestAsync } from './login';
 import { parseAddress, parseAddress2, parseAfterSale, parseAllGroups, parseArea, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
 
@@ -760,13 +759,17 @@ export const getUserInfo = () => {
  * @param ext 回传参数
  */
 export const payMoney = (money:number,ttype:string,count:number= 1,ext?:any,failed?:Function) => {
+    const flag = window.sessionStorage.appInflag;
+    let channer = 'wxpay';    // 公众号内支付
+    if (flag) channer = 'wx_app_pay';   // APP内支付
+
     const msg = {
         type:'mall/pay@pay',
         param:{
             money:Math.floor(money),
             type:ttype,
             count,
-            channel:'wxpay',
+            channer,
             ext
         }
     };
@@ -775,21 +778,8 @@ export const payMoney = (money:number,ttype:string,count:number= 1,ext?:any,fail
         if (resp.type) {
             console.log(`错误信息为${resp.type}`);
             popNewMessage(`支付失败${resp.type}`);
-            failed && failed();
         } else {
-            const flag = window.sessionStorage.appInflag;
-            if (flag) {
-                payByWx(resp.ok,(r:any) => {
-                    if (r.err_msg !== 'get_brand_wcpay_request:ok') {
-                        failed && failed();
-                    } else {
-                        queryOrder(resp.oid);   // 查询订单是否支付成功
-                    }
-                });
-
-            } else {
-                openWXPay(resp.ok,resp.oid,failed);
-            }
+            openWXPay(resp.ok,resp.oid,failed);
         }
     });
 };
