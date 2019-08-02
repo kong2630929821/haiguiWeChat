@@ -211,9 +211,18 @@ export const getCollect = () => {
 
 // 获取所有消息
 export const getAllMessage10 = () => {
-    getAllMessage('',4).then(r => {
-        const status = r.length ? r[0].id :0;
-        localStorage.setItem('messageStatus',JSON.stringify(status));
+    getAllMessage('',10).then(r => {
+        const id = JSON.parse(localStorage.getItem('messageStatus'));
+        if (id) {
+            // 非首次
+            if (id !== r[0].id) {
+                // 未读消息
+                setStore('flags/message',true);
+            }
+        } else {
+            // 首次获取
+            localStorage.setItem('messageStatus',JSON.stringify(0));
+        }
         setStore('message',r);
     });
 };

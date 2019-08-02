@@ -10,6 +10,7 @@ interface Props {
  * 消息站
  */
 export class MessageStation extends Widget {
+    public ok: () => void;
     public props:Props = {
         refresh:false
     };
