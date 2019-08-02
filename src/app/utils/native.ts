@@ -91,7 +91,7 @@ export const registerToWx = (appId:string) => {
     console.log('registerToWx!!!!!!',appId);
     WeChatLogin.regToWx(appId);
 };
-registerToWx('wx3d86fc2e76c0af41');   // 加载就立即调用
+registerToWx('wx352b4d158651ccf2');   // 加载就立即调用
 
 /**
  * 从微信APP获取临时凭证Code
