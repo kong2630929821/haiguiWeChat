@@ -118,7 +118,7 @@ export const getWXCode = (ok?:any) => {
  */
 export const payByWx = (param:string,ok?:any) => {
     const r = JSON.parse(param);
-    WeChatLogin.goWXPay(r.app_id,r.partnerid,r.prepayid,r.packages,r.noncestr,r.timestamp,r.sigh,(res) => {
+    WeChatLogin.goWXPay(r.appid,r.partnerid,r.prepayid,r.package,r.noncestr,r.timestamp,r.sign,(res) => {
         console.log('payByWx!!!!!!!!',res);
         ok && ok(res);
     });
