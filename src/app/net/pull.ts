@@ -3,7 +3,7 @@ import { baoSaleClassGoodsId, baoVipClassGoodsId, baoVipMaskGoodsId, freeMaskGoo
 import { getStore,GoodsDetails, GroupsLocation, OrderStatus, ReturnGoodsStatus, setStore, UserType } from '../store/memstore';
 import {  judgeRealName, openWXPay } from '../utils/logic';
 import { payByWx } from '../utils/native';
-import { arrayBuffer2File, getUserType, popNewMessage, priceFormat, str2Unicode, timestampFormat, unicode2ReadStr, unicode2Str, deelMessage } from '../utils/tools';
+import { arrayBuffer2File, deelMessage, getUserType, popNewMessage, priceFormat, str2Unicode, timestampFormat, unicode2ReadStr, unicode2Str } from '../utils/tools';
 import { requestAsync } from './login';
 import { parseAddress, parseAddress2, parseAfterSale, parseAllGroups, parseArea, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
 
@@ -760,8 +760,8 @@ export const getUserInfo = () => {
  */
 export const payMoney = (money:number,ttype:string,count:number= 1,ext?:any,failed?:Function) => {
     const flag = window.sessionStorage.appInflag;
-    let channer = 'wxpay';    // 公众号内支付
-    if (flag) channer = 'wx_app_pay';   // APP内支付
+    let channel = 'wxpay';    // 公众号内支付
+    if (flag) channel = 'wx_app_pay';   // APP内支付
 
     const msg = {
         type:'mall/pay@pay',
@@ -769,7 +769,7 @@ export const payMoney = (money:number,ttype:string,count:number= 1,ext?:any,fail
             money:Math.floor(money),
             type:ttype,
             count,
-            channer,
+            channel,
             ext
         }
     };
