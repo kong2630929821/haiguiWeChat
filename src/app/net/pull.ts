@@ -1,9 +1,10 @@
 import { request } from '../../pi/net/ui/con_mgr';
+import { start } from '../../pi/widget/slowdown';
 import { baoSaleClassGoodsId, baoVipClassGoodsId, baoVipMaskGoodsId, freeMaskGoodsId, httpPort, OffClassGoodsId, sourceIp, sourcePort, wangSaleClassGoodsId, wangVipClassGoodsId, wangVipMaskGoodsId, whiteGoodsId_10000A, whiteGoodsId_10000B, whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
 import { getStore,GoodsDetails, GroupsLocation, OrderStatus, ReturnGoodsStatus, setStore, UserType } from '../store/memstore';
 import {  judgeRealName, openWXPay } from '../utils/logic';
 import { payByWx } from '../utils/native';
-import { arrayBuffer2File, getUserType, popNewMessage, priceFormat, str2Unicode, timestampFormat, unicode2ReadStr, unicode2Str } from '../utils/tools';
+import { arrayBuffer2File, deelMessage, getUserType, popNewMessage, priceFormat, str2Unicode, timestampFormat, unicode2ReadStr, unicode2Str } from '../utils/tools';
 import { requestAsync } from './login';
 import { parseAddress, parseAddress2, parseAfterSale, parseAllGroups, parseArea, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
 
@@ -1280,4 +1281,19 @@ export const withdrawSetting = () => {
     };
 
     return requestAsync(msg);
+};
+
+// 获取站内消息记录
+export const getAllMessage = (start:any,count:number) => {
+    const msg = {
+        type:'mall/msg@get_inner_msg',
+        param:{
+            start,
+            count
+        }
+    };
+
+    return requestAsync(msg).then(r => {
+        return deelMessage(r.msg_list);
+    });
 };

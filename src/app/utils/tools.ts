@@ -341,3 +341,29 @@ const UserTypeShow = {
 export const getUserType = (level:number,label:number) => {
     return UserTypeShow[UserType[Number(`${level === 4 ? 3 :level}${label > 0 ? label :''}`)]];
 };
+
+// 处理站内消息
+export const deelMessage = (r:any) => {
+    if (!r) {
+        return [];
+    }
+    const data = [];
+    r.forEach(v => {
+        const arr = [];
+        v[1][2].forEach(t => {
+            arr.push(
+                { key:`${unicode2Str(t[0])}：`,value:unicode2Str(t[1]) }
+            );
+        });
+        data.push({
+            id:v[0][1],// 消息ID
+            start:unicode2Str(v[1][0]),// 标题
+            time:timestampFormat(v[1][4]),
+            title:unicode2Str(v[1][1]),// 标题开头
+            content:arr,
+            coda:unicode2Str(v[1][3])// 标题结尾
+        });
+    });
+
+    return data;
+};

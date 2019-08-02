@@ -1,7 +1,7 @@
 import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
-import { Order, OrderStatus, register, ReturnGoodsStatus } from '../../../store/memstore';
+import { getStore, Order, OrderStatus, register, ReturnGoodsStatus, setStore } from '../../../store/memstore';
 import { getUserTypeShow } from '../../../utils/logic';
 import { copyToClipboard, popNewMessage, priceFormat1, priceFormat2 } from '../../../utils/tools';
 
@@ -31,6 +31,7 @@ export class Home extends Widget {
             allStaus:allOrderStatus
         };
         super.setProps(this.props);
+        State.message = getStore('flags').message ? getStore('flags/message') :false;
         this.state = State;
     }
 
@@ -75,6 +76,12 @@ export class Home extends Widget {
     public goCollect() {
         popNew('app-view-mine-favorites',{});
     }
+
+    // 去消息列表
+    public gotoMessage() {
+        popNew('app-view-mine-messageStation',{});
+        setStore('flags/message',false);
+    }
 }
 const State = {
     balance:[
@@ -88,7 +95,8 @@ const State = {
     userName:'微信名',
     avatar:'',
     orders:new Map<OrderStatus,Order[]>(),
-    verified:false 
+    verified:false,
+    message:false 
 };
 register('balance',r => {
     State.balance[0].value = priceFormat1(r.cash);
@@ -110,3 +118,9 @@ register('mall/orders',(orders:Map<OrderStatus,Order[]>) => {
     State.orders = orders;
     forelet.paint(State);
 });
+
+// 监听消息是否查看
+register('flags/message',(r => {
+    State.message = r;
+    forelet.paint(State);
+}));

@@ -16,6 +16,9 @@
             {{end}}
             <div w-class="code">ID：&nbsp;{{it1.uid}}</div>
         </div>
+        <div w-class="messageBox">
+            <img src="../../../res/image/{{it1.message?'message.png':'unmessage.png'}}" alt="" w-class="messageImg" on-tap="gotoMessage"/>
+        </div>
     </div>
     <div w-class="orderType">
         {{for i,v of it.allStaus.slice(0,5)}}
