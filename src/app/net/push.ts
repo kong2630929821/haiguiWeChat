@@ -3,12 +3,14 @@
  */
 import { setMsgHandler } from '../../pi/net/ui/con_mgr';
 import { setStore } from '../store/memstore';
+import { getAllMessage10 } from '../utils/logic';
 import { popNewMessage, priceFormat } from '../utils/tools';
 import { delOrder, getNeedPayOrders } from '../view/shoppingCart/confirmOrder';
 
 /**
  * 支付成功
  */
+// tslint:disable-next-line:max-func-body-length
 export const payComplete = () => {
     // 支付成功
     setMsgHandler('event_pay_ok', (r) => {
@@ -102,5 +104,10 @@ export const payComplete = () => {
         };
         setStore('withdrawalSetting',data);
         console.log('提现配置========event_withdraw_config_change',r);
+    });
+
+    // 消息推送
+    setMsgHandler('event_inner_msg',r => {
+        getAllMessage10();
     });
 };

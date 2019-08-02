@@ -1,5 +1,5 @@
 import { onlyWXPay, whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
-import { getCollectList, payMoney, queryOrder, upgradeHBao, upgradeHWang } from '../net/pull';
+import { getAllMessage, getCollectList, payMoney, queryOrder, upgradeHBao, upgradeHWang } from '../net/pull';
 import { getStore, setStore, UserType } from '../store/memstore';
 import { popNewMessage } from './tools';
 /**
@@ -206,5 +206,23 @@ export const getCollect = () => {
     getCollectList().then(r => {
         console.log('获取所有收藏',r);
         setStore('flags/collects',r);
+    });
+};
+
+// 获取所有消息
+export const getAllMessage10 = () => {
+    getAllMessage('',10).then(r => {
+        const id = JSON.parse(localStorage.getItem('messageStatus'));
+        if (id) {
+            // 非首次
+            if (id !== r[0].id) {
+                // 未读消息
+                setStore('flags/message',true);
+            }
+        } else {
+            // 首次获取
+            localStorage.setItem('messageStatus',JSON.stringify(0));
+        }
+        setStore('message',r);
     });
 };
