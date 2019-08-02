@@ -187,24 +187,35 @@ export class GiftPage extends Widget {
     }
 
     // 分享给好友
-    public share(pop:boolean = true) {
+    public share(pop:boolean = true,str?:string) {
         const flag = window.sessionStorage.appInflag;
-        let url = `${location.origin + location.pathname}`;
+        let url = `${location.origin}/pt/wx/index.html`;   // APP和公众号都分享公众号内链接
         let title = '海龟壹号';
         let content = '更多精彩，就等你来';
         
         if (this.props.fg === PowerFlag.free) {
-            url = `${location.origin + location.pathname}?page=free&inviteCode=${this.props.inviteCode}`;
+            url += `?page=free&inviteCode=${this.props.inviteCode}`;
             title = '免费领面膜';
             content = '好友送了你一份面膜，快来领取吧';
 
         } else if (this.props.fg === PowerFlag.offClass) {
-            url = `${location.origin + location.pathname}?page=offClass&inviteCode=${this.props.inviteCode}`;
+            url += `?page=offClass&inviteCode=${this.props.inviteCode}`;
             title = '免费领课程';
             content = '好友送了你一个线下课程，快来领取吧';
-        } 
 
-        if (flag) {  // app进入
+        } else if (str === 'hBao') {
+            url += `?page=upHbao&inviteCode=${this.props.inviteCode}`;
+            title = '升级海宝';
+            content = '好友邀请你来成为海宝，享受海宝专属福利';
+
+        } else if (str === 'hWang') {
+            url += `?page=upHwang&inviteCode=${this.props.inviteCode}`;
+            title = '升级海王';
+            content = '好友邀请你来成为海王，享受海王专属福利';
+        }
+        console.log('share!!!!!!!',url,title,content);
+
+        if (flag && pop) {  // app进入
             popNew('app-components-share-share',{ 
                 shareType: ShareType.TYPE_LINK,
                 url,
@@ -219,18 +230,6 @@ export class GiftPage extends Widget {
                 popNew('app-components-bigImage-bigImage',{ img:'../../res/image/shareBg.png' });
             }
         }
-    }
-
-    // 邀请好友开通会员
-    public inviteShare(str:string) {
-        setWxConfig();
-        if (str === 'hBao') {
-            shareWithUrl('升级海宝','好友邀请你来成为海宝，享受海宝专属福利',`${location.origin + location.pathname}?page=upHbao&inviteCode=${this.props.inviteCode}`,'');
-
-        } else {
-            shareWithUrl('升级海王','好友邀请你来成为海王，享受海王专属福利',`${location.origin + location.pathname}?page=upHwang&inviteCode=${this.props.inviteCode}`,'');
-        }
-        popNew('app-components-bigImage-bigImage',{ img:'../../res/image/shareBg.png' });
     }
 
     public buyGoods(goods:number,addr:Address) {

@@ -759,13 +759,17 @@ export const getUserInfo = () => {
  * @param ext 回传参数
  */
 export const payMoney = (money:number,ttype:string,count:number= 1,ext?:any,failed?:Function) => {
+    const flag = window.sessionStorage.appInflag;
+    let channer = 'wxpay';    // 公众号内支付
+    if (flag) channer = 'wx_app_pay';   // APP内支付
+
     const msg = {
         type:'mall/pay@pay',
         param:{
             money:Math.floor(money),
             type:ttype,
             count,
-            channel:'wxpay',
+            channer,
             ext
         }
     };
@@ -776,7 +780,6 @@ export const payMoney = (money:number,ttype:string,count:number= 1,ext?:any,fail
             popNewMessage(`支付失败${resp.type}`);
             failed && failed();
         } else {
-            const flag = window.sessionStorage.appInflag;
             if (flag) {
                 payByWx(resp.ok,(r:any) => {
                     if (r.err_msg !== 'get_brand_wcpay_request:ok') {
