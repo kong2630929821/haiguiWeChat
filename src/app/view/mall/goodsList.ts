@@ -42,8 +42,8 @@ export class GoodsList extends Widget {
         goodsList:[],
         refresh:false,  
         active:0,
-        sortType:0,       // 排序规则 价格
-        sortRule:[true,false]     // 排序规则 从大到小
+        sortType:-1,       // 排序规则 价格
+        sortRule:[false,false]     // 排序规则 从大到小
     };
     public setProps(props:any) {
         this.props = {
@@ -54,7 +54,8 @@ export class GoodsList extends Widget {
         console.log('GoodsList ====',this.props);
         getGoodsInfo(props.selectedLevel2Groups.id,0).then((goods:GoodsDetails[]) => {
             this.props.goodsList = goods;
-            this.changeSortRule(this.props.sortType, this.props.sortRule[this.props.sortType]);
+            this.paint();
+            // this.changeSortRule(this.props.sortType, this.props.sortRule[this.props.sortType]);
         });
     }
 
@@ -94,7 +95,7 @@ export class GoodsList extends Widget {
     // 选择二级分组
     public selectLevel2Groups(e:any,index:number) {
         this.props.selectedLevel2Groups = this.props.selectedLevel1Groups.childs[index];
-        this.props.goodsList = [];
+        // this.props.goodsList = [];
         getGoodsInfo(this.props.selectedLevel2Groups.id,0).then((goods:GoodsDetails[]) => {
             this.props.goodsList = goods;
             this.changeSortRule(this.props.sortType, this.props.sortRule[this.props.sortType]);            
@@ -154,20 +155,24 @@ export class GoodsList extends Widget {
 
 // 销量从大到小排序
 export const sortCmd1 = (v1:GoodsDetails,v2:GoodsDetails) => {
-    return v2.saleCount - v1.saleCount || v1.id - v2.id;
+    // return v2.saleCount - v1.saleCount || v1.id - v2.id;
+    return v2.saleCount - v1.saleCount;
 };
 
 // 销量从小到大排序
 export const sortCmd2 = (v1:GoodsDetails,v2:GoodsDetails) => {
-    return v1.saleCount - v2.saleCount || v1.id - v2.id;
+    // return v1.saleCount - v2.saleCount || v1.id - v2.id;
+    return v1.saleCount - v2.saleCount;
 };
 
 // 价格从大到小排序
 export const sortCmd3 = (v1:GoodsDetails,v2:GoodsDetails) => {
-    return v2.discount - v1.discount || v1.id - v2.id;
+    // return v2.discount - v1.discount || v1.id - v2.id;
+    return v2.discount - v1.discount;
 };
 
 // 价格从小到大排序
 export const sortCmd4 = (v1:GoodsDetails,v2:GoodsDetails) => {
-    return v1.discount - v2.discount || v1.id - v2.id;
+    // return v1.discount - v2.discount || v1.id - v2.id;
+    return v1.discount - v2.discount;
 };

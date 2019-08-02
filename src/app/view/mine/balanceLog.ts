@@ -49,7 +49,7 @@ export class BalanceLog extends Widget {
                     if (item[1] === CashLogType.withdraw) {
                         getWithdrawStatus(item[3]).then(res => {
                             if (res.value[3] === 3) {  // 拒绝提现显示理由
-                                this.props.list[index].status = unicode2Str(res.value[6]);
+                                this.props.list[index].status = `提现失败：${unicode2Str(res.value[6])}`;
                             } else {
                                 this.props.list[index].status = Status[res.value[3]];
                             }

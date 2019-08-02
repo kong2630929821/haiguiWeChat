@@ -37,9 +37,9 @@
         {{elseif it.fg==6 && it.isCurVip}}
         <div w-class="inviteCode" on-tap="copyCode">我的邀请码&nbsp;{{it.inviteCode}}&nbsp;<span style="text-decoration: underline;">点击复制</span></div>
         <div w-class="invites">
-            <div w-class="invitebtn" on-tap="inviteShare('hBao')">邀请好友开通海宝</div>
+            <div w-class="invitebtn" on-tap="share(true,'hBao')">邀请好友开通海宝</div>
             {{if it.userType == 1}}
-            <div w-class="invitebtn" on-tap="inviteShare('hWang')">邀请好友开通海王</div>
+            <div w-class="invitebtn" on-tap="share(true,'hWang')">邀请好友开通海王</div>
             {{end}}
         </div>
         

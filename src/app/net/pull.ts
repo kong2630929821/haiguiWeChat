@@ -1,8 +1,9 @@
 import { request } from '../../pi/net/ui/con_mgr';
 import { baoSaleClassGoodsId, baoVipClassGoodsId, baoVipMaskGoodsId, freeMaskGoodsId, httpPort, OffClassGoodsId, sourceIp, sourcePort, wangSaleClassGoodsId, wangVipClassGoodsId, wangVipMaskGoodsId, whiteGoodsId_10000A, whiteGoodsId_10000B, whiteGoodsId_399A, whiteGoodsId_399B } from '../config';
-import { getStore,GoodsDetails, GroupsLocation, OrderStatus, ReturnGoodsStatus, setStore } from '../store/memstore';
-import {  openWXPay } from '../utils/logic';
-import {  arrayBuffer2File, popNewMessage, priceFormat, str2Unicode, timestampFormat, unicode2Str } from '../utils/tools';
+import { getStore,GoodsDetails, GroupsLocation, OrderStatus, ReturnGoodsStatus, setStore, UserType } from '../store/memstore';
+import {  judgeRealName, openWXPay } from '../utils/logic';
+import { payByWx } from '../utils/native';
+import { arrayBuffer2File, getUserType, popNewMessage, priceFormat, str2Unicode, timestampFormat, unicode2ReadStr, unicode2Str } from '../utils/tools';
 import { requestAsync } from './login';
 import { parseAddress, parseAddress2, parseAfterSale, parseAllGroups, parseArea, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
 
@@ -479,7 +480,7 @@ export const getEarningTotal = async () => {
         if (v[3]) {
             data.push(
                 {
-                    name:unicode2Str(v[1][0]),
+                    name:`${unicode2Str(v[1][0])} (购物返利)`,
                     time: timestampFormat(v[2]),
                     money: `￥${priceFormat(v[3])}`
                 }
@@ -492,7 +493,7 @@ export const getEarningTotal = async () => {
         partner: res.partnerCount,
         shell: res.hbei[0],
         wait_profit: priceFormat(res.wait_profit[0]),
-        rebate:data
+        rebate:data.reverse()
     };
     setStore('earning',earning);
 };
@@ -731,7 +732,23 @@ export const getUserInfo = () => {
         param:{}
     };
 
-    return requestAsync(msg);
+    return requestAsync(msg).then(res => {
+        const user = getStore('user');
+        user.label = getUserType(res.level,res.label);
+        user.avatar = res.avatar;
+        user.userName = unicode2ReadStr(res.wx_name);
+        // 正常中文名字则保留
+        user.realName = judgeRealName(unicode2Str(res.name[0])) ? unicode2Str(res.name[0]) :'';
+        user.IDCard = res.name[1];  // 身份证ID
+        user.phoneNum = res.phone;
+        if (res.level < UserType.other) {
+            user.fcode = res.fcode;  // 上级的邀请码
+            user.hwcode = res.hwcode;// 上级海王邀请码
+        } 
+        setStore('user',user);
+        
+        return res;
+    });
 };
 
 /**
@@ -742,13 +759,17 @@ export const getUserInfo = () => {
  * @param ext 回传参数
  */
 export const payMoney = (money:number,ttype:string,count:number= 1,ext?:any,failed?:Function) => {
+    const flag = window.sessionStorage.appInflag;
+    let channer = 'wxpay';    // 公众号内支付
+    if (flag) channer = 'wx_app_pay';   // APP内支付
+
     const msg = {
         type:'mall/pay@pay',
         param:{
             money:Math.floor(money),
             type:ttype,
             count,
-            channel:'wxpay',
+            channer,
             ext
         }
     };
@@ -757,8 +778,20 @@ export const payMoney = (money:number,ttype:string,count:number= 1,ext?:any,fail
         if (resp.type) {
             console.log(`错误信息为${resp.type}`);
             popNewMessage(`支付失败${resp.type}`);
+            failed && failed();
         } else {
-            openWXPay(resp.ok,resp.oid,failed);
+            if (flag) {
+                payByWx(resp.ok,(r:any) => {
+                    if (r.err_msg !== 'get_brand_wcpay_request:ok') {
+                        failed && failed();
+                    } else {
+                        queryOrder(resp.oid);   // 查询订单是否支付成功
+                    }
+                });
+
+            } else {
+                openWXPay(resp.ok,resp.oid,failed);
+            }
         }
     });
 };
@@ -838,7 +871,7 @@ export const uploadFileApp = (buffer:ArrayBuffer) => {
     formdata.append('upload',arrayBuffer2File(buffer));
     formdata.append('path','phone');
     
-    return fetch(`http://${sourceIp}:${sourcePort}/upload_goods_img`, {
+    return fetch(`http://${sourceIp}:${sourcePort}/service/upload`, {
         body: formdata, 
         method: 'POST', 
         mode: 'cors' 

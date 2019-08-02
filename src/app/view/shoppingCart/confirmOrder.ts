@@ -3,7 +3,7 @@ import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
 import { freeMaskGoodsId, mallImagPre, OffClassGoodsId, onlyWXPay } from '../../config';
 import { getCart, order, orderNow, payMoney, payOrder } from '../../net/pull';
-import { Address, CartGoods, getStore, OrderStatus, register, setStore } from '../../store/memstore';
+import { Address, CartGoods, getStore, OrderStatus, register, setStore, UserType } from '../../store/memstore';
 import { getLastAddress } from '../../utils/logic';
 import { calcFreight, popNewLoading, popNewMessage, priceFormat } from '../../utils/tools';
 import { allOrderStatus } from '../mine/home/home';
@@ -102,6 +102,7 @@ export class ConfirmOrder extends Widget {
                 break;
             }
         }
+
         if (hasTax && !getStore('user/IDCard')) {
             popNew('app-components-popModel-popModel',{ title:'海外购商品必须实名' },() => {
                 popNew('app-view-mine-IDCardUpload');
@@ -109,10 +110,15 @@ export class ConfirmOrder extends Widget {
 
             return;
         } 
-        
-        if (!getStore('user/fcode')) {
-            const fg = this.props.orderGoods[0].goods.isActGoods;  // 是否是399商品，是则不需要邀请码
-            popNew('app-view-member-applyModalBox',{ needSelGift:false,title:'请填写个人信息',needInviteCode: !fg },() => {
+        if (hasTax && getStore('user/realName') !== this.props.address.name) {
+            popNewMessage('海外购商品收货人名字必须与实名一致');
+
+            return;
+        } 
+        const fg = this.props.orderGoods[0].goods.isActGoods;  // 是否是399商品，是则不需要邀请码
+        if (!getStore('user/fcode') || (fg && getStore('user/userType') > UserType.hBao)) {
+            
+            popNew('app-view-member-applyModalBox',{ needSelGift:false,title:'请填写个人信息',isShopping399: fg },() => {
                 this.order();
             });
 
@@ -169,7 +175,6 @@ export class ConfirmOrder extends Widget {
             totalFee +=  res.orderInfo[3] + res.orderInfo[4] + res.orderInfo[5] + res.orderInfo[6];   // 商品原支付金额  商品税费  商品运费  其它费用
             console.log('oid ====',oid);
         }
-        // const totalFee = this.props.totalSale + this.props.totalFreight + this.props.totalTax;
         try {
             if (onlyWXPay) {
                 // 微信支付（正式服）
@@ -177,6 +182,9 @@ export class ConfirmOrder extends Widget {
                 payMoney(totalFee,'105',1,['pay_order',oids],() => {
                     console.log('payMoney --------------failed');
                     popNewMessage('支付失败');
+                    oids.forEach(r => {
+                        delOrder(r);
+                    });
                     this.payFaile();
                 });
                 
@@ -184,15 +192,20 @@ export class ConfirmOrder extends Widget {
                 // 用余额支付 (自测使用)
                 const cash = getStore('balance/cash',0);
                 if (cash > totalFee) {
-                    payOrder(oids[0]).then(r => {
-                        popNewMessage('支付成功');
-                        this.paySuccess();
-                    });
+                    for (const res of ordersRes) {
+                        const oid = res.orderInfo[0];
+                        payOrder(oid);
+                        console.log('oid ====',oid);
+                    }
+                    
                 } else {
                     setNeedPayOrders(oids);
                     payMoney(totalFee - cash,'105',1,['pay_order',oids],() => {
                         console.log('payMoney --------------failed');
                         popNewMessage('支付失败');
+                        oids.forEach(r => {
+                            delOrder(r);
+                        });
                         this.payFaile();
                     });
                 }

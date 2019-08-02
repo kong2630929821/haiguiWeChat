@@ -90,6 +90,7 @@ export const openWXPay = (param:any,oid:string,failed?:Function) => {
  * 获取会员等级名称
  */
 export const getUserTypeShow = (user?:UserType) => {
+    
     const curUser = getStore('user/userType',0);
     if (!user) user = curUser;
     if (curUser === UserType.hWang) return getStore('user/label','海王会员');
@@ -188,7 +189,7 @@ export const getLastAddress = () => {
     const list = getStore('mall/addresses');
     let selected = localStorage.getItem('addressIndex') ? Number(localStorage.getItem('addressIndex')) :0;
     if (selected >= list.length) selected = 0;
-
+    
     return [list, selected, list[selected]];
 };
 

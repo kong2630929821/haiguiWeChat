@@ -178,6 +178,12 @@ export class GoodsDetailHome extends Widget {
             }
             addCart(goodId,this.props.amount,sku[0]).then(() => {
                 popNewMessage('添加成功');
+            }).catch(r => {
+                if (r.type === 2142) {
+                    popNewMessage('特殊商品不能加购物车');
+                } else {
+                    popNewMessage('添加失败');
+                }
             });
         }
         

@@ -4,7 +4,7 @@ import { returnGoods, uploadFileApp } from '../../net/pull';
 import { Order } from '../../store/memstore';
 import { selectImage } from '../../utils/native';
 import { popNewMessage } from '../../utils/tools';
-import { takeImage, upImage } from '../../utils/wxAPI';
+import { setWxConfig, takeImage, upImage } from '../../utils/wxAPI';
 
 interface Props {
     order:Order;  // 订单详情
@@ -34,6 +34,7 @@ export class ApplyReturnGoods extends Widget {
             ...props
         };
         super.setProps(this.props);
+        setWxConfig();
     }
 
     // 选择图片
@@ -42,16 +43,17 @@ export class ApplyReturnGoods extends Widget {
             popNewMessage('正在上传，请稍等');
         }
 
-        const flag = location.protocol === 'file:';
+        const flag = window.sessionStorage.appInflag;
         if (flag) {    // app进入，唤起手机相机
             const imagePicker = selectImage((width, height, url) => {
                 console.log('selectImage url = ',url);
 
-            // 预览图片
+                // 预览图片
                 imagePicker.getContent({
                     quality:70,
                     success(buffer:ArrayBuffer) {
                         this.props.imgs.push(url);
+                        this.props.isUpload = true;
                         this.paint();
 
                         // 上传图片
@@ -60,6 +62,7 @@ export class ApplyReturnGoods extends Widget {
                             console.log('图片上传成功',res);
                             this.props.imgs.pop();
                             this.props.imgs.push(serverFilePath + res);
+                            this.props.isUpload = false;
                             this.paint();
                         });
                     }
@@ -71,15 +74,17 @@ export class ApplyReturnGoods extends Widget {
             takeImage(1,(r) => {
                 console.log(r);
                 this.props.imgs.push(r);
+                this.props.isUpload = true;
+                this.paint();
+
                 upImage(r, res => {
                     popNewMessage('图片上传成功');
                     console.log('图片上传成功',res);
                     this.props.imgs.pop();
                     this.props.imgs.push(serverFilePath + res);
+                    this.props.isUpload = false;
                     this.paint();
                 });
-
-                this.paint();
             });
         }
     }
@@ -107,6 +112,11 @@ export class ApplyReturnGoods extends Widget {
     public confirm() {
         if (!this.props.describle) {
             popNewMessage('请输入退货原因');
+
+            return;
+        }
+        if (this.props.imgs.length === 0) {
+            popNewMessage('请至少上传一张图片');
 
             return;
         }

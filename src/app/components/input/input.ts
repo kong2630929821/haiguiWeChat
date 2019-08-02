@@ -169,7 +169,7 @@ export class Input extends Widget {
         this.state.currentValue = '';
         this.state.showClear = false;
         (<any>this.getInput()).value = '';
-        notify(event.node,'ev-input-clear',{});  
+        notify(event.node,'ev-input-clear',{ value:'' });  
         this.paint();      
     }
 

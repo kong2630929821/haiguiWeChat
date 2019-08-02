@@ -101,6 +101,7 @@ export const parseGoodsSegmentationDetails = (infos: any) => {
 export const parseMallImage = (infos: any) => {
     const images: MallImages[] = [];
     for (const v of infos) {
+        if (!v) continue;
         const image: MallImages = {
             path: v[0],  // 图片url
             type: v[1],  // 图片的类型，例如图标、小图、大图等

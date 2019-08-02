@@ -1,3 +1,4 @@
+import { SharePlatform, ShareToPlatforms, ShareType } from '../../../pi/browser/shareToPlatforms';
 import { Widget } from '../../../pi/widget/widget';
 
 interface Props {
@@ -14,21 +15,9 @@ interface Props {
  * 分享
  */
 export class BaseShare extends Widget {
-    public props: any;
+    public props: Props;
     public ok: (success:boolean) => void;
     public cancel: (success:boolean) => void;
-
-    public setProps(props: Props, oldProps: Props): void {
-        super.setProps(props, oldProps);
-        if (this.props.shareType !== ShareType.TYPE_TEXT) {
-            this.props.isShowQQ = true;
-            this.props.showCount = 4;
-        } else {
-            this.props.isShowQQ = false;
-            this.props.showCount = 3;
-        }
-
-    }
 
     public backPrePage() {
         this.cancel && this.cancel(false);

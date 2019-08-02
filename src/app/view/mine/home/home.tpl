@@ -56,8 +56,8 @@
         <img src="../../../res/image/arrowRight.png"/>
         {{end}}
     </div>
-    <div w-class="row" on-tap="goCollect">
-        <img src="../../../res/image/shoucang.png"/>
+    <div w-class="row" style="border-bottom:1px solid #E5E5E5" on-tap="goCollect">
+        <img src="../../../res/image/shoucang_1.png"/>
         <div w-class="text">我的收藏</div>
         <img src="../../../res/image/arrowRight.png"/>
     </div>

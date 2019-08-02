@@ -195,7 +195,7 @@ export interface AfterSale {
     request_time:number;  // 请求售后时间
     reply_time:number;    // 回应售后时间
     finish_time:number;   // 完成售后时间
-    shipId:number;        // 退货运单号
+    shipId:string;        // 退货运单号
     refuseReason:string;  // 退货被拒绝原因
 }
 
@@ -351,6 +351,7 @@ interface User {
     label:string;        // 标签 省，市代理
     IDCard:string;       // 身份证号码 表示实名认证成功
     memberGifts:MemberGifts;   // 会员领取礼记录
+    hwcode:string;       // 上级海王邀请码
 }
 
 // 用户余额
@@ -416,6 +417,7 @@ const store:Store = {
         phoneNum:'',
         avatar:'',
         fcode:'',     // 上级的邀请码
+        hwcode:'',    // 上级海王邀请码
         label:'',      // 标签 省，市代理
         IDCard:'',
         memberGifts:{

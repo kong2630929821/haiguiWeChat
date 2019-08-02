@@ -48,7 +48,7 @@
     opacity:1;
 }
 .invalid{
-    width:67px;
+    width:110px;
     height:34px;
     background:rgba(128,128,128,1);
     font-size:32px;
@@ -56,6 +56,7 @@
     line-height:34px;
     color:rgba(255,255,255,1);
     opacity:1;
+    text-align: center;
 }
 .empty{
     flex: 1 0 0;

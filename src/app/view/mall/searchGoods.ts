@@ -31,6 +31,8 @@ export class SearchGoods extends Widget {
     // 搜索
     public search() {
         if (!this.props.message) {
+            this.props.goodsList = [];
+            this.paint();
             popNewMessage('请输入搜索条件');
 
             return;

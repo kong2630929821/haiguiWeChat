@@ -53,35 +53,37 @@ export class IDCardUpload extends Widget {
 
     // 选择图片
     public chooseImg(num:number) {
-        const flag = location.protocol === 'file:';
+        const flag = window.sessionStorage.appInflag;
         
         if (flag) {   // app进入，唤起手机相机
             const imagePicker = selectImage((width, height, url) => {
                 console.log('selectImage url = ',url);
-    
+                if (num === 1) {
+                    this.props.img1 = url;
+                } else {
+                    this.props.img2 = url;
+                }
+                this.paint();
+                // tslint:disable-next-line:no-this-assignment
+                const this1 = this;
+
                 // 预览图片
                 imagePicker.getContent({
                     quality:70,
                     success(buffer:ArrayBuffer) {
-                        if (num === 1) {
-                            this.props.img1 = url;
-                        } else {
-                            this.props.img2 = url;
-                        }
-                        this.paint();
-    
+                        
                         // 上传图片
                         uploadFileApp(buffer).then((res) => {
                             popNewMessage('图片上传成功');
                             console.log('图片上传成功',res);
                             if (num === 1) {
-                                this.props.img1 = serverFilePath + res;
-                                this.props.front = res;
+                                this1.props.img1 = serverFilePath + res.sid;
+                                this1.props.front = res.sid;
                             } else {
-                                this.props.img2 = serverFilePath + res;
-                                this.props.back = res;
+                                this1.props.img2 = serverFilePath + res.sid;
+                                this1.props.back = res.sid;
                             }
-                            this.paint();
+                            this1.paint();
                         });
                     }
                 });
@@ -153,10 +155,11 @@ export class IDCardUpload extends Widget {
                     // 上传身份信息
                     verifyIDCard(this.props.name,this.props.card,this.props.front,this.props.back,this.props.validDate).then(() => {
                         loadding && loadding.callback(loadding.widget);
-                        this.ok && this.ok();
                         popNewMessage('实名认证成功');
                         setStore('user/realName',this.props.name,false);
                         setStore('user/IDCard',this.props.card);
+                        this.ok && this.ok();
+                        
                     }).catch(() => {
                         popNewMessage('实名认证失败，请认真核对信息');
                         loadding && loadding.callback(loadding.widget);

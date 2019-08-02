@@ -3,7 +3,7 @@ import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
 import { whiteGoodsId_399A, whiteGoodsId_399B } from '../../../config';
-import { getAllGifts, getEarningTotal, getInviteCode } from '../../../net/pull';
+import { getAllGifts, getEarningTotal, getInviteCode, getUserInfo } from '../../../net/pull';
 import { register, setStore, UserType } from '../../../store/memstore';
 import { applyToUpHwang, getUserTypeShow, payToUpHbao } from '../../../utils/logic';
 import { copyToClipboard, popNewMessage, priceFormat } from '../../../utils/tools';
@@ -112,10 +112,11 @@ register('user',r => {
     forelet.paint(State);
 });
 register('flags/upgradeHbao',() => {
-    popNewMessage('升级海宝成功，输入地址立即领取礼包');
+    popNewMessage('升级海宝成功');
     setStore('user/userType', UserType.hBao);
     getInviteCode().then(res => {
         setStore('user/inviteCode',res.code);
     });
     getAllGifts();   // 获取所有礼包
+    getUserInfo();   // 更新用户信息
 });
