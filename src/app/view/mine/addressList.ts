@@ -1,6 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
+import { getAddress } from '../../net/pull';
 import { Address, getStore, register } from '../../store/memstore';
 import { getLastAddress } from '../../utils/logic';
 
@@ -29,6 +30,10 @@ export class AddressList extends Widget {
         };
         super.setProps(this.props);
         this.props.defaultAddrId = JSON.parse(localStorage.getItem('addressIndex'));
+        getAddress().then(r => {
+            this.props.list = r;
+            this.paint();
+        });
     }
 
     // 点击左侧按钮
@@ -57,11 +62,11 @@ export class AddressList extends Widget {
     }
 
     public addAddr() {
-        popNew('app-view-mine-editAddress',undefined,() => {
+        popNew('app-view-mine-editAddress',undefined,(fg:boolean) => {
             const address = getStore('mall/addresses');
             // localStorage.setItem('addressIndex',(address.length - 1).toString());
             if (this.props.isChoose) {
-                this.ok && this.ok(address.length - 1);
+                this.ok && this.ok(fg ? 0 :address.length - 1);
             }
         });
     }
