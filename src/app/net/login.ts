@@ -142,7 +142,7 @@ const userLogin = (userStr:any) => {
     const msg = { 
         type: 'login', 
         param: { 
-            type:1,
+            type:3,
             user:userStr.openid,
             password:getCookie('ZMSCID_WX') || ''
         } 
