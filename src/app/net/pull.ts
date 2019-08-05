@@ -770,7 +770,7 @@ export const payMoney = (money:number,ttype:string,count:number= 1,ext?:any,fail
             type:ttype,
             count,
             channer,
-            ext
+            ext:JSON.stringify(ext)
         }
     };
 
