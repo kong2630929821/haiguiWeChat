@@ -209,7 +209,7 @@ export const delAddress = (no:number) => {
         console.log('delAddress ======',addresses);
         setStore('mall/addresses',addresses);
 
-        return addAddress;
+        return addresses;
     });
 };
 
@@ -228,7 +228,7 @@ export const getAddress = () => {
         console.log('getAddress ======',addresses);
         setStore('mall/addresses',addresses);
         
-        return addAddress;
+        return addresses;
     });
 };
 

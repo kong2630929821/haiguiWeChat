@@ -10,7 +10,7 @@ import { checkPhone, popNewLoading, popNewMessage } from '../../utils/tools';
  * 编辑地址
  */
 export class EditAddress extends Widget {
-    public ok:() => void;
+    public ok:(fg:boolean) => void;
     public props:any = {
         name:'',
         tel:'',
@@ -130,7 +130,7 @@ export class EditAddress extends Widget {
                 const addresses = parseAddress2(data);
                 console.log('changeAddress ======',addresses);
                 setStore('mall/addresses',addresses);
-                this.ok && this.ok();
+                this.ok && this.ok(this.props.defaultAddr);
                 popNewMessage('修改成功');
                 close.callback(close.widget);
             }).catch(() => {
@@ -153,7 +153,7 @@ export class EditAddress extends Widget {
                 const addresses = parseAddress2(data);
                 console.log('addAddress ======',addresses);
                 setStore('mall/addresses',addresses);
-                this.ok && this.ok();
+                this.ok && this.ok(this.props.defaultAddr);
                 popNewMessage('保存成功');
                 close.callback(close.widget);
             }).catch(() => {
@@ -165,7 +165,7 @@ export class EditAddress extends Widget {
 
     public delAddress() {
         delAddress(this.props.id).then(() => {
-            this.ok && this.ok();
+            this.ok && this.ok(this.props.defaultAddr);
             popNewMessage('删除成功');
         });
     }
