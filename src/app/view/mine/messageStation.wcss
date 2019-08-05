@@ -80,3 +80,6 @@
     line-height:40px;
     margin: 30px;
 }
+.key{
+    white-space: nowrap;
+}
