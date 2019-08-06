@@ -114,15 +114,15 @@ const conReOpen = () => {
 
 const userLoginCheck = () => {
     let userStr;
-    let openId;
+    let unionid;
     if (location.search.indexOf('debug') >= 0) {
-        openId = localStorage.getItem('openid');
-        if (!openId) {
-            openId = new Date().getTime().toString();
-            localStorage.setItem('openid',openId);
+        unionid = localStorage.getItem('unionid');
+        if (!unionid) {
+            unionid = new Date().getTime().toString();
+            localStorage.setItem('unionid',unionid);
         }
         userStr = {
-            openid:openId,
+            unionid:unionid,
             headimgurl:'',
             nickname:'默认名字'
         };
@@ -145,8 +145,8 @@ const userLogin = (userStr:any) => {
     const msg = { 
         type: 'login', 
         param: { 
-            type:1,
-            user:userStr.openid,
+            type:3,
+            user:userStr.unionid,
             password:getCookie('ZMSCID_WX') || ''
         } 
     };
@@ -154,7 +154,7 @@ const userLogin = (userStr:any) => {
     requestAsync(msg).then(r => {
         console.log('userLogin success = ',r);
         setStore('user/uid',r.uid, false);   // uid
-        setBottomLayerReloginMsg(userStr.openid,1,r.password);
+        setBottomLayerReloginMsg(userStr.unionid,1,r.password);
         setStore('user/isLogin',true);
         setStore('user/userType',r.level); // 用户会员等级
         for (const k in GroupsLocation) {
