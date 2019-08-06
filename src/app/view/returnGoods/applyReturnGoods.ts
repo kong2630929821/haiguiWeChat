@@ -47,23 +47,25 @@ export class ApplyReturnGoods extends Widget {
         if (flag) {    // app进入，唤起手机相机
             const imagePicker = selectImage((width, height, url) => {
                 console.log('selectImage url = ',url);
+                this.props.imgs.push(url);
+                this.props.isUpload = true;
+                this.paint();
+                // tslint:disable-next-line:no-this-assignment
+                const this1 = this;
 
                 // 预览图片
                 imagePicker.getContent({
                     quality:70,
                     success(buffer:ArrayBuffer) {
-                        this.props.imgs.push(url);
-                        this.props.isUpload = true;
-                        this.paint();
-
+                        
                         // 上传图片
                         uploadFileApp(buffer).then((res) => {
                             popNewMessage('图片上传成功');
                             console.log('图片上传成功',res);
-                            this.props.imgs.pop();
-                            this.props.imgs.push(serverFilePath + res);
-                            this.props.isUpload = false;
-                            this.paint();
+                            this1.props.imgs.pop();
+                            this1.props.imgs.push(serverFilePath + res);
+                            this1.props.isUpload = false;
+                            this1.paint();
                         });
                     }
                 });
