@@ -770,7 +770,7 @@ export const payMoney = (money:number,ttype:string,count:number= 1,ext?:any,fail
             type:ttype,
             count,
             channel,
-            ext:JSON.stringify(ext)
+            ext
         }
     };
 
@@ -781,7 +781,7 @@ export const payMoney = (money:number,ttype:string,count:number= 1,ext?:any,fail
         } else {
             if (flag) {
                 payByWx(resp.ok,(r:any) => {
-                    if (r.err_msg !== 'get_brand_wcpay_request:ok') {
+                    if (r !== 0) {
                         failed && failed();
                     } else {
                         queryOrder(resp.oid);   // 查询订单是否支付成功
