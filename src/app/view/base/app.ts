@@ -31,30 +31,30 @@ export class App extends Widget {
             tabBarList: [
                 {
                     text: '商城',
-                    icon: 'mall.png',
-                    iconActive: 'mall_active.png',
+                    icon: 'mall1.png',
+                    iconActive: 'mall_active1.png',
                     components: 'app-view-mall-home-home'
                 },
                 {
                     text: '分类',
-                    icon: 'classify.png',
-                    iconActive: 'classify_active.png',
+                    icon: 'classify1.png',
+                    iconActive: 'classify_active1.png',
                     components: 'app-view-mall-home-groupsHome'
                 },{
                     text: '购物车',
-                    icon: 'shoppingCart.png',
-                    iconActive: 'shoppingCart_active.png',
+                    icon: 'shoppingCart1.png',
+                    iconActive: 'shoppingCart_active1.png',
                     components: 'app-view-shoppingCart-home-home'
                 },{
                     modulName: 'APP_EARN',
                     text: '会员',
-                    icon: 'income.png',
-                    iconActive: 'income_active.png',
+                    icon: 'income1.png',
+                    iconActive: 'income_active1.png',
                     components: 'app-view-member-home-home'
                 },{
                     text: '我的',
-                    icon: 'mine.png',
-                    iconActive: 'mine_active.png',
+                    icon: 'mine1.png',
+                    iconActive: 'mine_active1.png',
                     components: 'app-view-mine-home-home'
                 }
             ],

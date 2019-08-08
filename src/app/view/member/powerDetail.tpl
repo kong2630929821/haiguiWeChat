@@ -4,12 +4,12 @@
         {{if it1}}
         <div w-class="code" on-tap="copy">我的邀请码&nbsp;{{it1}}</div>
         {{else}}
-        <div w-class="update" on-tap="update">立即申请</div>
+        <div w-class="update" on-tap="upgradeUser">立即申请</div>
         {{end}}
     </div>
 
     <div w-class="title">
-        <img src="../../res/image/iconArrow.png"/>
+        <img src="../../res/image/iconArrow.png"  style="width:46px;height:46px;"/>
         <span style="margin-left:20px;">权益介绍</span>
     </div>
 
@@ -30,7 +30,7 @@
     </div>
 
     <div w-class="title">
-        <img src="../../res/image/iconArrow.png"/>
+        <img src="../../res/image/iconArrow.png" style="width:46px;height:46px;"/>
         <span style="margin-left:20px;">仅{{it.userTypeShow}}享受此权益</span>
     </div>
 

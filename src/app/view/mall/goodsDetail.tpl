@@ -63,13 +63,13 @@
         <div w-class="left">
             <div w-class="fix-item fix-item-1" on-tap="gotoMallHome">
                 <div style="position: relative;text-align: center;">
-                    <img src="../../res/image/mall.png"/>
+                    <img src="../../res/image/mall1.png"/>
                     <div>首页</div>
                 </div>
             </div>
             <div w-class="fix-item fix-item-1" on-tap="gotoShoppinigCart">
                 <div style="position: relative;text-align: center;">
-                    <img src="../../res/image/shoppingCart.png"/>
+                    <img src="../../res/image/shoppingCart1.png"/>
                     <div>购物车</div>
                     {{if  it.cartGoodsLen > 0}}
                     {{:icon =  it.cartGoodsLen > 99 ? "icon3" : (it.cartGoodsLen > 9 ? "icon2" : "icon1" )}}
