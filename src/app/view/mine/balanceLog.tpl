@@ -8,6 +8,7 @@
     <div w-class="content">
     {{if it.list.length>0}}
         {{for i,v of it.list}}
+            {{if v}}
             <div w-class="item" on-tap="goDetail({{i}})">
                 <div w-class="itemTop">
                     <div w-class="name">{{v.name}}</div>
@@ -20,6 +21,7 @@
                     {{end}}
                 </div>
             </div>
+            {{end}}
         {{end}}
     {{else}}
         <div w-class="empty">该月没有记录哦！</div>

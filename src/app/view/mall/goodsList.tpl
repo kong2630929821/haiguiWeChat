@@ -54,7 +54,8 @@
 
     </div>  
 
-    {{if it.goodsList.length==0}}
+    {{%===========商城首页保留图片滚动位置，用空白div撑起来===============}}
+    {{if it.goodsList.length==0 && it.styleMod === 1}}
         <div style="height:100%;"></div>
     {{end}}
 </div>

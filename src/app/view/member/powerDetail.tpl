@@ -1,5 +1,13 @@
 <div class="new-page" w-class="page" ev-update="upgradeUser">
-    <widget w-tag="app-view-member-home-powerCard">{name:"{{it.userTypeShow}}",money:{{it.userType==2 ? 399:10000}},code:{{it1}},privilegeNumber:{{it.userType==2 ? 6:8}} }</widget>
+    <div style="position:relative">
+        <img src="../../res/image/{{it.userType==2 ? 'hBaoCard':'hWangCard'}}.png" w-class="card"/>
+        {{if it1}}
+        <div w-class="code" on-tap="copy">我的邀请码&nbsp;{{it1}}</div>
+        {{else}}
+        <div w-class="update" on-tap="update">立即申请</div>
+        {{end}}
+    </div>
+
     <div w-class="title">
         <img src="../../res/image/iconArrow.png"/>
         <span style="margin-left:20px;">权益介绍</span>

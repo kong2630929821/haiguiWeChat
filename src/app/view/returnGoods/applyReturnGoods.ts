@@ -63,7 +63,7 @@ export class ApplyReturnGoods extends Widget {
                             popNewMessage('图片上传成功');
                             console.log('图片上传成功',res);
                             this1.props.imgs.pop();
-                            this1.props.imgs.push(serverFilePath + res);
+                            this1.props.imgs.push(serverFilePath + res.sid);
                             this1.props.isUpload = false;
                             this1.paint();
                         });

@@ -14,7 +14,8 @@ const Status = [
     '申请中',
     '处理中',
     '提现成功',
-    '提现失败'
+    '提现失败',
+    '处理中'
 ];
 
 /**
@@ -47,25 +48,22 @@ export class BalanceLog extends Widget {
                 const list = r.value.map((item,index) => {
                     // 提现记录需要获取进度
                     if (item[1] === CashLogType.withdraw) {
+                        const i = index;  
                         getWithdrawStatus(item[3]).then(res => {
                             if (res.value[3] === 3) {  // 拒绝提现显示理由
-                                this.props.list[index].status = `提现失败：${unicode2Str(res.value[6])}`;
+                                this.props.list[i].status = `提现失败：${unicode2Str(res.value[6])}`;
                             } else {
-                                this.props.list[index].status = Status[res.value[3]];
+                                this.props.list[i].status = Status[res.value[3]];
                             }
                             this.paint();
                         });
                     }
 
-                    // 充值购物记录隐藏
-                    if (item[1] === CashLogType.recharge || item[1] === CashLogType.shopping) {  
+                    // 充值 购物 升级海宝付钱 记录隐藏
+                    if (item[1] === CashLogType.recharge || item[1] === CashLogType.shopping || (item[1] === CashLogType.upHbao && item[2] < 0)) {  
                         return null;
 
                     } else {
-                        if (item[1] === CashLogType.upHbao && item[2] < 0) { // 升级海宝付钱记录隐藏
-                            return null;  
-                        }
-
                         return {
                             name: getCashLogName(item[1]), 
                             time: timestampFormat(item[4], 4),
@@ -76,7 +74,7 @@ export class BalanceLog extends Widget {
 
                 });
 
-                this.props.list = list.filter(r => !!r);
+                this.props.list = list;
             } else {
                 this.props.list = [];
             }

@@ -5,8 +5,8 @@ import { Widget } from '../../../../pi/widget/widget';
 import { whiteGoodsId_399A, whiteGoodsId_399B } from '../../../config';
 import { getAllGifts, getEarningTotal, getInviteCode, getUserInfo } from '../../../net/pull';
 import { register, setStore, UserType } from '../../../store/memstore';
-import { applyToUpHwang, getUserTypeShow, payToUpHbao } from '../../../utils/logic';
-import { copyToClipboard, popNewMessage, priceFormat } from '../../../utils/tools';
+import { applyToUpHwang, getUserTypeShow } from '../../../utils/logic';
+import { copyToClipboard, popNewMessage } from '../../../utils/tools';
 import { confirmActivityGoods } from '../giftPage';
 import { hBaoPower, hWangPower } from '../powerConstant';
 

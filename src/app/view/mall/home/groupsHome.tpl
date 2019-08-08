@@ -1,5 +1,5 @@
 <div class="new-page" w-class="new-page">
-    <div w-class="left-container">
+    <div w-class="left-container" style="display:{{it.isActive?'flex':'none'}}">
         {{for i,v of it1.groups}}
         <div w-class="group1-item  {{it1.activeIndex === i ? 'group1-item-active' : ''}}" on-tap="clickLevel1Item(e,{{i}})">{{v.name}}</div>
         {{end}}

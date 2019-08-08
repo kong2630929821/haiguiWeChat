@@ -1,6 +1,6 @@
 <div>
     <div w-class="top">
-        <img src="{{it1.avatar||'../../../res/image/income_active.png'}}" w-class="avatar"/>
+        <img src="{{it1.avatar||'../../../res/image/user_avatar.png'}}" w-class="avatar"/>
         <div w-class="desc">
             <div w-class="username">
                 <span>{{it1.userName}}</span>
@@ -46,12 +46,12 @@
     </div>
     <div w-class="divideLine"></div>
     <div w-class="row" style="border-bottom:1px solid #E5E5E5" on-tap="goAddress">
-        <img src="../../../res/image/address.png"/>
+        {{%<!-- <img src="../../../res/image/address.png"/> -->}}
         <div w-class="text">收货地址</div>
         <img src="../../../res/image/arrowRight.png"/>
     </div>
     <div w-class="row" style="border-bottom:1px solid #E5E5E5" on-tap="verified">
-        <img src="../../../res/image/IDcard.png"/>
+        {{%<!-- <img src="../../../res/image/IDcard.png"/> -->}}
         <div w-class="text">实名认证</div>
         {{if it1.verified}}
         <div style="font-size: 28px;color: rgb(136, 136, 136);">已认证</div>
@@ -60,7 +60,7 @@
         {{end}}
     </div>
     <div w-class="row" style="border-bottom:1px solid #E5E5E5" on-tap="goCollect">
-        <img src="../../../res/image/shoucang_1.png"/>
+        {{%<!-- <img src="../../../res/image/shoucang_1.png"/> -->}}
         <div w-class="text">我的收藏</div>
         <img src="../../../res/image/arrowRight.png"/>
     </div>
