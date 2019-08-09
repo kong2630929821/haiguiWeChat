@@ -60,7 +60,8 @@ export const calcPrices = (goods:GoodsDetails) => {
         origin:goods.origin,   // 原价
         sale:goods.origin,   // 售价
         discount:0,           // 几折
-        rebate:0              // 返利
+        rebate:0,             // 返利
+        vipSale:goods.vip_origin // 会员价（给白客看）
     };
     if (vipLevel === UserType.hBao) { // 海宝
         ret.sale = goods.discount !== goods.origin ? (goods.discount > goods.vip_origin ? goods.vip_origin :goods.discount) : (goods.vip_origin ? goods.vip_origin : goods.origin);

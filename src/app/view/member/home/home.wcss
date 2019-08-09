@@ -76,7 +76,6 @@
 .codeRow{
     display:flex;
     align-items:center;
-    width: 250px;
     border: 10px solid transparent;
     border-left: none;
 }

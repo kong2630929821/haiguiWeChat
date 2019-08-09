@@ -4,7 +4,7 @@
         <div w-class="good-name" class="{{it.discount || it.rebate ? 'line1-overflow' : 'line2-overflow'}}">{{it.goods.name}}</div>
         {{if it.discount || it.rebate}}
         <div w-class="good-labels">
-            {{if it.discount < 10}}
+            {{if it.discount > 0 && it.discount < 10 }}
             <div w-class="good-discount good-label">{{it.discount}}折</div>
             {{end}}
             {{if it.rebate}}
@@ -14,7 +14,7 @@
         {{end}}
         <div w-class="good-price">
             <div w-class="buy-price">￥{{it.priceFormat(it.sale)}}</div>
-            {{if it.discount < 10}}
+            {{if it.discount > 0 && it.discount < 10 }}
             <div w-class="original-price">{{it.priceFormat(it.origin)}}</div>
             {{end}}
         </div>

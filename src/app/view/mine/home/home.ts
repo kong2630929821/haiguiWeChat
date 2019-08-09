@@ -83,6 +83,11 @@ export class Home extends Widget {
         setStore('flags/message',false);
         localStorage.setItem('messageStatus',JSON.stringify(getStore('message')[0] ? getStore('message')[0].id :0));
     }
+
+    // 联系客服
+    public goOfficial() {
+        popNew('app-view-mine-contactUs');
+    }
 }
 const State = {
     balance:[

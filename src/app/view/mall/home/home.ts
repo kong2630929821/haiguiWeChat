@@ -2,8 +2,8 @@ import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
 import { likedGoodsMaxLen, mallImagPre, maxCount } from '../../../config';
-import { getGoodsDetails, guessYouLike } from '../../../net/pull';
-import { GoodsDetails, Groups, GroupsLocation, register, setStore } from '../../../store/memstore';
+import { guessYouLike } from '../../../net/pull';
+import { GoodsDetails, Groups, GroupsLocation1, register, setStore } from '../../../store/memstore';
 import { getImageThumbnailPath } from '../../../utils/tools';
 import { StyleMod } from '../goodsList';
 
@@ -26,7 +26,7 @@ export class MallHome extends Widget {
     public setProps(props:Props) {
         this.props = {
             ...props,
-            GroupsLocation,
+            GroupsLocation1,
             getFixLocationGroup,
             getImageThumbnailPath,
             mallImagPre,
@@ -44,7 +44,7 @@ export class MallHome extends Widget {
     }
 
     // 固定位置分组点击
-    public groupsLocationClick(e:any,location:GroupsLocation) {
+    public groupsLocationClick(e:any,location:number) {
         const group = this.state.groups.get(location)[0];
         // if (location > GroupsLocation.THIRTEEN) {  // 13以后是四个单链专区位置
         //     getGoodsDetails(group.childs[0]).then(r => {
@@ -92,22 +92,22 @@ export class MallHome extends Widget {
 }
 
 const STATE = {
-    groups:new Map<GroupsLocation, Groups[]>(),     // 所有分组信息
+    groups:new Map<number, Groups[]>(),     // 所有分组信息
     likedGoods:[]                  // 猜你喜欢商品列表
 };
 
 /**
  * 获取固定位置的分组
  */
-const getFixLocationGroup = (groups:Map<GroupsLocation, Groups[]>,location:GroupsLocation) => {
+const getFixLocationGroup = (groups:Map<number, Groups[]>,location:number) => {
     const group = groups.get(location);
 
     return  group ? group[0] : undefined;
 };
 
 // 分组信息监听
-register('mall/groups',(groups:Map<GroupsLocation, Groups[]>) => {  
-    STATE.groups = groups || new Map<GroupsLocation, Groups[]>();
+register('mall/groups',(groups:Map<number, Groups[]>) => {  
+    STATE.groups = groups || new Map<number, Groups[]>();
     forelet.paint(STATE);
 });
 

@@ -234,6 +234,11 @@ export class GoodsDetailHome extends Widget {
             });
         }
     }
+
+    // 前往升级会员
+    public goVip() {
+        setStore('flags/gotoMember',true);
+    }
 }
 
 // 计算加入购物车的商品数量

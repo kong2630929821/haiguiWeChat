@@ -64,4 +64,8 @@
         <div w-class="text">我的收藏</div>
         <img src="../../../res/image/arrowRight.png" w-class="arrow"/>
     </div>
+    <div w-class="row" style="border-bottom:1px solid #E5E5E5" on-tap="goOfficial">
+        <div w-class="text">联系我们</div>
+        <img src="../../../res/image/arrowRight.png" w-class="arrow"/>
+    </div>
 </div>

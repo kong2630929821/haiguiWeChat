@@ -249,6 +249,7 @@ export interface SplitOrder {
     taxFee:number;             // 所有商品总税费
     freightFee:number;         // 所有商品总运费
 }
+
 // 拆分订单
 const plitOrder = async (orderGoods:CartGoodsShow[],address:Address) => {
     const suppliers = new Map();    // 购买同一供应商的所有商品 保税商品/普通商品/海外直购分离
@@ -256,7 +257,7 @@ const plitOrder = async (orderGoods:CartGoodsShow[],address:Address) => {
         const supplierId = v.cartGood.goods.supplier;
         let oneSupplier = suppliers.get(supplierId);
         if (!oneSupplier) oneSupplier = [];
-        // 商品类型 0 普通商品 1 保税商品 2 海外直购
+        // 商品类型 0 普通商品 1 保税商品 2 海外直购 3 一般贸易
         if (v.cartGood.goods.goodsType === 0) { // 普通商品
             const normalGoods = oneSupplier[0] || [];
             normalGoods.push(v);
@@ -265,14 +266,28 @@ const plitOrder = async (orderGoods:CartGoodsShow[],address:Address) => {
             const taxGoods = oneSupplier[1] || [];
             taxGoods.push(v);
             oneSupplier[1] = taxGoods;
-        } else {  // 海外直购
+        } else if (v.cartGood.goods.goodsType === 2) {  // 海外直购
             const overseaGoods = oneSupplier[2] || [];
             overseaGoods.push(v);
             oneSupplier[2] = overseaGoods;
+        } else if (v.cartGood.goods.goodsType === 3) {   // 一般贸易
+            const otherGoods = oneSupplier[3] || [];
+            otherGoods.push(v);
+            oneSupplier[3] = otherGoods;
         }
         suppliers.set(supplierId,oneSupplier);
     }
+    const splitOrders = await buildUpOrder(suppliers,address);
+    const ret = calcAllFees(splitOrders);
 
+    return {
+        splitOrders,
+        ...ret
+    };
+};
+
+// 组装订单
+const buildUpOrder = async (suppliers, address) => {
     const splitOrders:SplitOrder[] = [];
     for (const [k,v] of suppliers) {
        
@@ -324,15 +339,26 @@ const plitOrder = async (orderGoods:CartGoodsShow[],address:Address) => {
             };
             splitOrders.push(splitOrder);
         }
-        
-    }
-    
-    const ret = calcAllFees(splitOrders);
 
-    return {
-        splitOrders,
-        ...ret
-    };
+        if (v[3]) {    // 一般贸易
+            let totalTax = 0;
+            let totalTaxSale = 0;
+            for (const cartGoodShow of v[3]) {   // 一般贸易
+                totalTax += cartGoodShow.cartGood.goods.tax * cartGoodShow.cartGood.amount;
+                totalTaxSale += cartGoodShow.finalSale * cartGoodShow.cartGood.amount;
+            }
+            const freightFee = await calcFreight(address && address.area_id, k, 3);
+            const splitOrder:SplitOrder = {     // 一般贸易运费税费都有 不知道跟普通商品啥区别
+                order:v[3],
+                saleFee:totalTaxSale,
+                taxFee:totalTax,
+                freightFee
+            };
+            splitOrders.push(splitOrder);
+        }
+    }
+
+    return splitOrders;
 };
 
 // 计算商品费用 包括商品总费用 运费总计  税费总计

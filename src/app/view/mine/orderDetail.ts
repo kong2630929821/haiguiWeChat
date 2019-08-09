@@ -34,28 +34,41 @@ export class OrderDetail extends Widget {
         const order = this.props.order;
         const activeStatus = this.props.status;
         if (num === 1) {  // 确认按钮
-            if (activeStatus === OrderStatus.PENDINGPAYMENT) {  // 去支付
-                payOrderNow(order);  // 去付款
+            if (activeStatus === OrderStatus.PENDINGPAYMENT) {  // 待付款 去付款
+                payOrderNow(order); 
+
             } else if (activeStatus === OrderStatus.PENDINGRECEIPT) {  // 待收货  确认收货
                 popNew('app-components-popModel-popModel',{ title:'是否确认收货' },() => {
                     receiptOrder(order.id).then(() => {
-                        getOrders(OrderStatus.PENDINGRECEIPT);
-                        this.ok && this.ok(OrderStatus.PENDINGRECEIPT);
+                        getOrders(activeStatus);
+                        this.ok && this.ok(activeStatus);
                     }).catch(err => {
                         popNewMessage('出错了');
                     });
                 });
                
             }
+            
         } else {  // 取消按钮
             if (activeStatus === OrderStatus.PENDINGPAYMENT) { // 待付款  取消订单
                 cancelOrder(order.id).then(() => {
                     popNewMessage('取消成功');
                     getOrders(activeStatus);
-                    this.ok && this.ok(OrderStatus.PENDINGPAYMENT);
+                    this.ok && this.ok(activeStatus);
                 }).catch(() => {
                     popNewMessage('取消失败');
                 });
+            } else if (activeStatus === OrderStatus.PENDINGDELIVERED) {  // 待发货 取消订单
+                popNew('app-components-popModel-popModel',{ title:'确认取消订单' },() => {
+                    cancelOrder(order.id).then(() => {
+                        popNewMessage('取消成功');
+                        getOrders(activeStatus);
+                        this.ok && this.ok(activeStatus);
+                    }).catch(() => {
+                        popNewMessage('取消失败');
+                    });
+                });
+
             } else if (activeStatus === OrderStatus.PENDINGRECEIPT) {  // 待收货  查看物流
                 popNew('app-view-mine-freight',{ order: order });
             }
@@ -85,7 +98,7 @@ export const statusShows:any = {
     },
     [OrderStatus.PENDINGDELIVERED]:{
         desc:'等待发货',
-        btn1:'',
+        btn1:'取消订单',
         btn2:''
     },
     [OrderStatus.PENDINGRECEIPT]:{

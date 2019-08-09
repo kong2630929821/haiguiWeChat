@@ -18,13 +18,15 @@
                 <div w-class="goods-other">
                     <div w-class="good-price">
                         <div w-class="buy-price">￥{{it.priceFormat(it.sale)}}</div>
-                        {{if it.discount}}
+                        {{if it.discount > 0 && it.discount < 10 }}
                         <div w-class="original-price">{{ it.priceFormat(it.origin)}}</div>
+                        {{else}}
+                        <div w-class="vip-price" on-tap="goVip">（会员价：{{ it.priceFormat(it.vipSale)}}）</div>
                         {{end}}
                     </div>
                     {{if it.discount || it.rebate}}
                     <div w-class="good-labels">
-                        {{if it.discount < 10}}
+                        {{if it.discount > 0 && it.discount < 10 }}
                         <div w-class="good-discount good-label">{{it.discount}}折</div>
                         {{end}}
                         {{if it.rebate}}

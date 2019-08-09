@@ -82,6 +82,16 @@ export class OrderList extends Widget {
                 }).catch(() => {
                     popNewMessage('取消失败');
                 });
+            } else if (activeStatus === OrderStatus.PENDINGDELIVERED) {  // 待发货 取消订单
+                popNew('app-components-popModel-popModel',{ title:'确认取消订单' },() => {
+                    cancelOrder(order.id).then(() => {
+                        popNewMessage('取消成功');
+                        getOrders(activeStatus);
+                    }).catch(() => {
+                        popNewMessage('取消失败');
+                    });
+                });
+
             } else if (activeStatus === OrderStatus.PENDINGRECEIPT) {  // 待收货  查看物流
                 popNew('app-view-mine-freight',{ order: order });
             }

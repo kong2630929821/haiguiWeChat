@@ -100,6 +100,13 @@ export class App extends Widget {
         this.paint();
     }
 
+    // 去会员页
+    public gotoMember() {
+        this.props.isActive = 3;
+        closeAllPage();
+        this.paint();
+    }
+
     public updateCartGoodsIcon(cartGoods:CartGoods[]) {
         let len = 0;
         for (const v of cartGoods) {
@@ -142,6 +149,12 @@ register('flags/gotoClass',() => {
 register('flags/gotoMine',() => {
     const w:any = forelet.getWidget(WIDGET_NAME);
     w && w.gotoMine();
+});
+
+// 去升级会员
+register('flags/gotoMember',() => {
+    const w:any = forelet.getWidget(WIDGET_NAME);
+    w && w.gotoMember();
 });
 
 // 购物车变动

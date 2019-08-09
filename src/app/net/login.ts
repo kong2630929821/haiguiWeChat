@@ -6,7 +6,7 @@ import { open, reopen, request, setBottomLayerReloginMsg, setReloginCallback, se
 import { popNew } from '../../pi/ui/root';
 import { getCookie } from '../../pi/util/html';
 import { maxCount, wsUrl } from '../config';
-import { getStore, GroupsLocation, OrderStatus, setStore, UserType } from '../store/memstore';
+import { getStore, GroupsLocation1, OrderStatus, setStore, UserType } from '../store/memstore';
 import { getAllMessage10, getCollect } from '../utils/logic';
 import { popNewMessage, unicode2ReadStr, unicode2Str } from '../utils/tools';
 import { registerWXAPI } from '../utils/wxAPI';
@@ -157,10 +157,8 @@ const userLogin = (userStr:any) => {
         setBottomLayerReloginMsg(userStr.unionid,1,r.password);
         setStore('user/isLogin',true);
         setStore('user/userType',r.level); // 用户会员等级
-        for (const k in GroupsLocation) {
-            if (parseInt(GroupsLocation[k]) >= 0) {
-                getGroups(<any>GroupsLocation[k]);
-            }
+        for (const v of GroupsLocation1) {
+            getGroups(v);
         }
         getCart();    // 购物车
         getAddress();  // 地址列表
