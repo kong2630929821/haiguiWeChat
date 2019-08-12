@@ -10,6 +10,7 @@ interface Props {
     message:string;  // 输入的内容
     sortType:number;   // 排序规则 0 价格  1 销量
     sortRule:[boolean,boolean];   // 排序规则 从大到小
+    searchResult:string;// 搜索无商品显示
 }
 /**
  * 搜索商品
@@ -19,7 +20,8 @@ export class SearchGoods extends Widget {
         goodsList:[],
         message:'',
         sortType:0,       // 排序规则 价格
-        sortRule:[true,false]     // 排序规则 从大到小
+        sortRule:[true,false],     // 排序规则 从大到小
+        searchResult:'没有想买的商品，快搜索一个'
     };
 
     // 输入
@@ -44,6 +46,9 @@ export class SearchGoods extends Widget {
                 goods.push(good);
             }
             this.props.goodsList = goods;
+            if (!this.props.goodsList.length) {
+                this.props.searchResult = `没有与条件“${this.props.message}”相关的商品，换一个试试`;
+            }
             this.paint();
             console.log(this.props.message,goods);
         });

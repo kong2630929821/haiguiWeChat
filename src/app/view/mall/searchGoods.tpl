@@ -8,7 +8,7 @@
     {{if it.goodsList.length==0}}
     <div w-class="empty">
         <img src="../../res/image/searchEmpty.png" w-class="emptyImg"/>
-        <div w-class="emptyText">没有想买的商品，快搜索一个</div>
+        <div w-class="emptyText">{{it.searchResult}}</div>
     </div>
     {{else}}
     <div w-class="sort_btns" >
