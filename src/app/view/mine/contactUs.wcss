@@ -36,7 +36,8 @@
 .itemDesc{
     color: rgba(136, 136, 136, 0.87);
     font-size: 28px;
-    margin-right: 20px;
+    margin-top: 60px;
+    margin-left: 140px;
 }
 .itemImg{
     width: 30px;

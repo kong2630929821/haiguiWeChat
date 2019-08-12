@@ -22,4 +22,9 @@ export class ContactUs extends Widget {
         copyToClipboard(this.props.data[ind][1]);
         popNewMessage('复制成功');
     }
+
+    public copyBtn() {
+        copyToClipboard('028-66266866');
+        popNewMessage('复制成功');
+    }
 }
