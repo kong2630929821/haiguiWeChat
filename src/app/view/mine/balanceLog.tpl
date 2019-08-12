@@ -17,7 +17,7 @@
                 <div w-class="itemTop">
                     <div w-class="time" style="margin-right: 15px;flex-shrink: 0">{{v.time}}</div>
                     {{if v.status}}
-                    <div w-class="time">{{v.status}}</div>
+                    <div w-class="time" style="word-break: break-all;">{{v.status}}</div>
                     {{end}}
                 </div>
             </div>

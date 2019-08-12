@@ -64,11 +64,12 @@ export class BalanceLog extends Widget {
                         return null;
 
                     } else {
+                       
                         return {
                             name: getCashLogName(item[1]), 
                             time: timestampFormat(item[4], 4),
-                            money: `${item[2] > 0 ? '+' :''}${priceFormat(item[2])}`,  // 正数带个+
-                            status:''
+                            money: `${item[2] > 0 ? '+' :''}${priceFormat(item[2])}` , // 正数带个+
+                            status:CashLogType.manage === item[1] ? unicode2Str(item[3]) :''
                         };
                     }
 

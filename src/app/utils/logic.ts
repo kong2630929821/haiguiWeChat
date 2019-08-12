@@ -117,7 +117,7 @@ export enum CashLogType {
     hBaoGoods      // 399商品返利
 }
 // 现金来源名称
-const CashLogName = {
+export const CashLogName = {
     upHwang:'升级海王',
     upHbao:'升级海宝',
     reShop:'购物返利',
