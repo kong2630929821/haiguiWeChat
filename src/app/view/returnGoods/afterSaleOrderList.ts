@@ -71,7 +71,7 @@ export class AfterSaleOrderList extends Widget {
     }
 
     // 退货状态变化
-    public returnChnage(rtype:ReturnChangeType) {
+    public returnChange(rtype:ReturnChangeType) {
         if (rtype === ReturnChangeType.ACCEPT) {
             this.typeClick(ReturnGoodsStatus.RETURNING);
         } else if (rtype === ReturnChangeType.SUCCESS) {
@@ -90,15 +90,25 @@ export enum ReturnChangeType {
 }
 
 const STATE = {
-    orders:new Map<ReturnGoodsStatus,AfterSale[]>()
+    orders:new Map<ReturnGoodsStatus,AfterSale[]>(),
+    returnGoodsFg:false  // 退货中订单填写物流单号提醒
 };
 
+// 监听退货订单
 register('mall/afterSales',(afterSaleOrders:Map<ReturnGoodsStatus,AfterSale[]>) => {
     STATE.orders = afterSaleOrders;
+
+    const order = afterSaleOrders.get(ReturnGoodsStatus.RETURNING);
+    STATE.returnGoodsFg = false;
+    for (const v of order) {
+        if (v.status === 1 && !v.shipId) {
+            STATE.returnGoodsFg = true;  // 只要有一个退货中订单未填运单号则提示
+        }
+    }
     forelet.paint(STATE);
 });
 
 register('flags/returnChange',(rtype:ReturnChangeType) => {
     const w:any = forelet.getWidget(WIDGET_NAME);
-    w && w.returnChnage(rtype);
+    w && w.returnChange(rtype);
 });

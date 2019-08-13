@@ -143,3 +143,12 @@
     width: 54px;
     height: 54px;
 }
+.spot{
+    width:10px;
+    height:10px;
+    background:rgba(206,57,57,1);
+    border-radius: 50%;
+    position: absolute;
+    top:0;
+    right: -5px;
+}

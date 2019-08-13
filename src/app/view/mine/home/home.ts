@@ -1,7 +1,7 @@
 import { popNew } from '../../../../pi/ui/root';
 import { Forelet } from '../../../../pi/widget/forelet';
 import { Widget } from '../../../../pi/widget/widget';
-import { getStore, Order, OrderStatus, register, ReturnGoodsStatus, setStore } from '../../../store/memstore';
+import { AfterSale, getStore, Order, OrderStatus, register, ReturnGoodsStatus, setStore } from '../../../store/memstore';
 import { getUserTypeShow } from '../../../utils/logic';
 import { copyToClipboard, popNewMessage, priceFormat1, priceFormat2 } from '../../../utils/tools';
 
@@ -102,7 +102,8 @@ const State = {
     avatar:'',
     orders:new Map<OrderStatus,Order[]>(),
     verified:false,
-    message:false 
+    message:false,
+    returnGoodsFg:false  // 退货中订单填写物流单号提醒
 };
 register('balance',r => {
     State.balance[0].value = priceFormat1(r.cash);
@@ -130,3 +131,16 @@ register('flags/message',(r => {
     State.message = r;
     forelet.paint(State);
 }));
+
+// 监听退货订单
+register('mall/afterSales',(orders:Map<ReturnGoodsStatus,AfterSale[]>) => {
+    const order = orders.get(ReturnGoodsStatus.RETURNING);
+    State.returnGoodsFg = false;
+    for (const v of order) {
+        if (v.status === 1 && !v.shipId) {
+            State.returnGoodsFg = true;  // 只要有一个退货中订单未填运单号则提示
+        }
+    }
+    
+    forelet.paint(State);
+});

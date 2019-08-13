@@ -30,6 +30,8 @@
             {{if len > 0 && (i === 0 || i === 1 || i === 2)}}
             {{:icon =  len > 99 ? "icon3" : (len > 9 ? "icon2" : "icon1" )}}
             <div w-class="icon {{icon}}">{{len > 99 ? "99+" : len}}</div>
+            {{elseif it1.returnGoodsFg && i===4}}
+            <div w-class="spot"></div>
             {{end}}
         </div>
         {{end}}

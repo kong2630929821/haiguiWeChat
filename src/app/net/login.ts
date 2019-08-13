@@ -6,11 +6,11 @@ import { open, reopen, request, setBottomLayerReloginMsg, setReloginCallback, se
 import { popNew } from '../../pi/ui/root';
 import { getCookie } from '../../pi/util/html';
 import { maxCount, wsUrl } from '../config';
-import { getStore, GroupsLocation1, OrderStatus, setStore, UserType } from '../store/memstore';
+import { getStore, GroupsLocation1, OrderStatus, ReturnGoodsStatus, setStore, UserType } from '../store/memstore';
 import { getAllMessage10, getCollect } from '../utils/logic';
 import { popNewMessage, unicode2ReadStr, unicode2Str } from '../utils/tools';
 import { registerWXAPI } from '../utils/wxAPI';
-import { getAddress, getAllGifts, getBalance, getCart, getEarningTotal, getGroups, getInviteCode, getOrders, getUserInfo, getWithdrawalStatus, guessYouLike, setUserName, withdrawSetting } from './pull';
+import { getAddress, getAllGifts, getBalance, getCart, getEarningTotal, getGroups, getInviteCode, getOrders, getReturnGoods, getUserInfo, getWithdrawalStatus, guessYouLike, setUserName, withdrawSetting } from './pull';
 import { payComplete } from './push';
 
 document.addEventListener('visibilitychange', () => {
@@ -169,6 +169,8 @@ const userLogin = (userStr:any) => {
         getOrders(OrderStatus.PENDINGPAYMENT);
         getOrders(OrderStatus.PENDINGDELIVERED);
         getOrders(OrderStatus.PENDINGRECEIPT);
+        getReturnGoods(ReturnGoodsStatus.RETURNING); // 获取退货中订单
+
         // 获取收益统计
         getEarningTotal();
         

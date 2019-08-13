@@ -20,7 +20,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 60px;
+    width: 100px;
+    position: relative;
 }
 .name{
     width: 100px;
@@ -32,4 +33,13 @@
 }
 .active{
     border-bottom: 6px solid #8A4AF3;
+}
+.spot{
+    width:10px;
+    height:10px;
+    background:rgba(206,57,57,1);
+    border-radius: 50%;
+    position: absolute;
+    top: 30px;
+    right: 0px;
 }

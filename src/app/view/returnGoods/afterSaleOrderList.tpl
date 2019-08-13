@@ -3,6 +3,9 @@
         {{for i,v of it.allStaus}}
         <div w-class="item" on-tap="typeClick({{v.status}})">
             <div w-class="name {{it.activeStatus == v.status ? 'active':''}}">{{v.name}}</div>
+            {{if it1.returnGoodsFg && i===1}}
+            <div w-class="spot"></div>
+            {{end}}
         </div>
         {{end}}
     </div>
