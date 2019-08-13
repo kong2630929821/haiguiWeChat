@@ -52,6 +52,7 @@
     color:rgba(136,136,136,1);
     line-height:40px;
     margin: 30px;
+    text-align: center;
 }
 .icon{
     width:0px;

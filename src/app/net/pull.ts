@@ -738,7 +738,7 @@ export const bindUser = (code:string,t:number) => {
 
     return requestAsync(msg);
 };
-
+const UserLabel = ['','市代理','省代理'];   // 用户标签
 /**
  * 获取用户信息
  */
@@ -750,7 +750,8 @@ export const getUserInfo = () => {
 
     return requestAsync(msg).then(res => {
         const user = getStore('user');
-        user.label = getUserType(res.level,res.label);
+        // user.label = getUserType(res.level,res.label);
+        user.label = UserLabel[res.label];
         user.avatar = res.avatar;
         user.userName = unicode2ReadStr(res.wx_name);
         // 正常中文名字则保留

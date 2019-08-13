@@ -61,7 +61,7 @@ export const baoSaleClassGoodsId = 10020009;
 export const maxCount = 20;
 
 // 猜你喜欢最大条数
-export const likedGoodsMaxLen = 60;
+export const likedGoodsMaxLen = 100;
 
 // 海王尊享面膜礼包
 export const wangVipMaskGoodsId = 10020017;
