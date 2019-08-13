@@ -2,7 +2,7 @@
     <div w-class="top">
         <div w-class="selectBox" on-tap="selectMon">
             <span style="margin-right:20px;">{{it.select.value.join(".")}}</span>
-            <img src="../../res/image/arrowDown.png"/>
+            <img src="../../res/image/arrowDown.png" style="width:46px;height:46px;"/>
         </div>
     </div>
     <div w-class="content">

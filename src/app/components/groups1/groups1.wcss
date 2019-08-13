@@ -23,7 +23,7 @@
     margin-bottom: 10px;
 }
 .turntable-icon{
-    background-image: url(../../res/image/turntable_icon1.png);
+    background-image: url(../../res/image/turntable_icon.jpg);
 }
 .shareGift-icon{
     background-image: url(../../res/image/shareGift_icon1.png);

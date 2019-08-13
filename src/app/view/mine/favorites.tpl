@@ -18,7 +18,7 @@
                     {{end}}
                 </div>
                 <div w-class="fix-item fix-item-1" on-tap="cancelCollect({{i}})">
-                    <img src="../../res/image/yishoucang.png"/>
+                    <img src="../../res/image/yishoucang.png" style="width:54px;height:54px;"/>
                 </div>
             </div>
         {{end}}

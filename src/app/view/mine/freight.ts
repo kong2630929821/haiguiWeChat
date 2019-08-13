@@ -12,7 +12,7 @@ interface Props {
  */
 export class Freight extends Widget {
     public setProps(props:Props) {
-        const shipId = props.order.ship_id.split('/');
+        const shipId = props.order.ship_id.split(/[,|，\/]/);   // 分隔符 拆分多个物流单号
 
         this.props = {
             ...props,
@@ -23,15 +23,16 @@ export class Freight extends Widget {
         };
         super.setProps(this.props);
         console.log('Freight ======',this.props);
-        this.init(shipId,0);
+        this.init(shipId, 0);
     }
 
     public init(shipId:string[], i:number) {
         if (shipId.length > i) {
-            getExpressCompany(shipId[i]).then((ShipperCode:string) => {
+            const id = shipId[i].split(/[:|：]/)[0];
+            getExpressCompany(id).then((ShipperCode:string) => {
                 this.props.ShipperName[i] = logisticsCode[ShipperCode] || '未知';
                 this.paint();
-                getExpressInfo(shipId[i],ShipperCode,this.props.order.tel).then(res => {
+                getExpressInfo(id, ShipperCode, this.props.order.tel).then(res => {
                     console.log(res);
                     this.props.traces[i] = res;
                     this.paint();

@@ -14,60 +14,69 @@
             <div w-class="container">
             {{for i,v of [0,1]}}
 
-                {{if it.getFixLocationGroup(it1.groups, it.GroupsLocation1[v * 12 + 3])}}
-                <div w-class="group1" class="bg-img" style="background-image:url(../../../res/image/hBaoCard.png);" on-tap="groupsLocationClick(e,{{it.GroupsLocation1[v * 12 + 3]}})"></div>
+                {{: loc3 = it.getFixLocationGroup(it1.groups, it.GroupsLocation1[v * 12 + 3])}}
+                {{if loc3}}
+                <div w-class="group1" class="bg-img" style="background-image:url({{loc3 ? it.mallImagPre + it.getImageThumbnailPath(loc3.images) : ''}})" on-tap="groupsLocationClick(e,{{it.GroupsLocation1[v * 12 + 3]}})"></div>
                 {{end}}
                 <div w-class="groups">
-                    {{if it.getFixLocationGroup(it1.groups, it.GroupsLocation1[v * 12 + 4])}}
+                    {{: loc4 = it.getFixLocationGroup(it1.groups, it.GroupsLocation1[v * 12 + 4])}}
+                    {{if loc4}}
                     <div w-class="group2"  on-tap="groupsLocationClick(e,{{it.GroupsLocation1[v * 12 + 4]}})" >
-                        <div style="background-image:url(../../../res/image/hBaoCard.png);border-radius:6px;" class="bg-img" ></div>
+                        <div style="background-image:url({{loc4 ? it.mallImagPre + it.getImageThumbnailPath(loc4.images) : ''}});border-radius:6px;" class="bg-img" ></div>
                     </div>
                     {{end}}
 
-                    {{if it.getFixLocationGroup(it1.groups, it.GroupsLocation1[v * 12 + 5])}}
+                    {{: loc5 = it.getFixLocationGroup(it1.groups, it.GroupsLocation1[v * 12 + 5])}}
+                    {{if loc5}}
                     <div w-class="group2"  on-tap="groupsLocationClick(e,{{it.GroupsLocation1[v * 12 + 5]}})" style="margin-right:0;">
-                        <div style="background-image:url(../../../res/image/hBaoCard.png);border-radius:6px;" class="bg-img" ></div>
+                        <div style="background-image:url({{loc5 ? it.mallImagPre + it.getImageThumbnailPath(loc5.images) : ''}});border-radius:6px;" class="bg-img" ></div>
                     </div>
                     {{end}}
                 </div>  
 
                 <div w-class="groups">
-                    {{if it.getFixLocationGroup(it1.groups, it.GroupsLocation1[v * 12 + 6])}}
+                    {{: loc6 = it.getFixLocationGroup(it1.groups, it.GroupsLocation1[v * 12 + 6])}}
+                    {{if loc6}}
                     <div w-class="group2"  on-tap="groupsLocationClick(e,{{it.GroupsLocation1[v * 12 + 6]}})" >
-                        <div style="background-image:url(../../../res/image/hBaoCard.png);border-radius:6px;" class="bg-img" ></div>
+                        <div style="background-image:url({{loc6 ? it.mallImagPre + it.getImageThumbnailPath(loc6.images) : ''}});border-radius:6px;" class="bg-img" ></div>
                     </div>
                     {{end}}
 
-                    {{if it.getFixLocationGroup(it1.groups, it.GroupsLocation1[v * 12 + 7])}}
+                    {{: loc7 = it.getFixLocationGroup(it1.groups, it.GroupsLocation1[v * 12 + 7])}}
+                    {{if loc7}}
                     <div w-class="group2"  on-tap="groupsLocationClick(e,{{it.GroupsLocation1[v * 12 + 7]}})" >
-                        <div style="background-image:url(../../../res/image/hBaoCard.png);border-radius:6px;" class="bg-img" ></div>
+                        <div style="background-image:url({{loc7 ? it.mallImagPre + it.getImageThumbnailPath(loc7.images) : ''}});border-radius:6px;" class="bg-img" ></div>
                     </div>
                     {{end}}
                     
-                    {{if it.getFixLocationGroup(it1.groups, it.GroupsLocation1[v * 12 + 8])}}
+                    {{: loc8 = it.getFixLocationGroup(it1.groups, it.GroupsLocation1[v * 12 + 8])}}
+                    {{if loc8}}
                     <div w-class="group2"  on-tap="groupsLocationClick(e,{{it.GroupsLocation1[v * 12 + 8]}})" style="margin-right:0;">
-                        <div style="background-image:url(../../../res/image/hBaoCard.png);border-radius:6px;" class="bg-img" ></div>
+                        <div style="background-image:url({{loc8 ? it.mallImagPre + it.getImageThumbnailPath(loc8.images) : ''}});border-radius:6px;" class="bg-img" ></div>
                     </div>
                     {{end}}
                 </div>
 
                 <div w-class="groups">
-                    {{if it.getFixLocationGroup(it1.groups, it.GroupsLocation1[v * 12 + 9])}}
+                    {{: loc9 = it.getFixLocationGroup(it1.groups, it.GroupsLocation1[v * 12 + 9])}}
+                    {{if loc9}}
                     <div w-class="group2" on-tap="groupsLocationClick(e,{{it.GroupsLocation1[v * 12 + 12]}})" style="height:410px;">
-                        <div style="background-image:url(../../../res/image/hBaoCard.png);border-radius:6px;" class="bg-img" ></div>
+                        <div style="background-image:url({{loc9 ? it.mallImagPre + it.getImageThumbnailPath(loc9.images) : ''}});border-radius:6px;" class="bg-img" ></div>
                     </div>
                     {{end}}
 
                     <div style="flex: 1 0 0;">
-                        {{if it.getFixLocationGroup(it1.groups, it.GroupsLocation1[v * 12 + 10])}}
+                        {{: loc10 = it.getFixLocationGroup(it1.groups, it.GroupsLocation1[v * 12 + 10])}}
+                        {{if loc10}}
                         <div on-tap="groupsLocationClick(e,{{it.GroupsLocation1[v * 12 + 10]}})" style="height: 200px;margin-top: 10px;">
-                            <div style="background-image:url(../../../res/image/hBaoCard.png);border-radius:6px;" class="bg-img" ></div>
+                            <div style="background-image:url({{loc10 ? it.mallImagPre + it.getImageThumbnailPath(loc10.images) : ''}});border-radius:6px;" class="bg-img" ></div>
                         </div>
                         {{end}}
                         
-                        {{if it.getFixLocationGroup(it1.groups, it.GroupsLocation1[v * 12 + 11])}}
+                        {{: loc11 = it.getFixLocationGroup(it1.groups, it.GroupsLocation1[v * 12 + 11])}}
+                        {{if loc11}}
                         <div on-tap="groupsLocationClick(e,{{it.GroupsLocation1[v * 12 + 11]}})" style="height:200px;margin-top:10px;" >
-                            <div style="background-image:url(../../../res/image/hBaoCard.png);border-radius:6px;" class="bg-img" ></div>
+                            <div style="background-image:url({{loc11 ? it.mallImagPre + it.getImageThumbnailPath(loc11.images) : ''}});border-radius:6px;" class="bg-img" ></div>
                         </div>
                         {{end}}
                     </div>
@@ -77,22 +86,25 @@
                 <div w-class="groups">
 
                     <div style="flex: 1 0 0;margin-right: 10px;">
-                        {{if it.getFixLocationGroup(it1.groups, it.GroupsLocation1[v * 12 + 12])}}
+                        {{: loc12 = it.getFixLocationGroup(it1.groups, it.GroupsLocation1[v * 12 + 12])}}
+                        {{if loc12}}
                         <div on-tap="groupsLocationClick(e,{{it.GroupsLocation1[v * 12 + 12]}})" style="height: 200px;margin-top: 10px;">
-                            <div style="background-image:url(../../../res/image/hBaoCard.png);border-radius:6px;" class="bg-img" ></div>
+                            <div style="background-image:url({{loc12 ? it.mallImagPre + it.getImageThumbnailPath(loc12.images) : ''}});border-radius:6px;" class="bg-img" ></div>
                         </div>
                         {{end}}
                         
-                        {{if it.getFixLocationGroup(it1.groups, it.GroupsLocation1[v * 12 + 13])}}
+                        {{: loc13 = it.getFixLocationGroup(it1.groups, it.GroupsLocation1[v * 12 + 13])}}
+                        {{if loc13}}
                         <div on-tap="groupsLocationClick(e,{{it.GroupsLocation1[v * 12 + 13]}})" style="height:200px;margin-top:10px;" >
-                            <div style="background-image:url(../../../res/image/hBaoCard.png);border-radius:6px;" class="bg-img" ></div>
+                            <div style="background-image:url({{loc13 ? it.mallImagPre + it.getImageThumbnailPath(loc13.images) : ''}});border-radius:6px;" class="bg-img" ></div>
                         </div>
                         {{end}}
                     </div>
 
-                    {{if it.getFixLocationGroup(it1.groups, it.GroupsLocation1[v * 12 + 14])}}
+                    {{: loc14 = it.getFixLocationGroup(it1.groups, it.GroupsLocation1[v * 12 + 14])}}
+                    {{if loc14}}
                     <div w-class="group2"  on-tap="groupsLocationClick(e,{{it.GroupsLocation1[v * 12 + 14]}})" style="height:410px;margin-right:0;">
-                        <div style="background-image:url(../../../res/image/hBaoCard.png);border-radius:6px;" class="bg-img" ></div>
+                        <div style="background-image:url({{loc14 ? it.mallImagPre + it.getImageThumbnailPath(loc14.images) : ''}});border-radius:6px;" class="bg-img" ></div>
                     </div>
                     {{end}}
 

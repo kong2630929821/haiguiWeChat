@@ -97,7 +97,7 @@ export class ConfirmOrder extends Widget {
         let hasTax = false;  // 是否有海外购商品，需要实名
         for (let i = 0;i < cartGood.length;i++) {
             const goods = cartGood[i].goods;
-            if (goods.goodsType > 0) {
+            if (goods.goodsType === 1 || goods.goodsType === 2) {
                 hasTax = true;
                 break;
             }

@@ -3,7 +3,7 @@
     <div w-class="body">
         <div w-class="title">
             <div>{{it.title}}</div>
-            <img src="../../res/image/close.png" on-tap="closeClick"/>
+            <img src="../../res/image/close.png" style="width:30px;height:30px;" on-tap="closeClick"/>
         </div>
         {{for i,v of it.descs}}
         <div w-class="item">

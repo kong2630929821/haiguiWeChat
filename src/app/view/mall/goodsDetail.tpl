@@ -20,8 +20,8 @@
                         <div w-class="buy-price">￥{{it.priceFormat(it.sale)}}</div>
                         {{if it.discount > 0 && it.discount < 10 }}
                         <div w-class="original-price">{{ it.priceFormat(it.origin)}}</div>
-                        {{else}}
-                        <div w-class="vip-price" on-tap="goVip">（会员价：{{ it.priceFormat(it.vipSale)}}）</div>
+                        {{elseif it.sale > it.vipSale}}
+                        <div w-class="vip-price" on-tap="goVip">会员价:￥{{ it.priceFormat(it.vipSale)}}</div>
                         {{end}}
                     </div>
                     {{if it.discount || it.rebate}}
@@ -36,13 +36,13 @@
                     {{end}}
                 </div>
             </div>
-            {{if it.goods.goodsType > 0}}
+            {{if it.goods.goodsType == 1 || it.goods.goodsType == 2}}
             <div style="margin-left:30px;background-color:rgba(255,255,255,1);"><div w-class="tax-box"><div w-class="tax-label">海外购</div></div></div>
             {{end}}
             <div w-class="goods-items">
                 <div w-class="items-father1" on-tap="clickDescs(e,'freight')"><app-components-goodsDetailsItem-goodsDetailsItem>{title:"运费",content:{{it.goodsItemDescs.freight.itemContent}} }</app-components-goodsDetailsItem-goodsDetailsItem></div>
                 
-                {{if it.goods.goodsType > 0}}
+                {{if it.goods.goodsType == 1 || it.goods.goodsType == 2}}
                     <div w-class="items-father1" on-tap="clickDescs(e,'tax')"><app-components-goodsDetailsItem-goodsDetailsItem>{title:"税费",content:"预计{{it.priceFormat(it.goods.tax)}}元"}</app-components-goodsDetailsItem-goodsDetailsItem></div>
                     <div w-class="items-father2" on-tap="clickDescs(e,'verified')"><app-components-goodsDetailsItem-goodsDetailsItem>{title:"实名",content:"该商品需实名认证",style:"padding-left:30px;"}</app-components-goodsDetailsItem-goodsDetailsItem></div>
                 {{elseif !it.goods.isActGoods}}

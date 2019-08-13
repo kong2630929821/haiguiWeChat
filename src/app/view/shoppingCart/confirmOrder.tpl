@@ -5,10 +5,10 @@
         {{else}}
         <div w-class="row row-addr" on-tap="addAddress">
             <div w-class="row" style="flex:1 0 0;">
-                <img src="../../res/image/add_blue.png" style="margin-right:20px;"/>
+                <img src="../../res/image/add_blue.png" style="margin-right:20px;width:46px;height:46px;"/>
                 <div w-class="text">添加地址</div>
             </div>
-            <img src="../../res/image/arrowRight.png"/>
+            <img src="../../res/image/arrowRight.png" style="width:30px;height:30px;"/>
         </div>
         {{end}}
     </div>
