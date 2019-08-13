@@ -226,8 +226,8 @@ export const parseOrder = (infos: any) => {
             const images = parseMallImage(v[3]);
             const goods = {
                 id:v[0],
-                name:v[1],
-                labels:v[2],
+                name:unicode2Str(v[1]),
+                labels:unicode2Str(v[2]),
                 images
             };
             const amount = v[5];
@@ -315,7 +315,8 @@ export const parseAfterSale = (infos: any, orders: Order[]) => {
 // 过滤固定商品的订单
 const filterOrderGoods = (order: Order, goodsid: number, skuId: string) => {
     const goods = order.orderGoods.filter((v) => {
-        return (v[0].id === goodsid && v[0].labels[0][0] === skuId);
+        // && v[0].labels[0][0] === skuId
+        return (v[0].id === goodsid);
     });
     order.orderGoods = goods;
 

@@ -3,7 +3,7 @@ import { baoSaleClassGoodsId, baoVipClassGoodsId, baoVipMaskGoodsId, freeMaskGoo
 import { getStore,GoodsDetails, GroupsLocation, OrderStatus, ReturnGoodsStatus, setStore, UserType } from '../store/memstore';
 import {  judgeRealName, openWXPay } from '../utils/logic';
 import { payByWx } from '../utils/native';
-import { arrayBuffer2File, deelMessage, getUserType, popNewMessage, priceFormat, str2Unicode, timestampFormat, unicode2ReadStr, unicode2Str } from '../utils/tools';
+import { arrayBuffer2File, deelMessage, popNewMessage, priceFormat, str2Unicode, timestampFormat, unicode2ReadStr, unicode2Str } from '../utils/tools';
 import { requestAsync } from './login';
 import { parseAddress, parseAddress2, parseAfterSale, parseAllGroups, parseArea, parseCart, parseFreight, parseGoodsDetail, parseOrder } from './parse';
 
