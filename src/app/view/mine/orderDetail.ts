@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { cancelOrder, getOrders, receiptOrder } from '../../net/pull';
+import { cancelOrder, cancelPaidOrder, getOrders, receiptOrder } from '../../net/pull';
 import { Order, OrderStatus, register } from '../../store/memstore';
 import { addressFormat, popNewMessage } from '../../utils/tools';
 import { payOrderNow } from './orderList';
@@ -21,6 +21,9 @@ interface Props {
 export class OrderDetail extends Widget {
     public ok:(status:OrderStatus) => void;
     public setProps(props:Props) {
+        if (props.status === OrderStatus.PENDINGDELIVERED && (Date.now() - props.order.pay_time) < 60 * 60 * 1000) {  // 下单一小时以内可以取消订单
+            statusShows[props.status].btn1 = '取消订单';
+        }
         this.props = {
             ...props,
             statusShow:statusShows[props.status],
@@ -60,7 +63,7 @@ export class OrderDetail extends Widget {
                 });
             } else if (activeStatus === OrderStatus.PENDINGDELIVERED) {  // 待发货 取消订单
                 popNew('app-components-popModel-popModel',{ title:'确认取消订单' },() => {
-                    cancelOrder(order.id).then(() => {
+                    cancelPaidOrder(order.id).then(() => {
                         popNewMessage('取消成功');
                         getOrders(activeStatus);
                         this.ok && this.ok(activeStatus);
@@ -98,7 +101,7 @@ export const statusShows:any = {
     },
     [OrderStatus.PENDINGDELIVERED]:{
         desc:'等待发货',
-        btn1:'取消订单',
+        btn1:'',
         btn2:''
     },
     [OrderStatus.PENDINGRECEIPT]:{

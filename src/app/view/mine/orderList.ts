@@ -1,7 +1,7 @@
 import { popNew } from '../../../pi/ui/root';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
-import { cancelOrder, getOrders, judgeActivityGoods, payMoney, receiptOrder } from '../../net/pull';
+import { cancelOrder, cancelPaidOrder, getOrders, judgeActivityGoods, payMoney, receiptOrder } from '../../net/pull';
 import { Order, OrderStatus, register } from '../../store/memstore';
 import { popNewMessage } from '../../utils/tools';
 import {  setGoodsId, setNeedPayOrders } from '../shoppingCart/confirmOrder';
@@ -84,7 +84,7 @@ export class OrderList extends Widget {
                 });
             } else if (activeStatus === OrderStatus.PENDINGDELIVERED) {  // 待发货 取消订单
                 popNew('app-components-popModel-popModel',{ title:'确认取消订单' },() => {
-                    cancelOrder(order.id).then(() => {
+                    cancelPaidOrder(order.id).then(() => {
                         popNewMessage('取消成功');
                         getOrders(activeStatus);
                     }).catch(() => {

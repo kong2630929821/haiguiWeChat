@@ -110,4 +110,21 @@ export const payComplete = () => {
     setMsgHandler('event_inner_msg',r => {
         getAllMessage10();
     });
+
 };
+
+/**
+ * 签到成功
+ */
+export const checkIn = () => {
+    // 签到推送
+    setMsgHandler('check_in_msg',r => {
+        console.log('签到推送========check_in_msg',r);
+        if (r.count === 10) {
+            popNewMessage('签到已满10天，快联系客服领取奖励吧');
+        } else {
+            popNewMessage('签到成功');
+        }
+    });
+};
+checkIn();

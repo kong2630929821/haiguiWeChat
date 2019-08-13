@@ -8,7 +8,6 @@ export class ContactUs extends Widget {
     public ok: () => void;
     public create() {
         super.create();
-        const tips = { zh_Hans:'客服',zh_Hant:'客服',en:'' };
         this.props = {
             data:[
                 ['官方网站','http://www.haiguiyihao.com'],

@@ -23,6 +23,9 @@ export class OrderItemDetail extends Widget {
             orderIdShow = `倒计时：${calcLeftTime(props.order.order_time)}`;
             this.countdown();
         }
+        if (props.status === OrderStatus.PENDINGDELIVERED && (Date.now() - props.order.pay_time) < 60 * 60 * 1000) {  // 下单一小时以内可以取消订单
+            statusShows[props.status].btn1 = '取消订单';
+        }
         this.props = {
             ...props,
             statusShow:statusShows[props.status],

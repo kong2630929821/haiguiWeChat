@@ -378,6 +378,22 @@ export const cancelOrder = (oid:number) => {
 };
 
 /**
+ * 取消已支付一小时内订单
+ * @param oid order id
+ */
+export const cancelPaidOrder = (oid:number) => {
+    const msg = {
+        type:'cancel_order_refund',
+        param:{
+            oid,
+            note:'退款'
+        }
+    };
+
+    return requestAsync(msg);
+};
+
+/**
  * 确认收货
  */
 export const receiptOrder = (oid:number) => {
@@ -913,7 +929,7 @@ export const getExpressCompany = (sid:string) => {
         const data = JSON.parse(res.ResponseData);
         console.log('getExpressCompany====',data);
 
-        return data[0].comCode;    // 接口识别会返回一家或者多家快递公司，返回的数据根据快递鸟大数据分析结果排序，排名靠前的命中率更高。
+        return data[0] ? data[0].comCode :'';    // 接口识别会返回一家或者多家快递公司，返回的数据根据快递鸟大数据分析结果排序，排名靠前的命中率更高。
         
     });
 };

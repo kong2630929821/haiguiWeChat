@@ -221,17 +221,22 @@ export const parseOrder = (infos: any) => {
     for (const info of infos) {
         if (info[14] <= 0) continue;     // 下单时间为0  订单退回
         const orderGoods = [];
-        let fg = true;  // SKU是否是正确的标记
+        const fg = true;  // SKU是否是正确的标记
         for (const v of info[2]) {
-            const goods = parseGoodsDetail(v[0]);
-            const amount = v[1];
-            const unit = v[2];
-            if (!v[3] || !v[3][0]) { // SKU出错，直接跳过该订单
-                fg = false;
-                break;
-            }
-            v[3][0][1] = unicode2Str(v[3][0][1]);
-            goods.labels = [v[3][0]];
+            const images = parseMallImage(v[3]);
+            const goods = {
+                id:v[0],
+                name:v[1],
+                labels:v[2],
+                images
+            };
+            const amount = v[5];
+            const unit = v[4];
+            // if (!v[3] || !v[3][0]) { // SKU出错，直接跳过该订单
+            //     fg = false;
+            //     break;
+            // }
+            // v[3][0][1] = unicode2Str(v[3][0][1]);
             orderGoods.push([goods, amount, unit]);
         }
         if (!fg) {  // SKU出错，直接跳过该订单
