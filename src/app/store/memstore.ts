@@ -163,10 +163,17 @@ export interface CartGoods {
     skuIndex:number;      // 选择的规格下标
 }
 
+export interface OrderGoodsDetail {
+    id:number;   // 商品id
+    name:string;   // 商品名称
+    labels:string;   // SKU描述
+    images:MallImages[];  // 商品包含的图片列表
+}
+
 // 订单详情
 export interface Order {
     id:number;		       // 订单id
-    orderGoods:[GoodsDetails,number,number][];   // (商品详细信息) (购买数量) (单价 综合各种折扣)
+    orderGoods:[OrderGoodsDetail,number,number][];   // (商品详细信息) (购买数量) (单价 综合各种折扣)
     pay_type:number;       // 支付类型，1现金，2积分，3表示同时支持现金和积分
     origin:number;         // 商品原支付金额，单位分，即所有商品单价乘数量
     tax:number;				// 	商品税费，单位分，即所有商品税费乘数量

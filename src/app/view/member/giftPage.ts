@@ -70,10 +70,12 @@ export class GiftPage extends Widget {
                 // 未到下次可领时间，且未领完
                 this.props.btn = `本周已领，还剩 ${Math.ceil((endTime - nextTime) / perTime)} 盒`;
                 this.props.isAble = false;
-            } else if (v[0] === v[1] || endTime < nowTime) {
+
+            } else if (v[0] === v[1] || (endTime > 0 && endTime < nowTime)) {
                 // 已超过结束时间，或已经全部领完
                 this.props.btn = '已全部领完';
                 this.props.isAble = false;
+                
             } else {
                 this.props.btn = '领取本期面膜';
             }

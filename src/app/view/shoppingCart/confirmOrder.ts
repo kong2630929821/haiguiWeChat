@@ -97,21 +97,21 @@ export class ConfirmOrder extends Widget {
         let hasTax = false;  // 是否有海外购商品，需要实名
         for (let i = 0;i < cartGood.length;i++) {
             const goods = cartGood[i].goods;
-            if (goods.goodsType === 1 || goods.goodsType === 2) {
+            if (goods.goodsType > 0) {
                 hasTax = true;
                 break;
             }
         }
 
         if (hasTax && !getStore('user/IDCard')) {
-            popNew('app-components-popModel-popModel',{ title:'海外购商品必须实名' },() => {
+            popNew('app-components-popModel-popModel',{ title:'海外购或一般贸易商品必须实名' },() => {
                 popNew('app-view-mine-IDCardUpload');
             });
 
             return;
         } 
         if (hasTax && getStore('user/realName') !== this.props.address.name) {
-            popNewMessage('海外购商品收货人名字必须与实名一致');
+            popNewMessage('海外购或一般贸易商品收货人名字必须与实名一致');
 
             return;
         } 

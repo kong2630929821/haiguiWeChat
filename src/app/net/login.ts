@@ -152,11 +152,16 @@ const userLogin = (userStr:any) => {
     };
     console.log('userLogin = ',msg);
     requestAsync(msg).then(r => {
-        console.log('userLogin success = ',r);
-        setStore('user/uid',r.uid, false);   // uid
         setBottomLayerReloginMsg(userStr.unionid,1,r.password);
+
+        console.log('userLogin success = ',r);
+        const user = getStore('user');
+        user.uid = r.uid;  // uid
+        user.userType = r.level; // 用户会员等级
+        user.fcode = r.fcode; // 绑定的上级邀请码
+        setStore('user',user,false);
+
         setStore('user/isLogin',true);
-        setStore('user/userType',r.level); // 用户会员等级
         for (const v of GroupsLocation1) {
             getGroups(v);
         }

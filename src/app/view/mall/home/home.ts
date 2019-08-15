@@ -70,7 +70,7 @@ export class MallHome extends Widget {
         const oh1 = document.getElementById('scroll-container').offsetHeight;
         const oh2 = document.getElementById('scroll-content').offsetHeight;
         const scrollTop = document.getElementById('scroll-container').scrollTop; 
-        if (oh2 - oh1 - scrollTop < -145) {
+        if (oh2 - oh1 - scrollTop < 145) {
             this.props.refresh = true;
             guessYouLike(maxCount).then(() => {
                 this.props.refresh = false;

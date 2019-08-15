@@ -34,6 +34,18 @@
     margin-top: 10px;
     margin-right: 10px;
 }
+.group3{
+    flex: 1 0 0;
+    height: 300px;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+.group4{
+    flex: 1 0 0;
+    height: 410px;
+    margin-top: 10px;
+    margin-right: 10px;
+}
 .no-group{
     visibility: hidden;
 }

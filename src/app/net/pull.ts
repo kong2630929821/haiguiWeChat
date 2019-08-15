@@ -797,8 +797,8 @@ export const payMoney = (money:number,ttype:string,count:number= 1,ext?:any,fail
             popNewMessage(`支付失败${resp.type}`);
             failed && failed();
         } else {
-            if (flag) {
-                payByWx(resp.ok,(r:any) => {
+            if (flag) {  // APP内支付
+                payByWx(resp.ok, (r:any) => {
                     if (r !== 0) {
                         failed && failed();
                     } else {
@@ -806,8 +806,10 @@ export const payMoney = (money:number,ttype:string,count:number= 1,ext?:any,fail
                     }
                 });
 
-            } else {
-                openWXPay(resp.ok,resp.oid,failed);
+            } else { // 公众号内支付
+                openWXPay(resp.ok, () => {
+                    queryOrder(resp.oid);    // 查询订单是否支付成功
+                }, failed);
             }
         }
     });
@@ -996,7 +998,6 @@ export const orderActiveGoods = (goods:[number,number,string],addr:number) => {
 /**
  * 用户可领的所有礼包
  */
-// tslint:disable-next-line:max-func-body-length
 export const getAllGifts = async () => {
     const msg = {
         type:'mall/members@get_activity_goods_all',
@@ -1006,59 +1007,59 @@ export const getAllGifts = async () => {
     try {
         const data = await requestAsync(msg);
         const memberGifts = getStore('user/memberGifts');
+        const uType = getStore('user/userType',UserType.other);
     
         for (const v of data.value) {
-            if (v[0] === whiteGoodsId_399A) {
-                memberGifts.gift = v[1];
-                memberGifts.optionalGift = whiteGoodsId_399A;
+            if (uType === UserType.hBao) {
 
-            } else if (v[0] === whiteGoodsId_399B) {
-                memberGifts.gift = v[1];
-                memberGifts.optionalGift = whiteGoodsId_399B;
+                if (v[0] === whiteGoodsId_399A) {
+                    memberGifts.gift = v[1];
+                    memberGifts.optionalGift = whiteGoodsId_399A;
+    
+                } else if (v[0] === whiteGoodsId_399B) {
+                    memberGifts.gift = v[1];
+                    memberGifts.optionalGift = whiteGoodsId_399B;
+    
+                } else if (v[0] === baoVipMaskGoodsId) {
+                    memberGifts.vipGift = v[1];
+    
+                } else if (v[0] === baoVipClassGoodsId) {
+                    memberGifts.vipClass = v[1];
+    
+                } else if (v[0] === baoSaleClassGoodsId) {
+                    memberGifts.saleClass = v[1];
+                }
 
-            } else if (v[0] === whiteGoodsId_10000A) {
-                memberGifts.gift = v[1];
-                memberGifts.optionalGift = whiteGoodsId_10000A;
+            } else if (uType === UserType.hWang) {
 
-            } else if (v[0] === whiteGoodsId_10000B) {
-                memberGifts.gift = v[1];
-                memberGifts.optionalGift = whiteGoodsId_10000B;
+                if (v[0] === whiteGoodsId_10000A) {
+                    memberGifts.gift = v[1];
+                    memberGifts.optionalGift = whiteGoodsId_10000A;
+    
+                } else if (v[0] === whiteGoodsId_10000B) {
+                    memberGifts.gift = v[1];
+                    memberGifts.optionalGift = whiteGoodsId_10000B;
+    
+                } else if (v[0] === wangVipMaskGoodsId) {
+                    memberGifts.vipGift = v[1];
+    
+                } else if (v[0] === wangVipClassGoodsId) {
+                    memberGifts.vipClass = v[1];
+                
+                } else if (v[0] === wangSaleClassGoodsId) {
+                    memberGifts.saleClass = v[1];
+                }
 
-            } else if (v[0] === baoVipMaskGoodsId) {
-                memberGifts.vipGift = v[1];
-
-            } else if (v[0] === freeMaskGoodsId) {
+            }
+            if (v[0] === freeMaskGoodsId) {
                 memberGifts.free = v[1];
             
             } else if (v[0] === OffClassGoodsId) {
                 memberGifts.offClass = v[1];
 
-            } else if (v[0] === baoVipClassGoodsId) {
-                memberGifts.vipClass = v[1];
-
-            } else if (v[0] === baoSaleClassGoodsId) {
-                memberGifts.saleClass = v[1];
-            
-            } else if (v[0] === wangVipMaskGoodsId) {
-                memberGifts.vipGift = v[1];
-
-            } else if (v[0] === wangVipClassGoodsId) {
-                memberGifts.vipClass = v[1];
-            
-            } else if (v[0] === wangSaleClassGoodsId) {
-                memberGifts.saleClass = v[1];
             }
         }
     
-        // 针对新版本迁移时未选择礼包的用户;，需要强制提示选择礼包;
-        // const userType = getStore('user/userType');
-        // if (userType === UserType.hBao && memberGifts.optionalGift === 0) {
-        //     popNew('app-view-member-applyModalBox',{ needAddress:true,title:'礼包领取',unaccalimed:true },(data) => {
-        //         let optional = whiteGoodsId_399A;
-        //         if (data.sel === 'B') optional = whiteGoodsId_399B;
-        //         confirmActivityGoods(optional, data.addr);
-        //     });
-        // }
         setStore('user/memberGifts',memberGifts);
 
         return memberGifts;

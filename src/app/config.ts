@@ -73,4 +73,4 @@ export const wangVipClassGoodsId = 10020018;
 export const wangSaleClassGoodsId = 10020019;
 
 // 只能微信支付 (测试可设为false 可用余额支付，余额不足用微信支付)
-export const onlyWXPay = false;
+export const onlyWXPay = true;

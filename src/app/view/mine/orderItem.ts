@@ -23,15 +23,6 @@ export class OrderItem extends Widget {
             orderIdShow = `倒计时：${calcLeftTime(props.order.order_time)}`;
             this.countdown();
         }
-        const lastTime = 60 * 60 * 1000 - Date.now() + props.order.pay_time;  // 剩余时间
-        if (props.status === OrderStatus.PENDINGDELIVERED && lastTime > 0) {  // 下单一小时以内可以取消订单
-            statusShows[props.status].btn1 = '取消订单';
-            
-            setTimeout(() => {
-                this.props.statusShow.btn1 = '';
-                this.paint();
-            }, lastTime);
-        }
         this.props = {
             ...props,
             statusShow:statusShows[props.status],
@@ -41,6 +32,15 @@ export class OrderItem extends Widget {
             calcPrices,
             mallImagPre
         };
+        const lastTime = 60 * 60 * 1000 - Date.now() + props.order.pay_time;  // 剩余时间
+        if (props.status === OrderStatus.PENDINGDELIVERED && lastTime > 0) {  // 下单一小时以内可以取消订单
+            this.props.statusShow.btn1 = '取消订单';
+            
+            setTimeout(() => {
+                this.props.statusShow.btn1 = '';
+                this.paint();
+            }, lastTime);
+        }
         super.setProps(this.props);        
         console.log('orderdetailitem ====',this.props);
     }
