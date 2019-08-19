@@ -47,8 +47,6 @@
 .copy{
     width: 30px;
     height: 30px;
-    border: 20px solid transparent;
-    border-right: none;
 }
 .process-box{
     flex: 1 0 0;
