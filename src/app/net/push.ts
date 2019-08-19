@@ -2,6 +2,7 @@
  * 后端主动推消息给前端
  */
 import { setMsgHandler } from '../../pi/net/ui/con_mgr';
+import { popNew } from '../../pi/ui/root';
 import { setStore } from '../store/memstore';
 import { getAllMessage10 } from '../utils/logic';
 import { popNewMessage, priceFormat } from '../utils/tools';
@@ -121,7 +122,8 @@ export const checkIn = () => {
     setMsgHandler('check_in_msg',r => {
         console.log('签到推送========check_in_msg',r);
         if (r.count === 10) {
-            popNewMessage('签到已满10天，快联系客服领取奖励吧');
+            // popNewMessage('签到已满10天，快联系客服领取奖励吧');
+            popNew('app-components-modalBox-modalBoxImg',{ img: 'checkInAward.png' });
         } else {
             popNewMessage('签到成功');
         }
