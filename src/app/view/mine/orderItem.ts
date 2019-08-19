@@ -40,6 +40,8 @@ export class OrderItem extends Widget {
                 this.props.statusShow.btn1 = '';
                 this.paint();
             }, lastTime);
+        } else {
+            this.props.statusShow.btn1 = '';
         }
         super.setProps(this.props);        
         console.log('orderdetailitem ====',this.props);
