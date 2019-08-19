@@ -31,13 +31,12 @@
     margin-top: 20px;
     border-bottom: 1px solid #E5E5E5;
     padding: 0 30px;
-    height:88px;
-    line-height:88px;
     position:relative;
 }
 .order{
     font-size:26px;
     color:rgba(136,136,136,1);
+    display: flex;
 }
 .column{
     overflow: hidden;
@@ -47,8 +46,6 @@
 .copy{
     width: 30px;
     height: 30px;
-    border: 20px solid transparent;
-    border-right: none;
 }
 .process-box{
     flex: 1 0 0;
