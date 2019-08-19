@@ -123,7 +123,7 @@ export const checkIn = () => {
         console.log('签到推送========check_in_msg',r);
         if (r.count === 10) {
             // popNewMessage('签到已满10天，快联系客服领取奖励吧');
-            popNew('app-components-modalBox-modalBoxImg',{ img: 'checkInAward.png' });
+            popNew('app-components-modalBox-modalBoxImg',{ img: 'checkIn.png' });
         } else {
             popNewMessage('签到成功');
         }
