@@ -31,7 +31,6 @@
     margin-top: 20px;
     border-bottom: 1px solid #E5E5E5;
     padding: 0 30px;
-    line-height:48px;
     position:relative;
 }
 .order{
