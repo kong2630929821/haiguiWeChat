@@ -37,6 +37,7 @@
 .order{
     font-size:26px;
     color:rgba(136,136,136,1);
+    display: flex;
 }
 .column{
     overflow: hidden;

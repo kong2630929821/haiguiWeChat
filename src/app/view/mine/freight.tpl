@@ -3,8 +3,8 @@
         {{for i,v of it.shipId}}
             <div w-class="row row1">
                 <div w-class="order">
-                    {{it.ShipperName[i]}}&nbsp;
-                    <span style="color:#000">{{v}}</span>
+                    <div style="white-space: nowrap;">{{it.ShipperName[i]}}</div>
+                    <div style="color:#000;font-weight: normal;margin-left: 10px;word-break:break-all;">{{v}}</div>
                 </div>
                 <img src="../../res/image/copy.png" w-class="copy" on-tap="copyClick"/>
             </div>
