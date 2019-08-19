@@ -1,20 +1,31 @@
 import { Widget } from '../../../pi/widget/widget';
 import { popNewMessage } from '../../utils/tools';
-import { privacyPolicy } from './privacyPolicyText';
+import { appPrivacyPolicy, privacyPolicy } from './privacyPolicyText';
 
+interface Props {
+    privacyPolicy: any;
+    selected:boolean;
+    appPriacypolicy:boolean;
+}
 /**
  * privacy policy
  */
 export class PrivacyPolicy extends Widget {
     public ok: () => void;
-    public props:any;
-
-    public setProps(props:any) {
-        super.setProps(props);
-        this.props =  {
-            privacyPolicy: privacyPolicy,
-            selected:false
+    public props:Props = {
+        privacyPolicy: privacyPolicy,
+        selected:false,
+        appPriacypolicy:false
+    };
+    public setProps(props:Props) {
+        this.props = {
+            ...this.props,
+            ...props
         };
+        super.setProps(this.props);
+        if (this.props.appPriacypolicy) {
+            this.props.privacyPolicy = appPrivacyPolicy;
+        }
     }
 
     public confirm() {

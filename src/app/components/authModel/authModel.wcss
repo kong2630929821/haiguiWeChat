@@ -25,7 +25,7 @@
 .btns{
     display: flex;
     justify-content: space-between;
-    margin:  90px 70px 0;
+    margin:  0 70px 0;
     align-self: stretch;
     margin-bottom: 60px;
 }
@@ -49,4 +49,18 @@
     border:1px solid rgba(5,5,5,0.08);
     color: #Fff;
     background-color: #8A4AF3;
+}
+.rowImg{
+    width: 16px;
+    height: 16px;
+}
+.select{
+    display: flex;
+    align-items: center;
+    font-size: 28px;
+    margin: 50px 0;
+}
+.img{
+    margin-left: 30px;
+    margin-right: 10px;
 }
