@@ -87,8 +87,12 @@ export class OrderList extends Widget {
                     cancelPaidOrder(order.id).then(() => {
                         popNewMessage('取消成功');
                         getOrders(activeStatus);
-                    }).catch(() => {
-                        popNewMessage('取消失败');
+                    }).catch((e:any) => {
+                        if (e.type === 2136) {
+                            popNewMessage('特殊商品无法退款');
+                        } else {
+                            popNewMessage('取消失败');
+                        }
                     });
                 });
 
