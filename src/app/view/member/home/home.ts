@@ -65,7 +65,7 @@ export class Home extends Widget {
     // 升级会员等级
     public upgradeUser(user:string) {
         popNew('app-view-member-privacypolicy',null,() => {
-            popNew('app-view-member-applyModalBox',{ needAddress: user !== 'hWang',userType:UserType[user] },(data) => {
+            popNew('app-view-member-applyModalBox',{ needAddress: user !== 'hWang',userType:UserType[user],getInvoteCodeShow:true },(data) => {
                 if (user === 'hWang') {
                     applyToUpHwang(data.sel);
                 } else {

@@ -74,3 +74,6 @@ export const wangSaleClassGoodsId = 10020019;
 
 // 只能微信支付 (测试可设为false 可用余额支付，余额不足用微信支付)
 export const onlyWXPay = false;
+
+// 默认邀请码
+export const defaultInviteCode = '64MF5M';

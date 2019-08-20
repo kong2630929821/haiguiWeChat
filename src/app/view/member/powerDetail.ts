@@ -56,7 +56,7 @@ export class PowerDetail extends Widget {
         if (!this.state) {  // 没有邀请码，不是当前等级的会员可以开通
             popNew('app-view-member-privacypolicy',null,() => {
                 
-                popNew('app-view-member-applyModalBox',{ needAddress:this.props.userType !== UserType.hWang, userType:this.props.userType },(data) => {
+                popNew('app-view-member-applyModalBox',{ needAddress:this.props.userType !== UserType.hWang, userType:this.props.userType,getInvoteCodeShow:true },(data) => {
                     
                     if (this.props.userType === UserType.hWang) {
                         applyToUpHwang(data.sel);

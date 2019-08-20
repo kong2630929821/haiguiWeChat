@@ -2,6 +2,7 @@ import { popNew } from '../../../pi/ui/root';
 import { register } from '../../../pi/util/res_mgr';
 import { Forelet } from '../../../pi/widget/forelet';
 import { Widget } from '../../../pi/widget/widget';
+import { defaultInviteCode } from '../../config';
 import { bindPhone, bindUser, randomInviteCode, sendCode, verifyIDCard } from '../../net/pull';
 import { getStore, setStore, UserType } from '../../store/memstore';
 import { getLastAddress, judgeRealName } from '../../utils/logic';
@@ -19,6 +20,7 @@ interface Props {
     needAddress:boolean;  // 是否需要选择地址
     needInviteCode:boolean;  // 是否需要邀请码
     isShopping399:boolean;// 是否是399商品
+    getInvoteCodeShow:boolean;// 是否显示推荐一个
 }
 interface State {
     realName:string;  // 用户名
@@ -47,7 +49,8 @@ export class ModalBoxInput extends Widget {
         address:'',
         needAddress:false,
         needInviteCode:true,
-        isShopping399:false
+        isShopping399:false,
+        getInvoteCodeShow:false
     };
 
     public setProps(props:any) {
@@ -128,11 +131,13 @@ export class ModalBoxInput extends Widget {
 
     // 获取邀请码
     public getInvoteCode() {
-        const t = this.props.userType === UserType.hWang ? 1 :3;
-        randomInviteCode(t).then(r => {  // 升级海王只能获取海王邀请码
-            this.state.inviteCode = r.code;
-            this.paint();
-        });
+        // const t = this.props.userType === UserType.hWang ? 1 :3;
+        // randomInviteCode(t).then(r => {  // 升级海王只能获取海王邀请码
+        //     this.state.inviteCode = r.code;
+        //     this.paint();
+        // });
+        this.state.inviteCode = this.state.fcode ? this.state.fcode :(this.state.inviteCode || defaultInviteCode);
+        this.paint();
     }
 
     // 切换礼包选择
