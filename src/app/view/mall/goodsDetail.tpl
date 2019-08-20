@@ -88,7 +88,7 @@
             </div>
             <div w-class="fix-item fix-item-1" on-tap="gotoCollect">
                 <div style="position: relative;text-align: center;">
-                    <img src="{{it.isLiked==1?'../../res/image/yishoucang.png':'../../res/image/shoucang.png'}}"/>
+                    <img src="{{it.isLiked==1?'../../res/image/yishoucang.png':'../../res/image/shoucang.png'}}" w-class="collectImg"/>
                     <div>{{it.isLiked==1?'已收藏':'收藏'}}</div>
                 </div>
             </div>

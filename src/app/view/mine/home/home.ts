@@ -74,6 +74,7 @@ export class Home extends Widget {
 
     // 去我的收藏
     public goCollect() {
+        // popNew('app-components-modalBox-modalBoxImg',{ img: 'checkIn.png',btn:true });
         popNew('app-view-mine-favorites',{});
     }
 
