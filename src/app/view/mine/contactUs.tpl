@@ -2,12 +2,10 @@
     <img src="../../res/image/contactUs.jpg" style="width:100%;"/>
     <div style="margin-top:60px;display:flex;justify-content: center;">
         <div w-class="itemDesc">
-            <p style="font-weight:600">尊敬的客户您好，如有任何咨询或帮助</p>
+            <p style="font-weight:bold">尊敬的客户您好，如有任何咨询或帮助</p>
             <p on-tap="copyBtn">1.请拨打客服热线028-66266866<img src="../../res/image/copy.png" style="width:25px;height:25px;margin-left:10px;"/></p>
-            <p>2.进入海龟壹号公众号联系在线客服</p>
-            <p>电话客服时间：周一到周五9:30-12:00 13:30-18:00</p>
-            <p>在线客服时间：周一到周五9:30-12:00 13:30-20:30</p>
-            <p style="text-align: right;">周六到周日9:30-12:00 13:30-18:00</p>
+            <p>2.进入海龟壹号官方微信联系在线客服</p>
+            <p>客服时间：周一到周五9:30-12:00 13:30-18:00</p>
         </div>
     </div>
     <img src="../../res/image/qrCode.jpg" style="width:100%;margin-top:100px;"/>

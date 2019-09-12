@@ -168,6 +168,7 @@ export interface OrderGoodsDetail {
     name:string;   // 商品名称
     labels:string;   // SKU描述
     images:MallImages[];  // 商品包含的图片列表
+    sku:string;
 }
 
 // 订单详情

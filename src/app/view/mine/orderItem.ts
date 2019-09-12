@@ -40,7 +40,7 @@ export class OrderItem extends Widget {
                 this.props.statusShow.btn1 = '';
                 this.paint();
             }, lastTime);
-        } else {
+        } else if (props.status === OrderStatus.PENDINGDELIVERED) {
             this.props.statusShow.btn1 = '';
         }
         super.setProps(this.props);        

@@ -228,7 +228,8 @@ export const parseOrder = (infos: any) => {
                 id:v[0],
                 name:unicode2Str(v[1]),
                 labels:unicode2Str(v[2]),
-                images
+                images,
+                sku:v[6]
             };
             const amount = v[5];
             const unit = v[4];
@@ -292,6 +293,7 @@ export const parseAfterSale = (infos: any, orders: Order[]) => {
     const afterSaleOrders = [];
     for (let i = 0; i < infos.length; i++) {
         const info = infos[i];
+        const sku = info[4][0];
         const order = filterOrderGoods(orders[i], info[2], info[4][0]);
         const afterSaleOrder: AfterSale = {
             id: info[0],		      // 售后订单id
@@ -316,7 +318,7 @@ export const parseAfterSale = (infos: any, orders: Order[]) => {
 const filterOrderGoods = (order: Order, goodsid: number, skuId: string) => {
     const goods = order.orderGoods.filter((v) => {
         // && v[0].labels[0][0] === skuId
-        return (v[0].id === goodsid);
+        return (v[0].id === goodsid && v[0].sku === skuId);
     });
     order.orderGoods = goods;
 
