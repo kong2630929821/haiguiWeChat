@@ -1166,21 +1166,36 @@ export const removeLiked = (id:number) => {
 
 // 查看收藏的商品列表
 export const getCollectList = () => {
-    const msg = {
-        type:'show_liked_goods',
-        param:{}
-    };
+    // const msg = {
+    //     type:'show_liked_goods',
+    //     param:{}
+    // };
 
-    return requestAsync(msg).then(r => {
-        const goods:GoodsDetails[] = [];
-        for (const v of r.goodsInfo) {
-            const good = parseGoodsDetail(v);
-            goods.push(good);
-        }
+    // return requestAsync(msg).then(r => {
+    //     const goods:GoodsDetails[] = [];
+    //     for (const v of r.goodsInfo) {
+    //         const good = parseGoodsDetail(v);
+    //         goods.push(good);
+    //     }
         
-        return goods;
-    }).catch(e => {
-        console.log('show_liked_goods',e);
+    //     return goods;
+    // }).catch(e => {
+    //     console.log('show_liked_goods',e);
+    // });
+    return fetch(`http://${sourceIp}:${httpPort}/goods/show_liked_goods?uid=${getStore('user/uid')}`).then(res => {
+        return res.json().then(r => {
+            const goods:GoodsDetails[] = [];
+            for (const v of r.goodsInfo) {
+                const good = parseGoodsDetail(v);
+                goods.push(good);
+            }
+            console.log(`wj======>${goods}`);
+            setStore('flags/collects',goods);
+            
+            return goods;
+        }).catch(e => {
+            console.log('show_liked_goods',e);
+        });
     });
 };
 

@@ -201,7 +201,7 @@ export const judgeRealName = (name:string) => {
 
 // 获取所有收藏
 export const getCollect = () => {
-    getCollectList().then(r => {
+    getCollectList().then((r:any) => {
         console.log('获取所有收藏',r);
         setStore('flags/collects',r);
     });
